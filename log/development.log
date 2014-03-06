@@ -1,0 +1,186 @@
+
+
+Started GET "/assets/rails.png" for 127.0.0.1 at 2014-03-05 22:36:17 -0500
+Connecting to database specified by database.yml
+Served asset /rails.png - 200 OK (3ms)
+Connecting to database specified by database.yml
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (4.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.2ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+Migrating to CreateSurveys (20140306033540)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033540')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to CreateSurveySections (20140306033541)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033541')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to CreateQuestions (20140306033542)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033542')[0m
+  [1m[35m (3.2ms)[0m  commit transaction
+Migrating to CreateQuestionGroups (20140306033543)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033543')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to CreateAnswers (20140306033544)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "hide_label" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033544')[0m
+  [1m[35m (3.7ms)[0m  commit transaction
+Migrating to CreateResponseSets (20140306033545)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033545')[0m
+  [1m[35m (3.9ms)[0m  commit transaction
+Migrating to CreateResponses (20140306033546)
+  [1m[36m (0.2ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033546')[0m
+  [1m[35m (3.3ms)[0m  commit transaction
+Migrating to CreateDependencies (20140306033547)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033547')[0m
+  [1m[35m (3.7ms)[0m  commit transaction
+Migrating to CreateDependencyConditions (20140306033548)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033548')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to CreateValidations (20140306033549)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033549')[0m
+  [1m[35m (3.2ms)[0m  commit transaction
+Migrating to CreateValidationConditions (20140306033550)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033550')[0m
+  [1m[35m (4.5ms)[0m  commit transaction
+Migrating to AddDisplayOrderToSurveys (20140306033551)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  ALTER TABLE "surveys" ADD "display_order" integer
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033551')[0m
+  [1m[35m (3.7ms)[0m  commit transaction
+Migrating to AddCorrectAnswerIdToQuestions (20140306033552)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "questions" ADD "correct_answer_id" integer
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033552')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to AddIndexToResponseSets (20140306033553)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033553')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to AddIndexToSurveys (20140306033554)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE INDEX "surveys_ac_idx" ON "surveys" ("access_code")
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033554')[0m
+  [1m[35m (3.2ms)[0m  commit transaction
+Migrating to AddUniqueIndicies (20140306033555)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  DROP INDEX "response_sets_ac_idx"
+  [1m[36m (0.2ms)[0m  [1mCREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")[0m
+  [1m[35m (0.1ms)[0m  DROP INDEX "surveys_ac_idx"
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "surveys_ac_idx" ON "surveys" ("access_code")[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033555')
+  [1m[36m (3.7ms)[0m  [1mcommit transaction[0m
+Migrating to AddSectionIdToResponses (20140306033556)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (1.2ms)[0m  [1mALTER TABLE "responses" ADD "survey_section_id" integer[0m
+  [1m[35m (0.1ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033556')[0m
+  [1m[35m (3.9ms)[0m  commit transaction
+Migrating to AddDefaultValueToAnswers (20140306033557)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "answers" ADD "default_value" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033557')[0m
+  [1m[35m (4.0ms)[0m  commit transaction
+Migrating to AddApiIds (20140306033558)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "surveys" ADD "api_id" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "questions" ADD "api_id" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "answers" ADD "api_id" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033558')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to AddDisplayTypeToAnswers (20140306033559)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "answers" ADD "display_type" varchar(255)
+  [1m[36mAnswer Load (0.1ms)[0m  [1mSELECT "answers".* FROM "answers" ORDER BY "answers".display_order ASC[0m
+  [1m[35m (0.3ms)[0m  CREATE TEMPORARY TABLE "altered_answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "hide_label" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "answers"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "answers"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "altered_answers"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "altered_answers"[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033559')
+  [1m[36m (3.4ms)[0m  [1mcommit transaction[0m
+Migrating to AddApiIdToQuestionGroups (20140306033560)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "question_groups" ADD "api_id" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033560')
+  [1m[36m (3.8ms)[0m  [1mcommit transaction[0m
+Migrating to AddApiIdsToResponseSetsAndResponses (20140306033561)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "response_sets" ADD "api_id" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "responses" ADD "api_id" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033561')[0m
+  [1m[35m (3.1ms)[0m  commit transaction
+Migrating to UpdateBlankApiIdsOnQuestionGroup (20140306033562)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35mSurvey Load (0.1ms)[0m  SELECT "surveys".* FROM "surveys" WHERE (api_id IS NULL)
+  [1m[36mQuestion Load (0.4ms)[0m  [1mSELECT "questions".* FROM "questions" WHERE (api_id IS NULL)[0m
+  [1m[35mQuestionGroup Load (0.1ms)[0m  SELECT "question_groups".* FROM "question_groups" WHERE (api_id IS NULL)
+  [1m[36mAnswer Load (0.1ms)[0m  [1mSELECT "answers".* FROM "answers" WHERE (api_id IS NULL) ORDER BY "answers".display_order ASC[0m
+  [1m[35mResponse Load (0.1ms)[0m  SELECT "responses".* FROM "responses" WHERE (api_id IS NULL)
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE (api_id IS NULL)[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033562')
+  [1m[36m (3.2ms)[0m  [1mcommit transaction[0m
+Migrating to DropUniqueIndexOnAccessCodeInSurveys (20140306033563)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1mDROP INDEX "surveys_ac_idx"[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033563')
+  [1m[36m (3.2ms)[0m  [1mcommit transaction[0m
+Migrating to AddVersionToSurveys (20140306033564)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "surveys" ADD "survey_version" integer DEFAULT 0[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033564')
+  [1m[36m (3.8ms)[0m  [1mcommit transaction[0m
+Migrating to AddUniqueIndexOnAccessCodeAndVersionInSurveys (20140306033565)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033565')
+  [1m[36m (3.7ms)[0m  [1mcommit transaction[0m
+Migrating to UpdateBlankVersionsOnSurveys (20140306033566)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36mSurvey Load (0.1ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE (survey_version IS NULL)[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mcommit transaction[0m
+Migrating to ApiIdsMustBeUnique (20140306033567)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (0.2ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")[0m
+  [1m[35m (0.1ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (0.1ms)[0m  CREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  commit transaction
+Migrating to CreateSurveyTranslations (20140306033568)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140306033568')[0m
+  [1m[35m (3.8ms)[0m  commit transaction
+Migrating to AddInputMaskAttributesToAnswer (20140306033569)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "answers" ADD "input_mask" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "answers" ADD "input_mask_placeholder" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20140306033569')
+  [1m[36m (3.1ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 

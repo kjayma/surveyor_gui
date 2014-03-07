@@ -57,4 +57,19 @@ SurveyorGui::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
+  resources :surveyforms do
+    member do
+      get 'replace_form'
+      get 'insert_survey_section'
+      get 'replace_survey_section'
+      get 'insert_new_question'
+      get 'replace_question'
+      get 'clone'
+      put 'create_cloned'
+      get 'set_default'
+      get 'cut_question'
+      get 'paste_question'
+    end
+  end
+
 end

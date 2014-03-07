@@ -1,0 +1,33 @@
+<div class="column2">
+  <div class="colorbox round">
+  <div id="survey">
+    <h1 class="round-top"><%= @title %></h1>
+      <%= form_tag surveyforms_path, :method => 'get' do %>
+        <p>
+        <%= text_field_tag :search, params[:search] %>
+        <%= submit_tag "Search", :name => nil %>
+        </p>
+    <% end %>
+  <%= will_paginate %>
+  <br />
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Actions</th>
+  </tr>
+  <% for survey in @surveyforms %>
+    <tr>
+      <td><%= survey.title %></td>
+      <td><%= link_to "Show", survey %>&nbsp
+      <%= link_to "Edit", edit_surveyform_path(survey) %>&nbsp
+      <%= link_to "Clone", clone_surveyform_path(survey) %>&nbsp
+      <%= link_to "Destroy", survey, :confirm => 'Are you sure?', :method => :delete %> </td>
+    </tr>
+  <% end %>
+</table>
+<br />
+<%= will_paginate %>
+<p><%= link_to "New Survey", new_surveyform_path(survey) %></p>
+</div>
+  </div>
+</div>

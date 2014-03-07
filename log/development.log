@@ -2521,3 +2521,1301 @@ Connecting to database specified by database.yml
   [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
   [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
   [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.9ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.4ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.3ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (4.5ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (5.0ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (4.2ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.1ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.7ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.9ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (4.0ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (4.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.1ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (4.0ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.8ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (4.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (4.0ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.4ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.9ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.4ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.6ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.9ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (4.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.7ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (8.5ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.5ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (4.8ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.8ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (8.6ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.6ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.8ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (9.0ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (6.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.6ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (6.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (7.7ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.2ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.1ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.1ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.0ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.0ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (2.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.1ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (4.1ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.6ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (4.1ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.8ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.5ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.7ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.8ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.9ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (2.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.9ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.4ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.9ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (4.0ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.8ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.5ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.7ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.5ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.9ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.9ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (2.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (4.0ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.9ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (4.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (1.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.7ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.1ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.0ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.4ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.4ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.8ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.5ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.6ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (4.1ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.9ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (4.5ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.5ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.9ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+Connecting to database specified by database.yml
+  [1m[36m (1.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.0ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.7ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.8ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (5.5ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (4.0ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.9ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.5ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (4.1ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.5ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033560')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033568')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033567')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033561')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033562')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033554')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033543')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033547')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033542')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033550')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033556')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033540')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033546')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033565')
+
+
+Started GET "/surveyforms" for 127.0.0.1 at 2014-03-07 15:22:40 -0500
+Connecting to database specified by database.yml
+Processing by SurveyformsController#index as HTML
+ERROR: compiling _app_views_surveyforms_index_html_erb___1385413707512039054_70156351026080 RAISED /home/kevin/surveyor-gui/app/views/surveyforms/index.html.erb:24: syntax error, unexpected keyword_ensure, expecting keyword_end
+/home/kevin/surveyor-gui/app/views/surveyforms/index.html.erb:26: syntax error, unexpected $end, expecting keyword_end
+Function body:           def _app_views_surveyforms_index_html_erb___1385413707512039054_70156351026080(local_assigns, output_buffer)
+            _old_virtual_path, @virtual_path = @virtual_path, "surveyforms/index";_old_output_buffer = @output_buffer;;@output_buffer = output_buffer || ActionView::OutputBuffer.new;@output_buffer.safe_concat('<div class="column2">
+  <div class="colorbox round">
+  <div id="survey">
+    <h1 class="round-top">');@output_buffer.append= ( @title );@output_buffer.safe_concat('</h1>
+      ');@output_buffer.append=  form_tag surveyforms_path, :method => 'get' do @output_buffer.safe_concat('
+');@output_buffer.safe_concat('        <p>
+        ');@output_buffer.append= ( text_field_tag :search, params[:search] );@output_buffer.safe_concat('
+');@output_buffer.safe_concat('        ');@output_buffer.append= ( submit_tag "Search", :name => nil );@output_buffer.safe_concat('
+');@output_buffer.safe_concat('        </p>
+');     end 
+@output_buffer.safe_concat('  ');@output_buffer.append= ( will_paginate );@output_buffer.safe_concat('
+');@output_buffer.safe_concat('  <br />
+<table>
+  <tr>
+    <th>Title</th>
+');     if current_user.is_superadmin? 
+@output_buffer.safe_concat('    <th>Default?</th>
+');     end 
+@output_buffer.safe_concat('    <th>Actions</th>
+  </tr>
+');   for survey in @surveyforms 
+@output_buffer.safe_concat('    <tr>
+');@output_buffer.to_s
+          ensure
+            @virtual_path, @output_buffer = _old_virtual_path, _old_output_buffer
+          end
+
+Backtrace: /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:297:in `module_eval'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:297:in `compile'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:244:in `block in compile!'
+<internal:prelude>:10:in `synchronize'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:232:in `compile!'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:144:in `block in render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications.rb:125:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/template.rb:143:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/template_renderer.rb:47:in `block (2 levels) in render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/abstract_renderer.rb:38:in `block in instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications.rb:123:in `block in instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications.rb:123:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/abstract_renderer.rb:38:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/template_renderer.rb:46:in `block in render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/template_renderer.rb:54:in `render_with_layout'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/template_renderer.rb:45:in `render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/template_renderer.rb:18:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/renderer.rb:36:in `render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_view/renderer/renderer.rb:17:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/rendering.rb:110:in `_render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/streaming.rb:225:in `_render_template'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/rendering.rb:103:in `render_to_body'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/renderers.rb:28:in `render_to_body'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/compatibility.rb:50:in `render_to_body'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/rendering.rb:88:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/rendering.rb:16:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:40:in `block (2 levels) in render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/core_ext/benchmark.rb:5:in `block in ms'
+/home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/benchmark.rb:295:in `realtime'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/core_ext/benchmark.rb:5:in `ms'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:40:in `block in render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:83:in `cleanup_view_runtime'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activerecord-3.2.15.rc3/lib/active_record/railties/controller_runtime.rb:24:in `cleanup_view_runtime'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:39:in `render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/implicit_render.rb:10:in `default_render'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/implicit_render.rb:5:in `send_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/base.rb:167:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/rendering.rb:10:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/callbacks.rb:18:in `block in process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:414:in `_run__2335685457730956311__process_action__42804251540790432__callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:405:in `__run_callback'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:385:in `_run_process_action_callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:81:in `run_callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/callbacks.rb:17:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/rescue.rb:29:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:30:in `block in process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications.rb:123:in `block in instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/notifications.rb:123:in `instrument'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/instrumentation.rb:29:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/params_wrapper.rb:207:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activerecord-3.2.15.rc3/lib/active_record/railties/controller_runtime.rb:18:in `process_action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/base.rb:121:in `process'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/abstract_controller/rendering.rb:45:in `process'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal.rb:203:in `dispatch'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal/rack_delegation.rb:14:in `dispatch'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_controller/metal.rb:246:in `block in action'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/routing/route_set.rb:73:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/routing/route_set.rb:73:in `dispatch'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/routing/route_set.rb:36:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/journey-1.0.4/lib/journey/router.rb:68:in `block in call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/journey-1.0.4/lib/journey/router.rb:56:in `each'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/journey-1.0.4/lib/journey/router.rb:56:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/routing/route_set.rb:608:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/best_standards_support.rb:17:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/etag.rb:23:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/conditionalget.rb:25:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/head.rb:14:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/params_parser.rb:21:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/flash.rb:242:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/session/abstract/id.rb:210:in `context'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/session/abstract/id.rb:205:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/cookies.rb:341:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activerecord-3.2.15.rc3/lib/active_record/query_cache.rb:64:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activerecord-3.2.15.rc3/lib/active_record/connection_adapters/abstract/connection_pool.rb:479:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/callbacks.rb:28:in `block in call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:405:in `_run__3863201368054471094__call__969970099742687917__callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:405:in `__run_callback'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:385:in `_run_call_callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/callbacks.rb:81:in `run_callbacks'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/reloader.rb:65:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/remote_ip.rb:31:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/debug_exceptions.rb:16:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/rack/logger.rb:32:in `call_app'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/rack/logger.rb:16:in `block in call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/tagged_logging.rb:22:in `tagged'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/rack/logger.rb:16:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/request_id.rb:22:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/methodoverride.rb:21:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/runtime.rb:17:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/activesupport-3.2.15.rc3/lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/lock.rb:15:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/static.rb:63:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/engine.rb:484:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/application.rb:231:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/content_length.rb:14:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/railties-3.2.15.rc3/lib/rails/rack/log_tailer.rb:17:in `call'
+/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/rack-1.4.5/lib/rack/handler/webrick.rb:59:in `service'
+/home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/httpserver.rb:138:in `service'
+/home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/httpserver.rb:94:in `run'
+/home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/server.rb:191:in `block in start_thread'
+  Rendered surveyforms/index.html.erb within layouts/application (26.9ms)
+Completed 500 Internal Server Error in 88ms
+
+ActionView::Template::Error (/home/kevin/surveyor-gui/app/views/surveyforms/index.html.erb:24: syntax error, unexpected keyword_ensure, expecting keyword_end
+/home/kevin/surveyor-gui/app/views/surveyforms/index.html.erb:26: syntax error, unexpected $end, expecting keyword_end):
+    21:   <% for survey in @surveyforms %>
+    22:     <tr>
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:297:in `module_eval'
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:297:in `compile'
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:244:in `block in compile!'
+  <internal:prelude>:10:in `synchronize'
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:232:in `compile!'
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:144:in `block in render'
+  activesupport (3.2.15.rc3) lib/active_support/notifications.rb:125:in `instrument'
+  actionpack (3.2.15.rc3) lib/action_view/template.rb:143:in `render'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/template_renderer.rb:47:in `block (2 levels) in render_template'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/abstract_renderer.rb:38:in `block in instrument'
+  activesupport (3.2.15.rc3) lib/active_support/notifications.rb:123:in `block in instrument'
+  activesupport (3.2.15.rc3) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (3.2.15.rc3) lib/active_support/notifications.rb:123:in `instrument'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/abstract_renderer.rb:38:in `instrument'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/template_renderer.rb:46:in `block in render_template'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/template_renderer.rb:54:in `render_with_layout'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/template_renderer.rb:45:in `render_template'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/template_renderer.rb:18:in `render'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/renderer.rb:36:in `render_template'
+  actionpack (3.2.15.rc3) lib/action_view/renderer/renderer.rb:17:in `render'
+  actionpack (3.2.15.rc3) lib/abstract_controller/rendering.rb:110:in `_render_template'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/streaming.rb:225:in `_render_template'
+  actionpack (3.2.15.rc3) lib/abstract_controller/rendering.rb:103:in `render_to_body'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/renderers.rb:28:in `render_to_body'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/compatibility.rb:50:in `render_to_body'
+  actionpack (3.2.15.rc3) lib/abstract_controller/rendering.rb:88:in `render'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/rendering.rb:16:in `render'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:40:in `block (2 levels) in render'
+  activesupport (3.2.15.rc3) lib/active_support/core_ext/benchmark.rb:5:in `block in ms'
+  /home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/benchmark.rb:295:in `realtime'
+  activesupport (3.2.15.rc3) lib/active_support/core_ext/benchmark.rb:5:in `ms'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:40:in `block in render'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:83:in `cleanup_view_runtime'
+  activerecord (3.2.15.rc3) lib/active_record/railties/controller_runtime.rb:24:in `cleanup_view_runtime'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:39:in `render'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/implicit_render.rb:10:in `default_render'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/implicit_render.rb:5:in `send_action'
+  actionpack (3.2.15.rc3) lib/abstract_controller/base.rb:167:in `process_action'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/rendering.rb:10:in `process_action'
+  actionpack (3.2.15.rc3) lib/abstract_controller/callbacks.rb:18:in `block in process_action'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:414:in `_run__2335685457730956311__process_action__42804251540790432__callbacks'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:385:in `_run_process_action_callbacks'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.15.rc3) lib/abstract_controller/callbacks.rb:17:in `process_action'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/rescue.rb:29:in `process_action'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:30:in `block in process_action'
+  activesupport (3.2.15.rc3) lib/active_support/notifications.rb:123:in `block in instrument'
+  activesupport (3.2.15.rc3) lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+  activesupport (3.2.15.rc3) lib/active_support/notifications.rb:123:in `instrument'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/instrumentation.rb:29:in `process_action'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/params_wrapper.rb:207:in `process_action'
+  activerecord (3.2.15.rc3) lib/active_record/railties/controller_runtime.rb:18:in `process_action'
+  actionpack (3.2.15.rc3) lib/abstract_controller/base.rb:121:in `process'
+  actionpack (3.2.15.rc3) lib/abstract_controller/rendering.rb:45:in `process'
+  actionpack (3.2.15.rc3) lib/action_controller/metal.rb:203:in `dispatch'
+  actionpack (3.2.15.rc3) lib/action_controller/metal/rack_delegation.rb:14:in `dispatch'
+  actionpack (3.2.15.rc3) lib/action_controller/metal.rb:246:in `block in action'
+  actionpack (3.2.15.rc3) lib/action_dispatch/routing/route_set.rb:73:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/routing/route_set.rb:73:in `dispatch'
+  actionpack (3.2.15.rc3) lib/action_dispatch/routing/route_set.rb:36:in `call'
+  journey (1.0.4) lib/journey/router.rb:68:in `block in call'
+  journey (1.0.4) lib/journey/router.rb:56:in `each'
+  journey (1.0.4) lib/journey/router.rb:56:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/routing/route_set.rb:608:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/best_standards_support.rb:17:in `call'
+  rack (1.4.5) lib/rack/etag.rb:23:in `call'
+  rack (1.4.5) lib/rack/conditionalget.rb:25:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/head.rb:14:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/params_parser.rb:21:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/flash.rb:242:in `call'
+  rack (1.4.5) lib/rack/session/abstract/id.rb:210:in `context'
+  rack (1.4.5) lib/rack/session/abstract/id.rb:205:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/cookies.rb:341:in `call'
+  activerecord (3.2.15.rc3) lib/active_record/query_cache.rb:64:in `call'
+  activerecord (3.2.15.rc3) lib/active_record/connection_adapters/abstract/connection_pool.rb:479:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/callbacks.rb:28:in `block in call'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:405:in `_run__3863201368054471094__call__969970099742687917__callbacks'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:405:in `__run_callback'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:385:in `_run_call_callbacks'
+  activesupport (3.2.15.rc3) lib/active_support/callbacks.rb:81:in `run_callbacks'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/reloader.rb:65:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/remote_ip.rb:31:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/debug_exceptions.rb:16:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/show_exceptions.rb:56:in `call'
+  railties (3.2.15.rc3) lib/rails/rack/logger.rb:32:in `call_app'
+  railties (3.2.15.rc3) lib/rails/rack/logger.rb:16:in `block in call'
+  activesupport (3.2.15.rc3) lib/active_support/tagged_logging.rb:22:in `tagged'
+  railties (3.2.15.rc3) lib/rails/rack/logger.rb:16:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/request_id.rb:22:in `call'
+  rack (1.4.5) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.4.5) lib/rack/runtime.rb:17:in `call'
+  activesupport (3.2.15.rc3) lib/active_support/cache/strategy/local_cache.rb:72:in `call'
+  rack (1.4.5) lib/rack/lock.rb:15:in `call'
+  actionpack (3.2.15.rc3) lib/action_dispatch/middleware/static.rb:63:in `call'
+  railties (3.2.15.rc3) lib/rails/engine.rb:484:in `call'
+  railties (3.2.15.rc3) lib/rails/application.rb:231:in `call'
+  rack (1.4.5) lib/rack/content_length.rb:14:in `call'
+  railties (3.2.15.rc3) lib/rails/rack/log_tailer.rb:17:in `call'
+  rack (1.4.5) lib/rack/handler/webrick.rb:59:in `service'
+  /home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/httpserver.rb:138:in `service'
+  /home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/httpserver.rb:94:in `run'
+  /home/kevin/.rvm/rubies/ruby-1.9.3-p545/lib/ruby/1.9.1/webrick/server.rb:191:in `block in start_thread'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.6ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (9.5ms)
+
+
+Started GET "/surveyforms" for 127.0.0.1 at 2014-03-07 15:23:28 -0500
+Processing by SurveyformsController#index as HTML
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "surveys" WHERE (template = 't')[0m
+SQLite3::SQLException: no such column: template: SELECT COUNT(*) FROM "surveys"  WHERE (template = 't')
+  Rendered surveyforms/index.html.erb within layouts/application (8.9ms)
+Completed 500 Internal Server Error in 10ms
+
+ActionView::Template::Error (SQLite3::SQLException: no such column: template: SELECT COUNT(*) FROM "surveys"  WHERE (template = 't')):
+    8:         <%= submit_tag "Search", :name => nil %>
+    9:         </p>
+    10:     <% end %>
+    11:   <%= will_paginate %>
+    12:   <br />
+    13: <table>
+    14:   <tr>
+  app/views/surveyforms/index.html.erb:11:in `_app_views_surveyforms_index_html_erb___1385413707512039054_70156349561940'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.1ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.6ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (7.0ms)
+
+
+Started GET "/assets/rails.png" for 127.0.0.1 at 2014-03-07 15:24:26 -0500
+Served asset /rails.png - 200 OK (4ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (1.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateSurveys (20140306033540)
+Migrating to CreateSurveySections (20140306033541)
+Migrating to CreateQuestions (20140306033542)
+Migrating to CreateQuestionGroups (20140306033543)
+Migrating to CreateAnswers (20140306033544)
+Migrating to CreateResponseSets (20140306033545)
+Migrating to CreateResponses (20140306033546)
+Migrating to CreateDependencies (20140306033547)
+Migrating to CreateDependencyConditions (20140306033548)
+Migrating to CreateValidations (20140306033549)
+Migrating to CreateValidationConditions (20140306033550)
+Migrating to AddDisplayOrderToSurveys (20140306033551)
+Migrating to AddCorrectAnswerIdToQuestions (20140306033552)
+Migrating to AddIndexToResponseSets (20140306033553)
+Migrating to AddIndexToSurveys (20140306033554)
+Migrating to AddUniqueIndicies (20140306033555)
+Migrating to AddSectionIdToResponses (20140306033556)
+Migrating to AddDefaultValueToAnswers (20140306033557)
+Migrating to AddApiIds (20140306033558)
+Migrating to AddDisplayTypeToAnswers (20140306033559)
+Migrating to AddApiIdToQuestionGroups (20140306033560)
+Migrating to AddApiIdsToResponseSetsAndResponses (20140306033561)
+Migrating to UpdateBlankApiIdsOnQuestionGroup (20140306033562)
+Migrating to DropUniqueIndexOnAccessCodeInSurveys (20140306033563)
+Migrating to AddVersionToSurveys (20140306033564)
+Migrating to AddUniqueIndexOnAccessCodeAndVersionInSurveys (20140306033565)
+Migrating to UpdateBlankVersionsOnSurveys (20140306033566)
+Migrating to ApiIdsMustBeUnique (20140306033567)
+Migrating to CreateSurveyTranslations (20140306033568)
+Migrating to AddInputMaskAttributesToAnswer (20140306033569)
+Migrating to AddTemplateToSurveys (20140307204049)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "surveys" ADD "template" boolean
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140307204049')[0m
+  [1m[35m (4.8ms)[0m  commit transaction
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Connecting to database specified by database.yml
+  [1m[36m (1.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (5.1ms)[0m  [1mCREATE TABLE "answers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "text" text, "short_text" text, "help_text" text, "weight" integer, "response_class" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "is_exclusive" boolean, "display_length" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "default_value" varchar(255), "api_id" varchar(255), "display_type" varchar(255), "input_mask" varchar(255), "input_mask_placeholder" varchar(255)) [0m
+  [1m[35m (3.1ms)[0m  CREATE UNIQUE INDEX "uq_answers_api_id" ON "answers" ("api_id")
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "dependencies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "question_id" integer, "question_group_id" integer, "rule" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.2ms)[0m  CREATE TABLE "dependency_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "dependency_id" integer, "rule_key" varchar(255), "question_id" integer, "operator" varchar(255), "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "question_groups" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "text" text, "help_text" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_type" varchar(255), "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.2ms)[0m  CREATE UNIQUE INDEX "uq_question_groups_api_id" ON "question_groups" ("api_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "questions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_section_id" integer, "question_group_id" integer, "text" text, "short_text" text, "help_text" text, "pick" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "display_type" varchar(255), "is_mandatory" boolean, "display_width" integer, "custom_class" varchar(255), "custom_renderer" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "correct_answer_id" integer, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "uq_questions_api_id" ON "questions" ("api_id")
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "response_sets" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "survey_id" integer, "access_code" varchar(255), "started_at" datetime, "completed_at" datetime, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "api_id" varchar(255)) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "response_sets_ac_idx" ON "response_sets" ("access_code")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_response_sets_api_id" ON "response_sets" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "responses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "response_set_id" integer, "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "response_group" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "survey_section_id" integer, "api_id" varchar(255)) 
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_responses_api_id" ON "responses" ("api_id")[0m
+  [1m[35m (3.3ms)[0m  CREATE INDEX "index_responses_on_survey_section_id" ON "responses" ("survey_section_id")
+  [1m[36m (3.4ms)[0m  [1mCREATE TABLE "survey_sections" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "title" varchar(255), "description" text, "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "display_order" integer, "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.9ms)[0m  CREATE TABLE "survey_translations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "survey_id" integer, "locale" varchar(255), "translation" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.6ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0, "template" boolean) [0m
+  [1m[35m (3.3ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (3.3ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "validation_conditions" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "validation_id" integer, "rule_key" varchar(255), "operator" varchar(255), "question_id" integer, "answer_id" integer, "datetime_value" datetime, "integer_value" integer, "float_value" float, "unit" varchar(255), "text_value" text, "string_value" varchar(255), "response_other" varchar(255), "regexp" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "validations" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "answer_id" integer, "rule" varchar(255), "message" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (3.4ms)[0m  [1mCREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")[0m
+  [1m[35m (0.1ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140307204049')[0m
+  [1m[35m (3.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033548')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033558')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033545')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033563')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033564')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033555')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033557')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033541')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033566')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033553')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033549')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033551')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033559')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033544')[0m
+  [1m[35m (2.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033552')
+  [1m[36m (3.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033569')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033560')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033568')[0m
+  [1m[35m (3.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033567')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033561')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033562')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033554')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033543')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033547')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033542')
+  [1m[36m (4.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033550')[0m
+  [1m[35m (4.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033556')
+  [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033540')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033546')
+  [1m[36m (3.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033565')[0m
+Connecting to database specified by database.yml
+  [1m[36m (1.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+Migrating to AddTemplateToSurveys (20140307204049)
+  [1m[36m (0.0ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TEMPORARY TABLE "altered_surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0, "template" boolean) [0m
+  [1m[35m (0.1ms)[0m  CREATE UNIQUE INDEX "temp_uq_altered_surveys_api_id" ON "altered_surveys" ("api_id")
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "temp_altered_surveys_access_code_version_idx" ON "altered_surveys" ("access_code", "survey_version")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "surveys"
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "altered_surveys" ("id","title","description","access_code","reference_identifier","data_export_identifier","common_namespace","common_identifier","active_at","inactive_at","css_url","custom_class","created_at","updated_at","display_order","api_id","survey_version","template") VALUES (1, 'Kitchen Sink survey', NULL, 'kitchen-sink-survey', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2014-03-06 16:00:11.660441', '2014-03-06 16:00:11.660441', 0, 'a62507ce-dcca-42f0-9620-a9a6dbb2467f', 0, NULL)[0m
+  [1m[35m (0.2ms)[0m  DROP TABLE "surveys"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "surveys" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar(255), "description" text, "access_code" varchar(255), "reference_identifier" varchar(255), "data_export_identifier" varchar(255), "common_namespace" varchar(255), "common_identifier" varchar(255), "active_at" datetime, "inactive_at" datetime, "css_url" varchar(255), "custom_class" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "display_order" integer, "api_id" varchar(255), "survey_version" integer DEFAULT 0) [0m
+  [1m[35m (0.2ms)[0m  CREATE UNIQUE INDEX "surveys_access_code_version_idx" ON "surveys" ("access_code", "survey_version")
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "uq_surveys_api_id" ON "surveys" ("api_id")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "altered_surveys"
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "surveys" ("id","title","description","access_code","reference_identifier","data_export_identifier","common_namespace","common_identifier","active_at","inactive_at","css_url","custom_class","created_at","updated_at","display_order","api_id","survey_version") VALUES (1, 'Kitchen Sink survey', NULL, 'kitchen-sink-survey', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2014-03-06 16:00:11.660441', '2014-03-06 16:00:11.660441', 0, 'a62507ce-dcca-42f0-9620-a9a6dbb2467f', 0)[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "altered_surveys"
+  [1m[36m (0.1ms)[0m  [1mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20140307204049'[0m
+  [1m[35m (7.1ms)[0m  commit transaction
+  [1m[36m (0.3ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Connecting to database specified by database.yml
+  [1m[36m (1.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateSurveys (20140306033540)
+Migrating to CreateSurveySections (20140306033541)
+Migrating to CreateQuestions (20140306033542)
+Migrating to CreateQuestionGroups (20140306033543)
+Migrating to CreateAnswers (20140306033544)
+Migrating to CreateResponseSets (20140306033545)
+Migrating to CreateResponses (20140306033546)
+Migrating to CreateDependencies (20140306033547)
+Migrating to CreateDependencyConditions (20140306033548)
+Migrating to CreateValidations (20140306033549)
+Migrating to CreateValidationConditions (20140306033550)
+Migrating to AddDisplayOrderToSurveys (20140306033551)
+Migrating to AddCorrectAnswerIdToQuestions (20140306033552)
+Migrating to AddIndexToResponseSets (20140306033553)
+Migrating to AddIndexToSurveys (20140306033554)
+Migrating to AddUniqueIndicies (20140306033555)
+Migrating to AddSectionIdToResponses (20140306033556)
+Migrating to AddDefaultValueToAnswers (20140306033557)
+Migrating to AddApiIds (20140306033558)
+Migrating to AddDisplayTypeToAnswers (20140306033559)
+Migrating to AddApiIdToQuestionGroups (20140306033560)
+Migrating to AddApiIdsToResponseSetsAndResponses (20140306033561)
+Migrating to UpdateBlankApiIdsOnQuestionGroup (20140306033562)
+Migrating to DropUniqueIndexOnAccessCodeInSurveys (20140306033563)
+Migrating to AddVersionToSurveys (20140306033564)
+Migrating to AddUniqueIndexOnAccessCodeAndVersionInSurveys (20140306033565)
+Migrating to UpdateBlankVersionsOnSurveys (20140306033566)
+Migrating to ApiIdsMustBeUnique (20140306033567)
+Migrating to CreateSurveyTranslations (20140306033568)
+Migrating to AddInputMaskAttributesToAnswer (20140306033569)
+Migrating to AddTemplateToSurveys (20140307204049)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "surveys" ADD "template" boolean DEFAULT 'f'
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140307204049')[0m
+  [1m[35m (5.6ms)[0m  commit transaction
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Connecting to database specified by database.yml

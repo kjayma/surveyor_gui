@@ -29,6 +29,17 @@ describe SurveyformsController do
       response.should render_template('index')
     end
 
+  context "#edit" do
+    def do_get(params = {})
+      survey.sections = [Factory(:survey_section, :survey => survey)]
+      get :edit, {:survey_code => "alpha", :response_set_code => "pdq"}.merge(params)
+    end
+    it "renders edit" do
+      do_get
+      response.should be_success
+      response.should render_template('edit')
+    end
+  end
   end
 
 end

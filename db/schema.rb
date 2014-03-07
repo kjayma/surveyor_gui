@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140306033569) do
+ActiveRecord::Schema.define(:version => 20140307204049) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -176,11 +176,12 @@ ActiveRecord::Schema.define(:version => 20140306033569) do
     t.datetime "inactive_at"
     t.string   "css_url"
     t.string   "custom_class"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "display_order"
     t.string   "api_id"
     t.integer  "survey_version",         :default => 0
+    t.boolean  "template",               :default => false
   end
 
   add_index "surveys", ["access_code", "survey_version"], :name => "surveys_access_code_version_idx", :unique => true

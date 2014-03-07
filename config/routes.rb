@@ -70,6 +70,42 @@ SurveyorGui::Application.routes.draw do
       get 'cut_question'
       get 'paste_question'
     end
+
+  resources :survey_sections do
+    post :sort, :on => :collection
+  end
+
+  resources :questions do
+    member do
+      get 'cut'
+    end
+  end
+
+  resources :dependencys do
+    collection do
+      get 'get_answers'
+      get 'get_question_type'
+    end
+  end
+
+  resources :surveyresponses,
+    :only=>['preview_results',
+            'preview_report',
+            'test',
+            'prepare_value_analysis_report',
+            'prepare_recommendation_report',
+            'show_recommendation_pdf',
+            'show_results' ] do
+      member do
+        get 'preview_results'
+        get 'preview_survey'
+        get 'preview_report'
+        get 'test'
+        get 'prepare_recommendation_report'
+        get 'show_recommendation_pdf'
+        get 'show_results'
+      end
+    end
   end
 
 end

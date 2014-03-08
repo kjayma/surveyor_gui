@@ -4284,3 +4284,44 @@ Connecting to database specified by database.yml
   [1m[36m (2.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033540')[0m
   [1m[35m (3.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140306033546')
   [1m[36m (3.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140306033565')[0m
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (1.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateSurveys (20140306033540)
+Migrating to CreateSurveySections (20140306033541)
+Migrating to CreateQuestions (20140306033542)
+Migrating to CreateQuestionGroups (20140306033543)
+Migrating to CreateAnswers (20140306033544)
+Migrating to CreateResponseSets (20140306033545)
+Migrating to CreateResponses (20140306033546)
+Migrating to CreateDependencies (20140306033547)
+Migrating to CreateDependencyConditions (20140306033548)
+Migrating to CreateValidations (20140306033549)
+Migrating to CreateValidationConditions (20140306033550)
+Migrating to AddDisplayOrderToSurveys (20140306033551)
+Migrating to AddCorrectAnswerIdToQuestions (20140306033552)
+Migrating to AddIndexToResponseSets (20140306033553)
+Migrating to AddIndexToSurveys (20140306033554)
+Migrating to AddUniqueIndicies (20140306033555)
+Migrating to AddSectionIdToResponses (20140306033556)
+Migrating to AddDefaultValueToAnswers (20140306033557)
+Migrating to AddApiIds (20140306033558)
+Migrating to AddDisplayTypeToAnswers (20140306033559)
+Migrating to AddApiIdToQuestionGroups (20140306033560)
+Migrating to AddApiIdsToResponseSetsAndResponses (20140306033561)
+Migrating to UpdateBlankApiIdsOnQuestionGroup (20140306033562)
+Migrating to DropUniqueIndexOnAccessCodeInSurveys (20140306033563)
+Migrating to AddVersionToSurveys (20140306033564)
+Migrating to AddUniqueIndexOnAccessCodeAndVersionInSurveys (20140306033565)
+Migrating to UpdateBlankVersionsOnSurveys (20140306033566)
+Migrating to ApiIdsMustBeUnique (20140306033567)
+Migrating to CreateSurveyTranslations (20140306033568)
+Migrating to AddInputMaskAttributesToAnswer (20140306033569)
+Migrating to AddTemplateToSurveys (20140307204049)
+Migrating to AddTestDataToResponseSets (20140307235607)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  ALTER TABLE "response_sets" ADD "test_data" boolean DEFAULT 'f'
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140307235607')[0m
+  [1m[35m (6.9ms)[0m  commit transaction
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m

@@ -70,6 +70,7 @@ SurveyorGui::Application.routes.draw do
       get 'cut_question'
       get 'paste_question'
     end
+  end
 
   resources :survey_sections do
     post :sort, :on => :collection
@@ -90,6 +91,7 @@ SurveyorGui::Application.routes.draw do
 
   resources :surveyresponses,
     :only=>['preview_results',
+            'preview_survey',
             'preview_report',
             'test',
             'prepare_value_analysis_report',
@@ -106,6 +108,5 @@ SurveyorGui::Application.routes.draw do
         get 'show_results'
       end
     end
-  end
 
 end

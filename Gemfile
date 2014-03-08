@@ -38,6 +38,7 @@ gem 'jquery-rails'
 gem 'debugger'
 gem 'will_paginate', '~> 3.0'
 gem 'simple_form'
+gem 'carrierwave'
 group :development, :test do
   gem "rspec-rails", ">= 2.8.1"
 end

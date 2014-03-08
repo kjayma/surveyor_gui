@@ -4477,3 +4477,36 @@ ActionView::Template::Error (Missing partial surveyforms/survey_section_fields, 
   Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.0ms)
   Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
   Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (7.9ms)
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 10:40:17 -0500
+Connecting to database specified by database.yml
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.1ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (260.2ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (265.6ms)
+Completed 500 Internal Server Error in 517ms
+
+ActionView::Template::Error (Missing partial surveyforms/survey_section_fields, application/survey_section_fields with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee, :haml]}. Searched in:
+  * "/home/kevin/surveyor-gui/app/views"
+  * "/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/surveyor-1.4.0/app/views"
+):
+    57: 
+    58:         </span><br/><br />
+    59:         <div class="sortable_sections">
+    60:           <%= render "survey_section_fields", :s => builder , :f => f %>
+    61:         </div>
+    62:         <% if @wizard_step && !@wizard_step.blank? && @wizard_step != 'undefined'  %>
+    63:           <span style="position:relative;left:5em"><%= f.button :submit, 'next' %></span>
+  app/views/surveyforms/_form.html.erb:60:in `block in _app_views_surveyforms__form_html_erb___696187168690775062_70273888893920'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___696187168690775062_70273888893920'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb___603415497619116027_70273888034900'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.0ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (7.1ms)

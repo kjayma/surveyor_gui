@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140307235607) do
+ActiveRecord::Schema.define(:version => 20140308172417) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20140307235607) do
     t.string   "display_type"
     t.string   "input_mask"
     t.string   "input_mask_placeholder"
+    t.string   "original_choice"
   end
 
   add_index "answers", ["api_id"], :name => "uq_answers_api_id", :unique => true
@@ -138,9 +139,11 @@ ActiveRecord::Schema.define(:version => 20140307235607) do
     t.datetime "updated_at",        :null => false
     t.integer  "survey_section_id"
     t.string   "api_id"
+    t.string   "blob"
   end
 
   add_index "responses", ["api_id"], :name => "uq_responses_api_id", :unique => true
+  add_index "responses", ["response_set_id", "question_id", "answer_id"], :name => "response_unique_idx", :unique => true
   add_index "responses", ["survey_section_id"], :name => "index_responses_on_survey_section_id"
 
   create_table "survey_sections", :force => true do |t|
@@ -153,8 +156,9 @@ ActiveRecord::Schema.define(:version => 20140307235607) do
     t.string   "common_identifier"
     t.integer  "display_order"
     t.string   "custom_class"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+    t.boolean  "modifiable",             :default => true
   end
 
   create_table "survey_translations", :force => true do |t|

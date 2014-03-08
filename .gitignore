@@ -7,6 +7,7 @@ capybara-*.html
 .rvmrc
 /vendor/bundle
 /log/*
+log/*
 /tmp/*
 /public/system/*
 /coverage/

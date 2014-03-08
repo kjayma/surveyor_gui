@@ -37,6 +37,7 @@ gem 'jquery-rails'
 # To use debugger
 gem 'debugger'
 gem 'will_paginate', '~> 3.0'
+gem 'simple_form'
 group :development, :test do
   gem "rspec-rails", ">= 2.8.1"
 end

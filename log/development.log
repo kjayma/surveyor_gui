@@ -4325,3 +4325,155 @@ Migrating to AddTestDataToResponseSets (20140307235607)
   [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20140307235607')[0m
   [1m[35m (6.9ms)[0m  commit transaction
   [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 00:28:29 -0500
+Connecting to database specified by database.yml
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.1ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (249.1ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (255.4ms)
+Completed 500 Internal Server Error in 494ms
+
+ActionView::Template::Error (undefined method `error_messages' for #<SimpleForm::FormBuilder:0x007fdb642270d0>):
+    46:         <% end %>
+    47: 
+    48: 
+    49:         <%= f.error_messages %>
+    50:         <br/>
+    51:         <%= f.hidden_field :id %>
+    52:         <%= f.hidden_field :user_id %>
+  app/views/surveyforms/_form.html.erb:49:in `block in _app_views_surveyforms__form_html_erb___999536241469881391_70290131379780'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___999536241469881391_70290131379780'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb__1234601425805182470_70290127512200'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (6.2ms)
+Connecting to database specified by database.yml
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 00:35:50 -0500
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.1ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.2ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (18.0ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (18.4ms)
+Completed 500 Internal Server Error in 26ms
+
+ActionView::Template::Error (undefined method `user_id' for #<Surveyform:0x007fdb64f0d858>):
+    51:          <% end %>
+    52:         <br/>
+    53:         <%= f.hidden_field :id %>
+    54:         <%= f.hidden_field :user_id %>
+    55:         <%= f.label :title, :required => false,  :style => 'font-size: 150%;' %>
+    56:         <%= f.input :title, :input_html => { :size => '35', :style=>'margin-top: 0.5%; font-size: 110%; float:left;'}, :required=>false , :label=>false%>
+    57:         <% if current_user.institution.name != 'EvaluationRx' -%>
+  app/views/surveyforms/_form.html.erb:54:in `block in _app_views_surveyforms__form_html_erb___999536241469881391_70290134433060'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___999536241469881391_70290134433060'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb__1234601425805182470_70290127512200'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (23.7ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.3ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (31.3ms)
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 00:36:20 -0500
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.1ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (36.8ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (37.2ms)
+Completed 500 Internal Server Error in 43ms
+
+ActionView::Template::Error (undefined local variable or method `current_user' for #<#<Class:0x007fdb648668b0>:0x007fdb64627838>):
+    53:         <%= f.hidden_field :id %>
+    54:         <%= f.label :title, :required => false,  :style => 'font-size: 150%;' %>
+    55:         <%= f.input :title, :input_html => { :size => '35', :style=>'margin-top: 0.5%; font-size: 110%; float:left;'}, :required=>false , :label=>false%>
+    56:         <% if current_user.institution.name != 'EvaluationRx' -%>
+    57:           <%= f.hidden_field :template %>
+    58:         <% else -%>
+    59:           <%= f.input :template, :label => false, :input_html=>{:style=>"float:right;"} %><span style='position:relative; float: right;'>Template?&nbsp;
+  app/views/surveyforms/_form.html.erb:56:in `block in _app_views_surveyforms__form_html_erb___999536241469881391_70290131408540'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___999536241469881391_70290131408540'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb__1234601425805182470_70290127512200'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.9ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (6.6ms)
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 00:37:14 -0500
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.1ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (20.5ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (20.9ms)
+Completed 500 Internal Server Error in 27ms
+
+ActionView::Template::Error (undefined method `survey_type' for #<Surveyform:0x007fdb6515b5b0>):
+    56:         <%= f.input :template, :label => false, :input_html=>{:style=>"float:right;"} %><span style='position:relative; float: right;'>Template?&nbsp;
+    57: 
+    58:         </span><br/><br />
+    59:         <% if !@hide_survey_type && f.object.survey_type!='MERXPQ'-%>
+    60:           <%= f.input :survey_type, :label_html => {:style => 'width:7.5em'},
+    61:                                               :collection => [
+    62:                                                     ['Value Analysis Committee Questionnaire for Vendors', 'VACQV'],
+  app/views/surveyforms/_form.html.erb:59:in `block in _app_views_surveyforms__form_html_erb___999536241469881391_70290137169000'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___999536241469881391_70290137169000'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb__1234601425805182470_70290127512200'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (1.0ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (28.0ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (33.8ms)
+
+
+Started GET "/surveyforms/1/edit" for 127.0.0.1 at 2014-03-08 00:37:49 -0500
+Processing by SurveyformsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mSurveyform Load (0.2ms)[0m  [1mSELECT "surveys".* FROM "surveys" WHERE "surveys"."id" = 1 LIMIT 1[0m
+  [1m[35mSurveySection Load (0.2ms)[0m  SELECT "survey_sections".* FROM "survey_sections" WHERE "survey_sections"."survey_id" IN (1) ORDER BY display_order
+  [1m[36mResponseSet Load (0.1ms)[0m  [1mSELECT "response_sets".* FROM "response_sets" WHERE "response_sets"."survey_id" = 1 AND (test_data='t')[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "response_sets" WHERE "response_sets"."survey_id" = 1
+  Rendered surveyforms/_form.html.erb (17.9ms)
+  Rendered surveyforms/edit.html.erb within layouts/application (19.1ms)
+Completed 500 Internal Server Error in 27ms
+
+ActionView::Template::Error (Missing partial surveyforms/survey_section_fields, application/survey_section_fields with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee, :haml]}. Searched in:
+  * "/home/kevin/surveyor-gui/app/views"
+  * "/home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/surveyor-1.4.0/app/views"
+):
+    57: 
+    58:         </span><br/><br />
+    59:         <div class="sortable_sections">
+    60:           <%= render "survey_section_fields", :s => builder , :f => f %>
+    61:         </div>
+    62:         <% if @wizard_step && !@wizard_step.blank? && @wizard_step != 'undefined'  %>
+    63:           <span style="position:relative;left:5em"><%= f.button :submit, 'next' %></span>
+  app/views/surveyforms/_form.html.erb:60:in `block in _app_views_surveyforms__form_html_erb___999536241469881391_70290131405700'
+  app/views/surveyforms/_form.html.erb:43:in `_app_views_surveyforms__form_html_erb___999536241469881391_70290131405700'
+  app/views/surveyforms/edit.html.erb:1:in `_app_views_surveyforms_edit_html_erb__1234601425805182470_70290127512200'
+
+
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.0ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.7ms)
+  Rendered /home/kevin/.rvm/gems/ruby-1.9.3-p545@rails32/gems/actionpack-3.2.15.rc3/lib/action_dispatch/middleware/templates/rescues/template_error.erb within rescues/layout (7.9ms)

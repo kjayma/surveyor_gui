@@ -1,0 +1,18 @@
+<% content_for :javascript do %>
+  <% javascript_tag do %>
+    window.onload=function () {
+    document.body.style.background = "#f3f3f3";
+    }
+  <% end %>
+<% end %>
+<div class="colorbox round">
+    <h1 class="round-top"><%= @title %></h1>
+    <%= simple_form_for @survey_section, :remote=>"true" do |f| %>
+    <%= f.error_messages %>
+    <%= f.hidden_field :survey_id %>
+    <%= f.hidden_field :modifiable %>
+    <%= f.hidden_field :display_order %>
+    <%= f.input :title , :input_html=>{:size=>'35'}%>
+    <%= f.button :submit, 'Save Changes', :id=>'survey_section_submit' %>
+  <% end %>
+</div>

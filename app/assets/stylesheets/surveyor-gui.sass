@@ -6,6 +6,20 @@ body
   :text-align  left
   :background-color white !important
 
+#Box
+  :margin 1em auto 1em
+  :padding 1em 0 2em
+  :width 1000px
+  :min-height 35em
+  :background-color #f7fAf7
+  :position relative
+  :overflow hidden
+
+.boxshadow
+  :-moz-box-shadow 10px 10px 5px #888
+  :-webkit-box-shadow 10px 10px 5px #888
+  :box-shadow 10px 10px 5px #888
+
 .shadebox
   :margin 0 0 2em
   :padding 0em 1em 1em
@@ -27,9 +41,9 @@ body
     :padding 0.25em 1em
     :text-transform none
     :text-align left
-    :font-size 130%
+    :font-size 160%
     :font-style normal
-    :font-family "WOW", Arial, Helvetica, sans-serif
+    :font-family Arial, Helvetica, sans-serif
     :font-weight normal
     :color white
     :background #ac90f2
@@ -51,11 +65,34 @@ body
   table td
     :padding  0 0.5em
 
+.sortable_sections
+  :margin-top 2em
+  .survey_section
+    :margin-bottom 2.5em
+  .surveysection
+    :margin-top 2em
+    :padding-left 1em
+    .questions
+      :margin 1em
+      :padding 1em
+      :font-weight bold
+
 .column2
   :float left
   :margin-right 1em
   :margin-left 1em
   :padding-bottom 0
+
+.column3
+  :float left
+  :margin-right 1em
+  :margin-left 1em
+  :padding-bottom 0
+  :width 98%
+
+.floatdown
+  :clear left
+  :margin-left 2.7em
 
 .round
   :-moz-border-radius-topleft  10px
@@ -81,4 +118,148 @@ body
   :-webkit-border-top-left-radius  10px
 
   :border-top-left-radius  10px
-  :border-top-right-radius  10px 
+  :border-top-right-radius  10px
+
+.simple_form
+  :margin-left 10px
+
+  label
+    :float left
+    :width 5em
+    :text-align left
+    :margin 2px 0
+
+
+  div.input
+    :margin-bottom 10px
+
+
+  div.numeric input
+    :text-align right
+
+  div.boolean, input[type='submit']
+    :margin-left 0em
+
+  div.boolean
+    label
+      :float none
+      :margin 0
+
+      .collection_radio, .collection_check_boxes
+        :margin-right 10px
+        :margin-left 2px
+
+  .questions
+    input.radio, input.check_boxes
+      :margin-right 5px
+      :vertical-align -3px
+
+
+    label.collection_radio , label.collection_check_boxes
+      :display block
+      :float none
+      :margin 1em 0 0 3em
+      :width 30em
+
+    div
+      .input.radio.star
+        :position relative
+        :left 3em
+        :top 1em
+
+      #answer_choice label.collection_radio
+        :float left
+        :margin 0
+
+      star label.collection_radio
+        :display inline
+        :margin 1 0 0 0em
+        :width auto
+  .question_logic_notifier {
+    background: #eee2f8;
+    overflow:hidden;
+    display: block;
+    width: 102.3%;
+    font-size: 95%;
+    margin: -17px 0 1em -17px;
+    padding-left: 1em;
+    font-weight:normal;
+
+  label.collection_check_boxes
+    :clear left
+    :margin-left 5.8em
+    :width 15em
+
+  .error
+    :clear left
+    :margin-left 15em
+    :font-size 12px
+    :color #D00
+    :display block
+
+  .hint
+    :clear left
+    :margin-left 13.5em
+    :font-size 12px
+    :color #555
+    :display block
+    :font-style italic
+
+  abbr
+    :border-bottom none
+
+  .fl
+    :float left
+    :margin-right 0
+
+  .fl.notfirst label
+    :width auto
+    :margin-left 1em
+
+  .gravatar
+    :float right
+    :margin 0 0 0 -0.1em
+
+  #vendor_citystatezip
+    :display inline
+
+  #vendor_country
+    :width 12em
+
+  #vendor_state
+    :width 12em
+
+  #recaptcha_area
+    :margin-left 10em
+    :margin-top -1em
+
+  #role_submit
+    :margin-top 1em
+
+  #institution_country
+    :width 12em
+
+  #institution_state
+    :width 12em
+
+  fieldset.indent
+    :margin-left 10em
+
+  .evaluation_products .hint
+    :margin-left 1em
+
+  .evaluation_products td
+    :vertical-align text-top
+
+  .evaluation_products td img, a
+    :vertical-align text-bottom
+
+  .evaluation_products div.currency
+    :width 4.5em
+
+  .vertical_collection
+    :margin-left 3em
+
+.simple_form.dependency_editor label
+  :float left
+  :width 10em     

@@ -36,9 +36,6 @@
             <% end %>
         </h1>
         <%= simple_form_for @surveyform, :url => "/surveyforms/"+@surveyform.id.to_s do |f| %>
-          <% if @wizard_step && !@wizard_step.blank? && @wizard_step != 'undefined' %>
-            <span style="position:relative;left:5em"><%= f.button :submit, 'next' %></span>
-          <% end %>
 
 
            <% @surveyform.errors.full_messages.each do |msg| %>

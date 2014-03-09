@@ -14,3 +14,7 @@
 //= require jquery_ujs
 //= require_tree .
 //= require colorbox-rails
+//= require jquery.form
+//= require surveyor-gui
+//= require jquery.validate
+//= require jquery.blockUI

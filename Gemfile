@@ -40,6 +40,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'simple_form'
 gem 'carrierwave'
 gem 'colorbox-rails'
+gem 'jquery-form-rails'
 group :development, :test do
   gem "rspec-rails", ">= 2.8.1"
 end

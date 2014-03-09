@@ -1,0 +1,271 @@
+<% @question_no = @question_no + 1 if f.object.id && f.object.display_type != 'label'-%>
+<%= div_for(f.object) do %>
+  <fieldset style="border:1px dashed <%= f.object.is_mandatory? ? 'red' : '#CCCCCC'%>; padding:3;<%= !@survey_locked && (f.object.modifiable) ? '' : 'background-color: #F3F3F3;' %>" class="fields questions">
+    <div style="position:relative;">
+      <% if f.object.dependency -%>
+        <span class="question_logic_notifier">
+          <%= get_questions(f) if f.object.dependency %>.<br/>
+        </span>
+      <% end -%>
+      <% if !@survey_locked && (f.object.modifiable?) -%>
+        <span class="fl ui-icon ui-icon-arrowthick-2-n-s" style='margin: .1em 0 0 -.5em;'></span>
+        <span style="margin-left: 1.5em;">
+          <%= button_to_function 'Edit Question',
+            'cbox = $.colorbox({width:"666px",
+height:"772px",
+scrolling:true,
+iframe:true,
+onClosed:function(){
+submitted = $("input#pass_cbox_data").val();
+if (submitted) {
+$.get("'+
+                                  url_for(:action => "replace_question", :question_id => f.object.id, :wizard_step => @wizard_step.to_s)+'",
+{},
+function(response) {
+$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response)).update_widgets();
+refresh_stars();
+update_uislider();
+update_question_numbers();
+}
+);
+};
+},
+href:"'+edit_question_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
+          <%= button_to_function "Cut Question",
+            '$.get("'+cut_question_surveyform_url(:question_id => f.object.id, :wizard_step => @wizard_step.to_s)+'",
+{},
+function(response) {
+$(".column3").filter(":last").replaceWith(response);
+refresh_stars();
+update_uislider();
+}
+); ' %>
+          <%= button_to_function "Delete Question", '
+$.ajax({
+type: "DELETE",
+url: "'+question_url(f.object.id)+'",
+success: function(msg){
+if (typeof msg !== undefined && msg.length>0) {
+alert(msg);
+}
+else {
+$.get("'+replace_form_surveyform_url(:survey_section_id => f.object.survey_section_id, :wizard_step => @wizard_step.to_s)+'",
+{},
+function(response) {
+$(".column3").filter(":last").replaceWith(response);
+refresh_stars();
+update_uislider();
+}
+);
+}
+},
+error: function(){
+alert("This question cannot be deleted.");
+}
+});' %>
+          <span style="float:right;">
+            <% if f.object.dependency -%>
+              <%= button_to_function "Delete Logic", '
+$.ajax({
+type: "DELETE",
+url: "'+dependency_url(f.object.id)+'",
+success: function(msg){
+$.get("'+
+                      url_for(:action => "replace_question", :question_id => f.object.id)+'",
+{},
+function(response) {
+var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
+refresh_stars(question);
+update_question_numbers();
+}
+);
+},
+error: function(){
+alert("This logic cannot be deleted.");
+}
+});' %>
+                <%= button_to_function 'Edit Logic',
+                  'cbox = $.fn.colorbox({width:"90%",
+height:"50%",
+scrolling:true,
+iframe:true,
+onClosed:function(){
+submitted = $("input#pass_cbox_data").val();
+if (submitted) {
+$.get("'+
+                                        url_for(:action => "replace_question", :question_id => f.object.id)+'",
+{},
+function(response) {
+var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
+refresh_stars(question);
+update_question_numbers();
+}
+);
+};
+},
+href:"'+edit_dependency_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
+            <% else -%>
+              <%= button_to_function 'Add Logic',
+                'cbox = $.fn.colorbox({width:"90%",
+height:"50%",
+scrolling:true,
+iframe:true,
+onClosed:function(){
+submitted = $("input#pass_cbox_data").val();
+if (submitted) {
+$.get("'+
+                                      url_for(:action => "replace_question", :question_id => f.object.id)+'",
+{},
+function(response) {
+var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
+refresh_stars(question);
+update_question_numbers();
+}
+);
+};
+},
+href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opacity:.3});'%>
+            <% end %>
+          </span>
+        </span>
+      <% end %>
+      <br /><br />
+      <%= f.hidden_field :id %>
+      <%= f.hidden_field :display_order %>
+      <%= f.hidden_field :modifiable %>
+      <% if f.object.display_type != 'label' -%><span class="questions"><%= (@question_no.to_s+ ') ' + f.object.text.to_s)%></span><% end %>
+      <br />
+      <% if f.object.pick == 'one' %>
+        <% if f.object.display_type == 'slider' -%>
+          <br />
+          <br />
+          <br />
+          <!-- The slider uses the Jquery UISlider plugin (http://www.filamentgroup.com/lab/update_jquery_ui_16_slider_from_a_select_element/) -->
+          <!-- Look in application.js for the hook - it selects all input select elements with "uislider" as the class -->
+          <%= f.input :dummy_answer, :collection => f.object.answers.map{|a| a.text}, :as => :select, :label => false,
+                      :input_html => {:class => "uislider"}, :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'}%>
+          <br />
+        <% elsif f.object.display_type == 'stars' -%>
+          <%= f.input :dummy_answer, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :label => false, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
+        <% else -%>
+          <%= f.input :dummy_answer, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
+        <% end %>
+      <% elsif f.object.pick == 'any' %>
+        <% if f.object.dynamically_generate -%>
+          <br />
+          <span style="font-weight:normal;font-style:italic" class="field_indent">content retrieved from the application will go here.</span>
+          <br />
+        <% else -%>
+          <%= f.input :dummy_answer, :collection => f.object.answers.collect(&:text), :as => :check_boxes, :label => false %>
+        <% end %>
+      <% elsif f.object.pick == 'none' %>
+        <br/>
+        <% if f.object.display_type == 'label' -%>
+           <span style="margin-left: 4.5em;">
+           <%= f.object.text %>
+           </span>
+        <% elsif (f.object.display_type == 'Text') || (f.object.answers.first ? f.object.answers.first.response_class == "text" : false) -%>
+
+           <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"3"}%>
+        <% elsif f.object.answers.first && ['float','integer'].include?(f.object.answers.first.response_class) -%>
+          <%
+            @prefix = f.object.answers.first.text.split('|')[0]
+            @suffix = f.object.answers.first.text.split('|')[1]
+           %>
+          <span class='fl' style="margin-left: 4.5em;">
+            <% if @prefix %>
+              <%= @prefix %>&nbsp;
+            <% end %>
+          </span>
+            <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:size=>"10"}, :wrapper_html=>{:class=>'fl notfirst'} %>
+            &nbsp;<%= @suffix %>
+        <% elsif f.object.answers.first && f.object.answers.first.response_class=='date' -%>
+            <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"}, :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
+        <% elsif f.object.answers.first && f.object.answers.first.response_class=='blob' -%>
+            <%= f.input :dummy_blob, :as => :file, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"} %>
+        <% else -%>
+           <br />
+           <%= f.input :dummy_answer, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;"}%>
+        <% end -%>
+      <% end %>
+      <% if !f.object.modifiable? -%>
+        <br />
+        <span class='field_indent'>
+          Report Code: <%= f.object.report_code %>
+        </span>
+        <br />
+      <% end %>
+    </div>
+  </fieldset>
+  <% if !@survey_locked && (f.object.modifiable?) -%>
+    <% if session[:cut_question] -%>
+      <%= button_to_function 'Add Question',
+        'cbox = $.fn.colorbox({width:"666px",
+height:"772px",
+scrolling:true,
+iframe:true,
+onCleanup:function(){
+$("#cboxLoadedContent iframe").load(function(){
+question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
+});
+},
+onClosed:function(){
+submitted = $("input#pass_cbox_data").val();
+if (submitted==="true") {
+$.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+{},
+function(response) {
+$(".column3").filter(":last").replaceWith(response);
+refresh_stars();
+update_uislider();
+}
+);
+}
+else{
+}
+},
+href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&modifiable='+(f.object.survey_section.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
+      :style=>'position:relative; left: 34.5%' %>
+      <%= button_to_function "Paste Question",
+          '$.get("'+paste_question_surveyform_url(:question_id=>f.object.id, :wizard_step => @wizard_step.to_s)+'",
+{},
+function(response) {
+$(".column3").filter(":last").replaceWith(response);
+refresh_stars();
+update_uislider();
+}
+);
+',
+          :style=>'position:relative; left: 35%' %>
+    <% else -%>
+      <%= button_to_function 'Add Question',
+        ' var question_id = null;
+cbox = $.fn.colorbox({width:"666px",
+height:"772px",
+scrolling:true,
+iframe:true,
+onCleanup:function(){
+$("#cboxLoadedContent iframe").load(function(){
+question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
+});
+},
+onClosed:function(){
+submitted = $("input#pass_cbox_data").val();
+if (submitted==="true") {
+$.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+{},
+function(response) {
+$(".column3").filter(":last").replaceWith(response);
+refresh_stars();
+update_uislider();
+}
+);
+}
+else {
+}
+},
+href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
+      :style=>'position:relative; left: 41.2%' %>
+    <% end %>
+  <% end %>
+<% end %>

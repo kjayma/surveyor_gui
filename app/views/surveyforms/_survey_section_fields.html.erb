@@ -1,0 +1,174 @@
+<%= simple_fields_for 'surveyform', @surveyform || @survey_section.survey do |f| %>
+  <%= f.simple_fields_for :survey_sections, @survey_section do |s| %>
+    <% if s.object.id -%>
+      <%= div_for(s.object) do %>
+        <h2 style='position:relative;'>
+          <span class="fl ui-icon ui-icon-arrowthick-2-n-s" style='margin: 0 0 0 -.5em;'></span>&nbsp;
+          <%= s.object.title %>
+          <% if s.object.modifiable %>
+            <%= button_to_function 'Edit Section Title',
+              'cbox = $.fn.colorbox({width:"40%",
+                            height:"40%",
+                            scrolling:false,
+                            iframe:true,
+                            onClosed:function(){
+                              submitted = $("input#pass_cbox_data").val();
+                              if (submitted) {
+                                $.get("'+
+                                  url_for(:action => "replace_survey_section", :survey_section_id => s.object.id)+'",
+                                  {},
+                                  function(response) {
+                                    $("#survey_section_'+s.object.id.to_s+'").html(replace_idx($("#survey_section_'+s.object.id.to_s+'"),"survey_sections", response));
+                                    refresh_stars();
+                                  }
+                                );
+                              };
+                             },
+                            href:"'+edit_survey_section_url(s.object.id)+'?suppress_header=true", opacity:.3});',
+              :style=>'position: absolute; top:2px;right:125px;' %>
+            <%= button_to_function "Delete Section", '
+              $.ajax({
+              type: "DELETE",
+              url: "'+survey_section_url(s.object.id)+'",
+              success: function(msg){
+                  if (typeof msg !== undefined  && msg.length>0) {
+                    alert(msg);
+                  }
+                  else {
+                    $("#survey_section_'+s.object.id.to_s+'").remove();
+                    update_question_numbers();
+                    update_dependency_questions('+@wizard_step.to_s+');
+                  }
+                }
+              });',
+              :style=>'position: absolute; top:2px;right:5px;'  %>
+
+
+          <% end %>
+        </h2>
+        <fieldset style="background:white">
+          <div class="fields surveysection">
+            <%= s.hidden_field :id %>
+            <%= s.hidden_field :modifiable %>
+
+            <% if !@survey_locked && (s.object.modifiable? || current_user.is_superadmin?)  -%>
+              <% if session[:cut_question] -%>
+                <%= button_to_function 'Add Question',
+                  'cbox = $.fn.colorbox({width:"666px",
+                                height:"772px",
+                                scrolling:true,
+                                iframe:true,
+                                onCleanup:function(){
+                                    $("#cboxLoadedContent iframe").load(function(){
+                                        question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
+                                    });
+                                },
+                                onClosed:function(){
+                                    submitted = $("input#pass_cbox_data").val();
+                                    if (submitted==="true") {
+                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+                                        {},
+                                        function(response) {
+                                          $(".column3").filter(":last").replaceWith(response);
+                                          refresh_stars();
+                                          update_uislider();
+                                        }
+                                      );
+                                    }
+                                },
+                                href:"'+new_question_url+'?suppress_header=true&modifiable='+(s.object.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
+                :style=>'position:relative; left: 34.5%' %>
+                <%= button_to_function "Paste Question",
+                    '$.get("'+paste_question_surveyform_url(:survey_section_id => s.object.id, :wizard_step => @wizard_step.to_s)+'",
+                      {},
+                      function(response) {
+                        $(".column3").filter(":last").replaceWith(response);
+                        refresh_stars();
+                        update_uislider();
+                      }
+                    );
+                    ',
+                    :style=>'position:relative; left: 35%' %>
+              <% else -%>
+                <%= button_to_function 'Add Question',
+                  'cbox = $.fn.colorbox({width:"666px",
+                                height:"772px",
+                                scrolling:true,
+                                iframe:true,
+                                onCleanup:function(){
+                                    $("#cboxLoadedContent iframe").load(function(){
+                                        question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
+                                    });
+                                },
+                                onClosed:function(){
+                                    submitted = $("input#pass_cbox_data").val();
+                                    if (submitted==="true") {
+                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+                                        {},
+                                        function(response) {
+                                          $(".column3").filter(":last").replaceWith(response);
+                                          refresh_stars();
+                                          update_uislider();
+                                        }
+                                      );
+                                    }
+                                    else{
+                                    }
+                                },
+                                href:"'+new_question_url+'?suppress_header=true&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
+                :style=>'position:relative; left: 41.2%' %>
+              <% end %>
+            <% end %>
+
+
+
+
+            <div class="sortable_questions" id="sortable_question<%= s.object.id.to_s %>">
+              <%= s.simple_fields_for :questions do |q| %>
+                <%= render "question_section", :f => q %>
+              <% end %>
+            </div>
+          <%= button_to_function 'Add Section',
+              'cbox = $.fn.colorbox({width:"517px;",
+                  height:"167px;",
+                  scrolling:false,
+                  iframe:true,
+                  onClosed:function(){
+                      submitted = $("input#pass_cbox_data").val();
+                      if (submitted) {
+                          $.get("'+
+                            url_for(:action => "insert_survey_section",:survey_id => f.object.id)+'",
+                            {},
+                            function(response) {
+                              $("#survey_section_'+s.object.id.to_s+'").after(replace_idx($(".survey_section"),"survey_sections", response));
+                            }
+                          );
+                      }
+                   },
+                  href:"'+new_survey_section_url+'?prev_section_id='+s.object.id.to_s+'&suppress_header=true&survey_id='+s.object.survey.id.to_s+'", opacity:.3});',
+    :style=>'position: relative; left:41.8%; top:25px;' %>
+          </div>
+        </fieldset>
+      <% end %>
+    <% else -%>
+      <%= s.hidden_field :id %>
+      <%= s.hidden_field :title %>
+      <%= s.hidden_field :display_order %>
+      <%= s.hidden_field :modifiable %>
+      <%= s.simple_fields_for :questions do |q| %>
+        <%= q.hidden_field :id %>
+        <%= q.hidden_field :text %>
+        <%= q.hidden_field :display_order %>
+        <%= q.hidden_field :pick %>
+        <%= q.hidden_field :display_type %>
+        <%= q.hidden_field :question_group_id %>
+        <%= q.hidden_field :modifiable %>
+        <%= q.simple_fields_for :answers do |a| %>
+          <%= a.hidden_field :text %>
+          <%= a.hidden_field :response_class %>
+          <%= a.hidden_field :display_order %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end -%>

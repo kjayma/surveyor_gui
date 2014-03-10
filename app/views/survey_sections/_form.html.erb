@@ -5,14 +5,16 @@
     }
   <% end %>
 <% end %>
-<div class="colorbox round">
+<div class="shadebox round">
     <h1 class="round-top"><%= @title %></h1>
     <%= simple_form_for @survey_section, :remote=>"true" do |f| %>
-    <%= f.error_messages %>
-    <%= f.hidden_field :survey_id %>
-    <%= f.hidden_field :modifiable %>
-    <%= f.hidden_field :display_order %>
-    <%= f.input :title , :input_html=>{:size=>'35'}%>
-    <%= f.button :submit, 'Save Changes', :id=>'survey_section_submit' %>
+      <% @survey_section.errors.full_messages.each do |msg| %>
+         <p><%= msg %></p>
+      <% end %>
+      <%= f.hidden_field :survey_id %>
+      <%= f.hidden_field :modifiable %>
+      <%= f.hidden_field :display_order %>
+      <%= f.input :title , :input_html=>{:size=>'35'}%>
+      <%= f.button :submit, 'Save Changes', :id=>'survey_section_submit' %>
   <% end %>
 </div>

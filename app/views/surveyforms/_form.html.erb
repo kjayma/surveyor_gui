@@ -6,28 +6,27 @@
 <div id="Box" class="boxshadow round">
   <div class="column3">
     <input id='pass_cbox_data' type="hidden">
-    <input id="institution_wizard_step" value="<%= @wizard_step %>" type="hidden">
     <div class="shadebox round">
       <div id="survey">
         <h1 class="round-top">
           <%= @title %>
             <% if @surveyform.id -%>
               <%= button_to_function 'Preview Survey',
-                  'cbox = $.fn.colorbox({width:"90%",
+                  'cbox = $.colorbox({width:"90%",
                       height:"90%",
                       scrolling:true,
                       iframe:true,
                       href:"'+preview_survey_surveyresponse_url+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
                       :style=>'position: relative; left:47%; top:0' %>
               <%= button_to_function 'Preview Results',
-                  'cbox = $.fn.colorbox({width:"90%",
+                  'cbox = $.colorbox({width:"90%",
                       height:"90%",
                       scrolling:true,
                       iframe:true,
                       href:"'+preview_results_surveyresponse_url+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
                       :style=>'position: relative; left:47%; top:0' %>
               <%= button_to_function 'Preview Report',
-                  'cbox = $.fn.colorbox({width:"90%",
+                  'cbox = $.colorbox({width:"90%",
                       height:"90%",
                       scrolling:true,
                       iframe:true,
@@ -51,11 +50,7 @@
           <div class="sortable_sections">
             <%= render "survey_section_fields", :s => builder , :f => f %>
           </div>
-          <% if @wizard_step && !@wizard_step.blank? && @wizard_step != 'undefined'  %>
-            <span style="position:relative;left:5em"><%= f.button :submit, 'next' %></span>
-          <% else -%>
-            <p><%= f.button :submit,  'Save Changes' %></p>
-          <% end %>
+          <p><%= f.button :submit,  'Save Changes' %></p>
         <% end %>
       </div>
     </div>

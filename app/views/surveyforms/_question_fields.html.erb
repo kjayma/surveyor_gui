@@ -19,7 +19,7 @@ onClosed:function(){
 submitted = $("input#pass_cbox_data").val();
 if (submitted) {
 $.get("'+
-                                  url_for(:action => "replace_question", :question_id => f.object.id, :wizard_step => @wizard_step.to_s)+'",
+                                  url_for(:action => "replace_question", :question_id => f.object.id)+'",
 {},
 function(response) {
 $("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response)).update_widgets();
@@ -32,7 +32,7 @@ update_question_numbers();
 },
 href:"'+edit_question_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
           <%= button_to_function "Cut Question",
-            '$.get("'+cut_question_surveyform_url(:question_id => f.object.id, :wizard_step => @wizard_step.to_s)+'",
+            '$.get("'+cut_question_surveyform_url(:question_id => f.object.id)+'",
 {},
 function(response) {
 $(".column3").filter(":last").replaceWith(response);
@@ -49,7 +49,7 @@ if (typeof msg !== undefined && msg.length>0) {
 alert(msg);
 }
 else {
-$.get("'+replace_form_surveyform_url(:survey_section_id => f.object.survey_section_id, :wizard_step => @wizard_step.to_s)+'",
+$.get("'+replace_form_surveyform_url(:survey_section_id => f.object.survey_section_id)+'",
 {},
 function(response) {
 $(".column3").filter(":last").replaceWith(response);
@@ -85,7 +85,7 @@ alert("This logic cannot be deleted.");
 }
 });' %>
                 <%= button_to_function 'Edit Logic',
-                  'cbox = $.fn.colorbox({width:"90%",
+                  'cbox = $.colorbox({width:"90%",
 height:"50%",
 scrolling:true,
 iframe:true,
@@ -106,7 +106,7 @@ update_question_numbers();
 href:"'+edit_dependency_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
             <% else -%>
               <%= button_to_function 'Add Logic',
-                'cbox = $.fn.colorbox({width:"90%",
+                'cbox = $.colorbox({width:"90%",
 height:"50%",
 scrolling:true,
 iframe:true,
@@ -200,7 +200,7 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
   <% if !@survey_locked && (f.object.modifiable?) -%>
     <% if session[:cut_question] -%>
       <%= button_to_function 'Add Question',
-        'cbox = $.fn.colorbox({width:"666px",
+        'cbox = $.colorbox({width:"666px",
 height:"772px",
 scrolling:true,
 iframe:true,
@@ -212,7 +212,7 @@ question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
 onClosed:function(){
 submitted = $("input#pass_cbox_data").val();
 if (submitted==="true") {
-$.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+$.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
 {},
 function(response) {
 $(".column3").filter(":last").replaceWith(response);
@@ -227,7 +227,7 @@ else{
 href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&modifiable='+(f.object.survey_section.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
       :style=>'position:relative; left: 34.5%' %>
       <%= button_to_function "Paste Question",
-          '$.get("'+paste_question_surveyform_url(:question_id=>f.object.id, :wizard_step => @wizard_step.to_s)+'",
+          '$.get("'+paste_question_surveyform_url(:question_id=>f.object.id)+'",
 {},
 function(response) {
 $(".column3").filter(":last").replaceWith(response);
@@ -252,7 +252,7 @@ question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
 onClosed:function(){
 submitted = $("input#pass_cbox_data").val();
 if (submitted==="true") {
-$.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+$.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
 {},
 function(response) {
 $(".column3").filter(":last").replaceWith(response);

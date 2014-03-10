@@ -7,8 +7,8 @@
           <%= s.object.title %>
           <% if s.object.modifiable %>
             <%= button_to_function 'Edit Section Title',
-              'cbox = $.fn.colorbox({width:"40%",
-                            height:"40%",
+              'cbox = $.colorbox({width:"40%",
+                            height:"30%",
                             scrolling:false,
                             iframe:true,
                             onClosed:function(){
@@ -37,7 +37,7 @@
                   else {
                     $("#survey_section_'+s.object.id.to_s+'").remove();
                     update_question_numbers();
-                    update_dependency_questions('+@wizard_step.to_s+');
+                    update_dependency_questions();
                   }
                 }
               });',
@@ -54,7 +54,7 @@
             <% if !@survey_locked && (s.object.modifiable? || current_user.is_superadmin?)  -%>
               <% if session[:cut_question] -%>
                 <%= button_to_function 'Add Question',
-                  'cbox = $.fn.colorbox({width:"666px",
+                  'cbox = $.colorbox({width:"666px",
                                 height:"772px",
                                 scrolling:true,
                                 iframe:true,
@@ -66,7 +66,7 @@
                                 onClosed:function(){
                                     submitted = $("input#pass_cbox_data").val();
                                     if (submitted==="true") {
-                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
                                         {},
                                         function(response) {
                                           $(".column3").filter(":last").replaceWith(response);
@@ -91,7 +91,7 @@
                     :style=>'position:relative; left: 35%' %>
               <% else -%>
                 <%= button_to_function 'Add Question',
-                  'cbox = $.fn.colorbox({width:"666px",
+                  'cbox = $.colorbox({width:"666px",
                                 height:"772px",
                                 scrolling:true,
                                 iframe:true,
@@ -129,7 +129,7 @@
               <% end %>
             </div>
           <%= button_to_function 'Add Section',
-              'cbox = $.fn.colorbox({width:"517px;",
+              'cbox = $.colorbox({width:"517px;",
                   height:"167px;",
                   scrolling:false,
                   iframe:true,

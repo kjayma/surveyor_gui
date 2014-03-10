@@ -27,6 +27,17 @@ class SurveyformsController < ApplicationController
     @url = "update"
   end
 
+  def insert_survey_section
+    survey_id = params[:id]
+    @survey_section = Survey.find(survey_id, :include=> :survey_sections, :order => 'survey_sections.id').survey_sections.last
+    if @survey_section
+      @question_no = 0
+      render "_survey_section_fields" , :layout=> false
+    else
+      render :nothing=> true
+    end
+  end
+
   def replace_survey_section
     survey_section_id = params[:survey_section_id]
     @survey_section = SurveySection.find(survey_section_id)

@@ -6,11 +6,11 @@ describe SurveyformsController do
 #    @routes = Surveyor::Engine.routes
 #  end
 
-  let!(:survey) { Factory(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
-  let!(:survey_beta) { Factory(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
-  let!(:response_set) { Factory(:response_set, :survey => survey, :access_code => "pdq")}
-  let!(:response_set_beta) { Factory(:response_set, :survey => survey_beta, :access_code => "rst")}
-  before { ResponseSet.stub(:create).and_return(response_set) }
+  let!(:survey) { Factory(:survey, :id=> 1, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
+  let!(:survey_beta) { Factory(:survey, :id => 2, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
+  #let!(:response_set) { Factory(:response_set, :survey => survey, :access_code => "pdq")}
+  #let!(:response_set_beta) { Factory(:response_set, :survey => survey_beta, :access_code => "rst")}
+  #before { ResponseSet.stub(:create).and_return(response_set) }
 
   # match '/', :to => 'surveyor#new', :as => 'available_surveys', :via => :get
   # match '/:survey_code', :to => 'surveyor#create', :as => 'take_survey', :via => :post
@@ -28,11 +28,12 @@ describe SurveyformsController do
       response.should be_success
       response.should render_template('index')
     end
+  end
 
   context "#edit" do
     def do_get(params = {})
       survey.sections = [Factory(:survey_section, :survey => survey)]
-      get :edit, {:survey_code => "alpha", :response_set_code => "pdq"}.merge(params)
+      get :edit, {:id => 1}.merge(params)
     end
     it "renders edit" do
       do_get
@@ -40,6 +41,16 @@ describe SurveyformsController do
       response.should render_template('edit')
     end
   end
-  end
 
+  context "#insert_survey_section" do
+    def do_get(params = {})
+      survey.sections = [Factory(:survey_section, :survey => survey)]
+      get :insert_survey_section,{:id => 1}.merge(params)
+    end
+    it "inserts a survey section" do
+      do_get
+      response.should be_success
+      response.should render_template('_survey_section_fields')
+    end
+  end
 end

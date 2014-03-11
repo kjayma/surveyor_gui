@@ -130,6 +130,41 @@ function application_js_code(){
             $('body').css({background:'#f3f3f3'});
           }
       });
+      $('.sortable_sections').sortable({
+        axis:"y",
+        opacity: 0.6,
+        scroll: true,
+        update: function(){
+          $.ajax({
+            type: 'post',
+            data: $('.sortable_sections').sortable('serialize')+'&survey_id='+$('input#surveyform_id')[0].value,
+            dataType: 'script',
+            complete: function(request){
+            $('#survey_section').effect('highlight');
+          },
+          url: '/survey_sections/sort'})
+        }
+      });
+
+      $('.sortable_questions').sortable({
+        axis:"y",
+        opacity: 0.6,
+        scroll: true,
+        connectWith: ".sortable_questions",
+        update: function(){
+          $.ajax({
+            type: 'post',
+            data: getAllSerialize()+'&survey_id='+$('input#surveyform_id')[0].value,
+            dataType: 'script',
+            complete: function(request){
+            $('#survey_section').effect('highlight');
+            update_question_numbers();
+          },
+          url: '/questions/sort'})
+        }
+      });
+
+
 
 /*
       $('document form[class="simple_form evaluation"]').find('select[id$="unit_of_measure"]').live('change', function(event){
@@ -527,6 +562,18 @@ function application_js_code(){
       });
 */
 }
+
+  function getAllSerialize() {
+    $('.sortable_questions').each(function(index, value) {
+      if (index === 0) {
+        newarr = $(this).sortable('serialize',{key:$(this).attr('id')+'[]'});
+      }
+      else{
+        newarr = newarr+'&'+$(this).sortable('serialize',{key:$(this).attr('id')+'[]'});
+      }
+    });
+    return newarr;
+  }
 
   function insert_id_if_missing(wrapped_set, response_id){
     //get the id of the form element

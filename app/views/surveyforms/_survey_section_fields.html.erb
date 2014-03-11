@@ -137,7 +137,7 @@
                       submitted = $("input#pass_cbox_data").val();
                       if (submitted) {
                           $.get("'+
-                            url_for(:action => "insert_survey_section",:survey_id => f.object.id)+'",
+                            url_for(:action => "insert_survey_section",:id => f.object.id)+'",
                             {},
                             function(response) {
                               $("#survey_section_'+s.object.id.to_s+'").after(replace_idx($(".survey_section"),"survey_sections", response));

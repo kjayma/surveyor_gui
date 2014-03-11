@@ -18,3 +18,4 @@
 //= require surveyor-gui
 //= require jquery.validate
 //= require jquery.blockUI
+//= require jquery.ui.sortable

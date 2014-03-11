@@ -20,12 +20,12 @@ class Question < ActiveRecord::Base
   before_destroy :no_responses
 
   def default_args
-    #self.is_mandatory ||= true
+    self.is_mandatory ||= false
     self.display_type ||= "default"
     self.pick ||= "none"
     self.data_export_identifier ||= Surveyor::Common.normalize(text)
     self.short_text ||= text
-    self.api_id ||= UUID.generate
+    self.api_id ||= Surveyor::Common.generate_api_id
   end
 
   #prevent a question from being modified if responses have been submitted for the survey. Protects data integrity.

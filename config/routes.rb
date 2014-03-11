@@ -76,6 +76,7 @@ SurveyorGui::Application.routes.draw do
     post :sort, :on => :collection
   end
 
+  match '/questions/sort',   :to => 'questions#sort'
   resources :questions do
     member do
       get 'cut'

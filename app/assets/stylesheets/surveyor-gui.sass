@@ -76,6 +76,7 @@ body
       :margin 1em
       :padding 1em
       :font-weight bold
+      div
 
 .column2
   :float left
@@ -145,36 +146,56 @@ body
       :float none
       :margin 0
 
-      .collection_radio, .collection_check_boxes
+      .collection_radio_buttons, .collection_check_boxes
         :margin-right 10px
         :margin-left 2px
 
-  .questions
-    input.radio, input.check_boxes
-      :margin-right 5px
-      :vertical-align -3px
+  .sortable_sections
+    :margin-top 2em
+    .survey_section
+      :margin-bottom 3em
+      fieldset
+        :border solid 2px
+        :margin 0 2px
+        :padding 5px 10px 12px 10px
 
+    .surveysection
+      :margin-top 2em
+      :padding-left 1em
+      .questions
+        :margin 1em
+        :padding 1em
+        :font-weight bold
 
-    label.collection_radio , label.collection_check_boxes
-      :display block
-      :float none
-      :margin 1em 0 0 3em
-      :width 30em
+        span.radio , span.checkbox
+          :display block
+          :float none
+          :margin 1em 0 0 3em
+          :width 30em
 
-    div
-      .input.radio.star
-        :position relative
-        :left 3em
-        :top 1em
+          input.radio_buttons, input.check_boxes
+            :margin-right 1em
+            :vertical-align -3px
 
-      #answer_choice label.collection_radio
-        :float left
-        :margin 0
+          label
+            :margin 0
+            :float none
+            :width auto
 
-      star label.collection_radio
-        :display inline
-        :margin 1 0 0 0em
-        :width auto
+        div
+          .input.radio.star
+            :position relative
+            :left 3em
+            :top 1em
+
+          #answer_choice label.collection_radio
+            :float left
+            :margin 0
+
+          star label.collection_radio
+            :display inline
+            :margin 1 0 0 0em
+            :width auto
 
   .question_logic_notifier
     :background #eee2f8
@@ -185,11 +206,6 @@ body
     :margin -17px 0 1em -17px
     :padding-left 1em
     :font-weight normal
-
-  label.collection_check_boxes
-    :clear left
-    :margin-left 5.8em
-    :width 15em
 
   .error
     :clear left

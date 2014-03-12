@@ -7,7 +7,7 @@ Surveyor-gui complements the surveyor gem.
 
 The surveyor gem is used to create surveys by parsing a file written in the Surveyor DSL.  It does not include a gui for creating surveys, although it does provide a gui for taking surveys.
 
-It also provides a reporting capability for Surveyor.
+This gem also provides a reporting capability for Surveyor.
 
 The lack of a gui front-end limits the utility of surveyor for certain applications.
 

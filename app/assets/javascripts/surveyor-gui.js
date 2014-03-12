@@ -203,7 +203,7 @@ function application_js_code(){
 
       update_uislider();
 
-      $("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '/images/datepicker.gif', buttonImageOnly: true });
+      $("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '../../assets/datepicker.gif', buttonImageOnly: true });
 
 
 
@@ -258,7 +258,7 @@ function application_js_code(){
         });
 
 
-      $(this).find("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '/images/datepicker.gif', buttonImageOnly: true });
+      $(this).find("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '../../assets/datepicker.gif', buttonImageOnly: true });
       };
 
       $('input:checked[id^="question_question_type_"]').show_answers();

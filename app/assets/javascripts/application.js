@@ -18,4 +18,5 @@
 //= require jquery.validate
 //= require jquery.blockUI
 //= require jquery.ui.sortable
+//= require jquery.rating
 //= require surveyor-gui

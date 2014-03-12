@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140308175305) do
+ActiveRecord::Schema.define(:version => 20140311161714) do
 
   create_table "answers", :force => true do |t|
     t.integer  "question_id"
@@ -106,6 +106,9 @@ ActiveRecord::Schema.define(:version => 20140308175305) do
     t.string   "api_id"
     t.boolean  "modifiable",             :default => true
     t.boolean  "dynamically_generate",   :default => false
+    t.string   "dummy_blob"
+    t.string   "dynamic_source"
+    t.string   "report_code"
   end
 
   add_index "questions", ["api_id"], :name => "uq_questions_api_id", :unique => true

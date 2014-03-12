@@ -146,9 +146,9 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
                       :input_html => {:class => "uislider"}, :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'}%>
           <br />
         <% elsif f.object.display_type == 'stars' -%>
-          <%= f.input :dummy_answer, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :label => false, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
+          <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
         <% else -%>
-          <%= f.input :dummy_answer, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
+          <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
         <% end %>
       <% elsif f.object.pick == 'any' %>
         <% if f.object.dynamically_generate -%>

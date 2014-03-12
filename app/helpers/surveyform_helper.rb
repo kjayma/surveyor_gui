@@ -50,24 +50,6 @@ module SurveyformHelper
 
 end
 
-def clone_vendor_value_analysis_questionnaire
-  template = Surveyform.where(:template=>true).where(:survey_type=>"VACQV").where(:evaluationrx_master=>true).first
-  if !template
-    template = Surveyform.where(:template=>true).where(:survey_type=>"VACQV").first
-  end
-  new_survey_id = clone_survey(template)
-  return new_survey_id
-end
-
-def clone_hospital_value_analysis_questionnaire
-  template = Surveyform.where(:template=>true).where(:survey_type=> "VACQH").where(:evaluationrx_master=>true).first
-  if !template
-    template = Surveyform.where(:template=>true).where(:survey_type=> "VACQH").first
-  end
-  new_survey_id = clone_survey(template)
-  return new_survey_id
-end
-
 def clone_survey(template, as_template=false)
   #the built-in clone method provided by Ruby on Rails gets us a clone of the Survey model, but does not clone the nested models. We have to do that ourselves.
   s2 = template.dup

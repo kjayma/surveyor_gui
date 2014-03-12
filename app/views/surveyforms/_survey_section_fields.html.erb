@@ -79,7 +79,7 @@
                                 href:"'+new_question_url+'?suppress_header=true&modifiable='+(s.object.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
                 :style=>'position:relative; left: 34.5%' %>
                 <%= button_to_function "Paste Question",
-                    '$.get("'+paste_question_surveyform_url(:survey_section_id => s.object.id, :wizard_step => @wizard_step.to_s)+'",
+                    '$.get("'+paste_question_surveyform_url(:survey_section_id => s.object.id)+'",
                       {},
                       function(response) {
                         $(".column3").filter(":last").replaceWith(response);
@@ -103,7 +103,7 @@
                                 onClosed:function(){
                                     submitted = $("input#pass_cbox_data").val();
                                     if (submitted==="true") {
-                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+"&wizard_step='+@wizard_step.to_s+'",
+                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id,
                                         {},
                                         function(response) {
                                           $(".column3").filter(":last").replaceWith(response);

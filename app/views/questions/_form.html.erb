@@ -1,0 +1,91 @@
+<div class="question_editor shadebox">
+    <h1 ><%= @title %></h1>
+    <%= simple_form_for @question do |f| %>
+      <div class = 'questions'>
+        <% @question.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+        <%= f.hidden_field :id %>
+        <%= f.hidden_field :survey_section_id %>
+        <%= f.hidden_field :display_order %>
+        <%= f.hidden_field :pick %>
+        <%= f.hidden_field :display_type %>
+        <%= f.hidden_field :modifiable %>
+        <%= f.label :Question, :input_html=>{:size=>'15'} %>
+        <%= f.input :text , :label => false, :input_html=>{:size=>'55'}%>
+        <span class='fl'><strong>Mandatory?</strong></span>
+        <%= f.input :is_mandatory, :label => false, :wrapper_html=>{:class=>'fl notfirst'}%>
+        <br />
+        <br />
+        <strong>Question Type</strong>
+        <%= f.input :question_type, :collection=>
+            [ 'Multiple Choice (only one answer)',
+              'Multiple Choice (multiple answers)',
+              'Text',
+              'Number',
+              'Date',
+              'Text Box (for extended text, like notes, etc.)',
+              'Slider',
+              '1-5 Stars',
+              'Label',
+              'File Upload'
+              ] , :as => :radio , :wrapper_html=>{:size=>'60'}, :label => false%>
+        <br />
+        <div id="answer_choice">
+          <span class='fl'>
+            Generate list from a database field?
+          </span>
+          <%= f.input :dynamically_generate, :as => :radio, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
+          <div id="dynamic_source">
+            Specify statement used to generate list:<br />
+            <%= f.input :dynamic_source, :label=>false %>
+          </div>
+          <div id="fixed_source">
+            <strong>Possible Answers:</strong>
+            <div id='sortable_answers'>
+              <%= f.simple_fields_for :answers do |a| %>
+                <%= render 'answer_fields', :a => a %>
+              <% end %>
+              <p class="floatdown2">
+                Add Possible Answer<%= link_to_add_fields "Add Answer", f, :answers, 'a' %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="number_questions">
+          <br>
+          <table>
+            <tr>
+              <td>Number Prefix</td><td>Number Suffix</td>
+            </tr>
+              <td>
+                <%= f.input :prefix, :label => false %>
+              </td>
+              <td>
+                <%= f.input :suffix, :label => false %>
+              <td>
+            <tr>
+          </table>
+          <span style='font-weight:normal;'>
+          Hint: affects how the number will be shown.<br/>
+          E.g. the number 60 could be shown as follows:<br/><br />
+            <table border=1 style="margin-left:2em;">
+            <tr><td>Number Suffix</td><td>Number Prefix</td><td>Shown as</td>
+            <tr><td>$</td><td>USD</td><td>$60 USD</td>
+            <tr><td></td><td>Months</td><td>60 Months</td></tr>
+            <tr><td></td><td>Inches</td><td>60 Inches</td></tr>
+            </table>
+          </span>
+          <br />
+        </div>
+
+          <div id="report_code" style="display:none">
+            <br />
+            <%= f.input :report_code, :label=>'Report Code', :label_html=>{:style=>'width:10em;'},:hint=>'Use this code to uniquely identify application data driven questions for reporting.' %>
+            <br />
+          </div>
+        <br />
+        <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>
+      </div>
+  <% end %>
+</div>

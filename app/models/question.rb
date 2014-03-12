@@ -77,6 +77,10 @@ class Question < ActiveRecord::Base
     write_attribute(:text, t1.match(/[\w\s\(\)\[\]\-\\\,\.\?\+\**&^%$#\@!%^-{}|:;'"<>\/\n\r\t~`]+/).to_s)
   end
 
+  def dynamically_generate
+    'false'
+  end
+
   #setter for question type.  Sets both pick and display_type
   def question_type=(type)
     case type

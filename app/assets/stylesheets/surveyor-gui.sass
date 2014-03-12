@@ -78,6 +78,9 @@ body
       :font-weight bold
       div
 
+iframe.cboxIframe
+  :background-color #f3f3f3
+
 .column2
   :float left
   :margin-right 1em
@@ -154,48 +157,61 @@ body
     :margin-top 2em
     .survey_section
       :margin-bottom 3em
-      fieldset
-        :border solid 2px
-        :margin 0 2px
-        :padding 5px 10px 12px 10px
 
     .surveysection
       :margin-top 2em
       :padding-left 1em
-      .questions
-        :margin 1em
-        :padding 1em
-        :font-weight bold
 
-        span.radio , span.checkbox
-          :display block
-          :float none
-          :margin 1em 0 0 3em
-          :width 30em
+  fieldset
+    :border solid 2px
+    :margin 0 2px
+    :padding 5px 10px 12px 10px
 
-          input.radio_buttons, input.check_boxes
-            :margin-right 1em
-            :vertical-align -3px
+  .questions
+    :margin 1em
+    :padding 1em
+    :font-weight bold
 
-          label
-            :margin 0
-            :float none
-            :width auto
+    div.question_dynamically_generate
+      span.radio , span.checkbox
+        :float left
+        :margin 0
+        :width auto
+        input
+          :margin-right 2px
 
-        div
-          .input.radio.star
-            :position relative
-            :left 3em
-            :top 1em
+    span.radio , span.checkbox
+      :display block
+      :float none
+      :margin 1em 0 0 3em
+      :width 30em
 
-          #answer_choice label.collection_radio
-            :float left
-            :margin 0
+      input.radio_buttons, input.check_boxes
+        :margin-right 1em
+        :vertical-align -3px
 
-          star label.collection_radio
-            :display inline
-            :margin 1 0 0 0em
-            :width auto
+      label
+        :margin 0
+        :float none
+        :width auto
+
+    textarea
+      height: 3em
+
+    div
+      .input.radio.star
+        :position relative
+        :left 3em
+        :top 1em
+
+      #answer_choice label.collection_radio
+        :float left
+        :margin 0
+
+      star label.collection_radio
+        :display inline
+        :margin 1 0 0 0em
+        :width auto
 
   .question_logic_notifier
     :background #eee2f8
@@ -237,42 +253,8 @@ body
     :float right
     :margin 0 0 0 -0.1em
 
-  #vendor_citystatezip
-    :display inline
-
-  #vendor_country
-    :width 12em
-
-  #vendor_state
-    :width 12em
-
-  #recaptcha_area
-    :margin-left 10em
-    :margin-top -1em
-
-  #role_submit
-    :margin-top 1em
-
-  #institution_country
-    :width 12em
-
-  #institution_state
-    :width 12em
-
   fieldset.indent
     :margin-left 10em
-
-  .evaluation_products .hint
-    :margin-left 1em
-
-  .evaluation_products td
-    :vertical-align text-top
-
-  .evaluation_products td img, a
-    :vertical-align text-bottom
-
-  .evaluation_products div.currency
-    :width 4.5em
 
   .vertical_collection
     :margin-left 3em

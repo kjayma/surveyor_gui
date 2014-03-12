@@ -30,6 +30,17 @@ describe SurveyformsController do
     end
   end
 
+  context "new" do
+    def do_get
+      get :new
+    end
+    it "renders new" do
+      do_get
+      response.should be_success
+      response.should render_template('new')
+    end
+  end
+
   context "#edit" do
     def do_get(params = {})
       survey.sections = [Factory(:survey_section, :survey => survey)]
@@ -51,6 +62,19 @@ describe SurveyformsController do
       do_get
       response.should be_success
       response.should render_template('_survey_section_fields')
+    end
+  end
+
+  context "#insert_new_question" do
+    def do_get(params = {})
+      survey.sections = [Factory(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [Factory(:question, :survey_section => survey.sections.first)]
+      get :insert_new_question,{:id => 1, :question_id => 1}.merge(params)
+    end
+    it "inserts a question" do
+      do_get
+      response.should be_success
+      response.should render_template('new')
     end
   end
 end

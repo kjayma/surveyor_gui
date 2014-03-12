@@ -4,17 +4,14 @@
       if ($('#surveyor').length > 0)
         all_surveyor_code();
       if ($.mobile) {
-        $('div:jqmData(role="page")').live('pagebeforeshow',function(){
+        $('div:jqmData(role="page")').on('pagebeforeshow',function(){
             application_js_code();
             if ($('#surveyor').length > 0)
               all_surveyor_code();
         });
       }
-
-//  jQuery("input[type='file']").change(function(){
-//      $(this).parents('form').trigger('submit');
-//  });
     });
+
  } ) ( jQuery );
 
 function application_js_code(){
@@ -100,8 +97,11 @@ function application_js_code(){
           //pass_cbox_data is a div at the top of /views/surveyforms/_form.html.erb
           $(parent.$.find('input#pass_cbox_data')).val('true');
       });
-      $(document).on('click','input[type="submit"]', function(event) {
-        if(window.parent.$('.cboxIframe').length>0){
+      $("#survey_section_submit, #question_submit, #dependency_submit").bind('click', function(event) {
+          //pass_cbox_data is a div at the top of /views/surveyforms/_form.html.erb
+          $(parent.$.find('input#pass_cbox_data')).val('true');
+      });
+      $(document).on('ajaxComplete', 'form.question, form.survey_section, form.dependency', function(event) {
           if ($("#errorExplanation").length===0){
             if($(parent.$.find('input#pass_cbox_data')).length>0) {
               if($(parent.$.find('input#pass_cbox_data')).val()==='true'){
@@ -112,7 +112,6 @@ function application_js_code(){
           else {
             $(parent.$.find('input#pass_cbox_data')).val('false');
           }
-        }
       });
       $(window).load(function() {
           if ($("#errorExplanation").length===0){
@@ -164,91 +163,31 @@ function application_js_code(){
         }
       });
 
-
-
-/*
-      $('document form[class="simple_form evaluation"]').find('select[id$="unit_of_measure"]').live('change', function(event){
-        open_or_close_the_description_of_other($(this));
-      });
-      $('form[class="simple_form evaluation"]').find('select[id$="unit_of_measure"]').each(function(){open_or_close_the_description_of_other($(this));});
-      $('form[class="simple_form evaluation"]').find('[id$="catalogue_number"]').bind('railsAutocomplete.select', function(){
-        selectbox = $(this).closest('tr').find('select[id$="unit_of_measure"]');
-        open_or_close_the_description_of_other(selectbox);
-      });
-      $(".num").regexMask(/^\d+$/);
-      $('.evaluation_progress_bar, .timeline_link, .evaluation_timeline_task').bind('mouseenter', function(event) {
-        var mycolor = $(this).css('backgroundColor');
-        $(this).data('mycolor',mycolor);
-        $(this).siblings('.timeline_link').each(function(){
-            var MyElem = $(this);
-            MyElem.data('mycolor',MyElem.css('backgroundColor'));
-        });
-        $(this).css('background-color','white');
-        $(this).siblings('.timeline_link').css('background-color','white');
-      });
-      $('.evaluation_progress_bar, .timeline_link, .evaluation_timeline_task').bind('mouseout', function(event) {
-        var mycolor = $(this).data('mycolor');
-        $(this).css('background-color',mycolor);
-        $(this).siblings('.timeline_link').each(function(){
-          mycolor = $(this).data('mycolor');
-          $(this).css('backgroundColor', mycolor);
-        });
-      });
-      $('.evaluation_progress_bar, .timeline_link').bind('click', function(event) {
-        var eid = $(this).closest('td').attr('eid');
-        var isMobile = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
-        if (eid) {
-          if (isMobile) {
-            location.href = 'gantt_chart?evaluation_institution_id='+eid;
-          }
-          else {
-            location.href = 'pages/gantt_chart?evaluation_institution_id='+eid;
-          }
-        }
-      });
-      $('.evaluation_timeline_task').bind('click', function(event){
-        showOrHide = $(this).data('showOrHide');
-        $('.events_and_milestones').toggle(showOrHide);
-        $(this).data('showOrHide')=!showOrHide;
-      });
-//      $("ul.tabs").tabs("div.panes > div");
-      $("ul.statustabs").tabs("div.statuspanes > div");
-      //on the evaluation form, show the duration question if the vendor wants to specify an evaluation duration.
-      $('input[id*="deadline_flag"]:checked').each(function(n){
-        if ($(this).val()==="true"){
-          $(this).closest('tr').next('tr[id="evaluation_proposed_duration"]').show();
-        }
-        else {
-          $(this).closest('tr').next('tr[id="evaluation_proposed_duration"]').hide();
+      $('#sortable_answers').sortable({
+        axis:"y",
+        opacity: 0.6,
+        scroll: true,
+        update: function(){
+          $.ajax({
+            type: 'post',
+            handle: '#answer_handle',
+            data: $('#sortable_answers').sortable('serialize')+'&question_id='+$('input#question_id')[0].value,
+            dataType: 'script',
+            complete: function(request){
+              $('#sortable_answers').effect('highlight');
+              parent.cbox.data('submitted','true');
+          },
+          url: '/answers/sort'})
         }
       });
 
-      $('input[id*="deadline_flag"]').live('click', function(event){
-        if ($(event.target).val()=="true") {
-          $(event.target).closest('tr').next('tr[id="evaluation_proposed_duration"]').show();
-        }
-        else
-        {
-          $(event.target).closest('tr').next('tr[id="evaluation_proposed_duration"]').hide();
-        }
-      });
-      $('form[action="make_request_revisions"]').bind('submit',function(event){
-        if ($(this).find('textarea[id="evaluation_institution_request_revision_response"]').val()===''){
-          alert('Please describe the revisions you will agree to in the text box at the bottom of the page.');
-          return false;
-        }
-      });
-      $("ul.tabs").tabs("div.panes > div");
-//      $("ul.statustabs").tabs("div.statuspanes > div");
-      $("ul.wizardtabs").tabs("div.wizardpanes > div");
-
-      $('form.question div#dynamic_source').hide();
-      $('form.question div#fixed_source').each(function(event){
-        if ($('input[id^="question_dynamically_generate"]:checked').val()==='true' || $('input[id^="question_dynamically_generate"]:checked').val()==='t'){
+      $('form div#dynamic_source').hide();
+      $('form div#fixed_source').each(function(event){
+        if ($('input[id^="question_dynamically_generate_true:checked"]').val()==='true'){
           $(event.target).closest('div#answer_choice').find('div#fixed_source').hide();
         }
       });
-      $('input[id^="question_dynamically_generate"]').live('click', function(event){
+      $('input[id^="question_dynamically_generate"]').on('click', function(event){
         if ($(event.target).val()==='true') {
           $(event.target).closest('div#answer_choice').find('div#dynamic_source').show();
           $(event.target).closest('div#answer_choice').find('div#fixed_source').hide();
@@ -265,40 +204,72 @@ function application_js_code(){
       update_uislider();
 
       $("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '/images/datepicker.gif', buttonImageOnly: true });
+
+
+
+      $.fn.show_answers = function (){
+        if ($(this).val() in {'Multiple Choice (only one answer)':1,'Multiple Choice (multiple answers)':1,'Slider':1}){
+          $('#question_answers_attributes_0_text').val($('#original_choice').data('original_choice'));
+          $('#answer_choice').show();
+          if ($('input[id^="question_dynamically_generate"]:checked').val() in {'t':1,'true':1}){
+            $('#fixed_source').hide();
+            $('#dynamic_source').show();
+          }
+        }
+        else
+        {
+          $('#answer_choice').hide();
+          switch($(this).val)
+          {
+          case 'Number':
+            $('#question_answers_attributes_0_text').val('Float');
+            break;
+          case 'Text':
+            $('#question_answers_attributes_0_text').val('Text');
+            break;
+          default:
+            $('#question_answers_attributes_0_text').val('String');
+          }
+        }
+      };
+
+      $.fn.show_number_questions = function (){
+        if ($(this).val() === "Number"){
+          $('#number_questions').show();
+        }
+        else
+        {
+          $('#number_questions').hide();
+        }
+      };
+
+
+     $.fn.update_widgets = function(){
+        $(this).find('select.uislider').each(function() {
+          $(this).selectToUISlider({
+            labels:2,
+            labelSrc: "text",
+            sliderOptions: {
+              stop: function(e, ui) { // handle stop sliding event
+                $(this).parents('form').trigger('slider_change');
+              }
+            }
+            }).hide();
+        });
+
+
+      $(this).find("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '/images/datepicker.gif', buttonImageOnly: true });
+      };
+
       $('input:checked[id^="question_question_type_"]').show_answers();
       $('input[id^="question_question_type_"]').bind('change', function(event){
         $(this).show_answers();
         $(this).show_number_questions();
       });
       $('input:checked[id^="question_question_type_"]').show_number_questions();
-      $('input[id$="rule_key_temp"]').live('updateInputs', update_logic);
+      $('input[id$="rule_key_temp"]').on('updateInputs', update_logic);
       $('select[id$="join_operator"]').first().parents('tr').hide();
-      $('select[id$="join_operator"]').live('change', update_logic);
-
-      $('ul.sf-menu').superfish();
-      $('.wizardtabs li').click(function(){
-        current_step = parseInt($('input[id$="institution_wizard_step"]').val());
-        link_step = $(this).attr('step');
-        //only allow a user to jump backwards through the wizard, not forward)
-        if (link_step < current_step) {
-          location.href = $(this).attr('href');
-        }
-      });
-      $('.wizardtabs li').each(function(index){
-        step = parseInt($('input[id$="institution_wizard_step"]').val());
-        if (index<step) {
-          $(this).addClass("checkmark");
-        }
-        if (index===(step)) {
-          $(this).addClass("current_tab");
-        }
-        if (index>=step) {
-          $(this).removeClass("checkmark");
-        }
-        if (index>step) {
-          $(this).removeClass("current_tab");
-        }
-      });
+      $('select[id$="join_operator"]').on('change', update_logic);
 
       $('.report_data_display').hide();
 
@@ -330,7 +301,7 @@ function application_js_code(){
             }
           );
       });
-      $('select[id^="question_dependency_attributes_dependency_conditions_attributes"][id$="question_id"]').live('change',function(event) {
+      $('select[id^="question_dependency_attributes_dependency_conditions_attributes"][id$="question_id"]').on('change',function(event) {
         $('[id^="question_dependency_attributes_dependency_conditions_attributes"][id$="answer_id"]')
           .load(
             '/dependencys/get_answers',
@@ -366,73 +337,7 @@ function application_js_code(){
 
       });
 
-      //when creating or editing evaluations, and after selecting departments, list the evaluation leader for the department, and update the list of possible recipients
-      //for the evaluation.
-      $('#new_evaluation , form[id^="edit_evaluation"]').find('select[id$="department_id"]').each(function(){
-        $(this).closest('td').find('.department_head').load('/evaluations/get_department_head', ('department_id='+$(this).val()));
-        $(this).closest('fieldset').find('select[id$="evaluation_initiator"]')
-         .load(
-          '/evaluations/get_evaluation_initiator',
-          $(this).closest('fieldset').find('select, input').serialize(),
-          function(){
-            $(this).attr('disabled',false);
-          }
-         )
-      });
-      $('#new_evaluation select[id$="department_id"], form[id^="edit_evaluation"] select[id$="department_id"]').live('change',function(event){
-        $(event.target).closest('td').find('.department_head').load('/evaluations/get_department_head', ('department_id='+$(event.target).val()));
-        $(event.target).closest('fieldset').find('select[id$="evaluation_initiator"]')
-         .load(
-          '/evaluations/get_evaluation_initiator',
-          $(event.target).closest('fieldset').find('select, input').serialize(),
-          function(){
-            $(this).attr('disabled',false);
-          }
-         )
-      });
 
-      //when updating institutions, after entering a department and identifying its evaluation leader, list the evaluation leader's name next to his or her email.
-      $('input[id$="user_email"]').live('railsAutocomplete.select', function(event, data){
-        $(this).closest('tr').find('.fullname').load('/institutions/get_fullname', ('email='+$(this).val()));
-      });
-
-      //when updating invitations, after entering a vendor's email, list the vendors name next to his or her email.
-      $('input[id="invitation_vendor_email"]').live('railsAutocomplete.select', function(event, data){
-        $('#vendor_name').load('/invitations/get_fullname', ('email='+$(this).val()));
-      });
-
-      //when reviewing an evaluation request, update the accompanying gantt chart when a task duration changes.
-      $('#evaluation_request_timeline').find('input, select').live('change', function(){
-        if ($(this).val().length===0) {
-          alert('You must have a value for the duration.  The value will be reset to 1.');
-          var el = $(this);
-          el.val(1);
-          setTimeout(function(){
-            el.trigger('focus')
-          },1);
-          $(this).focus();
-        }
-        else {
-          $('#evaluation_request_timeline').load('/workflows/revise_timeline', $(this).closest('td').find('input, select').add($(this).closest('form').find('input[id="evaluation_institution_id"]')).serialize());
-        }
-      });
-      $('#evaluation_request_timeline').find('input, select').live('blur', function(){
-        if ($(this).val().length===0 && $(this).parents('#evaluation_request_timeline').length>0) {
-          alert('You must have a value for the duration.  The value will be reset to 1.');
-          var el = $(this);
-          el.val(1);
-          setTimeout(function(){
-            el.trigger('focus')
-          },1);
-          return false;
-        }
-      });
-
-      $('#review_evaluation_request').find('input[type="button"], input[type="submit"]').click(function(event){
-        if (!($(this).val() in {'Deny Request':1,'Go Back':1}) && $(this).closest('td').find('div#deadline_flag').attr('deadline_flag')==='true') {
-          check_total_duration_against_vendor_request();
-        }
-      });
 
       $('input.autocomplete').each(function(){
         update_autocomplete_idx(this);
@@ -445,67 +350,6 @@ function application_js_code(){
           return /r_\d+_id/.test( $(this).attr('id'));
         }).val();
         insert_file_delete_icon(filenamediv,response_id);
-      });
-      $('form[id^="edit_evaluation_institution"]').find('input').filter(function(){
-         return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_extended_cost/);
-        })
-        .each(function(){
-          extended_cost(this);
-        });
-
-      $('form[id^="edit_evaluation_institution"]').find('fieldset').each(function(){
-        adjusted_total(this);
-      })
-
-      update_extended_cost_on_change($('form[id^="edit_evaluation_institution"]'));
-
-      $('input').filter(function() {
-        return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_discount/);
-        })
-        .change(function(){
-          var discount = parseInt($(this).val())/100;
-          $(this).closest('fieldset').find('input[id$="unit_cost"]').each(function(){
-            $(this).closest('fieldset').find('input[id$="unit_cost"]').each(function(){
-              var list_price = parseInt($(this).closest('tr').find('input[id$="list_price"]').val());
-              var new_unit_cost = CurrencyFormatted( Math.round(list_price * (1-discount)*100)/100 );
-              $(this).val(new_unit_cost);
-              $(this).closest('tr').find('div.unit_cost_calculated_from_discount').html(new_unit_cost);
-              extended_cost(this);
-            });
-          });
-       });
-
-       $('.add_financial_scenario').live('click',function(){
-        var current_scenario_number = $('span.scenario_number').filter(':last').text();
-        var new_fieldset = copy_fieldset($(this));
-        new_fieldset.show();
-        new_fieldset.find('tr.fields').each(function(){
-          $(this).remove();
-        });
-        new_fieldset.find('.add_fs_product').click(function(){
-          add_fs_product(this);
-         });
-        new_fieldset.find('span.total_annual_cost').html('');
-        add_fs_product($(this).find('.add_fs_product').toArray());
-        var scenario_number = parseInt(new_fieldset.find('span.scenario_number').text())+1;
-        var legend = new_fieldset.find('legend');
-        legend.html('Scenario <span class="scenario_number">'+scenario_number+'</span>:');
-        new_fieldset.find('div.scenario_name').show();
-        new_fieldset.find('.add_financial_scenario_button').show().find('.delete_financial_scenario').show();
-        new_fieldset.find('.add_financial_scenario_button').find('input[id$="_destroy"]').val(0);
-        new_fieldset.find('input[id$="_id"]').filter(':first').val('');
-        new_fieldset.find('input[id$="use_a_discount"]').removeAttr('checked').closest('div').next('div').hide();;
-       });
-       $('.add_fs_product').click(function(){
-        new_product = add_fs_product(this);
-       });
-
-      $('input[id$="use_a_discount"]').each(function(){
-        toggle_unit_cost(this);
-      });
-
-      $('input[id$="use_a_discount"]').live('change', function(){
-       toggle_unit_cost(this);
       });
 
 
@@ -560,7 +404,7 @@ function application_js_code(){
           });
         }
       });
-*/
+
 }
 
   function getAllSerialize() {
@@ -605,128 +449,7 @@ function application_js_code(){
     }
   }
 
-  function update_extended_cost_on_change(link){
-      $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_unit_cost/);
-      })
-      .change(function(){
-        extended_cost(this);
-        adjusted_total(this);
-     });
 
-      $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_list_price/);
-      })
-      .change(function(){
-        var use_a_discount = $(this).closest('fieldset').find('input[name$="use_a_discount\]"]').is(':checked');
-        if (use_a_discount){
-          var discount_field = $(this).closest('fieldset').find('input').filter(function() {
-            return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_discount/);
-          }).val();
-          var discount = parseInt(discount_field)/100;
-          var unit_cost_input = $(this).closest('tr').find('input[id$="unit_cost"]');
-          var new_unit_cost = calculate_discounted_cost(unit_cost_input, discount);
-          unit_cost_input.val(new_unit_cost);
-          $(this).closest('tr').find('div.unit_cost_calculated_from_discount').html(new_unit_cost);
-          extended_cost(this);
-          adjusted_total(this);
-        }
-     });
-
-    $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_estimated_annual_usage/);
-      })
-      .change(function(){
-        extended_cost(this);
-        adjusted_total(this);
-     });
-
-
-    $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_discount/);
-      })
-      .change(function(){
-        var use_a_discount = $(this).closest('fieldset').find('input[name$="use_a_discount\]"]').is(':checked');
-        if (use_a_discount){
-          var discount = parseInt($(this).val())/100;
-          $(this).closest('fieldset').find('input[id$="unit_cost"]').each(function(){
-            var new_unit_cost = calculate_discounted_cost(this, discount);
-            $(this).val(new_unit_cost);
-            $(this).closest('tr').find('div.unit_cost_calculated_from_discount').html(new_unit_cost);
-            extended_cost(this);
-            adjusted_total(this);
-          });
-        }
-     });
-
-    $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_other_costs/);
-      })
-      .change(function(){
-        adjusted_total(this);
-     });
-
-
-    $(link).find('input').filter(function() {
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_anticipated_savings/);
-      })
-      .change(function(){
-        adjusted_total(this);
-     });
-  }
-
-  function toggle_unit_cost(link){
-    if ($(link).is(':checked')){
-      $(link).closest('div').next('div').show();
-      var discount = parseInt($(link).closest('div').next('div').find('input').val())/100;
-      $(link).closest('fieldset').find('input[id$="unit_cost"]').each(function(){
-        var new_unit_cost = calculate_discounted_cost(this, discount);
-        $(this).val(new_unit_cost);
-        $(this).closest('tr').find('div.unit_cost_calculated_from_discount').show().html(new_unit_cost);
-        extended_cost(this);
-        $(this).closest('tr').find('div.unit_cost_from_user').hide();
-      });
-    }
-    else {
-      $(link).closest('div').next('div').hide();
-      $(link).closest('tr').find('div.unit_cost_from_user').show();
-      $(link).closest('tr').find('div.unit_cost_calculated_from_discount').hide();
-      $(link).closest('fieldset').find('div.unit_cost_calculated_from_discount').hide();
-      $(link).closest('fieldset').find('div.unit_cost_from_user').show();
-    }
-  }
-
-  function calculate_discounted_cost(link, discount){
-    var list_price = parseInt($(link).closest('tr').find('input[id$="list_price"]').val());
-    return CurrencyFormatted( Math.round(list_price * (1-discount)*100)/100 );
-  };
-
-  function extended_cost(link){
-    var usage = $(link).closest('tr').find('input').filter(function(){
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_estimated_annual_usage/);
-    }).val();
-    var unit_cost = $(link).closest('tr').find('input').filter(function(){
-      return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_unit_cost/);
-    }).val();
-    $(link).closest('tr').find('input').filter(function(){
-     return this.id.match(/evaluation_institution_financial_scenarios_attributes_\d+_fs_products_attributes_\d+_extended_cost/);
-    }).val(unit_cost*usage);
-    $(link).closest('tr').find('td[class="extended_cost"] span').html(CurrencyFormatted(unit_cost*usage));
-    var total_annual_cost = 0;
-    $(link).closest('table').find('td[class="extended_cost"] span').each(function(){
-      total_annual_cost = total_annual_cost + parseFloat($(this).html());
-    });
-    $(link).closest('table').find('span[class="total_annual_cost"]').html(CurrencyFormatted(total_annual_cost));
-  }
-
-
-  function adjusted_total(link){
-    var total_annual_cost = $(link).closest('fieldset').find('span[class="total_annual_cost"]').html() * 1;
-    var other_costs = $(link).closest('fieldset').find('input[id$="other_costs"]').val() * 1;
-    var anticipated_savings = $(link).closest('fieldset').find('input[id$="anticipated_savings"]').val();
-    var adjusted_total = total_annual_cost + other_costs - anticipated_savings;
-    $(link).closest('fieldset').find('span[class="adjusted_annual_cost"]').html(CurrencyFormatted(adjusted_total));
-  }
 
   function CurrencyFormatted(amount) {
 	  var i = parseFloat(amount);
@@ -741,110 +464,6 @@ function application_js_code(){
 	  if(s.indexOf('.') == (s.length - 2)) { s += '0'; }
 	  s = minus + s;
 	  return s;
-  }
-  //add button code for adding a new product row to financial scenarios.
-  //alternative to method of adding rows used in evaluation_controller.rb. That one, based on a rails casts, embeds the js code to create the new row
-  //in the button link.  It uses a helper function to render the fields for the new row, and then embeds them in js using code elsewhere in this file.
-  //This approach instead takes a copy of an existing row, uses jquery to insert it into the DOM, and modifies the index values so it can be used to save
-  //new rows.  It should be simpler to set up and has the advantage of not being as brittly dependent on DOM position.
-  //This particular example is complicated because the fields change for a product that was not part of the
-  //original evaluation (won't happen often, but give flexibility to analysis).
-  function add_fs_product(link){
-    var fsindex = get_1st_index($(link).closest('fieldset').find('input').filter(':first'));
-    //if at least one row exists in the new financial scenario, copy the last row from that.  That way, we'll pick up the right product index
-    if ($(link).closest('fieldset').find('tr.fields').length > 0){
-      var new_tr = copy_row($(link).closest('fieldset').find('tr.fields').filter(':last'), link);
-    }
-    //otherwise, copy the first row from the first scenario - we'll be changing all the important details, so that row will work as well as any
-    else {
-      var new_tr = copy_row($('fieldset').eq(0).find('tr.fields').eq(0), link);
-      new_tr.find('input, select').each(function(){
-        var old_id = this.id;
-        //replace first occurrence of a number (dont want to change anything but the lowest nested attribute)
-        var new_id = old_id.replace(/\d/,fsindex);
-        this.id = new_id;
-        var old_name = this.name;
-        var new_name = old_name.replace(/\d/,fsindex);
-        this.name = new_name;
-      });
-    }
-    new_tr.css("display","");
-    new_tr.find('td.extended_cost').find('span').html('');
-    //recalculate extended cost - do we really need to do this?
-    new_tr.find('input[id$="unit_cost"], input[id$="estimated_annual_usage"]').change(function(){extended_cost(this);});
-    //set financial_scenario_id
-    var financial_scenario_id = $(link).closest('fieldset').find('input[id="evaluation_institution_financial_scenarios_attributes_'+fsindex+'_id"]').val();
-    new_tr.find('input[id$="financial_scenario_id"]').val(financial_scenario_id);
-    //change the first col from text to an input for institution
-    var new_div = new_tr.find('td').filter(':first').html('<div class="input string optional">');
-    var idx = parseInt(get_index(new_tr.find('input').filter(':first')));
-    var input_str = '<input id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_1_vendor_token" class="string optional" type="text" size="25" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][1][vendor_token]" data-pre="" style="display: none;">';
-    input_str = input_str.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+_vendor_token/,idx+"_vendor_token");
-    input_str = input_str.replace(/\d+\]\[vendor_token/,idx+"][vendor_token");
-    new_div.find('div').html(input_str);
-
-    //change the second field from text to an input for catalogue number
-    new_div = new_tr.find('td').eq(1).html('<div class="input string optional">');
-    input_str = '<input id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_1_catalogue_number" class="string optional" type="text" size="8" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][1][catalogue_number]" data-pre="" >';
-    input_str = input_str.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+_catalogue_number/,idx+"_catalogue_number");
-    input_str = input_str.replace(/\d+\]\[catalogue_number/,idx+"][catalogue_number");
-    new_div.find('div').html(input_str);
-
-    //change the third field from text to an input for name
-    new_div = new_tr.find('td').eq(2).html('<div class="input string optional">');
-    input_str = '<input id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_1_name" class="string optional" type="text" size="8" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][1][name]" data-pre="" >';
-    input_str = input_str.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+_name/,idx+"_name");
-    input_str = input_str.replace(/\d+\]\[name/,idx+"][name");
-    new_div.find('div').html(input_str);
-
-    //change the fifth field from text to an input for unit of measure
-    new_div = new_tr.find('td').eq(4).html('<div class="input select optional">');
-    input_str = '<select id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_2_unit_of_measure" class="select optional" width="5" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][2][unit_of_measure]"><option value=""></option><option value="each">each</option>     <option value="box">box</option><option value="pack">pack</option><option value="case">case</option><option value="other">other</option></select>';
-    input_str = input_str.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+_unit_of_measure/,idx+"_unit_of_measure");
-    input_str = input_str.replace(/\d+\]\[unit_of_measure/,idx+"][unit_of_measure");
-    new_div.find('div').html(input_str);
-
-    //change the sixth field from text to an input for list_price
-    new_div = new_tr.find('td').eq(5).html('<div class="input currency optional">');
-    input_str = '$<input id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_0_list_price" class="currency optional" type="text" size="4" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][0][list_price]">';
-    input_str = input_str.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-    input_str = input_str.replace(/\d+_list_price]/,idx+"_list_price");
-    input_str = input_str.replace(/\d+\]\[list_price/,idx+"][list_price");
-    new_div.find('div').html(input_str);
-
-    //add the delete icon, if needed
-    var delete_icon_present = new_tr.find('input[id$="destroy"]').length;
-    if (!delete_icon_present){
-      var delete_icon = '<td><span class="fl notfirst"><input id="evaluation_institution_financial_scenarios_attributes_0_fs_products_attributes_2__destroy" type="hidden" value="false" name="evaluation_institution[financial_scenarios_attributes][0][fs_products_attributes][2][_destroy]"><a onclick="remove_fields(this); return false;" href="#">'
-      //replaces all numbers, although we only want the first. OK, because the next command replaces the second number
-      delete_icon = delete_icon.replace(/\d+(?=_fs_products_attributes)/g,fsindex);
-      input_str = input_str.replace(/\d+(?=\]\[fs_products_attributes)/g,fsindex);
-      delete_icon = delete_icon.replace(/\d+__destroy/g,idx+"__destroy");
-      delete_icon = delete_icon.replace(/\d+\]\[_destroy/g,idx+"][_destroy");;
-      delete_icon = delete_icon + '<img border="0" src="../images/delete.png" margin="-1em" alt="Delete"></a></span></td>'
-      new_div = new_tr.find('td').filter(':last').after(delete_icon);
-    }
-
-    new_tr.find('input[id$="vendor_token"]').tokenInput("/institutions.json?institution_type=Vendor", {
-      tokenLimit: 1,
-      identifier: "vendor",
-      prePopulate: $("#vendor_hospital_token").data("pre"),
-      hintText: "fill in name",
-      noResultsText: "vendor not found"
-    });
-    toggle_unit_cost(new_tr.closest('fieldset').find('input[id$="use_a_discount"]'));
-    update_extended_cost_on_change(new_tr.closest('fieldset'));
-    return new_tr;
-    //new_tr.find('input#vendor_input_box').focus();
   }
 
   function copy_fieldset(link) {
@@ -890,71 +509,6 @@ function application_js_code(){
     $(destination).closest('tr').before(new_tr);
     return new_tr;
   }
-
-
-   $.fn.update_widgets = function(){
-      $(this).find('select.uislider').each(function() {
-        $(this).selectToUISlider({
-          labels:2,
-          labelSrc: "text",
-          sliderOptions: {
-            stop: function(e, ui) { // handle stop sliding event
-              $(this).parents('form').trigger('slider_change');
-            }
-          }
-          }).hide();
-      });
-      $(this).find("input.date_picker").datepicker({ duration: 'fast',  showOn: 'both', buttonImage: '/images/datepicker.gif', buttonImageOnly: true });
-    };
-
-    $.fn.show_answers = function (){
-      if ($(this).val() in {'Multiple Choice (only one answer)':1,'Multiple Choice (multiple answers)':1,'Slider':1}){
-        $('#question_answers_attributes_0_text').val($('#original_choice').data('original_choice'));
-        $('#answer_choice').show();
-        if ($('input[id^="question_dynamically_generate"]:checked').val() in {'t':1,'true':1}){
-          $('#fixed_source').hide();
-          $('#dynamic_source').show();
-//          $('#question_answers_attributes_0_text').val('String');
-        }
-      }
-      else
-      {
-        $('#answer_choice').hide();
-        switch($(this).val)
-        {
-        case 'Number':
-          $('#question_answers_attributes_0_text').val('Float');
-          break;
-        case 'Text':
-          $('#question_answers_attributes_0_text').val('Text');
-          break;
-        default:
-          $('#question_answers_attributes_0_text').val('String');
-        }
-      }
-    };
-
-    $.fn.show_number_questions = function (){
-      if ($(this).val() === "Number"){
-        $('#number_questions').show();
-      }
-      else
-      {
-        $('#number_questions').hide();
-      }
-    };
-
-    function check_total_duration_against_vendor_request() {
-      $.get(
-        '/workflows/check_total_duration_against_vendor_request',
-        {evaluation_institution_id: $('form').find('input[id="evaluation_institution_id"]').val()},
-        function(response) {
-          if (response.length > 1) {
-            alert(response);
-          }
-        }
-      );
-    }
 
     function update_logic() {
         var rule_keys = $('input[id$="rule_key_temp"]');
@@ -1185,39 +739,6 @@ function application_js_code(){
       $('#revise_buttons').hide();
       $('#show_schedule').show();
       $('#revise_schedule').hide();
-    }
-    function reason_for_deny_request() {
-      $('#initial_buttons').hide();
-      $('#deny_buttons').show();
-      $('#revise_buttons').hide();
-      $('#show_schedule').show();
-      $('#revise_schedule').hide();
-    }
-    function revise_request() {
-      $('#initial_buttons').hide();
-      $('#deny_buttons').hide();
-      $('#revise_buttons').show();
-      $('#show_schedule').hide();
-      $('#revise_schedule').show();
-    }
-
-    function show_evaluation_summary () {
-      $('#evaluation_summary').show();
-      $('#evaluation_summary_button').hide();
-    }
-    function hide_evaluation_summary () {
-      $('#evaluation_summary').hide();
-      $('#evaluation_summary_button').show();
-    }
-    function revise_evaluation () {
-      $('#revision_requests').hide();
-      $('#revision_form').show();
-      $('#make_revisions_button').hide();
-    }
-    function withdraw_evaluation () {
-      $('#revision_requests').hide();
-      $('#withdrawal_form').show();
-      $('#make_revisions_button').hide();
     }
     function go_back_2() {
       $('#revision_requests').show();

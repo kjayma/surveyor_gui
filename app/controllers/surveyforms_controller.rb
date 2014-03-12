@@ -27,6 +27,12 @@ class SurveyformsController < ApplicationController
     @url = "update"
   end
 
+  def replace_form
+    @surveyform = SurveySection.find(params[:survey_section_id]).surveyform
+    @question_no = 0
+    render :new, :layout => false
+  end
+
   def insert_survey_section
     survey_id = params[:id]
     @survey_section = Survey.find(survey_id, :include=> :survey_sections, :order => 'survey_sections.id').survey_sections.last
@@ -46,7 +52,6 @@ class SurveyformsController < ApplicationController
   end
 
   def insert_new_question
-    @wizard_step = params[:wizard_step]
     question_id = params[:question_id]
     @question = Question.find(question_id)
     @question_no = 0
@@ -57,7 +62,6 @@ class SurveyformsController < ApplicationController
 
   def cut_question
     session[:cut_question]=params[:question_id]
-    @wizard_step = params[:wizard_step]
     if q=Question.find(params[:question_id])
       @surveyform=q.survey_section.surveyform
       q.update_attribute(:survey_section_id,nil)
@@ -74,7 +78,6 @@ class SurveyformsController < ApplicationController
     if session[:cut_question]
       @question = Question.find(session[:cut_question])
       @question_no = 0
-      @wizard_step = params[:wizard_step]
       if params[:question_id]
         place_under_question = Question.find(params[:question_id])
         survey_section = place_under_question.survey_section
@@ -102,7 +105,6 @@ class SurveyformsController < ApplicationController
   end
 
   def replace_question
-    @wizard_step = params[:wizard_step]
     question_id = params[:question_id]
     @question = Question.find(question_id)
     @question_no = 0

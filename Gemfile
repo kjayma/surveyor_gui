@@ -1,57 +1,17 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'rails', '3.2.15.rc3'
+# Declare your gem's dependencies in plugtest.gemspec.
+# Bundler will treat runtime dependencies like base dependencies, and
+# development dependencies will be added by default to the :development group.
+gemspec
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# jquery-rails is used by the dummy application
+# gem "jquery-rails"
 
-gem 'sqlite3'
-
-
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
-
-  gem 'uglifier', '>= 1.0.3'
-end
-
-gem 'jquery-rails'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
+# Declare any dependencies that are still in development here instead of in
+# your gemspec. These might include edge Rails or gems from your path or
+# Git. Remember to move these dependencies to your gemspec before releasing
+# your gem to rubygems.org.
 
 # To use debugger
-gem 'debugger'
-gem 'will_paginate', '~> 3.0'
-gem 'simple_form'
-gem 'carrierwave'
-gem 'colorbox-rails'
-gem 'jquery-form-rails'
-group :development, :test do
-  gem "rspec-rails", ">= 2.8.1"
-end
-
-group :test do
-#  gem "factory_girl_rails", ">= 1.6.0", :require=> false
-	gem "factory_girl", "~> 2.1.2"
-  gem "cucumber-rails", ">= 1.2.1", :require => false
-  gem "capybara", ">= 1.1.2"
-  gem "database_cleaner"
-  gem "launchy"
-end
-
-gem 'surveyor'
+# gem 'debugger'

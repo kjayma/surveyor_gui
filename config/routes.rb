@@ -1,5 +1,4 @@
-SurveyorGui::Application.routes.draw do
-  mount Surveyor::Engine => "/surveys", :as => "surveyor"
+SurveyorGui::Engine.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

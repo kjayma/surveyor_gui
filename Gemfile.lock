@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    surveyor-gui (0.0.1)
+    surveyor_gui (0.0.1)
       carrierwave
       colorbox-rails
       jquery-form-rails
@@ -158,5 +158,5 @@ DEPENDENCIES
   debugger
   sass-rails (~> 3.2.3)
   sqlite3
-  surveyor-gui!
+  surveyor_gui!
   uglifier (>= 1.0.3)

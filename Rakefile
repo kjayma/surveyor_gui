@@ -4,13 +4,13 @@ desc 'Set up the rails app that the specs and features use'
 task :gui_testbed => 'gui_testbed:rebuild'
 
 namespace :gui_testbed do
-  desc 'Generate a minimal surveyor-gui/surveyor rails app'
+  desc 'Generate a minimal surveyor_gui/surveyor rails app'
   task :generate do
     sh "bundle exec rails new testbed --skip-bundle" # don't run bundle install until the Gemfile modifications
 
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
-      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor-gui', :path => plugin_root})
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root})
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
 
       Bundler.with_clean_env do

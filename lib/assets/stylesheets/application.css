@@ -12,6 +12,6 @@
  *= require_tree .
  *= require colorbox-rails
  *= surveyor_all
- *= surveyor-gui/require jquery.rating
- *= surveyor-gui
+ *= surveyor_gui/require jquery.rating
+ *= surveyor_gui
  */

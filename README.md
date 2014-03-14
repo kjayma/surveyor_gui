@@ -1,9 +1,9 @@
-surveyor-gui
+surveyor_gui
 ============
 
 THE FIRST VERSION OF THIS GEM IS UNDER DEVELOPMENT!
 
-Surveyor-gui complements the surveyor gem.
+Surveyor_gui complements the surveyor gem.
 
 The surveyor gem is used to create surveys by parsing a file written in the Surveyor DSL.  It does not include a gui for creating surveys, although it does provide a gui for taking surveys.
 
@@ -11,6 +11,6 @@ This gem also provides a reporting capability for Surveyor.
 
 The lack of a gui front-end limits the utility of surveyor for certain applications.
 
-Surveyor-gui meets this need by providing a gui to create surveys from scratch.
+Surveyor_gui meets this need by providing a gui to create surveys from scratch.
 
-Surveyor-gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.
+Surveyor_gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.

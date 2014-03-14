@@ -1,21 +1,26 @@
 require 'rails/generators'
-require 'surveyor-gui/helpers/asset_pipeline'
 
-module Surveyor
+module SurveyorGui
   class InstallGenerator < Rails::Generators::Base
-    include Surveyor::Helpers::AssetPipeline
 
     source_root File.expand_path("../templates", __FILE__)
     desc "Generate surveyor README, migrations, assets and sample survey"
     class_option :skip_migrations, :type => :boolean, :desc => "skip migrations, but generate everything else"
 
     MIGRATION_ORDER = %w(
+      20140307204049_add_template_to_surveys
+      20140307235607_add_test_data_to_response_sets
+      20140308171947_add_original_choice_to_answers
+      20140308172118_add_blob_to_responses
+      20140308172224_add_unique_index_to_responses
+      20140308172417_add_modifiable_to_survey_section
+      20140308174532_add_modifiable_to_question
+      20140308175305_add_dynamically_generate_to_questions
+      20140311032923_add_dummy_blob_to_questions
+      20140311160609_add_dynamic_source_to_questions
+      20140311161714_add_report_code_to_questions
+    )
 
-)
-
-    def readme
-      copy_file "../../../../README.md", "surveys/README.md"
-    end
     def migrations
       unless options[:skip_migrations]
         migration_files = Dir[File.join(self.class.source_root, 'db/migrate/*.rb')]
@@ -41,32 +46,13 @@ module Surveyor
     end
 
     def routes
-      route('mount Surveyor::Engine => "/surveys", :as => "surveyor"')
+      route('mount SurveyorGui::Engine => "/surveyforms", :as => "surveyor_gui"')
     end
 
     def assets
-      if asset_pipeline_enabled?
-        directory "app/assets"
-        copy_file "vendor/assets/stylesheets/custom.sass"
-      else
-        directory "../../../assets/javascripts", "public/javascripts"
-        directory "../../../assets/images", "public/images"
-        directory "../../../assets/stylesheets/surveyor", "public/stylesheets/surveyor"
-        copy_file "../../../assets/stylesheets/surveyor.sass", "public/stylesheets/sass/surveyor.sass"
-        copy_file "vendor/assets/stylesheets/custom.sass", "public/stylesheets/sass/custom.sass"
-      end
+      directory "app/assets"
+      #copy_file "vendor/assets/stylesheets/custom.sass"
     end
 
-    def surveys
-      copy_file "surveys/kitchen_sink_survey.rb"
-      copy_file "surveys/quiz.rb"
-      copy_file "surveys/date_survey.rb"
-      copy_file "surveys/languages.rb"
-      directory "surveys/translations"
-    end
-
-    def locales
-      directory "config/locales"
-    end
   end
 end

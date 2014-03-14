@@ -1,7 +1,39 @@
-#!/usr/bin/env rake
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+$LOAD_PATH << File.expand_path('../lib', __FILE__)
 
-require File.expand_path('../config/application', __FILE__)
+desc 'Set up the rails app that the specs and features use'
+task :gui_testbed => 'gui_testbed:rebuild'
 
-SurveyorGui::Application.load_tasks
+namespace :gui_testbed do
+  desc 'Generate a minimal surveyor-gui/surveyor rails app'
+  task :generate do
+    sh "bundle exec rails new testbed --skip-bundle" # don't run bundle install until the Gemfile modifications
+
+    chdir('testbed') do
+      gem_file_contents = File.read('Gemfile')
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor-gui', :path => plugin_root})
+      File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
+
+      Bundler.with_clean_env do
+        sh 'bundle install' # run bundle install after Gemfile modifications
+      end
+    end
+  end
+
+  desc 'Remove the testbed entirely'
+  task :remove do
+    rm_rf 'testbed'
+  end
+
+  desc 'Prepare the databases for the testbed'
+  task :migrate do
+    chdir('testbed') do
+      Bundler.with_clean_env do
+        sh 'bundle exec rails generate surveyor:install'
+        sh 'bundle exec rails generate surveyor-gui:install'
+        sh 'bundle exec rake db:migrate db:test:prepare'
+      end
+    end
+  end
+
+  task :rebuild => [:remove, :generate, :migrate]
+end

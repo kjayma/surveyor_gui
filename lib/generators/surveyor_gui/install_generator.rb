@@ -56,7 +56,7 @@ module SurveyorGui
     end
 
     def assets
-      #directory "app/assets"
+      directory "app/assets"
       #copy_file "vendor/assets/stylesheets/custom.sass"
     end
 

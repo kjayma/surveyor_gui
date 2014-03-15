@@ -35,7 +35,8 @@ module SurveyorGui
         end
 
         # because all migration timestamps end up the same, causing a collision when running rake db:migrate
-        # copied functionality from RAILS_GEM_PATH/lib/rails_generator/commands.rb
+        # modified functionality from RAILS_GEM_PATH/lib/rails_generator/commands.rb
+        last_timestamp = Dir.glob("db/migrate/[0-9]*_*.rb").sort.last.match(/(?<=\d{12})\d{2}/)[0].to_i
         MIGRATION_ORDER.each_with_index do |model, i|
           unless (prev_migrations = Dir.glob("db/migrate/[0-9]*_*.rb").grep(/[0-9]+_#{model}.rb$/)).empty?
             prev_migration_timestamp = prev_migrations[0].match(/([0-9]+)_#{model}.rb$/)[1]
@@ -44,7 +45,8 @@ module SurveyorGui
           if cpfile.empty?
             fail " failed on model %s and directory %s" % [model, Dir.glob("db/migrate/*.rb")]
           end
-          copy_file("#{cpfile}", "db/migrate/#{(prev_migration_timestamp || Time.now.utc.strftime("%Y%m%d%H%M%S").to_i + i).to_s}_#{model}")
+          modified_time = (Time.now.utc+ i + last_timestamp).strftime("%Y%m%d%H%M%S").to_i
+          copy_file("#{cpfile}", "db/migrate/#{(prev_migration_timestamp || modified_time).to_s}_#{model}.rb")
         end
       end
     end

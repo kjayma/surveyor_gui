@@ -1,5 +1,7 @@
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
+
+require 'bundler/gem_tasks'
 desc 'Set up the rails app that the specs and features use'
 task :gui_testbed => 'gui_testbed:rebuild'
 

@@ -1,7 +1,7 @@
 require 'rails'
 require 'surveyor_gui'
 require 'haml' # required for view resolution
-require 'debugger'
+
 module SurveyorGui
   class Engine < Rails::Engine
     root = File.expand_path('../../', __FILE__)

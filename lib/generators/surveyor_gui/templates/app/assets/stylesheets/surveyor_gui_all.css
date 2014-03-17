@@ -2,4 +2,5 @@
 *= require surveyor_gui
 *= require surveyor_gui/
 *= require surveyor_gui/jquery.rating
+*= require colorbox-rails
 */

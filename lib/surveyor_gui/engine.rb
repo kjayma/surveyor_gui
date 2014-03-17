@@ -8,9 +8,10 @@ module SurveyorGui
     config.autoload_paths << root
 
     config.to_prepare do
-      Dir.glob(root + "/surveyor_gui/models/*.rb").each do |c|
-        require_dependency(c)
-      end
+      require_dependency('/home/kevin/surveyor_gui/lib/surveyor_gui/models/survey_methods.rb')
+#      Dir.glob(root + "/surveyor_gui/models/*.rb").each do |c|
+#        require_dependency(c)
+#      end
     end
   end
 end

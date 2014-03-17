@@ -1,4 +1,4 @@
-module Surveyor
+module SurveyorGui
   module Models
     module DependencyMethods
       def self.included(base)

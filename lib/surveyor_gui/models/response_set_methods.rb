@@ -1,4 +1,4 @@
-module Surveyor
+module SurveyorGui
   module Models
     module ResponseSetMethods
 

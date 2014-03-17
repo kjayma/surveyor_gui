@@ -1,6 +1,6 @@
 module SurveyorGui
   module Models
-    module QuestionMethods
+    module SurveySectionMethods
 
       def self.included(base)
 
@@ -12,7 +12,7 @@ module SurveyorGui
         base.send :default_scope, :order => 'display_order'
 
         base.send :validate, :no_responses
-        base.send :before_destroy. :no_responses
+        base.send :before_destroy, :no_responses
       end
 
       #don't let a survey be deleted or changed if responses have been submitted

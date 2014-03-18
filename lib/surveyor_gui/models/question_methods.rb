@@ -3,7 +3,7 @@ module SurveyorGui
     module QuestionMethods
 
       def self.included(base)
-        base.send :attr_accessor, :dummy_answer, :type, :prefix, :suffix, :decimals
+        base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory, :answers_attributes, :prefix, :suffix, :decimals, :dependency_attributes,
@@ -205,7 +205,7 @@ module SurveyorGui
             if pre.blank?
               self.answers.first.text = 'default'
             else
-              self.answers.first.text = pre+'|' unless pre.blank?
+              self.answers.first.text = pre+'|'
             end
           end
         end

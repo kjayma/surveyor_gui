@@ -167,18 +167,14 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
         <% elsif (f.object.display_type == 'Text') || (f.object.answers.first ? f.object.answers.first.response_class == "text" : false) -%>
 
            <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"3"}%>
-        <% elsif f.object.answers.first && ['float','integer'].include?(f.object.answers.first.response_class) -%>
-          <%
-            @prefix = f.object.answers.first.text.split('|')[0]
-            @suffix = f.object.answers.first.text.split('|')[1]
-           %>
+        <% elsif f.object.answers.first && ['float','integer'].include?(f.object.answers.first.response_class) && f.object.answers.first.text.include?('|') -%>
           <span class='fl' style="margin-left: 4.5em;">
-            <% if @prefix %>
-              <%= @prefix %>&nbsp;
+            <% if f.object.answers.first.text.include?('|') %>
+              <%= f.object.answers.first.text.split('|')[0] %>&nbsp;
             <% end %>
           </span>
             <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:size=>"10"}, :wrapper_html=>{:class=>'fl notfirst'} %>
-            &nbsp;<%= @suffix %>
+            &nbsp;<%= f.object.answers.first.text.split('|')[1] %>
         <% elsif f.object.answers.first && f.object.answers.first.response_class=='date' -%>
             <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"}, :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
         <% elsif f.object.answers.first && f.object.answers.first.response_class=='blob' -%>

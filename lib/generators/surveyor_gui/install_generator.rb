@@ -51,6 +51,11 @@ module SurveyorGui
       end
     end
 
+    def copy_config
+      remove_file File.expand_path('config/initializers/simple_form.rb',Rails.root)
+      template "config/initializers/simple_form.rb"
+    end
+
     def routes
       route('mount SurveyorGui::Engine => "/", :as => "surveyor_gui"')
     end

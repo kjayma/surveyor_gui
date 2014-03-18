@@ -1,0 +1,21 @@
+<%= simple_fields_for 'Question', @question do |f| %>
+    <span class='fl'>
+      Generate list from a database field?
+    </span>
+    <%= f.input :dynamically_generate, :as => :radio, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
+    <div id="dynamic_source">
+      Specify statement used to generate list:<br />
+      <%= f.input :dynamic_source, :label=>false %>
+    </div>
+    <div id="fixed_source">
+      <strong>Possible Answers:</strong>
+      <div id='sortable_answers'>
+        <%= f.simple_fields_for @answers do |a| %>
+          <%= render 'answer_fields', :a => a %>
+        <% end %>
+        <p class="floatdown2">
+          Add Possible Answer<%= link_to_add_fields "Add Answer", @questions.id, f, :answers, 'a' %>
+        </p>
+      </div>
+    </div>
+<% end %>

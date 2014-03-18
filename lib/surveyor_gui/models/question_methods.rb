@@ -6,7 +6,7 @@ module SurveyorGui
         base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
-                  :is_mandatory, :answers_attributes, :prefix, :suffix, :decimals, :dependency_attributes,
+                  :is_mandatory, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate,
                   :dynamic_source, :modifiable, :report_code
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
@@ -83,9 +83,6 @@ module SurveyorGui
         write_attribute(:text, t1.match(/[\w\s\(\)\[\]\-\\\,\.\?\+\**&^%$#\@!%^-{}|:;'"<>\/\n\r\t~`]+/).to_s)
       end
 
-      def dynamically_generate
-        'false'
-      end
 
       #setter for question type.  Sets both pick and display_type
       def question_type=(type)
@@ -163,6 +160,7 @@ module SurveyorGui
           self.answers.first.original_choice=self.answers.first.text if ['String','Integer','Float','Number','default'].exclude?(self.answers.first.text) if self.answers.first
           self.answers.first.text = '' if ['String','Integer','Float','Number','default'].include?(self.answers.first.text)
           self.answers.map{|a|a.response_class=response_class}
+          puts 'stop'
         end
       end
 
@@ -178,53 +176,6 @@ module SurveyorGui
           self.answers.first.response_class=answer_type
           #self.answers.first.hide_label = answer_type=='float' ? false : true
           self.answers.first.display_type = answer_type=='float' ? 'default' : 'hidden_label'
-        end
-      end
-
-      #number prefix getter.  splits a number question into the actual answer and it's unit type. Eg, you might want a
-      #number to be prefixed with a dollar sign.
-      def prefix
-        if self.answers.first && self.answers.first.text.include?('|')
-          self.answers.first.text.split('|')[0]
-        end
-      end
-
-      #number suffix getter. sometimes you want a number question to have a units of measure suffix, like "per day"
-      def suffix
-        if self.answers.first && self.answers.first.text.include?('|')
-          self.answers.first.text.split('|')[1]
-        end
-      end
-
-      #sets the number prefix
-      def prefix=(pre)
-        if self.question_type=='Number'
-          if self.answers.blank?
-            self.answers_attributes={'0'=>{'text'=>pre+'|'}} unless pre.blank?
-          else
-            if pre.blank?
-              self.answers.first.text = 'default'
-            else
-              self.answers.first.text = pre+'|'
-            end
-          end
-        end
-      end
-
-      #sets the number suffix
-      def suffix=(suf)
-        if self.question_type=='Number'
-          if self.answers.first.blank? || self.answers.first.text.blank?
-            self.answers_attributes={'0'=>{'text'=>'|'+suf}} unless suf.blank?
-          else
-            if self.answers.first.text=='default'
-              self.answers.first.text='|'+suf
-            elsif self.answers.first.text.blank?
-              self.answers.first.text = '|'+suf
-            else
-              self.answers.first.text=self.answers.first.text+suf
-            end
-          end
         end
       end
 

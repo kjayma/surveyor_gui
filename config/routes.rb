@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   resources :questions do
     member do
       get 'cut'
+      get 'render_picks_partial'
     end
   end
 

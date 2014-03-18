@@ -3,19 +3,18 @@ module QuestionHelper
     f.hidden_field(:_destroy) + link_to_function(image_tag("delete.png",:border => 0, :margin=>'-1em'), "remove_fields(this)")
   end
 
-  def link_to_add_fields(name, f, association, formclass="f", table=false, div=false, dirpath=nil)
+  def link_to_add_fields(name, id, f, association, formclass="f", table=false, div=false, dirpath=nil)
+    fkey=':'+ f.object_name.underscore+'_id'
+    setid = "{"+fkey+"=>"+id.to_s+"}"
 
-    fkey=':'+ f.object.class.name.underscore+'_id'
-    setid = "{"+fkey+"=>"+f.object.id.to_s+"}"
-
-    if f.object.id
-      new_object = f.object.class.reflect_on_association(association).klass.new(eval(setid))
+    if id
+      new_object = eval(f.object_name).reflect_on_association(association).klass.new(eval(setid))
     else
-      new_object = f.object.class.reflect_on_association(association).klass.new
+      new_object = eval(f.object_name).reflect_on_association(association).klass.new
     end
 
-    if f.object.class.reflect_on_association(association).klass.accessible_attributes.include?('display_order')
-      new_object.display_order = f.object.class.reflect_on_association(association).klass.maximum(:display_order)+1
+    if eval(f.object_name).reflect_on_association(association).klass.accessible_attributes.include?('display_order')
+      new_object.display_order = eval(f.object_name).reflect_on_association(association).klass.maximum(:display_order)+1
     end
     new_object.class.reflect_on_all_autosave_associations.each do |ar|
       #build a query string that checks if f.object has an existing child object. This should be due to an

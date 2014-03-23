@@ -42,29 +42,40 @@ module SurveyorGui
       end
 
       def prefix=(pre)
-        if question && question.question_type=='Number'
-            if pre.blank?
-              write_attribute(:text, '')
-            else
-              write_attribute(:text, pre+'|')
-            end
+        if question && question.pick=='none'
+          if pre.blank?
+            write_attribute(:text, '')
+          else
+            write_attribute(:text, pre+'|')
+          end
+        else
+          write_attribute(:text,original_choice)
         end
-        write_attribute(:prefix,pre)
       end
 
       def suffix=(suf)
-        if !suf.blank?
-              if text=='default'
-                write_attribute(:text, '|'+suf)
-              else
-                write_attribute(:text, self.text+suf)
-              end
+        if question && question.pick=='none'
+          if !suf.blank?
+            if text=='default'
+              write_attribute(:text, '|'+suf)
+            else
+              write_attribute(:text, self.text+suf)
+            end
+          end
         end
-        write_attribute(:suffix,suf)
       end
 
-    def original_choice=(orig)
-      text
+      def text=(txt)
+        if question && question.pick!='none'
+          write_attribute(:text, txt)
+        end
+      end
+
+      def original_choice=(orig)
+        if question.pick!='none'
+          text
+        end
+      end
     end
   end
 end

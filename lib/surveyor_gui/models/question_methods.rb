@@ -106,14 +106,19 @@ module SurveyorGui
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")
         when 'Text Box (for extended text, like notes, etc.)'
+          write_attribute(:pick, "none")
           prep_not_picks('text')
         when 'Number'
+          write_attribute(:pick, "none")
           prep_not_picks('float')
         when 'Date'
+          write_attribute(:pick, "none")
           prep_not_picks('date')
         when 'File Upload'
+          write_attribute(:pick, "none")
           prep_not_picks('blob')
         when 'Text'
+          write_attribute(:pick, "none")
           prep_not_picks('string')
         end
       end

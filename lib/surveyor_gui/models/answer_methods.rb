@@ -42,6 +42,7 @@ module SurveyorGui
       end
 
       def prefix=(pre)
+      puts 'got to pre'
         if question && question.question_type=='Number'
             if pre.blank?
               write_attribute(:text, '')
@@ -59,12 +60,12 @@ module SurveyorGui
               else
                 write_attribute(:text, self.text+suf)
               end
-            end
         end
         write_attribute(:suffix,suf)
       end
 
      #sets the number prefix
+     puts 'got to text'
       def text=(txt)
         if question && question.question_type=='Number'
             if attributes["prefix"].blank?

@@ -1,5 +1,6 @@
 <%= simple_fields_for 'question', @questions do |f| %>
   <%= f.simple_fields_for :answers, @questions.answers.first do |a| %>
+    <%= a.hidden_field :text %>
     <table>
       <tr>
         <td>Number Prefix</td><td>Number Suffix</td>

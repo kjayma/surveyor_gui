@@ -42,7 +42,6 @@ module SurveyorGui
       end
 
       def prefix=(pre)
-      puts 'got to pre'
         if question && question.question_type=='Number'
             if pre.blank?
               write_attribute(:text, '')
@@ -63,28 +62,6 @@ module SurveyorGui
         end
         write_attribute(:suffix,suf)
       end
-
-     #sets the number prefix
-     puts 'got to text'
-      def text=(txt)
-        if question && question.question_type=='Number'
-            if attributes["prefix"].blank?
-              write_attribute(:text, '')
-            else
-              write_attribute(:text, attributes["prefix"]+'|')
-            end
-            if !attributes["suffix"].blank?
-              if text=='default'
-                write_attribute(:text, '|'+attributes["suffix"])
-              else
-                write_attribute(:text, self.text+attributes["suffix"])
-              end
-            end
-        else
-          write_attribute(:text, txt)
-        end
-      end
-    end
 
     def original_choice=(orig)
       text

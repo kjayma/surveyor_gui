@@ -159,7 +159,7 @@ module SurveyorGui
           self.answers_attributes={'0'=>{'text'=>'','original_choice'=>'','response_class'=>response_class}}
         else
 #          self.answers.first.original_choice=self.answers.first.text if ['String','Integer','Float','Number','default'].exclude?(self.answers.first.text) if self.answers.first
-#          self.answers.first.text = '' if ['String','Integer','Float','Number','default'].include?(self.answers.first.text)
+          self.answers.first.text = '' if ['String','Integer','Float','Number','default'].include?(self.answers.first.text)
           self.answers.map{|a|a.response_class=response_class}
 #          puts 'stop'
         end

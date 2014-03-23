@@ -98,5 +98,20 @@ class QuestionsController < ApplicationController
     redirect_to :back
   end
 
+  def render_picks_partial
+    @questions = Question.find(params[:id])
+    if @questions.answers.empty?
+      @questions.answers.build(:text=>'')
+    end
+    render :partial => 'picks'
+  end
+
+  def render_no_picks_partial
+    @questions = Question.find(params[:id])
+    if @questions.answers.empty?
+      @questions.answers.build(:text=>'')
+    end
+    render :partial => 'no_picks'
+  end
 
 end

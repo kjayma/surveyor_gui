@@ -3,9 +3,7 @@ module SurveyorGui
     module AnswerMethods
 
       def self.included(base)
-        base.send :belongs_to, :question
-        base.send :has_many, :responses
-        base.send :attr_accessible, :text, :response_class, :display_order,
+        base.send :attr_accessible, :prefix, :suffix, :text, :response_class, :display_order,
                   :original_choice, :hide_label, :question_id, :display_type
 
         base.send :before_save, :update_display_order
@@ -44,26 +42,30 @@ module SurveyorGui
       end
 
       def prefix=(pre)
-      debugger
-      puts
-      puts
-      puts('got here')
-      puts
-      puts
+        if question && question.question_type=='Number'
+            if pre.blank?
+              write_attribute(:text, '')
+            else
+              write_attribute(:text, pre+'|')
+            end
+        end
         write_attribute(:prefix,pre)
       end
 
       def suffix=(suf)
+        if !suf.blank?
+              if text=='default'
+                write_attribute(:text, '|'+suf)
+              else
+                write_attribute(:text, self.text+suf)
+              end
+            end
+        end
         write_attribute(:suffix,suf)
       end
 
      #sets the number prefix
       def text=(txt)
-      puts
-      puts
-      puts('got here to text')
-      puts
-      puts
         if question && question.question_type=='Number'
             if attributes["prefix"].blank?
               write_attribute(:text, '')

@@ -151,7 +151,7 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
           <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
         <% end %>
       <% elsif f.object.pick == 'any' %>
-        <% if f.object.dynamically_generate -%>
+        <% if f.object.dynamically_generate==false -%>
           <br />
           <span style="font-weight:normal;font-style:italic" class="field_indent">content retrieved from the application will go here.</span>
           <br />

@@ -100,11 +100,20 @@ class QuestionsController < ApplicationController
 
   def render_picks_partial
     @questions = Question.find(params[:id])
-    @answers = @questions.answers
-    if @answers.empty?
-      @answers = @questions.answers.build(:text=>'')
+    if @questions.answers.empty?
+      @questions.answers.build(:text=>'')
+    else
+      @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
     end
-    render :partial => 'pick'
+    render :partial => 'picks'
+  end
+
+  def render_no_picks_partial
+    @questions = Question.find(params[:id])
+    if @questions.answers.empty?
+      @questions.answers.build(:text=>'')
+    end
+    render :partial => 'no_picks'
   end
 
 end

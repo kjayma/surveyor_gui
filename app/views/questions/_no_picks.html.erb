@@ -1,0 +1,29 @@
+<%= simple_fields_for 'question', @questions do |f| %>
+    <table class="number_hints">
+      <tr>
+        <td>Number Prefix</td><td>Number Suffix</td>
+      </tr>
+        <td>
+          <%= f.input :prefix, :label => false %>
+        </td>
+        <td>
+          <%= f.input :suffix, :label => false %>
+        <td>
+      <tr>
+    </table>
+  <%= f.simple_fields_for :answers, @questions.answers.first do |a| %>
+    <%= a.hidden_field :text %>
+  <% end -%>
+<% end -%>
+<br>
+<span style='font-weight:normal;'>
+Hint: affects how the number will be shown.<br/>
+E.g. the number 60 could be shown as follows:<br/><br />
+  <table id="number_hint" style="margin-left:2em;">
+    <tr><td>Number Suffix</td><td>Number Prefix</td><td>Shown as</td>
+    <tr><td>$</td><td>USD</td><td>$60 USD</td>
+    <tr><td></td><td>Months</td><td>60 Months</td></tr>
+    <tr><td></td><td>Inches</td><td>60 Inches</td></tr>
+  </table>
+</span>
+<br />

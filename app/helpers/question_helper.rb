@@ -7,14 +7,15 @@ module QuestionHelper
     fkey=':'+ f.object_name.underscore+'_id'
     setid = "{"+fkey+"=>"+id.to_s+"}"
 
+    object_model = eval(f.object_name.camelcase)
     if id
-      new_object = eval(f.object_name).reflect_on_association(association).klass.new(eval(setid))
+      new_object = object_model.reflect_on_association(association).klass.new(eval(setid))
     else
-      new_object = eval(f.object_name).reflect_on_association(association).klass.new
+      new_object = object_model.reflect_on_association(association).klass.new
     end
 
-    if eval(f.object_name).reflect_on_association(association).klass.accessible_attributes.include?('display_order')
-      new_object.display_order = eval(f.object_name).reflect_on_association(association).klass.maximum(:display_order)+1
+    if object_model.reflect_on_association(association).klass.accessible_attributes.include?('display_order')
+      new_object.display_order = object_model.reflect_on_association(association).klass.maximum(:display_order)+1
     end
     new_object.class.reflect_on_all_autosave_associations.each do |ar|
       #build a query string that checks if f.object has an existing child object. This should be due to an

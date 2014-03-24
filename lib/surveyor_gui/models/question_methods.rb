@@ -6,7 +6,7 @@ module SurveyorGui
         base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
-                  :is_mandatory, :answers_attributes, :decimals, :dependency_attributes,
+                  :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate,
                   :dynamic_source, :modifiable, :report_code
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
@@ -21,6 +21,19 @@ module SurveyorGui
 
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
+
+        base.class_eval do
+
+          def answers_attributes=(ans)
+            #don't set answer.text if question_type = number.  In this case, text should get set by the prefix and suffix setters.
+            #note: Surveyor uses the answer.text field to store prefix and suffix for numbers.
+            #if not a number question, go ahead and set the text attribute as normal.
+            if question_type!="Number" && !ans.empty? && ans["0"]
+              ans["0"].merge!( {"original_choice"=>ans["0"]["text"]})
+              assign_nested_attributes_for_collection_association(:answers, ans)
+            end
+          end
+        end
 
       end
 
@@ -63,7 +76,7 @@ module SurveyorGui
         elsif self.pick == 'any'
           "Multiple Choice (multiple answers)"
         else
-          if self.display_type == 'label' || !self.answers.first
+          if self.display_type == 'label'
             "Label"
           elsif self.answers.first.response_class == 'text'
             "Text Box (for extended text, like notes, etc.)"
@@ -83,6 +96,9 @@ module SurveyorGui
         write_attribute(:text, t1.match(/[\w\s\(\)\[\]\-\\\,\.\?\+\**&^%$#\@!%^-{}|:;'"<>\/\n\r\t~`]+/).to_s)
       end
 
+      def dynamically_generate
+        'false'
+      end
 
       #setter for question type.  Sets both pick and display_type
       def question_type=(type)
@@ -135,18 +151,7 @@ module SurveyorGui
         end
       end
 
-      #If the question involves picking from a list of choices, this sets response class, text, and original choice.
-      #this solves the problem that arises if a user switches questions back and forth between different
-      #question types.  If it's a one pick question (like string, number, etc.), answer should contain
-      #a single row, and carry a text of the answer type (string, integer, float, number).  However, if its
-      #a multiple choice question, the first row in answer now represents one of the possible choices, with text
-      #containg the value.  For instance, if the choices are 'red', 'green', and 'yellow', text might contain 'red'
-      #so what happens when the user switches the question type from number to multiple choice and back again?
-      #in that case, the text column in the first row of answer starts as "Number", but must switch to "red".
-      #when the user switches back to a question type of number, the text can't stay "red" - it has to switch to
-      #"number".  But if the user switches back to multiple choice, we don't want to forget that the first choice was at
-      #one point "red". So we use the original_choice column, an extension of the original Surveyor data model, to retain
-      #that information.
+      #If the question involves picking from a list of choices, this sets response class.
       def prep_picks
         write_attribute(:display_type, self.display_type || "default")
         if self.display_type=='stars'
@@ -155,12 +160,9 @@ module SurveyorGui
           response_class='answer'
         end
         if self.answers.blank?
-          self.answers_attributes={'0'=>{'text'=>'','original_choice'=>'','response_class'=>response_class}}
+          self.answers_attributes={'0'=>{'response_class'=>response_class}}
         else
-          self.answers.first.original_choice=self.answers.first.text if ['String','Integer','Float','Number','default'].exclude?(self.answers.first.text) if self.answers.first
-          self.answers.first.text = '' if ['String','Integer','Float','Number','default'].include?(self.answers.first.text)
           self.answers.map{|a|a.response_class=response_class}
-          puts 'stop'
         end
       end
 
@@ -178,6 +180,54 @@ module SurveyorGui
           self.answers.first.display_type = answer_type=='float' ? 'default' : 'hidden_label'
         end
       end
+
+      #number prefix getter.  splits a number question into the actual answer and it's unit type. Eg, you might want a
+      #number to be prefixed with a dollar sign.
+      def prefix
+        if self.answers.first && self.answers.first.text.include?('|')
+          self.answers.first.text.split('|')[0]
+        end
+      end
+
+      #number suffix getter. sometimes you want a number question to have a units of measure suffix, like "per day"
+      def suffix
+        if self.answers.first && self.answers.first.text.include?('|')
+          self.answers.first.text.split('|')[1]
+        end
+      end
+
+      #sets the number prefix
+      def prefix=(pre)
+        if self.question_type=='Number'
+          if self.answers.blank?
+            self.answers_attributes={'0'=>{'text'=>pre+'|'}} unless pre.blank?
+          else
+            if pre.blank?
+              self.answers.first.text = 'default'
+            else
+              self.answers.first.text = pre+'|' unless pre.blank?
+            end
+          end
+        end
+      end
+
+      #sets the number suffix
+      def suffix=(suf)
+        if self.question_type=='Number'
+          if self.answers.first.blank? || self.answers.first.text.blank?
+            self.answers_attributes={'0'=>{'text'=>'|'+suf}} unless suf.blank?
+          else
+            if self.answers.first.text=='default'
+              self.answers.first.text='|'+suf
+            elsif self.answers.first.text.blank?
+              self.answers.first.text = '|'+suf
+            else
+              self.answers.first.text=self.answers.first.text+suf
+            end
+          end
+        end
+      end
+
 
       def surveyresponse_class(response_sets)
         if dependent?

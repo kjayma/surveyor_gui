@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     member do
       get 'cut'
       get 'render_picks_partial'
+      get 'render_no_picks_partial'
     end
   end
 

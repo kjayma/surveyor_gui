@@ -76,7 +76,7 @@ module SurveyorGui
         elsif self.pick == 'any'
           "Multiple Choice (multiple answers)"
         else
-          if self.display_type == 'label'
+          if self.display_type == 'label'  || !self.answers.first
             "Label"
           elsif self.answers.first.response_class == 'text'
             "Text Box (for extended text, like notes, etc.)"

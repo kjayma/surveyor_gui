@@ -103,7 +103,7 @@ class QuestionsController < ApplicationController
     if @questions.answers.empty?
       @questions.answers.build(:text=>'')
     else
-      @questions.answers_attributes=({:id=>@questions.answers.first.id, :text=>@questions.answers.first.original_choice})
+      @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
     end
     render :partial => 'picks'
   end

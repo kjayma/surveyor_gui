@@ -1,18 +1,18 @@
 <%= simple_fields_for 'question', @questions do |f| %>
-  <%= f.simple_fields_for :answers, @questions.answers.first do |a| %>
-    <%= a.hidden_field :text %>
-    <table>
+    <table class="number_hints">
       <tr>
         <td>Number Prefix</td><td>Number Suffix</td>
       </tr>
         <td>
-          <%= a.input :prefix, :label => false %>
+          <%= f.input :prefix, :label => false %>
         </td>
         <td>
-          <%= a.input :suffix, :label => false %>
+          <%= f.input :suffix, :label => false %>
         <td>
       <tr>
     </table>
+  <%= f.simple_fields_for :answers, @questions.answers.first do |a| %>
+    <%= a.hidden_field :text %>
   <% end -%>
 <% end -%>
 <br>

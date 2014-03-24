@@ -3,8 +3,9 @@ module SurveyorGui
     module AnswerMethods
 
       def self.included(base)
-        base.send :attr_accessible, :prefix, :suffix, :text, :response_class, :display_order,
-                  :original_choice, :hide_label, :question_id, :display_type
+        base.send :belongs_to, :question
+        base.send :has_many, :responses
+        base.send :attr_accessible, :text, :response_class, :display_order, :original_choice, :hide_label, :question_id, :display_type
 
         base.send :before_save, :update_display_order
       end
@@ -25,57 +26,6 @@ module SurveyorGui
         part == :pre ? text.split("|",2)[0] : (part == :post ? text.split("|",2)[1] : text)
       end
 
-
-      #number prefix getter.  splits a number question into the actual answer and it's unit type. Eg, you might want a
-      #number to be prefixed with a dollar sign.
-      def prefix
-        if text && text.include?('|')
-          text.split('|')[0]
-        end
-      end
-
-      #number suffix getter. sometimes you want a number question to have a units of measure suffix, like "per day"
-      def suffix
-        if text && text.include?('|')
-          text.split('|')[1]
-        end
-      end
-
-      def prefix=(pre)
-        if question && question.pick=='none'
-          if pre.blank?
-            write_attribute(:text, '')
-          else
-            write_attribute(:text, pre+'|')
-          end
-        else
-          write_attribute(:text,original_choice)
-        end
-      end
-
-      def suffix=(suf)
-        if question && question.pick=='none'
-          if !suf.blank?
-            if text=='default'
-              write_attribute(:text, '|'+suf)
-            else
-              write_attribute(:text, self.text+suf)
-            end
-          end
-        end
-      end
-
-      def text=(txt)
-        if question && question.pick!='none'
-          write_attribute(:text, txt)
-        end
-      end
-
-      def original_choice=(orig)
-        if question.pick!='none'
-          text
-        end
-      end
     end
   end
 end

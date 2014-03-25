@@ -1,7 +1,7 @@
 <%= div_for(a.object) do %>
   <div id='original_choice', data-original_choice="<%= a.object.original_choice %>"></div>
   <div class="fields vertical_collection" style='display: table;'>
-    <span class='fl ui-icon ui-icon-arrowthick-2-n-s'>
+    <span class='fl ui-icon ui-icon-arrowthick-2-n-s answer_handle'>
       Move
     </span>
     <%= a.input :text, :as => :string, :label => false, :required => false, :wrapper_html=>{:class=>'fl notfirst'}%>

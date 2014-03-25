@@ -84,6 +84,8 @@ Rails.application.routes.draw do
     end
   end
 
+  match '/answers/sort',   :to => 'answers#sort'
+
   resources :dependencys do
     collection do
       get 'get_answers'

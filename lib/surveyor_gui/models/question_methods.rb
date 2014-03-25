@@ -106,6 +106,7 @@ module SurveyorGui
         when "Multiple Choice (only one answer)"
           write_attribute(:pick, "one")
           prep_picks
+          write_attribute(:display_type, "")
         when "Slider"
           write_attribute(:pick, "one")
           prep_picks
@@ -117,6 +118,7 @@ module SurveyorGui
         when "Multiple Choice (multiple answers)"
           write_attribute(:pick, "any")
           prep_picks
+          write_attribute(:display_type, "")
         when 'Label'
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")

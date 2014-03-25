@@ -22,7 +22,7 @@ $.get("'+
                                   url_for(:action => "replace_question", :question_id => f.object.id)+'",
 {},
 function(response) {
-$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response)).update_widgets();
+$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
 refresh_stars();
 update_uislider();
 update_question_numbers();

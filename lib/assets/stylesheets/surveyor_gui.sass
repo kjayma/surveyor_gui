@@ -123,6 +123,7 @@ iframe.cboxIframe
   :border-top-left-radius  10px
   :border-top-right-radius  10px
 
+// Simple_form formatting
 .simple_form
   :margin-left 10px
 
@@ -271,10 +272,31 @@ iframe.cboxIframe
   :float left
   :width 10em
 
-.simple_form.edit_survey_section
+.simple_form.edit_survey_section, .simple_form.new_survey_section
   input[type="text"]
     :width 15em
 
+// end simple_form formatting
+
+//button formatting
+button#edit_section_title
+  :position absolute
+  :top 2px
+  :right 125px
+
+button#delete_section
+  :position absolute
+  :top 2px
+  :right 5px
+
+//end button formatting
+
+//arrow formatting (surveyform)
+.fl.ui-icon-arrowthick-2-n-s
+  :margin 0 0 0 -.5em
+//
+
+//appears in views/questions/_no_pick.html.erb
 table#number_hint
   :margin-left 2em
   td, tr

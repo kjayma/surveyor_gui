@@ -1,15 +1,8 @@
-<% content_for :javascript do %>
-  <% javascript_tag do %>
-    window.onload=function () {
-    document.body.style.background = "#f3f3f3";
-    }
-  <% end %>
-<% end %>
 <div class="shadebox round">
     <h1 class="round-top"><%= @title %></h1>
-    <%= simple_form_for @survey_section, :remote=>"true" do |f| %>
+    <%= simple_form_for @survey_section do |f| %>
       <% @survey_section.errors.full_messages.each do |msg| %>
-         <p><%= msg %></p>
+        <p><%= msg %></p>
       <% end %>
       <%= f.hidden_field :survey_id %>
       <%= f.hidden_field :modifiable %>

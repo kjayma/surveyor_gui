@@ -30,7 +30,7 @@ class SurveySectionsController < ApplicationController
     @title = "Update Survey Section"
     @survey_section = SurveySection.find(params[:id])
     if @survey_section.update_attributes(params[:survey_section])
-      redirect_to :back
+      render :blank, :layout=>'colorbox'
     else
       render :action => 'edit', :layout=>'colorbox'
     end

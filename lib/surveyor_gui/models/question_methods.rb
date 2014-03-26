@@ -135,23 +135,23 @@ module SurveyorGui
         end
       end
 
-      #setter for pick
-      def pick=(val)
-        if self.pick
-          write_attribute(:pick, self.pick)
-        else
-          write_attribute(:pick, val.nil? ? nil : val.to_s)
-        end
-      end
-
-      #setter for display_type
-      def display_type=(val)
-        if self.display_type
-          write_attribute(:display_type, self.display_type.nil? ? nil : self.display_type.to_s)
-        else
-          write_attribute(:display_type, val.nil? ? nil : val.to_s)
-        end
-      end
+#      #setter for pick
+#      def pick=(val)
+#        if self.pick
+#          write_attribute(:pick, self.pick)
+#        else
+#          write_attribute(:pick, val.nil? ? nil : val.to_s)
+#        end
+#      end
+#
+#      #setter for display_type
+#      def display_type=(val)
+#        if self.display_type
+#          write_attribute(:display_type, self.display_type.nil? ? nil : self.display_type.to_s)
+#        else
+#          write_attribute(:display_type, val.nil? ? nil : val.to_s)
+#        end
+#      end
 
       #If the question involves picking from a list of choices, this sets response class.
       def prep_picks

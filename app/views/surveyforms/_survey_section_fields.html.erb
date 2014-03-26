@@ -55,33 +55,18 @@
               <% end %>
             <% end %>
 
-
-
-
             <div class="sortable_questions" id="sortable_question<%= s.object.id.to_s %>">
               <%= s.simple_fields_for :questions do |q| %>
                 <%= render "question_section", :f => q %>
               <% end %>
             </div>
-          <%= button_to_function 'Add Section',
-              'cbox = $.colorbox({width:"517px;",
-                  height:"167px;",
-                  scrolling:false,
-                  iframe:true,
-                  onClosed:function(){
-                      submitted = $("input#pass_cbox_data").val();
-                      if (submitted) {
-                          $.get("'+
-                            url_for(:action => "insert_survey_section",:id => f.object.id)+'",
-                            {},
-                            function(response) {
-                              $("#survey_section_'+s.object.id.to_s+'").after(replace_idx($(".survey_section"),"survey_sections", response));
-                            }
-                          );
-                      }
-                   },
-                  href:"'+new_survey_section_url+'?prev_section_id='+s.object.id.to_s+'&suppress_header=true&survey_id='+s.object.survey.id.to_s+'", opacity:.3});',
-    :style=>'position: relative; left:41.8%; top:25px;' %>
+            <button type="button" id="add_section"
+              data-new_survey_section_url="<%=new_survey_section_url%>"
+              data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
+              data-survey_section_id="<%= s.object.id.to_s %>"
+              data-survey_id="<%= s.object.survey.id.to_s %>"
+            >Add Section</button>
+
           </div>
         </fieldset>
       <% end %>

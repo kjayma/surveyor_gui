@@ -99,7 +99,11 @@ class QuestionsController < ApplicationController
   end
 
   def render_picks_partial
-    @questions = Question.find(params[:id])
+    if params[:id].blank?
+      @questions = Question.new
+    else
+      @questions = Question.find(params[:id])
+    end
     if @questions.answers.empty?
       @questions.answers.build(:text=>'')
     else
@@ -109,7 +113,11 @@ class QuestionsController < ApplicationController
   end
 
   def render_no_picks_partial
-    @questions = Question.find(params[:id])
+    if params[:id].blank?
+      @questions = Question.new
+    else
+      @questions = Question.find(params[:id])
+    end
     if @questions.answers.empty?
       @questions.answers.build(:text=>'')
     end

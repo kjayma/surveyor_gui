@@ -76,13 +76,15 @@ Rails.application.routes.draw do
   end
 
   match '/questions/sort',   :to => 'questions#sort'
+
   resources :questions do
     member do
       get 'cut'
-      get 'render_picks_partial'
-      get 'render_no_picks_partial'
     end
   end
+
+  match '/question/render_picks_partial', :to => 'questions#render_picks_partial'
+  match '/question/render_no_picks_partial', :to => 'questions#render_no_picks_partial'
 
   match '/answers/sort',   :to => 'answers#sort'
 

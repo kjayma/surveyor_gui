@@ -3,57 +3,44 @@
 
     <% if s.object.id -%>
       <%= div_for(s.object) do %>
+
         <h2 style='position:relative;'>
+
           <span class="fl ui-icon ui-icon-arrowthick-2-n-s"></span>&nbsp;
+
           <%= s.object.title %>
+
           <% if s.object.modifiable %>
+
             <button type="button" id="edit_section_title"
                     data-replace_survey_section_url="<%=url_for(:action => 'replace_survey_section', :survey_section_id => s.object.id)%>"
                     data-edit_survey_section_url="<%=edit_survey_section_url(s.object.id)%>"
                     data-survey_section_id="<%=s.object.id%>"
-            >
-              Edit Section Title
-            </button>
+            >Edit Section Title</button>
+
             <button type="button" id="delete_section"
                     data-survey_section_id="<%=s.object.id%>"
                     data-survey_section_url="<%= survey_section_url(s.object.id)%>"
-            >
-              Delete Section
-            </button>
+            >Delete Section</button>
+
           <% end -%>
+
         </h2>
+
         <fieldset style="background:white">
           <div class="fields surveysection">
             <%= s.hidden_field :id %>
             <%= s.hidden_field :modifiable %>
 
-            <% if !@survey_locked && (s.object.modifiable? || current_user.is_superadmin?)  -%>
+            <% if !@survey_locked && (s.object.modifiable?)  -%>
+
               <% if session[:cut_question] -%>
-                <%= button_to_function 'Add Question',
-                  'cbox = $.colorbox({width:"666px",
-                                height:"772px",
-                                scrolling:true,
-                                iframe:true,
-                                onCleanup:function(){
-                                    $("#cboxLoadedContent iframe").load(function(){
-                                        question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
-                                    });
-                                },
-                                onClosed:function(){
-                                    submitted = $("input#pass_cbox_data").val();
-                                    if (submitted==="true") {
-                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
-                                        {},
-                                        function(response) {
-                                          $(".column3").filter(":last").replaceWith(response);
-                                          refresh_stars();
-                                          update_uislider();
-                                        }
-                                      );
-                                    }
-                                },
-                                href:"'+new_question_url+'?suppress_header=true&modifiable='+(s.object.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
-                :style=>'position:relative; left: 34.5%' %>
+
+                <button type="button" id="add_question"
+                  data-insert_new_question_url="<%=insert_new_question_url%>"
+                  data-new_question_url="<%=new_question_url%>"
+                >Add Question</button>
+
                 <%= button_to_function "Paste Question",
                     '$.get("'+paste_question_surveyform_url(:survey_section_id => s.object.id)+'",
                       {},

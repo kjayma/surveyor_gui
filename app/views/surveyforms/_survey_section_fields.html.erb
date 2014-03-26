@@ -36,8 +36,8 @@
 
               <% if session[:cut_question] -%>
 
-                <button type="button" id="add_question"
-                  data-insert_new_question_url="<%=insert_new_question_url%>"
+                <button type="button" id="add_question" class="cut"
+                  data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
                   data-new_question_url="<%=new_question_url%>"
                 >Add Question</button>
 
@@ -52,34 +52,14 @@
                     );
                     ',
                     :style=>'position:relative; left: 35%' %>
+
               <% else -%>
-                <%= button_to_function 'Add Question',
-                  'cbox = $.colorbox({width:"666px",
-                                height:"772px",
-                                scrolling:true,
-                                iframe:true,
-                                onCleanup:function(){
-                                    $("#cboxLoadedContent iframe").load(function(){
-                                        question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
-                                    });
-                                },
-                                onClosed:function(){
-                                    submitted = $("input#pass_cbox_data").val();
-                                    if (submitted==="true") {
-                                        $.get("/surveyforms/0/insert_new_question?question_id="+question_id,
-                                        {},
-                                        function(response) {
-                                          $(".column3").filter(":last").replaceWith(response);
-                                          refresh_stars();
-                                          update_uislider();
-                                        }
-                                      );
-                                    }
-                                    else{
-                                    }
-                                },
-                                href:"'+new_question_url+'?suppress_header=true&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
-                :style=>'position:relative; left: 41.2%' %>
+
+                <button type="button" id="add_question"
+                  data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
+                  data-new_question_url="<%=new_question_url%>"
+                >Add Question</button>
+
               <% end %>
             <% end %>
 

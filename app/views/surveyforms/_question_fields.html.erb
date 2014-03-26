@@ -133,7 +133,7 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
       <%= f.hidden_field :id %>
       <%= f.hidden_field :display_order %>
       <%= f.hidden_field :modifiable %>
-      <% if f.object.display_type != 'label' -%><span class="questions"><%= (@question_no.to_s+ ') ' + f.object.text.to_s)%></span><% end %>
+      <% if f.object.question_type != 'Label' -%><span class="questions"><%= (@question_no.to_s+ ') ' + f.object.text.to_s)%></span><% end %>
       <br />
       <% if f.object.pick == 'one' %>
         <% if f.object.display_type == 'slider' -%>
@@ -160,7 +160,7 @@ href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opac
         <% end %>
       <% elsif f.object.pick == 'none' %>
         <br/>
-        <% if f.object.display_type == 'label' -%>
+        <% if f.object.question_type=='Label' -%>
            <span style="margin-left: 4.5em;">
            <%= f.object.text %>
            </span>
@@ -220,7 +220,7 @@ update_uislider();
 else{
 }
 },
-href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&modifiable='+(f.object.survey_section.survey.survey_type=='MERXPQ' ? 'false' : 'true')+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
+href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&modifiable='+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
       :style=>'position:relative; left: 34.5%' %>
       <%= button_to_function "Paste Question",
           '$.get("'+paste_question_surveyform_url(:question_id=>f.object.id)+'",

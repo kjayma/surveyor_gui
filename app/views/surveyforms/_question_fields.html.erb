@@ -31,9 +31,10 @@
            data-question_url="<%=question_url(f.object.id)%>"
            data-replace_form_surveyform_url="<%= replace_form_surveyform_url(:survey_section_id => f.object.survey_section_id) %>"
         >Delete Question</button>
-          <span style="float:right;">
-            <% if f.object.dependency -%>
-              <%= button_to_function "Delete Logic", '
+
+        <span style="float:right;">
+          <% if f.object.dependency -%>
+            <%= button_to_function "Delete Logic", '
 $.ajax({
 type: "DELETE",
 url: "'+dependency_url(f.object.id)+'",
@@ -52,26 +53,13 @@ error: function(){
 alert("This logic cannot be deleted.");
 }
 });' %>
-                <%= button_to_function 'Edit Logic',
-                  'cbox = $.colorbox({width:"90%",
-height:"50%",
-scrolling:true,
-iframe:true,
-onClosed:function(){
-submitted = $("input#pass_cbox_data").val();
-if (submitted) {
-$.get("'+
-                                        url_for(:action => "replace_question", :question_id => f.object.id)+'",
-{},
-function(response) {
-var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
-refresh_stars(question);
-update_question_numbers();
-}
-);
-};
-},
-href:"'+edit_dependency_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
+
+
+        <button type="button" id="edit_logic"
+          data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+          data-edit_dependency_url="<%= edit_dependency_url(f.object.id) %>"
+        >Edit Logic</button>
+
             <% else -%>
               <%= button_to_function 'Add Logic',
                 'cbox = $.colorbox({width:"90%",

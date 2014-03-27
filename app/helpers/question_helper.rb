@@ -4,10 +4,11 @@ module QuestionHelper
   end
 
   def link_to_add_fields(name, id, f, association, formclass="f", table=false, div=false, dirpath=nil)
-    fkey=':'+ f.object_name.underscore+'_id'
+    object_name = f.object_name.include?('[') ? /(?<=\[)(.*?)(?=_attributes\])/.match(f.object_name).to_s : f.object_name
+    fkey=':'+ object_name.underscore+'_id'
     setid = "{"+fkey+"=>"+id.to_s+"}"
 
-    object_model = eval(f.object_name.camelcase)
+    object_model = eval(object_name.camelcase)
     if id
       new_object = object_model.reflect_on_association(association).klass.new(eval(setid))
     else

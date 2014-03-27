@@ -1,36 +1,27 @@
-<% @question_no = @question_no + 1 if f.object.id && f.object.display_type != 'label'-%>
+<% @question_no = @question_no + 1 if f.object.id && f.object.question_type != 'Label'-%>
 <%= div_for(f.object) do %>
-  <fieldset style="border:1px dashed <%= f.object.is_mandatory? ? 'red' : '#CCCCCC'%>; padding:3;<%= !@survey_locked && (f.object.modifiable) ? '' : 'background-color: #F3F3F3;' %>" class="fields questions">
-    <div style="position:relative;">
+  <fieldset class="
+    fields
+    questions
+    <%= f.object.is_mandatory ? 'mandatory_questions' : 'optional_questions' %>
+    <%= !@survey_locked && (f.object.modifiable) ? '' : 'not_modifiable' %>"
+  >
+    <div class="inner_question">
       <% if f.object.dependency -%>
         <span class="question_logic_notifier">
           <%= get_questions(f) if f.object.dependency %>.<br/>
         </span>
       <% end -%>
       <% if !@survey_locked && (f.object.modifiable?) -%>
-        <span class="fl ui-icon ui-icon-arrowthick-2-n-s" style='margin: .1em 0 0 -.5em;'></span>
-        <span style="margin-left: 1.5em;">
-          <%= button_to_function 'Edit Question',
-            'cbox = $.colorbox({width:"666px",
-height:"772px",
-scrolling:true,
-iframe:true,
-onClosed:function(){
-submitted = $("input#pass_cbox_data").val();
-if (submitted) {
-$.get("'+
-                                  url_for(:action => "replace_question", :question_id => f.object.id)+'",
-{},
-function(response) {
-$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
-refresh_stars();
-$("#question_'+f.object.id.to_s+'").update_single_uislider();
-update_question_numbers();
-}
-);
-};
-},
-href:"'+edit_question_url(f.object.id)+'?suppress_header=true", opacity:.3});'%>
+        <span class="fl ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <span class="question_button_bar">
+
+        <button type="button" id="edit_question"
+           data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+           data-edit_question_url="<%=edit_question_url(f.object.id)%>"
+           data-question_id="<%= f.object.id.to_s %>"
+         >Edit Question</button>
+
           <%= button_to_function "Cut Question",
             '$.get("'+cut_question_surveyform_url(:question_id => f.object.id)+'",
 {},

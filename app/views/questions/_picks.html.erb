@@ -13,9 +13,9 @@
         <%= f.simple_fields_for :answers do |a| %>
           <%= render 'answer_fields', :a => a %>
         <% end %>
-        <p class="floatdown2">
-          Add Possible Answer<%= link_to_add_fields "Add Answer", @questions.id, f, :answers, 'a' %>
-        </p>
       </div>
+        <p class="floatdown2 add_answer">
+          Add Possible Answer <%= image_tag 'addicon.png', :border => 0 %>
+        </p>
     </div>
 <% end %>

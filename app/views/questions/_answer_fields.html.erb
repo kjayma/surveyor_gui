@@ -5,6 +5,7 @@
       Move
     </span>
     <%= a.input :text, :as => :string, :label => false, :required => false, :wrapper_html=>{:class=>'fl notfirst'}%>
+    <%= a.hidden_field :display_order %>
     <span class="fl notfirst">
       <%= link_to_remove_fields "remove", a %>
     </span>

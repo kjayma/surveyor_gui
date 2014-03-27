@@ -110,6 +110,10 @@ class QuestionsController < ApplicationController
       if !@questions.answers.first.original_choice.blank?
         @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
       end
+      if params[:add_row]
+        display_order = @questions.answers.maximum(:display_order)+1
+        @questions.answers.build(:text=>'', :display_order=>display_order)
+      end
     end
     render :partial => 'picks'
   end

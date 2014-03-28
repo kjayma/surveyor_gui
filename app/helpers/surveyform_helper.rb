@@ -5,26 +5,26 @@ module SurveyformHelper
     retstr = ''
     dependencies = []
     dependencies << question.dependency
-    dependencies.each do |d|
-      conditions = d.dependency_conditions
-      conditions.each_with_index do |e, index|
-        #if there is only one condition, end with the ')' - 'This question is shown depending on the answer to question 1)'
-        if conditions.count == 1
-          retstr += get_display_id(e.question_id).to_s+')'
-        #if this is the last condition and there is more than one condition, add the word 'and' at the front 'This question is shown depending
-        # on the answers to questions 1) and 2)'
-        elsif (index+1) == conditions.count and conditions.count > 1
-          retstr += 'and '+get_display_id(e.question_id).to_s+')'
-        #if this is the next to last condition allow a space to be succeeded by the word 'and'
-        elsif (index+1) == (conditions.count - 1)
-          retstr += get_display_id(e.question_id).to_s+') '
-        #if this is not the last condition, but part of a list of > 2 conditions, so include the comma 'This question is shown depending on the
-        # answers to question 1), 2), and 3).'
-        else
-          retstr += get_display_id(e.question_id).to_s+'), '
-        end
+    ids = dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question_id}}.flatten.uniq
+
+    ids.each_with_index do |id, index|
+      #if there is only one condition, end with the ')' - 'This question is shown depending on the answer to question 1)'
+      if ids.count == 1
+        retstr += get_display_id(id).to_s+')'
+      #if this is the last condition and there is more than one condition, add the word 'and' at the front 'This question is shown depending
+      # on the answers to questions 1) and 2)'
+      elsif (index+1) == ids.count and ids.count > 1
+        retstr += 'and '+get_display_id(id).to_s+')'
+      #if this is the next to last condition allow a space to be succeeded by the word 'and'
+      elsif (index+1) == (ids.count - 1)
+        retstr += get_display_id(id).to_s+') '
+      #if this is not the last condition, but part of a list of > 2 conditions, so include the comma 'This question is shown depending on the
+      # answers to question 1), 2), and 3).'
+      else
+        retstr += get_display_id(id).to_s+'), '
       end
     end
+
     if retstr.include?('and')
       retstr = 'This question is shown depending on the answers to questions '+retstr
     else

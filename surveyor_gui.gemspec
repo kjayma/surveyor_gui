@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~> 3.2.17"
+  s.add_dependency 'dynamic_form'
 
   s.add_development_dependency "sqlite3"
 

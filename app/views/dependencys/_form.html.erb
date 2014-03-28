@@ -2,9 +2,7 @@
     <h1 ><%= @title %></h1>
     <%= simple_form_for @question, :url => dependencys_path+'/'+@question.id.to_s do |f| %>
       <div class = 'dependency_editor'>
-        <% @question.errors.full_messages.each do |msg| %>
-          <p><%= msg %></p>
-        <% end %>
+        <%= f.error_messages %>
         <%= f.hidden_field :survey_section_id %>
         <%= f.simple_fields_for :dependency do |d| %>
           <%= d.hidden_field :question_id %>
@@ -20,8 +18,8 @@
                 <%= render "dependency_condition_fields", :c => c %>
               <% end %>
             </table>
-            <p class="floatdown2">
-              Add a Condition<%= link_to_add_fields "Add Condition", d.object.id, d, :dependency_conditions, 'c', true %>
+            <p class="floatdown2 add_condition">
+              Add a Condition <%= image_tag 'addicon.png', :border => 0 %>
             </p>
           </div>
         <% end -%>

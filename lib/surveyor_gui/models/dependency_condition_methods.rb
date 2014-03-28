@@ -3,9 +3,8 @@ module SurveyorGui
     module DependencyConditionMethods
 
       def self.included(base)
-        base.send :attr_accessor, :rule_key_temp, :join_operator
         base.send :attr_accessible, :dependency_id, :rule_key, :question_id, :operator, :answer_id,
-                  :rule_key_temp, :join_operator, :float_value, :integer_value
+                  :rule_key_temp,  :float_value, :integer_value, :join_operator
         base.send :belongs_to, :dependency
         base.send :default_scope, :order => 'rule_key'
       end
@@ -44,6 +43,9 @@ module SurveyorGui
             end
           end
         end
+      end
+
+      def join_operator=(x)
       end
 
     end

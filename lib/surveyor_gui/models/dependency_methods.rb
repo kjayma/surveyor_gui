@@ -6,7 +6,6 @@ module SurveyorGui
         base.send :attr_accessible, :dependency_conditions_attributes
         base.send :accepts_nested_attributes_for, :dependency_conditions, :reject_if => lambda { |d| d[:operator].blank?}, :allow_destroy => true
 
-#        base.class_eval {
 #        # HACK: Remove the existing validates_numericality_of block.  By default in Surveyor, it doesn't account for
 #        # question_id/question_group_id being nil when adding a new record - it never needed to.  However, Surveyor_gui
 #        # adds accepts_nested_attributes_for dependency to the question model, which triggers the dependency validations
@@ -25,7 +24,19 @@ module SurveyorGui
         base.send :validates_numericality_of, :question_group_id, :if => Proc.new { |d| d.question_id.nil? && !d.new_record?}
 
         # Attribute aliases
-        base.send :alias_attribute, :dependent_question_id, :question_id
+        #base.send :alias_attribute, :dependent_question_id, :question_id
+      end
+
+      # need to overwrite the following methods because they rely on the nil? method.  Actually, the parameter comes back as a string
+      # and even an empty string will not evaluate to nil.  Changed to blank? instead.
+      def question_group_id=(i)
+        write_attribute(:question_id, nil) unless i.blank? #i.nil?
+        write_attribute(:question_group_id, i)
+      end
+
+      def question_id=(i)
+        write_attribute(:question_group_id, nil) unless i.blank? #i.nil?
+        write_attribute(:question_id, i)
       end
     end
   end

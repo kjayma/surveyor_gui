@@ -57,12 +57,7 @@ class DependencysController < ApplicationController
     question_id =  params[:question_id]
     question = Question.find(question_id)
     response=question.pick
-    if question.pick == 'none'
-      response += ','+question.answers.first.response_class.to_s
-    else
-      response += ',default'
-    end
-    response += ','+question.display_type
+    response += ','+question.question_type
     render :inline=>response
   end
 
@@ -86,9 +81,9 @@ private
     questions = Question.unscoped.joins(:survey_section).where('survey_id = ? and display_type!=?', survey_id,"label").order('survey_sections.display_order','survey_sections.id','questions.display_order')
     questions.each_with_index do |q, index|
       #dependencies can only be applied multiple choice (pick != none) and number questions (float)
-      if q.id == question.id || q.pick != 'none' || q.answers.first.response_class=='float'
+      #if q.id == question.id || q.pick != 'none' || q.answers.first.response_class=='float'
         qarray[index] = [(index+1).to_s+') '+q.text, q.id]
-      end
+      #end
     end
     return qarray
   end

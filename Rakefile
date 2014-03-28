@@ -36,6 +36,7 @@ namespace :gui_testbed do
         sh 'bundle exec rails generate surveyor_gui:install'
         sh 'bundle exec rake db:migrate'
         sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'
+        sh 'sed -i "s/# gem \'debugger/gem \'debugger/" Gemfile'
       end
     end
   end

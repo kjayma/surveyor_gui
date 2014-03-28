@@ -8,22 +8,32 @@
     <%= c.hidden_field :rule_key_temp %>
     <td>
       <%= c.input :question_id, :collection => @question_ids, :label=>false, :include_blank => false, :input_html => {:style=>"max-width:38em;"} %>
-    </td><td>
+    </td>
+    <td>
       <%= c.input :operator, :collection => @operators, :label=>false, :include_blank => false %>
-    </td><td id='answer_field'>
-      <div id="dependency_float">
+    </td>
+    <td class='answer_field'>
+      <div class="dependency_text">
+        <%= c.input :string_value, :label=>false, :size=>8 %>
+      </div>
+      <div class="dependency_text_box">
+        <%= c.input :text_value, :label=>false, :size=>8 %>
+      </div>
+      <div class="dependency_float">
         <%= c.input :float_value, :label=>false, :size=>8 %>
       </div>
-      <div id="dependency_star">          
-        <%= c.input :integer_value, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :label => false, :input_html=>{:class=>'star'} %>  
+      <div class="dependency_date">
+        <%= c.input :datetime_value, :label=>false, :size=>8 %>
       </div>
-      <div id="dependency_pick_multiple_choice">
+      <div class="dependency_star">
+        <%= c.input :integer_value, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :input_html=>{:class=>'star'} %>
+      </div>
+      <div class="dependency_pick_multiple_choice">
         <%= c.input :answer_id, :collection => Answer.where('question_id=?',c.object.question_id).map{|a| [a.text,a.id]}, :label=>false, :include_blank => false, :input_html => {:style=>"max-width:18em;"} %>
       </div>
     </td>
-    <td> 
-      <%= link_to_remove_tbody "remove", c %>    
-    </td>               
+    <td>
+      <%= link_to_remove_tbody "remove", c %>
+    </td>
   </tr>
 </tbody>
-

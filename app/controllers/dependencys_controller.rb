@@ -3,7 +3,7 @@ class DependencysController < ApplicationController
   def new
     prep_variables
     @title = "Add Logic for "+@this_question
-    @question.build_dependency(:rule=>'A').dependency_conditions.build(:rule_key=>'A')
+    @question.build_dependency(:rule=>'A')
   end
 
   def edit
@@ -40,11 +40,15 @@ class DependencysController < ApplicationController
 
   def render_dependency_conditions_partial
     prep_variables
+    if @question.dependency.nil?
+      @question.build_dependency(:rule=>'A').dependency_conditions.build(:rule_key=>'A')
+    end
     if @question.dependency.dependency_conditions.empty?
-      @question.dependency.dependency_conditions.build()
+      @question.dependency.dependency_conditions.build(:rule_key=>'A')
     else
       if params[:add_row]
-        @question.dependency.dependency_conditions.build()
+        @question = Question.new
+        @question.build_dependency(:rule=>'A').dependency_conditions.build(:rule_key=>'A')
       end
     end
     render :partial => 'dependency_condition_fields'
@@ -90,12 +94,17 @@ private
     survey_id = question.survey_section.survey.id
 
     qarray = []
-    questions = Question.unscoped.joins(:survey_section).where('survey_id = ? and display_type!=?', survey_id,"label").order('survey_sections.display_order','survey_sections.id','questions.display_order')
+    questions = Question.unscoped.joins(:survey_section).where('survey_id = ?', survey_id).order('survey_sections.display_order','survey_sections.id','questions.display_order')
+    label_offsetter = 0
     questions.each_with_index do |q, index|
       #dependencies can only be applied multiple choice (pick != none) and number questions (float)
       #if q.id == question.id || q.pick != 'none' || q.answers.first.response_class=='float'
-        qarray[index] = [(index+1).to_s+') '+q.text, q.id]
-      #end
+      if q.question_type!='Label' || (q.id == question.id)
+        if q.question_type == 'Label'
+          label_offsetter += 1
+        end
+        qarray[index] = [(index+1-label_offsetter).to_s+') '+q.text, q.id]
+      end
     end
     return qarray
   end

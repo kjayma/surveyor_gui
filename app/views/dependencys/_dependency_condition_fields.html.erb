@@ -9,6 +9,7 @@
       </tr>
       <tr>
         <%= c.hidden_field :rule_key_temp %>
+        <%= c.hidden_field :id %>
         <td>
           <%= c.input :question_id, :collection => @question_ids, :label=>false, :include_blank => false, :input_html => {:style=>"max-width:38em;"} %>
         </td>

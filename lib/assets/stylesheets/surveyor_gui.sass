@@ -1,5 +1,5 @@
 body
-  :margin  0 0 2em
+  :margin  0
   :padding  0
   :font-size  16px
   :font-family Arial, Helvetica, sans-serif
@@ -21,7 +21,7 @@ body
   :box-shadow 10px 10px 5px #888
 
 .shadebox
-  :margin 0 0 2em
+  :margin 0
   :padding 0em 1em 1em
   :background-color #f3f3f3
   :overflow hidden
@@ -76,9 +76,6 @@ body
       :margin 1em
       :padding 1em
       :font-weight bold
-
-iframe.cboxIframe
-  :background-color #f3f3f3
 
 .column2
   :float left
@@ -282,9 +279,14 @@ iframe.cboxIframe
     input
       :width 6em
 
-.simple_form.dependency_editor label
-  :float left
-  :width 10em
+.simple_form
+  .dependency_editor
+    label
+      :float left
+      :width 10em
+    .answer_field
+      input
+        :width 10em
 
 .simple_form.edit_survey_section, .simple_form.new_survey_section
   input[type="text"]

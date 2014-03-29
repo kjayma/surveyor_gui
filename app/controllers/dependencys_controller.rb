@@ -38,6 +38,18 @@ class DependencysController < ApplicationController
     render :nothing=>true
   end
 
+  def render_dependency_conditions_partial
+    prep_variables
+    if @question.dependency.dependency_conditions.empty?
+      @question.dependency.dependency_conditions.build()
+    else
+      if params[:add_row]
+        @question.dependency.dependency_conditions.build()
+      end
+    end
+    render :partial => 'dependency_condition_fields'
+  end
+
   def get_answers
     options=""
     question_id =  params[:question_id]

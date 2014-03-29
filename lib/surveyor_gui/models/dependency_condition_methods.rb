@@ -14,14 +14,9 @@ module SurveyorGui
           return rule_key
         else
           if self.dependency
-            last_key = self.dependency.dependency_conditions.maximum(:rule_key)
+            return (self.dependency.dependency_conditions.maximum(:rule_key)[0].ord+1).chr
           else
-            last_key = ''
-          end
-          if last_key.is_number?
-            return rule_key.to_i + 1
-          else
-            return 0
+            return 'A'
           end
         end
       end

@@ -94,6 +94,7 @@ Rails.application.routes.draw do
       get 'get_question_type'
     end
   end
+  match '/dependency/render_dependency_conditions_partial', :to => 'dependencys#render_dependency_conditions_partial'
 
   resources :surveyresponses,
     :only=>['preview_results',

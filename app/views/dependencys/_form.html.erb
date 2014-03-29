@@ -9,14 +9,14 @@
           <%= d.hidden_field :question_group_id %>
           <%= d.hidden_field :rule %>
           <div>
+            Show the question, "<%= @this_question %>", when the following conditions are true:<br /><br />
             <table>
-              Show the question, "<%= @this_question %>", when the following conditions are true:<br /><br />
-              <tr>
-                <td>Question</td><td>Condition</td><td>Answer</td>
-              </tr>
-              <%= d.simple_fields_for :dependency_conditions do |c| %>
-                <%= render "dependency_condition_fields", :c => c %>
-              <% end %>
+              <thead>
+                <tr>
+                  <td>Question</td><td>Condition</td><td>Answer</td>
+                </tr>
+              </thead>
+              <tbody id="dependency_conditions_partial" data-question_id="<%= f.object.id.to_s %>"></tbody>
             </table>
             <p class="floatdown2 add_condition">
               Add a Condition <%= image_tag 'addicon.png', :border => 0 %>
@@ -25,10 +25,16 @@
         <% end -%>
         <br /><br />
         <%= f.button :submit,  'Save Changes',  :id=>'dependency_submit' %>
-        <br />
-        <br />
-        <br />
-        Note: Logic can not be applied to text, text box, and date question types.
+
       </div>
   <% end %>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
 </div>

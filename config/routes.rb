@@ -86,8 +86,6 @@ Rails.application.routes.draw do
   match '/question/render_picks_partial', :to => 'questions#render_picks_partial'
   match '/question/render_no_picks_partial', :to => 'questions#render_no_picks_partial'
 
-  match '/answers/sort',   :to => 'answers#sort'
-
   resources :dependencys do
     collection do
       get 'get_answers'

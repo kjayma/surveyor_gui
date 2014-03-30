@@ -36,7 +36,7 @@
 
               <% if session[:cut_question] -%>
 
-                <button type="button" id="add_question" class="cut"
+                <button type="button" id="add_question_off_centered" class="cut"
                   data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
                   data-new_question_url="<%=new_question_url%>"
                 >Add Question</button>
@@ -47,7 +47,7 @@
 
               <% else -%>
 
-                <button type="button" id="add_question"
+                <button type="button" id="add_question_centered"
                   data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
                   data-new_question_url="<%=new_question_url%>"
                 >Add Question</button>

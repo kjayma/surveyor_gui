@@ -105,7 +105,8 @@
           <br />
 
         <% when question_type.include?( 'stars' ) -%>
-          <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :as => :radio, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
+          <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
+                      :as => :radio, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
         <% when question_type.include?( 'only one answer' ) -%>
 
@@ -150,7 +151,8 @@
 
         <% when question_type == 'date' -%>
           <br/>
-            <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"}, :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
+            <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
+                        :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
 
         <% when question_type == 'file upload' -%>
           <br/>
@@ -175,73 +177,25 @@
 
   <% if !@survey_locked && (f.object.modifiable?) -%>
     <% if session[:cut_question] -%>
-      <%= button_to_function 'Add Question',
-        'cbox = $.colorbox({width:"666px",
-height:"772px",
-scrolling:true,
-iframe:true,
-onCleanup:function(){
-$("#cboxLoadedContent iframe").load(function(){
-question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
-});
-},
-onClosed:function(){
-submitted = $("input#pass_cbox_data").val();
-if (submitted==="true") {
-$.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
-{},
-function(response) {
-$(".column3").filter(":last").replaceWith(response);
-refresh_stars();
-update_uislider();
-}
-);
-}
-else{
-}
-},
-href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&modifiable='+'&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
-      :style=>'position:relative; left: 34.5%' %>
-      <%= button_to_function "Paste Question",
-          '$.get("'+paste_question_surveyform_url(:question_id=>f.object.id)+'",
-{},
-function(response) {
-$(".column3").filter(":last").replaceWith(response);
-refresh_stars();
-update_uislider();
-}
-);
-',
-          :style=>'position:relative; left: 35%' %>
+
+      <button type="button" id="add_question_off_centered" class="cut"
+        data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
+        data-new_question_url="<%=new_question_url%>"
+        data-prev_question_id="<%= f.object.id.to_s %>"
+      >Add Question</button>
+
+      <button type="button" id="paste_question"
+        data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:question_id=>f.object.id) %>"
+      >Paste Question</button>
+
     <% else -%>
-      <%= button_to_function 'Add Question',
-        ' var question_id = null;
-cbox = $.colorbox({width:"666px",
-height:"772px",
-scrolling:true,
-iframe:true,
-onCleanup:function(){
-$("#cboxLoadedContent iframe").load(function(){
-question_id = $("iframe.cboxIframe").contents().find("#cboxQuestionId").html();
-});
-},
-onClosed:function(){
-submitted = $("input#pass_cbox_data").val();
-if (submitted==="true") {
-$.get("/surveyforms/0/insert_new_question?question_id="+question_id+",
-{},
-function(response) {
-$(".column3").filter(":last").replaceWith(response);
-refresh_stars();
-update_uislider();
-}
-);
-}
-else {
-}
-},
-href:"'+new_question_url+'?prev_question_id='+f.object.id.to_s+'&suppress_header=true&survey_section_id="+$(this).parents("div.survey_section").find("input[id$=\'id\']").first().val(), opacity:.3});',
-      :style=>'position:relative; left: 41.2%' %>
+
+      <button type="button" id="add_question_centered" class="cut"
+        data-insert_new_question_url="<%=insert_new_question_surveyform_url %>"
+        data-new_question_url="<%=new_question_url%>"
+        data-prev_question_id="<%= f.object.id.to_s %>"
+      >Add Question</button>
+
     <% end %>
   <% end %>
 <% end %>

@@ -34,25 +34,11 @@
 
         <span style="float:right;">
           <% if f.object.dependency -%>
-            <%= button_to_function "Delete Logic", '
-$.ajax({
-type: "DELETE",
-url: "'+dependency_url(f.object.id)+'",
-success: function(msg){
-$.get("'+
-                      url_for(:action => "replace_question", :question_id => f.object.id)+'",
-{},
-function(response) {
-var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
-refresh_stars(question);
-update_question_numbers();
-}
-);
-},
-error: function(){
-alert("This logic cannot be deleted.");
-}
-});' %>
+            <button type="button" id="delete_logic"
+               data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+               data-dependency_url="<%= dependency_url(f.object.id) %>"
+               data-question_id="<%= f.object.id.to_s %>"
+            >Delete Logic</button>
 
 
         <button type="button" id="edit_logic"

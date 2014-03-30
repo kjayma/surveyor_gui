@@ -2,9 +2,7 @@
     <h1 ><%= @title %></h1>
     <%= simple_form_for @question do |f| %>
       <div class = 'questions'>
-        <% @question.errors.full_messages.each do |msg| %>
-          <p><%= msg %></p>
-        <% end %>
+        <%= f.error_messages %>
         <%= f.hidden_field :id %>
         <%= f.hidden_field :survey_section_id %>
         <%= f.hidden_field :display_order %>
@@ -32,7 +30,9 @@
               'File Upload'
               ] , :as => :radio , :wrapper_html=>{:size=>'60'}, :label => false%>
         <br />
-        <div id="answer_choice"></div>
+        <div id="answer_choice">
+          <%= render 'picks', :f => f %>
+        </div>
         <div id="number_questions"></div>
 
           <div id="report_code" style="display:none">

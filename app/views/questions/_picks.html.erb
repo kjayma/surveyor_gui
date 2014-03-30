@@ -1,21 +1,15 @@
-<%= simple_fields_for 'question', @questions do |f| %>
-    <span class='fl'>
-      Generate list from a database field?
-    </span>
-    <%= f.input :dynamically_generate, :as => :radio_buttons, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
-    <div id="dynamic_source">
-      Specify statement used to generate list:<br />
-      <%= f.input :dynamic_source, :label=>false %>
-    </div>
-    <div id="fixed_source">
-      <strong>Possible Answers:</strong>
-      <div id='sortable_answers'>
-        <%= f.simple_fields_for :answers do |a| %>
-          <%= render 'answer_fields', :a => a %>
-        <% end %>
-      </div>
-        <p class="floatdown2 add_answer">
-          Add Possible Answer <%= image_tag 'addicon.png', :border => 0 %>
-        </p>
-    </div>
-<% end %>
+<span class='fl'>
+  Generate list from a database field?
+</span>
+<%= f.input :dynamically_generate, :as => :radio_buttons, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
+<div id="dynamic_source">
+  Specify statement used to generate list:<br />
+  <%= f.input :dynamic_source, :label=>false %>
+</div>
+<div id="fixed_source">
+  <strong>Possible Answers:</strong>
+  <div id='sortable_answers'></div>
+    <p class="floatdown2 add_answer">
+      Add Possible Answer <%= image_tag 'addicon.png', :border => 0 %>
+    </p>
+</div>

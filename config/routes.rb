@@ -83,7 +83,7 @@ Rails.application.routes.draw do
     end
   end
 
-  match '/question/render_picks_partial', :to => 'questions#render_picks_partial'
+  match '/question/render_answer_fields_partial', :to => 'questions#render_answer_fields_partial'
   match '/question/render_no_picks_partial', :to => 'questions#render_no_picks_partial'
 
   resources :dependencys do

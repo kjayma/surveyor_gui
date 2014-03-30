@@ -98,7 +98,7 @@ class QuestionsController < ApplicationController
     redirect_to :back
   end
 
-  def render_picks_partial
+  def render_answer_fields_partial
     if params[:id].blank?
       @questions = Question.new
     else
@@ -112,10 +112,11 @@ class QuestionsController < ApplicationController
       end
       if params[:add_row]
         display_order = @questions.answers.maximum(:display_order)+1
+        @questions = Question.new
         @questions.answers.build(:text=>'', :display_order=>display_order)
       end
     end
-    render :partial => 'picks'
+    render :partial => 'answer_fields'
   end
 
   def render_no_picks_partial

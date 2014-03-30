@@ -47,26 +47,11 @@
         >Edit Logic</button>
 
             <% else -%>
-              <%= button_to_function 'Add Logic',
-                'cbox = $.colorbox({width:"98%",
-height:"50%",
-scrolling:true,
-iframe:true,
-onClosed:function(){
-submitted = $("input#pass_cbox_data").val();
-if (submitted) {
-$.get("'+
-                                      url_for(:action => "replace_question", :question_id => f.object.id)+'",
-{},
-function(response) {
-var question=$("#question_'+f.object.id.to_s+'").html(replace_idx($("#question_'+f.object.id.to_s+'"),"questions", response));
-refresh_stars(question);
-update_question_numbers();
-}
-);
-};
-},
-href:"'+new_dependency_url+'?id='+f.object.id.to_s+'&suppress_header=true", opacity:.3});'%>
+              <button type="button" id="add_logic"
+                data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+                data-new_dependency_url="<%= new_dependency_url(:id=>f.object.id) %>"
+                data-question_id="<%= f.object.id.to_s %>"
+              >Add Logic</button>
             <% end %>
           </span>
         </span>

@@ -58,7 +58,7 @@ Bundle, install, and migrate:
     rails g surveyor-gui:install
     bundle exec rake db:migrate
 
-The survey editor can be found at '/surveyforms'
+The survey editor can be found at '/surveyforms'.  Users can take surveys at the '/surveys' url.
 
 ## Limitations
 
@@ -76,16 +76,37 @@ not currently support the following:
   - Other type questions (e.g., the "Choose your favorite utensils and enter frequency of use (daily, weekly, monthly, etc...)"
     in kitchen_sink_survey.rb
   - Repeaters
+  - Quizzes
 
 It adds some new question types:
 
   - Star rating (1-5 stars)
   - File upload
 
+These new question types will be supported in a modified version of the surveyor views which is pending.
+
 Dependencies are partially supported.  The following are not currently supported:
 
 - counts (count the number of answers checked or entered)
 - Regexp validations
+
+## Locking
+
+This gem enforces locking on surveys.  A survey may be modified up until a user submits a response.  At that point, the survey
+can no longer be edited for structural changes (i.e., /surveyform/edit will not permit any changes).  This protects the
+data integrity of the survey response data.
+
+## Templates
+
+Surveys may be saved as templates.  This allows them to be cloned when creating a new survey (cloning is a pending feature).  It is
+possible to mark certain parts of a survey as unmodifiable so that they will always be present when a survey is cloned.
+
+A template library feature is pending.
+
+## Dynamic Generation
+
+A pending feature that allows a list of answers to be dynamically generated from the database.  When creating a question, the survey creator
+enters a special code that specifies the table from which to draw the answers.
 
 ## Test environment
 

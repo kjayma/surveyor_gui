@@ -11,6 +11,15 @@ class SurveyformsController < ApplicationController
 	 	@surveyforms = Surveyform.where('template = ?',template).search(params[:search]).order(:title).paginate(:page => params[:page])
   end
 
+  def new
+    @title = "Create New "+ (params[:template] == 'template'? 'Template' : 'Survey')
+    @hide_survey_type = params[:hide_survey_type]
+    template = params[:template] == 'template'? true : false
+    @surveyform = Surveyform.new(:template=>template)
+    @surveyform.survey_sections.build(:title=>'Section 1', :display_order=>0, :modifiable=>true)#.questions.build(:text=>'New question',:pick=>'none',:display_order=>0,:display_type=>'default', :modifiable=>modifiable).answers.build(:text=>'string', :response_class=>'string', :display_order=>1, :template=>true)
+    @question_no = 0
+  end
+
   def edit
     @surveyform = Surveyform.where(:id=>params[:id]).includes(:survey_sections).first
     @survey_locked=false
@@ -25,6 +34,51 @@ class SurveyformsController < ApplicationController
     @surveyform.survey_sections.build if @surveyform.survey_sections.blank?
     @question_no = 0
     @url = "update"
+  end
+
+  def create
+    @surveyform = Surveyform.new(params[:surveyform])
+    if @surveyform.save
+      flash[:notice] = "Successfully created survey."
+      @title = "Edit Survey"
+      @question_no = 0
+      redirect_to edit_surveyform_path(@surveyform.id)
+    else
+      render :action => 'new'
+    end
+  end
+
+  def update
+    @title = "Update Survey"
+    @surveyform = Surveyform.find(params[:surveyform][:id], :include =>:survey_sections)
+    if @surveyform.update_attributes(params[:surveyform])
+      flash[:notice] = "Successfully updated surveyform."
+      redirect_to :action=>:index
+    else
+      flash[:error] = "Changes not saved."
+      @question_no = 0
+      render :action => 'edit'
+    end
+  end
+
+  def show
+    @title = "Edit Survey"
+    @surveyform = Surveyform.find(params[:id], :include =>:survey_sections)
+    @surveyform = Surveyform.where(:id=>params[:id]).includes(:survey_sections).first
+    @question_no=0
+    render :edit
+  end
+
+  def destroy
+    @surveyform = Surveyform.find(params[:id])
+    @surveyform.destroy
+    if !@surveyform
+      flash[:notice] = "Successfully destroyed survey."
+      redirect_to surveyforms_url
+    else
+      flash.now[:error] = 'Survey could not be deleted.'
+      redirect_to surveyforms_url
+    end
   end
 
   def replace_form

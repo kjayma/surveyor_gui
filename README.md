@@ -14,3 +14,75 @@ The lack of a gui front-end limits the utility of surveyor for certain applicati
 Surveyor_gui meets this need by providing a gui to create surveys from scratch.
 
 Surveyor_gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.
+
+## Requirements
+
+Surveyor works with:
+
+* Ruby 1.9.2, and 1.9.3
+* Rails 3.1-3.2
+
+In keeping with the Rails team maintenance [policy] we no longer support Rails 3.0 (stick with v1.3.0 if you need Rails 3.0) or Ruby 1.8.7 (stick with v1.4.0 if you need Ruby 1.8.7).
+
+Some key dependencies are:
+
+* Surveyor
+* HAML
+* Sass
+* Formtastic
+
+A more exhaustive list can be found in the [gemspec][].
+
+[gemspec]: https://github.com/NUBIC/surveyor/blob/master/surveyor.gemspec
+[policy]: http://weblog.rubyonrails.org/2013/2/24/maintenance-policy-for-ruby-on-rails/
+
+## Install
+
+Add surveyor-gui to your Gemfile:
+
+    gem "surveyor-gui"
+
+Bundle, install, and migrate:
+
+    bundle install
+    rails g surveyor-gui:install
+    bundle exec rake db:migrate
+
+The survey editor can be found at '/surveyforms'
+
+## Limitations
+
+This gem provides support for a subset of the Surveyor functionality.  It supports all of the basic question types, but does
+not currently support the following:
+
+  - Question groups
+  - Questions with multiple entries (e.g., the "Get me started on an improv sketch" question in the kitchen_sink_survey.rb that comes
+    with the Surveyor gem.
+  - Grid questions
+  - Datetime
+  - Exclusive answers
+  - Input masks
+  - Rankings
+  - Other type questions (e.g., the "Choose your favorite utensils and enter frequency of use (daily, weekly, monthly, etc...)"
+    in kitchen_sink_survey.rb
+  - Repeaters
+
+It adds some new question types:
+
+  - Star rating (1-5 stars)
+  - File upload
+
+Dependencies are partially supported.  The following are not currently supported:
+
+- counts (count the number of answers checked or entered)
+- Regexp validations
+
+## Test environment
+
+If you want to try out surveyor-gui before incorporating it into an application, run
+
+  bundle install
+  bundle exec rake gui_testbed
+  cd testbed
+
+Start the rails server and go to /surveyforms

@@ -13,7 +13,9 @@ namespace :gui_testbed do
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
       gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root})
+
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
+      sh 'sed -i "s/# gem \'therubyracer/gem \'therubyracer/" Gemfile'
 
       Bundler.with_clean_env do
         sh 'bundle install' # run bundle install after Gemfile modifications

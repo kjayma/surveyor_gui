@@ -45,6 +45,13 @@ Add surveyor-gui to your Gemfile:
 
     gem "surveyor-gui"
 
+You will also need a javascript runtime, like node.js or therubyracer.  If you
+have not yet installed one, add
+
+    gem "therubyracer"
+
+to your Gemfile.
+
 Bundle, install, and migrate:
 
     bundle install

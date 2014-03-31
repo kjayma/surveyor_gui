@@ -2,10 +2,10 @@ PATH
   remote: .
   specs:
     surveyor_gui (0.0.1)
-      carrierwave
-      colorbox-rails
-      dynamic_form
-      jquery-form-rails
+      carrierwave (~> 0.10.0)
+      colorbox-rails (~> 0.1.1)
+      dynamic_form (~> 1.1.4)
+      jquery-form-rails (~> 1.0.1)
       rails (~> 3.2.17)
       simple_form (~> 2.1.1)
       surveyor (~> 1.4.0)

@@ -22,7 +22,7 @@ This gem will also provide a reporting capability for Surveyor.
 Surveyor works with:
 
 * Ruby 1.9.3
-* Rails 3.2
+* Rails 3.2.17
 
 In keeping with the Rails team maintenance [policy] we no longer support Rails 3.0 (stick with v1.3.0 if you need Rails 3.0) or Ruby 1.8.7 (stick with v1.4.0 if you need Ruby 1.8.7).
 
@@ -43,7 +43,7 @@ A more exhaustive list can be found in the gemspecs for Surveyor [surveyor] and 
 
 Add surveyor-gui to your Gemfile:
 
-    gem "surveyor-gui"
+    gem 'surveyor_gui', git: 'git://github.com/kjayma/surveyor_gui.git'
 
 You will also need a javascript runtime, like node.js or therubyracer.  If you
 have not yet installed one, add
@@ -55,7 +55,9 @@ to your Gemfile.
 Bundle, install, and migrate:
 
     bundle install
-    rails g surveyor-gui:install
+    rails g surveyor:install
+    rails g simple_form:install
+    rails g surveyor_gui:install
     bundle exec rake db:migrate
 
 The survey editor can be found at '/surveyforms'.  Users can take surveys at the '/surveys' url.

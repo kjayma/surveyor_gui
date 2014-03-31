@@ -99,8 +99,8 @@ private
     questions.each_with_index do |q, index|
       #dependencies can only be applied multiple choice (pick != none) and number questions (float)
       #if q.id == question.id || q.pick != 'none' || q.answers.first.response_class=='float'
-      if q.question_type!='Label' || (q.id == question.id)
-        if q.question_type == 'Label'
+      if (q.question_type!='Label' && q.question_type!='File Upload') || (q.id == question.id)
+        if q.question_type == 'Label'  || q.question_type == 'File Upload'
           label_offsetter += 1
         end
         qarray[index] = [(index+1-label_offsetter).to_s+') '+q.text, q.id]

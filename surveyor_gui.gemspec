@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~> 3.2.17"
-  s.add_dependency 'dynamic_form'
+  s.add_dependency 'dynamic_form', "~> 1.1.4"
 
   s.add_development_dependency "sqlite3"
 
@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 2.1.1'
-  s.add_dependency 'carrierwave'
-  s.add_dependency 'colorbox-rails'
-  s.add_dependency 'jquery-form-rails'
+  s.add_dependency 'carrierwave', '~> 0.10.0'
+  s.add_dependency 'colorbox-rails', '~> 0.1.1'
+  s.add_dependency 'jquery-form-rails', '~> 1.0.1'
 end

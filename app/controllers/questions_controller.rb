@@ -111,7 +111,8 @@ class QuestionsController < ApplicationController
         @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
       end
       if params[:add_row]
-        display_order = @questions.answers.maximum(:display_order)+1
+        display_order = @questions.answers.maximum(:display_order)
+        display_order = display_order ? display_order + 1 : 0
         @questions = Question.new
         @questions.answers.build(:text=>'', :display_order=>display_order)
       end

@@ -70,6 +70,8 @@ module SurveyorGui
             "Slider"
           elsif self.display_type == 'stars'
             "1-5 Stars"
+          elsif self.display_type == 'dropdown'
+            "Dropdown List"
           else
             "Multiple Choice (only one answer)"
           end
@@ -114,6 +116,10 @@ module SurveyorGui
         when "1-5 Stars"
           write_attribute(:pick, "one")
           write_attribute(:display_type, "stars")
+          prep_picks
+        when "Dropdown List"
+          write_attribute(:pick, "one")
+          write_attribute(:display_type, "dropdown")
           prep_picks
         when "Multiple Choice (multiple answers)"
           write_attribute(:pick, "any")

@@ -112,6 +112,11 @@
 
           <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
 
+       <% when question_type.include?( 'dropdown' ) -%>
+
+          <br />
+          <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select, :label => false %>
+
         <% when question_type.include?( 'multiple answers' ) %>
 
           <% if f.object.dynamically_generate==false -%>

@@ -11,6 +11,8 @@ module SurveyorGui
       Dir.glob(root + "/surveyor_gui/models/*.rb").each do |c|
         require_dependency(c)
       end
+      c = Dir.glob(File.expand_path('../',root)+'/app/controllers/surveyor_controller.rb').first
+      require_dependency(c)
       Dir.glob(File.expand_path('../',root)+'/app/models/*.rb').each do |c|
         require_dependency(c)
       end

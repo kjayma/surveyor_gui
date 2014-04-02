@@ -85,8 +85,6 @@ It adds some new question types:
   - Star rating (1-5 stars)
   - File upload
 
-These new question types will be supported in a modified version of the surveyor views which is pending.
-
 Dependencies are partially supported.  The following are not currently supported:
 
 - counts (count the number of answers checked or entered)

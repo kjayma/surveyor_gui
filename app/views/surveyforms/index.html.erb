@@ -27,7 +27,10 @@
 </table>
 <br />
 <%= will_paginate %>
-<p><%= link_to "New Survey", new_surveyform_path() %></p>
+<p>
+  <%= link_to "New Survey", new_surveyform_path() %>&nbsp
+  <%= link_to "Take a Survey", surveyor.available_surveys_path %>&nbsp
+</p>
 </div>
   </div>
 </div>

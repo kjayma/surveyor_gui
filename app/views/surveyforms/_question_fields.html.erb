@@ -181,26 +181,24 @@
   </fieldset>
 
   <% if !@survey_locked && (f.object.modifiable?) -%>
-    <% if session[:cut_question] -%>
 
-      <button type="button" id="add_question_off_centered" class="cut"
-        data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
-        data-new_question_url="<%=new_question_url%>"
-        data-prev_question_id="<%= f.object.id.to_s %>"
-      >Add Question</button>
+    <div class="question_buttons_bottom">
 
-      <button type="button" id="paste_question"
-        data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:question_id=>f.object.id) %>"
-      >Paste Question</button>
-
-    <% else -%>
-
-      <button type="button" id="add_question_centered" class="cut"
+      <button type="button" id="add_question" class="cut"
         data-insert_new_question_url="<%=insert_new_question_surveyform_url %>"
         data-new_question_url="<%=new_question_url%>"
         data-prev_question_id="<%= f.object.id.to_s %>"
       >Add Question</button>
 
-    <% end %>
+      <% if session[:cut_question] -%>
+
+        <button type="button" id="paste_question"
+          data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:question_id=>f.object.id) %>"
+        >Paste Question</button>
+
+      <% end %>
+
+    </div>
+
   <% end %>
 <% end %>

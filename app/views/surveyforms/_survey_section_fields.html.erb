@@ -54,10 +54,9 @@
 
             <% if !@survey_locked && (s.object.modifiable?)  -%>
 
-              <div class="xbutton_bar_outer">
-                <div class="xquestion_button_bar_top_inner">
+              <div class="question_buttons_top">
 
-                  <button type="button" id="add_question_centered" class="cut"
+                  <button type="button" id="add_question" class="cut"
                     data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
                     data-new_question_url="<%=new_question_url%>"
                   >Add Question</button>
@@ -70,7 +69,6 @@
 
                   <% end %>
 
-                </div>
               </div>
 
             <% end %>
@@ -96,7 +94,7 @@
                   <% if session[:cut_section] -%>
 
                     <button type="button" id="paste_section"
-                      data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_id => f.object.id) %>"
+                      data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_section_id => s.object.id) %>"
                     >Paste Section</button>
 
                   <% end -%>

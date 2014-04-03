@@ -66,6 +66,8 @@ Rails.application.routes.draw do
       get 'clone'
       put 'create_cloned'
       get 'set_default'
+      get 'cut_section'
+      get 'paste_section'
       get 'cut_question'
       get 'paste_question'
     end

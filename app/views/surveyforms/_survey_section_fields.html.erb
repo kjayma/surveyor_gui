@@ -11,6 +11,7 @@
           <%= s.object.title %>
 
           <div class="section_top_button_bar">
+
             <% if !@survey_locked && (s.object.modifiable?) %>
 
               <button type="button" id="edit_section_title"
@@ -19,12 +20,29 @@
                       data-survey_section_id="<%=s.object.id%>"
               >Edit Section Title</button>
 
+              <% if session[:cut_section] -%>
+
+                <button type="button" id="paste_section"
+                  data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_id => f.object.id) %>"
+                >Paste Section</button>
+
+              <% else -%>
+
+                <button type="button" id="cut_section"
+                        data-cut_section_surveyform_url="<%=cut_section_surveyform_url(:survey_section_id => s.object.id)%>"
+                        data-survey_section_id="<%=s.object.id%>"
+                        data-section_already_cut="<%= session[:cut_section] %>"
+                >Cut Section</button>
+
+              <% end -%>
+
               <button type="button" id="delete_section"
                       data-survey_section_id="<%=s.object.id%>"
                       data-survey_section_url="<%= survey_section_url(s.object.id)%>"
               >Delete Section</button>
 
             <% end -%>
+
           </div>
 
         </h2>
@@ -36,25 +54,25 @@
 
             <% if !@survey_locked && (s.object.modifiable?)  -%>
 
-              <% if session[:cut_question] -%>
+              <div class="xbutton_bar_outer">
+                <div class="xquestion_button_bar_top_inner">
 
-                <button type="button" id="add_question_off_centered" class="cut"
-                  data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
-                  data-new_question_url="<%=new_question_url%>"
-                >Add Question</button>
+                  <button type="button" id="add_question_centered" class="cut"
+                    data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
+                    data-new_question_url="<%=new_question_url%>"
+                  >Add Question</button>
 
-                <button type="button" id="paste_question"
-                  data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:survey_section_id => s.object.id) %>"
-                >Paste Question</button>
+                  <% if session[:cut_question] -%>
 
-              <% else -%>
+                    <button type="button" id="paste_question"
+                      data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:survey_section_id => s.object.id) %>"
+                    >Paste Question</button>
 
-                <button type="button" id="add_question_centered"
-                  data-insert_new_question_url="<%=insert_new_question_surveyform_url%>"
-                  data-new_question_url="<%=new_question_url%>"
-                >Add Question</button>
+                  <% end %>
 
-              <% end %>
+                </div>
+              </div>
+
             <% end %>
 
             <div class="sortable_questions" id="sortable_question<%= s.object.id.to_s %>">
@@ -65,12 +83,26 @@
 
             <% if !@survey_locked && s.object.modifiable %>
 
-              <button type="button" id="add_section"
-                data-new_survey_section_url="<%=new_survey_section_url%>"
-                data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
-                data-survey_section_id="<%= s.object.id.to_s %>"
-                data-survey_id="<%= s.object.survey.id.to_s %>"
-              >Add Section</button>
+              <div class="button_bar_outer">
+                <div class="section_button_bar_bottom_inner">
+
+                  <button type="button" id="add_section"
+                    data-new_survey_section_url="<%=new_survey_section_url%>"
+                    data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
+                    data-survey_section_id="<%= s.object.id.to_s %>"
+                    data-survey_id="<%= s.object.survey.id.to_s %>"
+                  >Add Section</button>
+
+                  <% if session[:cut_section] -%>
+
+                    <button type="button" id="paste_section"
+                      data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_id => f.object.id) %>"
+                    >Paste Section</button>
+
+                  <% end -%>
+
+                </div>
+              </div>
 
             <% end -%>
 

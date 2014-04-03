@@ -113,6 +113,51 @@ class SurveyformsController < ApplicationController
     render :new, :layout=>false
   end
 
+  def cut_section
+    session[:cut_section]=params[:survey_section_id]
+    if ss=SurveySection.find(params[:survey_section_id])
+      @surveyform=ss.surveyform
+      ss.update_attribute(:survey_id,nil)
+      @question_no = 0
+      render :new, :layout=>false
+      return true
+    end
+    render :nothing=>true
+    return false
+  end
+
+  def paste_section
+    @title="Edit Survey"
+    if session[:cut_section]
+      survey_section = SurveySection.find(session[:cut_section])
+      @question_no = 0
+      if params[:survey_section_id]
+        place_under_section = SurveySection.find(params[:survey_section_id])
+        survey = place_under_section.survey
+        survey_id = survey.id
+        survey.survey_sections.where('display_order>?',place_under_section.display_order).update_all('display_order=display_order+1')
+        survey_section.display_order = place_under_section.display_order+1
+        @surveyform = survey
+      else
+        survey_id = params[:survey_id]
+        survey_section.display_order = 0
+        Survey.find(survey_id).survey_sections.update_all('display_order = display_order+1')
+        @surveyform = Surveyform.find(survey_id)
+      end
+      survey_section.survey_id = survey_id
+
+      if survey_section.save
+        @surveyform.reload
+        session[:cut_section]=nil
+        render :new, :layout=>false
+      else
+        render :nothing=>true
+        return false
+      end
+    else
+      render :nothing=>true
+    end
+  end
 
   def cut_question
     session[:cut_question]=params[:question_id]

@@ -327,13 +327,26 @@ body
     :position relative
     :left 35%
 
-  button#add_section
-    :position relative
-    :left 41.8%
-    :top 25px
-
   span.question_button_bar
     :margin-left 1.5em
+
+  .button_bar_outer
+    :position relative
+    :float right
+    :right 50%
+    :clear both
+
+    .question_button_bar_bottom_inner
+      :position relative
+      :float right
+      :right -50%
+
+    .section_button_bar_bottom_inner
+      :position relative
+      :top 25px
+      :float right
+      :right -50%
+
 //end button formatting
 
 //arrow formatting (surveyform)

@@ -10,20 +10,22 @@
 
           <%= s.object.title %>
 
-          <% if s.object.modifiable %>
+          <div class="section_top_button_bar">
+            <% if !@survey_locked && (s.object.modifiable?) %>
 
-            <button type="button" id="edit_section_title"
-                    data-replace_survey_section_url="<%=url_for(:action => 'replace_survey_section', :survey_section_id => s.object.id)%>"
-                    data-edit_survey_section_url="<%=edit_survey_section_url(s.object.id)%>"
-                    data-survey_section_id="<%=s.object.id%>"
-            >Edit Section Title</button>
+              <button type="button" id="edit_section_title"
+                      data-replace_survey_section_url="<%=url_for(:action => 'replace_survey_section', :survey_section_id => s.object.id)%>"
+                      data-edit_survey_section_url="<%=edit_survey_section_url(s.object.id)%>"
+                      data-survey_section_id="<%=s.object.id%>"
+              >Edit Section Title</button>
 
-            <button type="button" id="delete_section"
-                    data-survey_section_id="<%=s.object.id%>"
-                    data-survey_section_url="<%= survey_section_url(s.object.id)%>"
-            >Delete Section</button>
+              <button type="button" id="delete_section"
+                      data-survey_section_id="<%=s.object.id%>"
+                      data-survey_section_url="<%= survey_section_url(s.object.id)%>"
+              >Delete Section</button>
 
-          <% end -%>
+            <% end -%>
+          </div>
 
         </h2>
 
@@ -60,12 +62,17 @@
                 <%= render "question_section", :f => q %>
               <% end %>
             </div>
-            <button type="button" id="add_section"
-              data-new_survey_section_url="<%=new_survey_section_url%>"
-              data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
-              data-survey_section_id="<%= s.object.id.to_s %>"
-              data-survey_id="<%= s.object.survey.id.to_s %>"
-            >Add Section</button>
+
+            <% if !@survey_locked && s.object.modifiable %>
+
+              <button type="button" id="add_section"
+                data-new_survey_section_url="<%=new_survey_section_url%>"
+                data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
+                data-survey_section_id="<%= s.object.id.to_s %>"
+                data-survey_id="<%= s.object.survey.id.to_s %>"
+              >Add Section</button>
+
+            <% end -%>
 
           </div>
         </fieldset>

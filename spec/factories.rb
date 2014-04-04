@@ -13,6 +13,17 @@ FactoryGirl.define do
     s.survey_version  0
   end
 
+  factory :surveyform do |s|
+    s.title           "Simple survey"
+    s.description     "A simple survey for testing"
+    s.access_code     { FactoryGirl.generate :unique_survey_access_code }
+    s.survey_version  0
+  end
+
+  factory :template, parent: :surveyform do |s|
+    s.template true
+  end
+
   factory :survey_translation do |t|
     t.locale "es"
     t.translation %(title: "Un idioma nunca es suficiente"

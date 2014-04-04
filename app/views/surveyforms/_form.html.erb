@@ -30,11 +30,7 @@
             <% end %>
         </h1>
         <%= simple_form_for @surveyform, :url => "/surveyforms/"+@surveyform.id.to_s do |f| %>
-
-
-           <% @surveyform.errors.full_messages.each do |msg| %>
-              <p><%= msg %></p>
-           <% end %>
+          <%= f.error_messages %>
           <br/>
           <%= f.hidden_field :id %>
           <%= f.label :title, :required => false,  :style => 'font-size: 150%;' %>

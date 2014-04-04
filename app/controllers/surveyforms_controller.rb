@@ -2,7 +2,7 @@ class SurveyformsController < ApplicationController
   def index
     if params[:template]=='false'
       template=false
-    elsif params[:tempate]=='true'
+    elsif params[:template]=='true'
       template=true
 		else
 			template=false

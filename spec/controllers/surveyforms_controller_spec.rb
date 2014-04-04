@@ -8,7 +8,12 @@ describe SurveyformsController do
 
   let!(:survey) { FactoryGirl.create(:survey, :id=> 1, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
   let!(:survey_beta) { FactoryGirl.create(:survey, :id => 2, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
-  #let!(:response_set) { FactoryGirl.create(:response_set, :survey => survey, :access_code => "pdq")}
+  let!(:survey_with_no_responses) {FactoryGirl.create(:survey)}
+  let!(:survey_with_responses) {FactoryGirl.create(:survey)}
+  let!(:template) {FactoryGirl.create(:template)}
+  let!(:surveyform) {FactoryGirl.create(:surveyform)}
+  let!(:response_set) { FactoryGirl.create(:survey_sections, :survey => survey_with_responses)}
+  let!(:response_set) { FactoryGirl.create(:response_set, :survey => survey_with_responses, :access_code => "pdq")}
   #let!(:response_set_beta) { Factory(:response_set, :survey => survey_beta, :access_code => "rst")}
   #before { ResponseSet.stub(:create).and_return(response_set) }
 
@@ -21,35 +26,102 @@ describe SurveyformsController do
 
   context "#index" do
  		def do_get(params = {})
-      get :index
+      get :index, params
     end
-    it "shows the surveys" do
-      do_get
-      response.should be_success
-      response.should render_template('index')
+
+    context "parameters call for surveys" do
+
+      it "set the title to 'modify surveys'" do
+        do_get()
+        assigns(:title).should eq("Modify Surveys")
+      end
+
+      it "should not populate an array of templates" do
+        do_get()
+        expect(assigns(:surveyforms)).not_to eq([template])
+      end
+
+      it "should populate an array of surveys" do
+        do_get()
+        expect(assigns(:surveyforms)).to include(surveyform)
+      end
+
+      it "shows the surveys" do
+        do_get()
+        expect(response).to render_template('index')
+      end
+    end
+
+    context "parameters call for survey templates" do
+
+      it "set the title to 'modify templates'" do
+        do_get(:template=>"true")
+        assigns(:title).should eq("Modify Templates")
+      end
+
+      it "should populate an array of templates" do
+        do_get(params={:template=>"true"})
+        expect(assigns(:surveyforms)).to eq([template])
+      end
+
+      it "should not populate an array of surveys" do
+        do_get(params={:template=>"true"})
+        expect(assigns(:surveyforms)).not_to eq([surveyform])
+      end
+
+      it "shows the survey templates" do
+        do_get(:template=>"true")
+        expect(response).to render_template('index')
+      end
     end
   end
 
-  context "new" do
+  context "#new" do
     def do_get
       get :new
     end
+
     it "renders new" do
       do_get
-      response.should be_success
-      response.should render_template('new')
+      expect(response).to be_success
+      expect(response).to render_template('new')
+    end
+
+    it "populates an empty survey" do
+      do_get
+      expect(assigns(:surveyform).id).to eq(nil)
     end
   end
 
   context "#edit" do
-    def do_get(params = {})
-      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
-      get :edit, {:id => 1}.merge(params)
+
+    context "the survey has no responses" do
+
+      def do_get(params = {})
+        get :edit, {:id => 1}.merge(params)
+      end
+
+      it "renders edit" do
+        do_get
+        expect(response).to be_success
+        expect(response).to render_template('edit')
+      end
     end
-    it "renders edit" do
-      do_get
-      response.should be_success
-      response.should render_template('edit')
+
+    context "the survey has responses" do
+
+      def do_get(params = {})
+        get :edit, {:id => 1}.merge(params)
+      end
+
+      it "still lets you see the edit page" do
+        do_get
+        expect(response).to be_success
+        expect(response).to render_template('edit')
+      end
+      it "warns that responses have been collected" do
+        expect(flash[:error]) =~ /been collected/i
+      end
     end
   end
 
@@ -60,8 +132,8 @@ describe SurveyformsController do
     end
     it "inserts a survey section" do
       do_get
-      response.should be_success
-      response.should render_template('_survey_section_fields')
+      expect(response).to be_success
+      expect(response).to render_template('_survey_section_fields')
     end
   end
 
@@ -73,8 +145,8 @@ describe SurveyformsController do
     end
     it "inserts a question" do
       do_get
-      response.should be_success
-      response.should render_template('new')
+      expect(response).to be_success
+      expect(response).to render_template('new')
     end
   end
 end

@@ -6,9 +6,9 @@ describe SurveyformsController do
 #    @routes = Surveyor::Engine.routes
 #  end
 
-  let!(:survey) { Factory(:survey, :id=> 1, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
-  let!(:survey_beta) { Factory(:survey, :id => 2, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
-  #let!(:response_set) { Factory(:response_set, :survey => survey, :access_code => "pdq")}
+  let!(:survey) { FactoryGirl.create(:survey, :id=> 1, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
+  let!(:survey_beta) { FactoryGirl.create(:survey, :id => 2, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
+  #let!(:response_set) { FactoryGirl.create(:response_set, :survey => survey, :access_code => "pdq")}
   #let!(:response_set_beta) { Factory(:response_set, :survey => survey_beta, :access_code => "rst")}
   #before { ResponseSet.stub(:create).and_return(response_set) }
 
@@ -43,7 +43,7 @@ describe SurveyformsController do
 
   context "#edit" do
     def do_get(params = {})
-      survey.sections = [Factory(:survey_section, :survey => survey)]
+      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
       get :edit, {:id => 1}.merge(params)
     end
     it "renders edit" do
@@ -55,7 +55,7 @@ describe SurveyformsController do
 
   context "#insert_survey_section" do
     def do_get(params = {})
-      survey.sections = [Factory(:survey_section, :survey => survey)]
+      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
       get :insert_survey_section,{:id => 1}.merge(params)
     end
     it "inserts a survey section" do
@@ -67,8 +67,8 @@ describe SurveyformsController do
 
   context "#insert_new_question" do
     def do_get(params = {})
-      survey.sections = [Factory(:survey_section, :survey => survey)]
-      survey.sections.first.questions = [Factory(:question, :survey_section => survey.sections.first)]
+      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first)]
       get :insert_new_question,{:id => 1, :question_id => 1}.merge(params)
     end
     it "inserts a question" do

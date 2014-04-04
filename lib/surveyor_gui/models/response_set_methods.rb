@@ -5,6 +5,7 @@ module SurveyorGui
       def self.included(base)
         #has_many :users, :primary_key => :user_id, :foreign_key => :id
         base.send :has_many, :responses, :dependent=>:destroy
+        base.send :attr_accessible, :survey, :responses_attributes, :user_id, :survey_id, :test_data
       end
 
       #determine whether a mandatory question is missing a response.  Only applicable if the question is not dependent on other questions,

@@ -2,6 +2,21 @@ $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
 
 require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
+
+###### RSPEC
+
+RSpec::Core::RakeTask.new(:spec)
+
+RSpec::Core::RakeTask.new(:rcov) do |spec|
+  spec.rcov = true
+end
+
+task :default => :spec
+
+
+###### TESTBED
+
 desc 'Set up the rails app that the specs and features use'
 task :gui_testbed => 'gui_testbed:rebuild'
 
@@ -36,7 +51,7 @@ namespace :gui_testbed do
         sh 'bundle exec rails generate surveyor:install'
         sh 'bundle exec rake db:migrate db:test:prepare'
         sh 'bundle exec rails generate surveyor_gui:install'
-        sh 'bundle exec rake db:migrate'
+        sh 'bundle exec rake db:migrate db:test:prepare'
         sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'
         sh 'sed -i "s/# gem \'debugger/gem \'debugger/" Gemfile'
       end

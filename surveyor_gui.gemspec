@@ -28,7 +28,13 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sass-rails', '~> 3.2.3'
   s.add_development_dependency 'coffee-rails', '~> 3.2.1'
   s.add_development_dependency 'uglifier', '>= 1.0.3'
-
+  s.add_development_dependency('rspec-rails', '~> 2.14.2')
+  s.add_development_dependency('capybara', '~> 2.2.1')
+  s.add_development_dependency('launchy', '~> 2.4.2')
+  s.add_development_dependency('poltergeist', '~>1.5.0')
+  s.add_development_dependency('json_spec', '~> 1.1.1')
+  s.add_development_dependency('factory_girl', '~> 4.4.0')
+  s.add_development_dependency('database_cleaner', '~> 1.2.0')
   s.add_development_dependency 'debugger'
 
   s.add_dependency 'surveyor', '~> 1.4.0'

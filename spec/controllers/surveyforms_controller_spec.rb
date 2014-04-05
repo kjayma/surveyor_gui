@@ -93,6 +93,36 @@ describe SurveyformsController do
     end
   end
 
+  context "#create" do
+
+    def do_post(params = {})
+      post :create, :surveyform=>params
+    end
+
+    context "it saves successfully" do
+
+      it "returns to the edit page" do
+        do_post(:title=>'New surv')
+        expect(response).to redirect_to(edit_surveyform_url(assigns(:surveyform).id))
+      end
+
+      it "resets question_no to 0" do
+        do_post(:title=>'New surv')
+        expect(assigns(:question_no)).to eq(0)
+      end
+
+    end
+
+    context "it fails to save" do
+
+      it "renders new" do
+        do_post()
+        expect(response).to render_template('new')
+      end
+
+    end
+  end
+
   context "#edit" do
 
     context "the survey has no responses" do
@@ -123,6 +153,41 @@ describe SurveyformsController do
         expect(flash[:error]) =~ /been collected/i
       end
     end
+  end
+
+  context "#update" do
+
+    context "it saves successfully" do
+
+      def do_put(params = {})
+        put :update, params
+      end
+
+      it "redirects to index" do
+        do_put(:id=>1,:surveyform=>{:id=>1})
+        expect(response).to redirect_to(surveyforms_url)
+      end
+
+    end
+
+    context "it fails to save" do
+
+      def do_put(params = {})
+        put :update, params
+      end
+
+      it "renders edit" do
+        do_put(:id=>1,:surveyform=>{:id=>1,:title=>''})
+        expect(response).to render_template('edit')
+      end
+
+      it "resets question_no to 0" do
+        do_put(:id=>1,:surveyform=>{:id=>1,:title=>''})
+        expect(assigns(:question_no)).to eq(0)
+      end
+
+    end
+
   end
 
   context "#insert_survey_section" do

@@ -62,11 +62,11 @@ class SurveyformsController < ApplicationController
   end
 
   def show
-    @title = "Edit Survey"
+    @title = "Show Survey"
+    @survey_locked=true
     @surveyform = Surveyform.find(params[:id], :include =>:survey_sections)
     @surveyform = Surveyform.where(:id=>params[:id]).includes(:survey_sections).first
     @question_no=0
-    render :edit
   end
 
   def destroy

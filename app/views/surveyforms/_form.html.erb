@@ -42,7 +42,11 @@
           <div class="sortable_sections" data-survey_locked=<%= @survey_locked %>>
             <%= render "survey_section_fields", :s => builder , :f => f %>
           </div>
-          <p><%= f.button :submit,  'Save Changes' %></p>
+          <% if @survey_locked%>
+            <p><button class="go_back" type="button">Go Back</button></p>
+          <% else -%>
+            <p><%= f.button :submit,  'Save Changes' %></p>
+          <% end -%>
         <% end %>
       </div>
     </div>

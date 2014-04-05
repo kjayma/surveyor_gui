@@ -65,6 +65,42 @@ body
   table td
     :padding  0 0.5em
 
+.flash.notice, .flash.success, .flash.error
+  :-moz-border-radius-topleft 10px
+  :-moz-border-radius-topright 10px
+  :-moz-border-radius-bottomright 10px
+  :-moz-border-radius-bottomleft 10px
+
+
+  :-webkit-border-top-left-radius 10px
+  :-webkit-border-top-right-radius 10px
+  :-webkit-border-bottom-right-radius 10px
+  :-webkit-border-bottom-left-radius 10px
+
+  :border-top-left-radius 10px
+  :border-top-right-radius 10px
+  :border-bottom-left-radius 10px
+  :border-bottom-right-radius 10px
+
+  :-moz-box-shadow 10px 10px 5px #888
+  :-webkit-box-shadow 10px 10px 5px #888
+  :box-shadow 10px 10px 5px #888
+  :width 400px
+  :border 2px solid black
+  :padding 7px
+  :padding-bottom 12px
+  :margin 2em 1em 1em
+
+.ui-page .flash.notice, .ui-page .flash.success, .ui-page .flash.error
+  :width auto
+
+.flash.notice, .flash.success
+  :background-color #a0ffa0
+
+.flash.error
+  :background #fbe3e4
+  :color #8a1f11
+
 .sortable_sections
   :margin-top 2em
   .survey_section

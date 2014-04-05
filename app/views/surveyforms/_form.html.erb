@@ -35,10 +35,11 @@
           <%= f.hidden_field :id %>
           <%= f.label :title, :required => false,  :style => 'font-size: 150%;' %>
           <%= f.input :title, :input_html => { :size => '35', :style=>'margin-top: 0.5%; font-size: 110%; float:left;'}, :required=>false , :label=>false%>
-          <%= f.input :template, :label => false, :input_html=>{:style=>"float:right;"} %><span style='position:relative; float: right;'>Template?&nbsp;
+          <%= f.input :template, :disabled=>@survey_locked, :label => false, :input_html=>{:style=>"float:right;"} %>
+          <span style='position:relative; float: right;'>Template?&nbsp;
 
           </span><br/><br />
-          <div class="sortable_sections">
+          <div class="sortable_sections" data-survey_locked=<%= @survey_locked %>>
             <%= render "survey_section_fields", :s => builder , :f => f %>
           </div>
           <p><%= f.button :submit,  'Save Changes' %></p>

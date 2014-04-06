@@ -201,7 +201,33 @@ describe SurveyformsController do
       expect(response).to be_success
       expect(response).to render_template('show')
     end
+  end
 
+  context "#destroy" do
+
+    context "responses were submitted" do
+      def do_delete
+        delete :destroy, :id => survey_with_no_responses
+      end
+
+      it "successfully destroys the survey" do
+        do_delete
+        expect(response).to redirect_to(surveyforms_url)
+        expect(Survey.exists?(survey_with_no_responses.id)).to be_false
+      end
+    end
+
+    context "no responses were submitted" do
+      def do_delete
+        delete :destroy, :id => survey_with_responses
+      end
+
+      it "fails to delete the survey" do
+        do_delete
+        expect(response).to redirect_to(surveyforms_url)
+        expect(Survey.exists?(survey_with_responses.id)).to be_true
+      end
+    end
   end
 
   context "#insert_survey_section" do

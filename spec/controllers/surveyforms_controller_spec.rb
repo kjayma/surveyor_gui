@@ -230,6 +230,25 @@ describe SurveyformsController do
     end
   end
 
+  context "#replace form" do
+    def do_get(params = {})
+      FactoryGirl.create(:survey_section, :survey => survey)
+      get :replace_form, {:id=>1,:survey_section_id=>1}.merge(params)
+    end
+
+    it "resets question_no to 0" do
+      do_get
+      expect(assigns(:question_no)).to eq(0)
+    end
+
+    it "renders new" do
+      do_get
+      expect(response).to be_success
+      expect(response).to render_template('new')
+    end
+
+  end
+
   context "#insert_survey_section" do
     def do_get(params = {})
       survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]

@@ -190,6 +190,20 @@ describe SurveyformsController do
 
   end
 
+
+  context "#show" do
+    def do_get
+      get :show, {:id => 1}
+    end
+
+    it "shows survey" do
+      do_get
+      expect(response).to be_success
+      expect(response).to render_template('show')
+    end
+
+  end
+
   context "#insert_survey_section" do
     def do_get(params = {})
       survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]

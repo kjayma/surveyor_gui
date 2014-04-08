@@ -52,6 +52,7 @@
               <button type="button" id="edit_logic"
                 data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
                 data-edit_dependency_url="<%= edit_dependency_url(f.object.id) %>"
+                data-question_id="<%= f.object.id.to_s %>"
               >Edit Logic</button>
 
             <% else -%>

@@ -19,6 +19,14 @@ module SurveyorGui
               [[:question_id], [:question_group_id]].include? callback.raw_filter.attributes
             end
           end
+
+          def dependency_conditions_attributes=(dac)
+            dac = _set_rule_keys(dac)
+            assign_nested_attributes_for_collection_association(:dependency_conditions, dac)
+            _set_dependency_rule(dac)
+          end
+
+
         end
         base.send :validates_numericality_of, :question_id, :if => Proc.new { |d| d.question_group_id.nil? && !d.new_record? }
         base.send :validates_numericality_of, :question_group_id, :if => Proc.new { |d| d.question_id.nil? && !d.new_record?}
@@ -38,6 +46,33 @@ module SurveyorGui
         write_attribute(:question_group_id, nil) unless i.blank? #i.nil?
         write_attribute(:question_id, i)
       end
+
+      private
+
+        def _set_rule_keys(dac)
+          dac_not_z = _remove_z_rules(dac)
+          dac_not_z.each_with_index do |(k, v), index|
+            v["rule_key"] = ("A".ord + index).chr
+          end
+          dac.merge(dac_not_z)
+        end
+
+        def _remove_z_rules(dac)
+          dac.reject{|k, v| v["rule_key"]=="Z"}
+        end
+
+        def _set_dependency_rule(dac)
+          rule = _derive_rule(dac)
+          write_attribute(:rule, rule)
+        end
+
+        def _derive_rule(dac)
+          rule = ''
+          dac.each_with_index do |(k, v), i|
+            rule += (i==0 ? '' : v["join_operator"] + ' ') + v["rule_key"] + ' '
+          end
+          rule.rstrip
+        end
     end
   end
 end

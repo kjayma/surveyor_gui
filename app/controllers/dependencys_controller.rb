@@ -41,14 +41,14 @@ class DependencysController < ApplicationController
   def render_dependency_conditions_partial
     prep_variables
     if @question.dependency.nil?
-      @question.build_dependency(:rule=>'A').dependency_conditions.build(:rule_key=>'A')
+      @question.build_dependency(:rule=>'A').dependency_conditions.build()
     end
     if @question.dependency.dependency_conditions.empty?
-      @question.dependency.dependency_conditions.build(:rule_key=>'A')
+      @question.dependency.dependency_conditions.build()
     else
       if params[:add_row]
         @question = Question.new
-        @question.build_dependency(:rule=>'A').dependency_conditions.build(:rule_key=>'A')
+        @question.build_dependency(:rule=>'A').dependency_conditions.build()
       end
     end
     render :partial => 'dependency_condition_fields'

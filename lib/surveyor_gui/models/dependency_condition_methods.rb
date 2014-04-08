@@ -10,28 +10,43 @@ module SurveyorGui
       end
 
       def join_operator
-        if self.dependency
-          rule = self.dependency.rule
-          if rule
-            rarray = rule.split(' ')
-            idx = rarray.find_index{|i| i == self.rule_key}
-            if idx && idx > 0
-              return rarray[idx-1]
-            else
-              return nil
-            end
-          end
-        end
+        rule = Rules.new(self)
+        return rule.join_operator(self.rule_key)
       end
 
       def join_operator=(x)
       end
 
-    end
-    class String
-      def is_number?
-        true if Float(self) rescue false
+
+      class Rules
+
+        attr_accessor :rules
+
+        def initialize(dependency_condition)
+          if dependency_condition.dependency
+            @rules = dependency_condition.dependency.rule.split(' ')
+          else
+            @rules = []
+          end
+        end
+
+        def join_operator(rule_key)
+          _find_join_operator(_find_rule_key(rule_key))
+        end
+
+        private
+
+        def _find_rule_key(rule_key)
+          rules.index(rule_key)
+        end
+
+        def _find_join_operator(idx)
+          if idx && idx > 0
+            rules[idx-1]
+          end
+        end
       end
+
     end
   end
 end

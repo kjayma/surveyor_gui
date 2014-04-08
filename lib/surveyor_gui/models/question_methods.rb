@@ -249,6 +249,47 @@ module SurveyorGui
           nil
         end
       end
+
+      def numbered_when_displayed?
+        case display_type
+        when 'label'
+          false
+        else
+          true
+        end
+      end
+
+      def question_number
+        if survey_section.id.nil?
+          nil
+        else
+          preceding_questions_numbered.count
+        end
+      end
+
+
+      def controlling_questions
+        dependencies = []
+        dependencies << self.dependency
+        dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question}}.flatten.uniq
+      end
+
+      private
+      def preceding_questions_numbered
+        preceding_questions.delete_if{|p| !p.numbered_when_displayed?}
+      end
+
+      def preceding_questions
+        ##all questions from previous sections, plus all questions with a lower display order than this one
+        Question.joins(:survey_section).where(
+            '(survey_id = ? and survey_sections.display_order < ?) or (survey_section_id = ? and questions.display_order <= ?)',
+            survey_section.survey_id,
+            survey_section.display_order,
+            survey_section.id,
+            display_order
+        )
+      end
+
     end
   end
 end

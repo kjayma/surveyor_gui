@@ -1,50 +1,31 @@
 module SurveyformHelper
 
-  def get_questions(f)
-    question = f.object
-    retstr = ''
-    dependencies = []
-    dependencies << question.dependency
-    ids = dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question_id}}.flatten.uniq
+  def list_dependencies(f)
+    controlling_questions = f.object.controlling_questions
 
-    ids.each_with_index do |id, index|
-      #if there is only one condition, end with the ')' - 'This question is shown depending on the answer to question 1)'
-      if ids.count == 1
-        retstr += get_display_id(id).to_s+')'
-      #if this is the last condition and there is more than one condition, add the word 'and' at the front 'This question is shown depending
-      # on the answers to questions 1) and 2)'
-      elsif (index+1) == ids.count and ids.count > 1
-        retstr += 'and '+get_display_id(id).to_s+')'
-      #if this is the next to last condition allow a space to be succeeded by the word 'and'
-      elsif (index+1) == (ids.count - 1)
-        retstr += get_display_id(id).to_s+') '
-      #if this is not the last condition, but part of a list of > 2 conditions, so include the comma 'This question is shown depending on the
-      # answers to question 1), 2), and 3).'
-      else
-        retstr += get_display_id(id).to_s+'), '
-      end
-    end
-
-    if retstr.include?('and')
-      retstr = 'This question is shown depending on the answers to questions '+retstr
-    else
-      retstr = 'This question is shown depending on the answer to question '+ retstr
-    end
-    return retstr
+    count = controlling_questions.count
+    retstr ='This question is shown depending on the '
+    retstr += 'answer'.pluralize(count)
+    retstr += ' to '
+    retstr += 'question'.pluralize(count) + ' '
+    retstr + list_phrase(controlling_questions.map{|q| q.question_number.to_s+')'})
   end
 
-  def get_display_id(q)
-    target = Question.find(q)
-    if target.survey_section_id.nil?
-      return nil
+  def list_phrase(args)
+    ## given a list of word parameters, return a syntactically correct phrase
+    ## [dog] = "dog"
+    ## [dog, cat] = "dog and cat"
+    ## [dog, cat, bird] = "dog, cat and bird"
+    case args.count
+    when 0
+      ''
+    when 1
+      args[0]
+    when 2
+      args[0] + ' and ' + args[1]
     else
-      previous = Question.joins(:survey_section).where(
-        'survey_id = ? and survey_sections.display_order < ? and display_type != ?',
-        target.survey_section.survey_id,
-        target.survey_section.display_order,
-        "label"
-      )
-      return previous.count + target.survey_section.questions.where('display_order <= ? and display_type != ?',target.display_order,"label").count
+      last = args.count
+      args.take(last - 2).join(', ') + ', ' + args[last - 2] + ' and ' + args[last - 1]
     end
   end
 
@@ -153,5 +134,4 @@ def clone_survey(template, as_template=false)
   else
     return nil
   end
-
-end 
+end

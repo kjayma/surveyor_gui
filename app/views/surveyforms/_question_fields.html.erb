@@ -10,8 +10,8 @@
       <!-- if dependencies, notify the user with a highlighted message at the top of the question -->
       <% if f.object.dependency -%>
         <span class="question_logic_notifier">
-          <!-- get_questions tells the user which other questions determine whether this one is displayed -->
-          <%= get_questions(f) if f.object.dependency %>.<br/>
+          <!-- list_dependencies tells the user which other questions determine whether this one is displayed -->
+          <%= list_dependencies(f) if f.object.dependency %>.<br/>
         </span>
       <% end -%>
 

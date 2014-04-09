@@ -300,9 +300,3 @@ module SurveyorGui
     end
   end
 end
-
-class PossibleControllingQuestion < Question
-  def is_eligible?
-    question_type!='Label' && question_type!='File Upload'
-  end
-end

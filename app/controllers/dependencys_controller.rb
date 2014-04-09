@@ -184,3 +184,11 @@ class QuestionCollection
     @question_number += 1
   end
 end
+
+## This shouldn't be here but breaks saving nested attributes on question when put
+## in QuestionMethods.  Not sure why, but leave for now and revisit later.
+class PossibleControllingQuestion < Question
+  def is_eligible?
+    question_type!='Label' && question_type!='File Upload'
+  end
+end

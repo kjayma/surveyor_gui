@@ -250,7 +250,12 @@ module SurveyorGui
         end
       end
 
-      def numbered_when_displayed?
+      def question_description
+        ## this is an expensive method - use sparingly
+        is_numbered? ? question_number.to_s + ') ' + text : text
+      end
+
+      def is_numbered?
         case display_type
         when 'label'
           false
@@ -260,6 +265,8 @@ module SurveyorGui
       end
 
       def question_number
+        ##this is an expensive method - use sparingly
+        ##should consider adding question_number attribute to table in future
         if survey_section.id.nil?
           nil
         else
@@ -276,7 +283,7 @@ module SurveyorGui
 
       private
       def preceding_questions_numbered
-        preceding_questions.delete_if{|p| !p.numbered_when_displayed?}
+        preceding_questions.delete_if{|p| !p.is_numbered?}
       end
 
       def preceding_questions
@@ -291,5 +298,11 @@ module SurveyorGui
       end
 
     end
+  end
+end
+
+class PossibleControllingQuestion < Question
+  def is_eligible?
+    question_type!='Label' && question_type!='File Upload'
   end
 end

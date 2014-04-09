@@ -81,34 +81,36 @@ private
 
   def prep_variables
     @question = Question.includes(:dependency).find(params[:id]) unless @question
-    @question_ids = get_question_ids(@question)
-    @question_ids.delete(nil)
+    controlling_questions = get_controlling_question_collection(@question)
+    @controlling_questions = controlling_questions.collection
+    @this_question = controlling_questions.dependency_question_description
     @operators = get_operators
-    @this_question = @question_ids.select{|q| q[1]==@question.id}[0][0]
-    @question_ids.delete_at(@question_ids.index{|q| q[1]==@question.id})
-    answer = Question.find(@question_ids.last[1]).answers
+    answer = Question.find(@controlling_questions.last[1]).answers
     @answers = answer.map{|a| [a.text, a.id]}
   end
 
-  def get_question_ids(question)
-    survey_id = question.survey_section.survey.id
-
-    qarray = []
-    questions = Question.unscoped.joins(:survey_section).where('survey_id = ?', survey_id).order('survey_sections.display_order','survey_sections.id','questions.display_order')
-    label_offsetter = 0
-    questions.each_with_index do |q, index|
-      #dependencies can only be applied multiple choice (pick != none) and number questions (float)
-      #if q.id == question.id || q.pick != 'none' || q.answers.first.response_class=='float'
-      if (q.question_type!='Label' && q.question_type!='File Upload') || (q.id == question.id)
-        if q.question_type == 'Label'  || q.question_type == 'File Upload'
-          label_offsetter += 1
-        end
-        qarray[index] = [(index+1-label_offsetter).to_s+') '+q.text, q.id]
-      end
-    end
-    return qarray
+  def get_controlling_question_collection(question)
+    survey_id = _get_survey_id(question)
+    all_questions = _get_all_questions_in_survey(survey_id)
+    _get_question_collection(all_questions, question)
   end
 
+  def _get_survey_id(question)
+    question.survey_section.survey.id
+  end
+
+  def _get_all_questions_in_survey(survey_id)
+    Question.unscoped
+      .joins(:survey_section)
+      .where('survey_id = ?', survey_id)
+      .order('survey_sections.display_order','survey_sections.id','questions.display_order')
+  end
+
+  def _get_question_collection(all_questions, question_with_dependencies)
+    controlling_questions = QuestionCollection.new(question_with_dependencies)
+    all_questions.each{|q| controlling_questions.add_question(q) }
+    controlling_questions
+  end
 
   def get_operators
     return [
@@ -119,5 +121,62 @@ private
       ['greater than or equal to (>=)','>='],
       ['greater than','>']
     ]
+  end
+end
+
+class QuestionCollection
+  attr_accessor :collection, :dependency_question_description
+
+  def initialize(question_with_dependencies)
+    @collection = []
+    @question_number = 1
+    @question_with_dependencies = question_with_dependencies
+    @dependency_question_description = nil
+  end
+
+  def collection
+    @collection
+  end
+
+  def add_question(question)
+    unless question.id == @question_with_dependencies.id
+      _add_to_collection_if_eligible(question)
+    else
+      _handle_dependency_question(question)
+    end
+  end
+
+  private
+  def _handle_dependency_question(question)
+    _set_dependency_question_description(question)
+    _increment_question_number if _eligible_question?(question)
+  end
+
+  def _set_dependency_question_description(question)
+    @dependency_question_description = _eligible_question?(question) ? _get_description(question) : question.text
+  end
+
+  def _get_description(question)
+    @question_number.to_s + ') ' + question.text
+  end
+
+  def _add_to_collection(question)
+    description = _get_description(question)
+    @collection.push([description, question.id])
+  end
+
+  def _add_to_collection_if_eligible(question)
+    if _eligible_question?(question)
+      _add_to_collection(question)
+      _increment_question_number
+    end
+  end
+
+  def _eligible_question?(question)
+    question.question_type!='Label' && question.question_type!='File Upload'
+  end
+
+  def _increment_question_number
+    @question_number += 1
   end
 end

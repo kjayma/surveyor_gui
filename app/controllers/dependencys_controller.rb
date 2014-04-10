@@ -85,8 +85,6 @@ private
     @controlling_questions = controlling_questions.collection
     @this_question = @question.question_description
     @operators = get_operators
-    answers = Question.find(@controlling_questions.last[1]).answers
-    @answers = answers.map{|a| [a.text, a.id]}
   end
 
   def get_controlling_question_collection(dependent_question)

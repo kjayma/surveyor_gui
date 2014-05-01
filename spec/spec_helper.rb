@@ -8,6 +8,7 @@ end
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'factories'
+require 'json_spec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

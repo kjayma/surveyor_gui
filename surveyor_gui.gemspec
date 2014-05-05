@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('json_spec', '~> 1.1.1')
   s.add_development_dependency('factory_girl', '~> 4.4.0')
   s.add_development_dependency('database_cleaner', '~> 1.2.0')
+  s.add_development_dependency('rspec-retry')
   s.add_development_dependency 'debugger'
 
   s.add_dependency 'surveyor', '~> 1.4.0'

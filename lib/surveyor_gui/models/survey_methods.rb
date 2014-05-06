@@ -27,21 +27,6 @@ module SurveyorGui
         end
       end
 
-      #force unique titles by tacking a sequence to the end of duplicates
-      def title=(value)
-        return if value == self.title
-        adjusted_value = value
-        while Survey.find_by_access_code(Survey.to_normalized_string(adjusted_value))
-          i ||= 0
-          i += 1
-          adjusted_value = "#{value} #{i.to_s}"
-        end
-        self.access_code = Survey.to_normalized_string(adjusted_value)
-        super(adjusted_value)
-       # self.access_code = Survey.to_normalized_string(value)
-       # super
-      end
-
     end
   end
 end

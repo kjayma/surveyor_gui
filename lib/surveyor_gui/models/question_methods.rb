@@ -94,10 +94,6 @@ module SurveyorGui
         end
       end
 
-      def text=(t1)
-        write_attribute(:text, t1.match(/[\w\s\(\)\[\]\-\\\,\.\?\+\**&^%$#\@!%^-{}|:;'"<>\/\n\r\t~`]+/).to_s)
-      end
-
       def dynamically_generate
         'false'
       end

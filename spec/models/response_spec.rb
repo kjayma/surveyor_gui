@@ -33,13 +33,13 @@ describe Response, "when saving a response" do
     @response.answer = FactoryGirl.create(:answer, :response_class => "answer").tap { |a| a.id = 143 }
     @response.correct?.should be_false
   end
-  
+
   it "should be in order by created_at" do
     @response.response_set.should_not be_nil
     response2 = FactoryGirl.create(:response, :question => FactoryGirl.create(:question), :answer => FactoryGirl.create(:answer), :response_set => @response.response_set, :created_at => (@response.created_at + 1))
     Response.all.should == [@response, response2]
   end
-  
+
   describe "returns the response as the type requested" do
     it "returns 'string'" do
       @response.string_value = "blah"
@@ -120,6 +120,7 @@ describe Response, '#to_formatted_s' do
     let(:r) { Response.new(:answer => Answer.new(:response_class => 'datetime')) }
 
     it 'returns "" when nil' do
+      pending "bug fix in a37c4e1d99ce7fda39bf292584730ae6af640915 issue 459"
       r.datetime_value = nil
 
       r.to_formatted_s.should == ""
@@ -184,6 +185,7 @@ describe Response, 'value methods' do
     end
 
     it 'clears when given nil' do
+      pending "bug fix in 04b9dd4c71cc6e1c1df546d81b0f46aa2f0b7a04"
       response.datetime_value = Time.new
       response.date_value = nil
       response.datetime_value.should be_nil
@@ -197,6 +199,7 @@ describe Response, 'value methods' do
     end
 
     it 'clears when given nil' do
+      pending "bug fix in 04b9dd4c71cc6e1c1df546d81b0f46aa2f0b7a04"
       response.datetime_value = Time.new
       response.time_value = nil
       response.datetime_value.should be_nil

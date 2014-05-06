@@ -13,11 +13,13 @@
 <table>
   <tr>
     <th>Title</th>
+    <th>Version</th>
     <th>Actions</th>
   </tr>
   <% for survey in @surveyforms %>
     <tr>
       <td><%= survey.title %></td>
+      <td><%= survey.survey_version %></td>
       <td><%= link_to "Show", survey %>&nbsp
       <%= link_to "Edit", edit_surveyform_path(survey) %>&nbsp
       <%= link_to "Clone", clone_surveyform_path(survey) %>&nbsp

@@ -370,12 +370,13 @@ describe ResponseSet, "with mandatory, dependent questions" do
   before(:each) do
     @survey = FactoryGirl.create(:survey)
     @section = FactoryGirl.create(:survey_section, :survey => @survey)
-    @response_set = FactoryGirl.create(:response_set, :survey => @survey)
+    Qstruct = Struct.new(:q, :a) unless defined?(Qstruct)
   end
   def generate_responses(count, mandatory = nil, dependent = nil, triggered = nil)
     dq = FactoryGirl.create(:question, :survey_section => @section, :is_mandatory => (mandatory == "mandatory"))
     da = FactoryGirl.create(:answer, :question => dq, :response_class => "answer")
     dx = FactoryGirl.create(:answer, :question => dq, :response_class => "answer")
+    qary = []
     count.times do |i|
       q = FactoryGirl.create(:question, :survey_section => @section, :is_mandatory => (mandatory == "mandatory"))
       a = FactoryGirl.create(:answer, :question => q, :response_class => "answer")
@@ -383,8 +384,12 @@ describe ResponseSet, "with mandatory, dependent questions" do
         d = FactoryGirl.create(:dependency, :question => q)
         dc = FactoryGirl.create(:dependency_condition, :dependency => d, :question_id => dq.id, :answer_id => da.id)
       end
-      @response_set.responses << FactoryGirl.create(:response, :response_set => @response_set, :question => dq, :answer => (triggered == "triggered" ? da : dx))
-      @response_set.responses << FactoryGirl.create(:response, :response_set => @response_set, :question => q, :answer => a)
+      qary << Qstruct.new(q, a)
+    end
+    @response_set = FactoryGirl.create(:response_set, :survey => @survey)
+    @response_set.responses << FactoryGirl.create(:response, :response_set => @response_set, :question => dq, :answer => (triggered == "triggered" ? da : dx))
+    qary.each do |q|
+      @response_set.responses << FactoryGirl.create(:response, :response_set => @response_set, :question => q.q, :answer => q.a)
     end
   end
   it "should report progress without mandatory questions" do

@@ -4,5 +4,4 @@
 *= require surveyor_gui/jquery.rating
 *= require colorbox-rails
 *= require surveyor_gui/themes/ui-lightness/jquery-ui-1.8.23.custom
-*= require_tree surveyor_gui/themes/ui-lightness
 */

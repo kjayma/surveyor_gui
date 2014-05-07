@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('capybara', '~> 2.2.1')
   s.add_development_dependency('launchy', '~> 2.4.2')
   s.add_development_dependency('poltergeist', '~>1.5.0')
+  s.add_development_dependency('capybara-webkit')
   s.add_development_dependency('json_spec', '~> 1.1.1')
   s.add_development_dependency('factory_girl', '~> 4.4.0')
   s.add_development_dependency('database_cleaner', '~> 1.2.0')

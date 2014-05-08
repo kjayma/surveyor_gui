@@ -57,7 +57,7 @@ feature "User creates a new survey using a browser",  %q{
       click_button "Edit Section Title"
 
       #Then I see a new form
-      expect(find('survey_section[title]')).to have_content("Edit Section Title")
+      expect(find('h1')).to have_content("Edit Section Title")
 
       #And I can enter a title
       fill_in "Title", with: "Accommodations"

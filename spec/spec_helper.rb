@@ -6,6 +6,7 @@ rescue LoadError => e
   fail "Could not load the testbed app. Have you generated it?\n#{e.class}: #{e}"
 end
 
+require 'jquery-rails'
 require 'rspec/rails'
 require 'rspec/autorun'
 
@@ -28,9 +29,12 @@ Capybara.app = Rack::ShowExceptions.new(Testbed::Application)
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)
 
-Capybara.javascript_driver = :webkit
+Capybara.javascript_driver = :poltergeist
 
-#Capybara.app_host = "http://localhost:3001"
+
+Rails.application.routes.default_url_options[:host] = "lvh.me:3000"
+Capybara.app_host = "http://lvh.me:3000"
+Capybara.asset_host = "http://lvh.me:3000"
 
 class ActiveRecord::Base
   mattr_accessor :shared_connection

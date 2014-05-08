@@ -6,7 +6,6 @@ rescue LoadError => e
   fail "Could not load the testbed app. Have you generated it?\n#{e.class}: #{e}"
 end
 
-require 'jquery-rails'
 require 'rspec/rails'
 require 'rspec/autorun'
 
@@ -29,25 +28,20 @@ Capybara.app = Rack::ShowExceptions.new(Testbed::Application)
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)
 
-Capybara.javascript_driver = :poltergeist
 
+#Capybara.register_driver :poltergeist do |app|
+#  Capybara::Poltergeist::Driver.new(app,
+#    #port: 3001,
+#    debug: false)
+#end
+Capybara.server_port = 3001
+#Capybara.server_host = "lvh.me"
+Capybara.asset_host = "http://lvh.me:3001"
+#Capybara.app_host = "http://lvh.me:3001"
 
-Rails.application.routes.default_url_options[:host] = "lvh.me:3000"
-Capybara.app_host = "http://lvh.me:3000"
-Capybara.asset_host = "http://lvh.me:3000"
-
-class ActiveRecord::Base
-  mattr_accessor :shared_connection
-  @@shared_connection = nil
-
-  def self.connection
-    @@shared_connection || retrieve_connection
-  end
-end
-
-# Forces all threads to share the same connection. This works on
-# Capybara because it starts the web server in a thread.
-ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+Capybara.javascript_driver = :webkit
+#Capybara.always_include_port = true
+#Capybara.app_host = "http://lvh.me:3000"
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
@@ -76,7 +70,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
@@ -96,25 +90,34 @@ RSpec.configure do |config|
   config.default_retry_count = retry_count.try(:to_i) || 1
   puts "RSpec retry count is #{config.default_retry_count}"
 
+  # host
+  config.before :each do
+  #  host = "lvh.me:"+Capybara.current_session.driver.server.port.to_s
+  ##  puts host
+  #  Capybara.asset_host = "http://#{host}"
+  #  Rails.application.routes.default_url_options[:host] = host
+  ##    #"lvh.me:"+Capybara.current_session.driver.server.port.to_s
+  end
 
-  ## Database Cleaner
-  #config.before :suite do
-  #  DatabaseCleaner.clean_with :truncation
-  #  DatabaseCleaner.strategy = :transaction
-  #end
+  # Database Cleaner
+  config.before :suite do
+    DatabaseCleaner.clean_with :truncation
+    DatabaseCleaner.strategy = :transaction
+  end
 
-  #config.before do
-  #  if example.metadata[:clean_with_truncation] || example.metadata[:js]
-  #    DatabaseCleaner.strategy = :truncation
-  #  else
-  #    DatabaseCleaner.strategy = :transaction
-  #  end
-  #  DatabaseCleaner.start
-  #end
+  config.before :each do
+    if example.metadata[:clean_with_truncation] || example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start
+  end
 
-  #config.after do
-  #  DatabaseCleaner.clean
-  #end
+  config.after :each do
+    Capybara.reset_sessions!
+    DatabaseCleaner.clean
+  end
 end
 JsonSpec.configure do
   exclude_keys "id", "created_at", "updated_at", "uuid", "modified_at", "completed_at"

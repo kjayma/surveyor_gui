@@ -6,8 +6,8 @@ def start_a_new_survey
   click_button "Save Changes"
 end
 
-def first_section
-  first("survey_section")
+def first_section_title
+  find('.survey_section h2')
 end
 
 feature "User creates a new survey using a browser",  %q{
@@ -56,16 +56,25 @@ feature "User creates a new survey using a browser",  %q{
       #When I click the "Edit Section Title" button
       click_button "Edit Section Title"
 
-      #Then I see a new form
-      expect(find('h1')).to have_content("Edit Section Title")
+      #Then I see a window pop-up
+      expect(page).to have_css('iframe')
+      within_frame 0 do
 
-      #And I can enter a title
-      fill_in "Title", with: "Accommodations"
+      #And I see a new form for "Edit Survey Section"
+        find('form')
+        expect(find('h1')).to have_content("Edit Survey Section")
 
-      #And I can save the title
-      click_button "Save Changes"
-      #And I can see the correctly titled section
-      expect(first_section).to have_content("Accommodations")
+      #And I enter a title
+        fill_in "Title", with: "Accommodations"
+
+      #And I save the title
+        click_button "Save Changes"
+
+      #Then the window goes away
+      end
+
+      #And I can see the correctly titled section in my survey
+      expect(first_section_title).to have_content("Accommodations")
     end
 
 

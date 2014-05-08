@@ -54,6 +54,8 @@ module SurveyorGui
     def copy_config
       remove_file File.expand_path('config/initializers/simple_form.rb',Rails.root)
       template "config/initializers/simple_form.rb"
+      remove_file File.expand_path('config/application.rb',Rails.root)
+      template "config/application.rb"
     end
 
     def routes

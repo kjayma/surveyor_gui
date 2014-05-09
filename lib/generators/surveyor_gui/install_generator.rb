@@ -51,11 +51,9 @@ module SurveyorGui
       end
     end
 
-    def copy_config
-      remove_file File.expand_path('config/initializers/simple_form.rb',Rails.root)
-      template "config/initializers/simple_form.rb"
-      remove_file File.expand_path('config/application.rb',Rails.root)
-      template "config/application.rb"
+    def configurations
+      replace_simple_forms_configuration_rb
+      require_jquery_rails_in_application_rb
     end
 
     def routes
@@ -64,7 +62,25 @@ module SurveyorGui
 
     def assets
       directory "app/assets"
-      #copy_file "vendor/assets/stylesheets/custom.sass"
+    end
+
+    private
+
+    def replace_simple_forms_configuration_rb
+      #formatting of radio buttons and checkboxes sensitive to the configuration.
+      #The newer version of simple_forms defaults to a form_building approach
+      #that changes the wrapping of input fields; it breaks selectors in jquery
+      #code.  Flipping a few switches in the configuration gets the code to work.
+      remove_file File.expand_path('config/initializers/simple_form.rb',Rails.root)
+      template "config/initializers/simple_form.rb"
+    end
+
+    def require_jquery_rails_in_application_rb
+      #Need to explicitly add require 'jquery-rails' or poltergeist/webkit can't
+      #find jquery when :js=>true
+      inject_into_file "config/application.rb",
+        "require 'jquery-rails'",
+        :after => "require 'rails/all'\n"
     end
 
   end

@@ -192,5 +192,95 @@ feature "User creates a new survey using a browser",  %q{
       expect(page).to have_css("input[type='radio'][value='Standard Queen']")
       expect(page).to have_css("input[type='radio'][value='Standard Double']")
     end
+
+
+    scenario "User adds a choose any question", :js=>true do
+      #Given I've added a new question
+      within_frame 0 do
+
+      #Then I select the "number" question type
+        select_question_type "Multiple Choice (multiple answers)"
+
+      #And I frame the question
+        fill_in "question_text", with: "What did you order from the minibar?"
+
+      #And I add some choices"
+        answers[0].set("Bottled Water")
+        find(".add_answer img").click
+        answers[1].set("Kit Kats")
+        find(".add_answer img").click
+        answers[2].set("Scotch")
+
+      #And I save the question
+        click_button "Save Changes"
+
+      #Then the window goes away
+      end
+
+      #And I can see the question in my survey
+      expect(first_question).to have_content("What did you order from the minibar?")
+      expect(page).to have_css("input[type='checkbox'][value='Bottled Water']")
+      expect(page).to have_css("input[type='checkbox'][value='Kit Kats']")
+      expect(page).to have_css("input[type='checkbox'][value='Scotch']")
+    end
+
+
+    scenario "User adds a dropdown list", :js=>true do
+      #Given I've added a new question
+      within_frame 0 do
+
+      #Then I select the "number" question type
+        select_question_type "Dropdown List"
+
+      #And I frame the question
+        fill_in "question_text", with: "What neighborhood were you in?"
+
+      #And I add some choices"
+        answers[0].set("Financial District")
+        find(".add_answer img").click
+        answers[1].set("Back Bay")
+        find(".add_answer img").click
+        answers[2].set("North End")
+
+      #And I save the question
+        click_button "Save Changes"
+
+      #Then the window goes away
+      end
+
+      #And I can see the question in my survey
+      expect(first_question).to have_content("What neighborhood were you in?")
+      expect(page).to have_css("option[value='Financial District']")
+      expect(page).to have_css("option[value='Back Bay']")
+      expect(page).to have_css("option[value='North End']")
+    end
+
+
+    scenario "User adds a date question", :js=>true, :wip=>true do
+      #Given I've added a new question
+      within_frame 0 do
+
+      #Then I select the "number" question type
+        select_question_type "Date"
+
+      #And I frame the question
+        fill_in "question_text", with: "When did you checkout?"
+
+      #And I save the question
+        click_button "Save Changes"
+
+      #Then the window goes away
+      end
+
+      #And I can see the question in my survey
+      expect(first_question).to have_content("When did you checkout?")
+      expect(page).to have_css("div.ui-datepicker",:visible=>false)
+
+      #Then I click on the question
+      1.times {page.execute_script "$('input.date_picker').trigger('focus')"}
+
+      #And I see a datepicker popup
+      expect(page).to have_css("div.ui-datepicker", :visible=>true)
+    end
   end
 end

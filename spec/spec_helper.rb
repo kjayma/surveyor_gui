@@ -29,19 +29,14 @@ Capybara.app = Rack::ShowExceptions.new(Testbed::Application)
 ActiveRecord::Migration.check_pending! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)
 
 
-#Capybara.register_driver :poltergeist do |app|
-#  Capybara::Poltergeist::Driver.new(app,
-#    #port: 3001,
-#    debug: false)
-#end
-Capybara.server_port = 3001
-#Capybara.server_host = "lvh.me"
-Capybara.asset_host = "http://lvh.me:3001"
-#Capybara.app_host = "http://lvh.me:3001"
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, debug: false)
+end
 
-Capybara.javascript_driver = :webkit
-#Capybara.always_include_port = true
-#Capybara.app_host = "http://lvh.me:3000"
+Capybara.server_port = 3001
+Capybara.asset_host = "http://lvh.me:3001"
+
+Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers

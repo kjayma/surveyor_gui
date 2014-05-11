@@ -5,7 +5,9 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Survey: <%= controller.action_name %></title>
   <%= surveyor_includes %>
-  <%= stylesheet_link_tag('surveyor_add_ons') + javascript_include_tag('surveyor_add_ons')%>
+  <%= stylesheet_link_tag('surveyor_gui/surveyor_add_ons') +
+      javascript_include_tag('surveyor_gui/surveyor_add_ons') +
+      javascript_include_tag('surveyor_gui/jquery.rating')%>
 </head>
 <body>
   <%= yield %>

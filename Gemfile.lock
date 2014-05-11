@@ -6,6 +6,7 @@ PATH
       colorbox-rails (~> 0.1.1)
       dynamic_form (~> 1.1.4)
       jquery-form-rails (~> 1.0.1)
+      jquery-ui-sass-rails
       rails (~> 3.2.17)
       simple_form (~> 2.1.1)
       surveyor (~> 1.4.0)
@@ -96,6 +97,13 @@ GEM
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-ui-rails (4.0.3)
+      jquery-rails
+      railties (>= 3.1.0)
+    jquery-ui-sass-rails (4.0.3.0)
+      jquery-rails
+      jquery-ui-rails (= 4.0.3)
+      railties (>= 3.1.0)
     json (1.8.1)
     json_spec (1.1.1)
       multi_json (~> 1.0)

@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.2.17"
   s.add_dependency 'dynamic_form', "~> 1.1.4"
+  #s.add_dependency 'jquery-ui-rails'
+  s.add_dependency 'jquery-ui-sass-rails'
 
   s.add_development_dependency "sqlite3"
 

@@ -53,7 +53,7 @@ module SurveyorGui
 
     def configurations
       replace_simple_forms_configuration_rb
-      require_jquery_rails_in_application_rb
+      remove_surveyor_require_jquery_css
     end
 
     def routes
@@ -75,13 +75,13 @@ module SurveyorGui
       template "config/initializers/simple_form.rb"
     end
 
-    def require_jquery_rails_in_application_rb
-      #Need to explicitly add require 'jquery-rails' or poltergeist/webkit can't
-      #find jquery when :js=>true
-      inject_into_file "config/application.rb",
-        "require 'jquery-rails'",
-        :after => "require 'rails/all'\n"
+    def remove_surveyor_require_jquery_css
+      #comment line in surveyor_all.css manifest that steps on jquery-ui-rails.
+      #this is somewhat brittle because it assumes surveyor:install generator will
+      #always be run before this generator.
+      gsub_file "app/assets/stylesheets/surveyor_all.css",
+        /^\*=(.*jquery-ui-\d.*custom.*$)/,
+        '*\1'
     end
-
   end
 end

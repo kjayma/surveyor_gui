@@ -54,6 +54,7 @@ module SurveyorGui
     def configurations
       replace_simple_forms_configuration_rb
       remove_surveyor_require_jquery_css
+      add_i18n_enforce_locales
     end
 
     def routes
@@ -82,6 +83,16 @@ module SurveyorGui
       gsub_file "app/assets/stylesheets/surveyor_all.css",
         /^\*=(.*jquery-ui-\d.*custom.*$)/,
         '*\1'
+    end
+
+    def add_i18n_enforce_locales
+      #gets rid of 18n deprecation message:
+      #"I18n.enforce_available_locales will default to true in the future. If you really
+      #want to skip validation of your locale you can set I18n.enforce_available_locales
+      #= false to avoid this message."
+      inject_into_file "config/application.rb",
+        "config.i18n.enforce_available_locales = true",
+        :after => "config.encoding = \"utf-8\"\n"
     end
   end
 end

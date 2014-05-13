@@ -107,11 +107,11 @@
 
         <% when question_type.include?( 'stars' ) -%>
           <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
-                      :as => :radio, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
+                      :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
         <% when question_type.include?( 'only one answer' ) -%>
 
-          <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio, :label => false %>
+          <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio_buttons, :label => false %>
 
        <% when question_type.include?( 'dropdown' ) -%>
 

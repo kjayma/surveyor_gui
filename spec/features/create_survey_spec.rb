@@ -8,7 +8,7 @@ feature "User creates a new survey using a browser",  %q{
   I want to create a new survey using a browser
   So that I don't have to learn the Surveyor DSL or dive into technical weeds} do
 
-  #force a cf/lf to make the output look better
+  #force a cr/lf to make the output look better
   scenario " " do
   end
 
@@ -138,7 +138,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "number" question type
+        #Then I select the "multiple choice" question type
           select_question_type "Multiple Choice (only one answer)"
 
         #And I frame the question
@@ -169,7 +169,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "number" question type
+        #Then I select the "multiple choice, multiple answers" question type
           select_question_type "Multiple Choice (multiple answers)"
 
         #And I frame the question
@@ -200,7 +200,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "number" question type
+        #Then I select the "Dropdown" question type
           select_question_type "Dropdown List"
 
         #And I frame the question
@@ -231,7 +231,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "number" question type
+        #Then I select the "Date" question type
           select_question_type "Date"
 
         #And I frame the question

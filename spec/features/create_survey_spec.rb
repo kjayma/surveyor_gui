@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 #from spec/support/surveyforms_helpers.rb
-include SurveyFormsHelpers::CreateSurvey
+include SurveyFormsCreationHelpers::CreateSurvey
 
 feature "User creates a new survey using a browser",  %q{
   As a user

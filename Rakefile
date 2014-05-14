@@ -27,7 +27,7 @@ namespace :gui_testbed do
 
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
-      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'debugger'})
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'debugger'\ngem 'surveyor', github: 'NUBIC/surveyor'\ngem 'strong_parameters'})
 
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
 

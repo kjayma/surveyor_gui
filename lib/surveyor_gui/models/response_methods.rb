@@ -5,9 +5,7 @@ module SurveyorGui
       def self.included(base)
         base.send :has_many, :answers, :primary_key => :answer_id, :foreign_key => :id
         base.send :has_many, :questions
-        base.send :attr_accessible, :response_set, :question, :answer, :date_value, :time_value,
-            :response_set_id, :question_id, :answer_id, :datetime_value, :integer_value, :float_value,
-            :unit, :text_value, :string_value, :response_other, :response_group, :survey_section_id, :blob
+        base.send :attr_accessible, *SurveyorGui::PermittedParams.new.response_attributes if defined? ActiveModel::MassAssignmentSecurity
         #belongs_to :user
 
         # after_destroy :delete_blobs!

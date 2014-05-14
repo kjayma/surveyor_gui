@@ -43,7 +43,7 @@ module SurveyorGui
     end
 
     def create
-      @surveyform = Surveyform.new(params[:surveyform])
+      @surveyform = Surveyform.new(surveyforms_params)
       if @surveyform.save
         flash[:notice] = "Successfully created survey."
         @title = "Edit Survey"
@@ -57,7 +57,7 @@ module SurveyorGui
     def update
       @title = "Update Survey"
       @surveyform = Surveyform.find(params[:surveyform][:id], :include =>:survey_sections)
-      if @surveyform.update_attributes(params[:surveyform])
+      if @surveyform.update_attributes(surveyforms_params)
         flash[:notice] = "Successfully updated surveyform."
         redirect_to :action=>:index
       else
@@ -214,6 +214,11 @@ module SurveyorGui
       @question = Question.find(question_id)
       @question_no = 0
       render "_question_section" , :layout=> false
+    end
+
+    private
+    def surveyforms_params
+      ::PermittedParams.new(params[:surveyform]).survey
     end
 
   end

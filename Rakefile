@@ -27,10 +27,9 @@ namespace :gui_testbed do
 
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
-      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root})
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'debugger'})
 
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
-      sh 'sed -i "s/# gem \'therubyracer/gem \'therubyracer/" Gemfile'
 
       Bundler.with_clean_env do
         sh 'bundle install' # run bundle install after Gemfile modifications
@@ -53,7 +52,6 @@ namespace :gui_testbed do
         sh 'bundle exec rails generate surveyor_gui:install'
         sh 'bundle exec rake db:migrate db:test:prepare'
         sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'
-        sh 'sed -i "s/# gem \'debugger/gem \'debugger/" Gemfile'
       end
     end
   end

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 #from spec/support/surveyforms_helpers.rb
 include SurveyFormsCreationHelpers::CreateSurvey
+include SurveyFormsCreationHelpers::BuildASurvey
 
 feature "User creates a new survey using a browser",  %q{
   As a user
@@ -355,7 +356,7 @@ feature "User creates a new survey using a browser",  %q{
       end
 
 
-      scenario "User includes a file upload in the survey", :js=>true, :wip=>true do
+      scenario "User includes a file upload in the survey", :js=>true do
         #Given I've added a new question
         within_frame 0 do
 
@@ -378,5 +379,12 @@ feature "User creates a new survey using a browser",  %q{
         expect(page).to have_css("input[type='file']")
       end
     end
+  end #end context "user has started a new survey"
+
+  scenario "User saves a survey with all the different question types", :js=>true, :wip=>true do
+    build_a_survey
+    click_button "Save Changes"
+    expect(page).to have_content(/[Ss]uccessfully update/)
+    expect(page).to have_content("How was Boston?")
   end
-end
+end #end feature

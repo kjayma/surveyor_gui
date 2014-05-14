@@ -15,11 +15,24 @@ module SurveyFormsCreationHelpers
     end
 
     def add_question
-      click_button "Add Question"
-      expect(page).to have_css('iframe')
+      #make sure ajax was completed
+      fix_node_error do
+        all('#add_question').last.click
+        expect(page).to have_css('iframe')
+      end
       within_frame 0 do
         find('form')
         expect(find('h1')).to have_content("Add Question")
+      end
+    end
+
+    def fix_node_error(&block)
+      # fix Capybara::Poltergeist::ObsoleteNode: - seems like some kind of race problem
+      begin
+        yield(block)
+      rescue
+        sleep(1)
+        yield(block)
       end
     end
 
@@ -36,7 +49,7 @@ module SurveyFormsCreationHelpers
   end
 
   module BuildASurvey
-    def build
+    def build_a_survey
       visit new_surveyform_path
       #When I fill in a title
       fill_in "Title", with: "How was Boston?"

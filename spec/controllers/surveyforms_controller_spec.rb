@@ -14,22 +14,25 @@ describe SurveyformsController do
   let!(:surveyform) {FactoryGirl.create(:surveyform)}
   let!(:response_set) { FactoryGirl.create(:survey_sections, :survey => survey_with_responses)}
   let!(:response_set) { FactoryGirl.create(:response_set, :survey => survey_with_responses, :access_code => "pdq")}
-  #let!(:response_set_beta) { Factory(:response_set, :survey => survey_beta, :access_code => "rst")}
-  #before { ResponseSet.stub(:create).and_return(response_set) }
 
-  # match '/', :to => 'surveyor#new', :as => 'available_surveys', :via => :get
-  # match '/:survey_code', :to => 'surveyor#create', :as => 'take_survey', :via => :post
-  # match '/:survey_code', :to => 'surveyor#export', :as => 'export_survey', :via => :get
-  # match '/:survey_code/:response_set_code', :to => 'surveyor#show', :as => 'view_my_survey', :via => :get
-  # match '/:survey_code/:response_set_code/take', :to => 'surveyor#edit', :as => 'edit_my_survey', :via => :get
-  # match '/:survey_code/:response_set_code', :to => 'surveyor#update', :as => 'update_my_survey', :via => :put
+  def survey_with_sections
+    {
+      :title=>'New Survey',
+      :survey_sections_attributes => {
+        "0" => {
+          :title => 'New Section',
+          :display_order => 0
+        }
+      }
+    }
+  end
 
   context "#index" do
  		def do_get(params = {})
       get :index, params
     end
 
-    context "parameters call for surveys" do
+    context "index parameters specify surveys" do
 
       it "set the title to 'modify surveys'" do
         do_get()
@@ -52,7 +55,7 @@ describe SurveyformsController do
       end
     end
 
-    context "parameters call for survey templates" do
+    context "index parameters specify survey templates" do
 
       it "set the title to 'modify templates'" do
         do_get(:template=>"true")
@@ -119,7 +122,30 @@ describe SurveyformsController do
         do_post()
         expect(response).to render_template('new')
       end
+    end
 
+    context "if it includes survey sections" do
+
+        before :each do
+          @survey_with_sections = survey_with_sections
+        end
+
+      context "when sections are valid" do
+        it "redirects to the edit page" do
+          do_post @survey_with_sections
+          expect(response).to redirect_to(edit_surveyform_url(assigns(:surveyform).id))
+        end
+      end
+
+      context "when sections are not valid" do
+        before :each do
+          @survey_with_sections[:survey_sections_attributes]["0"][:display_order]=nil
+        end
+        it "renders new" do
+          do_post()
+          expect(response).to render_template('new')
+        end
+      end
     end
   end
 

@@ -14,17 +14,22 @@ module SurveyFormsCreationHelpers
       find('.question span.questions')
     end
 
-    def add_question
-      #make sure ajax was completed
-      find('input[value="How was Boston?"]')
+    def add_question(&block)
+      #make sure prior jquery was completed
+      expect(page).not_to have_css('div.jquery_add_question_started, div.jquery_add_section_started')
       fix_node_error do
         all('#add_question').last.click
         expect(page).to have_css('iframe')
       end
       within_frame 0 do
+      #then wait for window to pop up
         find('form')
         expect(find('h1')).to have_content("Add Question")
+      #then enter the question details
+        block.call
+      #then the window closes
       end
+      expect(page).not_to have_css('div.jquery_add_question_started')
     end
 
     def add_section
@@ -73,12 +78,28 @@ module SurveyFormsCreationHelpers
       add_a_slider_question
       add_a_star_question
       add_a_file_upload
-      add_a_new_section("Entertainment")
-      sleep 3
 
+      add_a_new_section("Entertainment")
       question_maker = QuestionsFactory.new
       question_maker.make_question(3){|text| add_a_text_question(text)}
-      expect(page).to have_content("Unique Question 3")
+
+      add_a_new_section("Food")
+      question_maker.make_question(3){|text| add_a_text_question(text)}
+    end
+
+    def build_a_three_question_survey
+      visit new_surveyform_path
+      title_the_survey
+      question_maker = QuestionsFactory.new
+      question_maker.make_question(3){|text| add_a_text_question(text)}
+    end
+
+    def build_a_three_section_survey
+      visit new_surveyform_path
+      title_the_survey
+      title_the_first_section ("Unique Section 1")
+      add_a_new_section("Unique Section 2")
+      add_a_new_section("Unique Section 3")
     end
 
     def title_the_survey
@@ -88,22 +109,21 @@ module SurveyFormsCreationHelpers
       click_button "Save Changes"
     end
 
-    def title_the_first_section
+    def title_the_first_section(title="Accommodations")
       #And I click "Edit Section Title"
       click_button "Edit Section Title"
       #Then I see a window pop-up
       expect(page).to have_css('iframe')
       within_frame 0 do
       #And I enter a title
-        fill_in "Title", with: "Accommodations"
+        fill_in "Title", with: title
       #And I save the title
         click_button "Save Changes"
       end
     end
 
     def add_a_text_question(text="Where did you stay?")
-      add_question
-      within_frame 0 do
+      add_question do
       #And I see a new form for "Add Question"
         find('form')
         expect(find('h1')).to have_content("Add Question")
@@ -118,9 +138,8 @@ module SurveyFormsCreationHelpers
     end
 
     def add_a_number_question
-      add_question
+      add_question do
       #Given I've added a new question
-      within_frame 0 do
       #Then I select the "number" question type
         select_question_type "Number"
       #And I frame the question
@@ -134,8 +153,7 @@ module SurveyFormsCreationHelpers
     end
 
     def add_a_pick_one_question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "multiple choice" question type
         select_question_type "Multiple Choice (only one answer)"
       #And I frame the question
@@ -154,8 +172,7 @@ module SurveyFormsCreationHelpers
 
     def add_a_pick_any_question
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "number" question type
         select_question_type "Multiple Choice (multiple answers)"
       #And I frame the question
@@ -174,12 +191,11 @@ module SurveyFormsCreationHelpers
 
     def add_a_dropdown_question
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "number" question type
         select_question_type "Dropdown List"
       #And I frame the question
-        fill_in "question_text", with: "1) What neighborhood were you in?"
+        fill_in "question_text", with: "What neighborhood were you in?"
       #And I add some choices"
         answers[0].set("Financial District")
         find(".add_answer img").click
@@ -195,8 +211,7 @@ module SurveyFormsCreationHelpers
     def add_a_date_question
       #And I can see the question in my survey
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "number" question type
         select_question_type "Date"
       #And I frame the question
@@ -208,8 +223,7 @@ module SurveyFormsCreationHelpers
     end
 
     def add_a_label
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "Label" question type
         select_question_type "Label"
       #And I frame the question
@@ -222,8 +236,7 @@ module SurveyFormsCreationHelpers
 
     def add_a_text_box_question
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "Text Box" question type
         select_question_type "Text Box (for extended text, like notes, etc.)"
       #And I frame the question
@@ -236,8 +249,7 @@ module SurveyFormsCreationHelpers
 
     def add_a_slider_question
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "Slider" question type
         select_question_type "Slider"
       #And I frame the question
@@ -258,8 +270,7 @@ module SurveyFormsCreationHelpers
 
     def add_a_star_question
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "Star" question type
         select_question_type "Star"
       #And I frame the question
@@ -272,8 +283,7 @@ module SurveyFormsCreationHelpers
 
     def add_a_file_upload
       #Given I've added a new question
-      add_question
-      within_frame 0 do
+      add_question do
       #Then I select the "Star" question type
         select_question_type "File Upload"
       #And I frame the question

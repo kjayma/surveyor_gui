@@ -68,7 +68,7 @@ module SurveyFormsCreationHelpers
 
       title_the_survey
       title_the_first_section
-      add_a_text_question
+      add_a_text_question("Describe your day at Fenway Park.")
       add_a_number_question
       add_a_pick_one_question
       add_a_pick_any_question
@@ -82,6 +82,7 @@ module SurveyFormsCreationHelpers
       add_a_new_section("Entertainment")
       question_maker = QuestionsFactory.new
       question_maker.make_question(3){|text| add_a_text_question(text)}
+      add_a_text_question("Describe your room.")
 
       add_a_new_section("Food")
       question_maker.make_question(3){|text| add_a_text_question(text)}

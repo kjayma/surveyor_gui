@@ -1,21 +1,3 @@
-module SurveyFormsRearrangementHelpers
-  def rearrange_everything
-    move_questions
-  end
-
-  def move_sections
-  end
-
-  def move_sections_using_drag
-  end
-
-  def move_questions
-  end
-
-  def move_questions_using_drag
-  end
-end
-
 module CutAndPaste
   def construct_scenario
     examples = """

@@ -2,10 +2,13 @@ class SurveySectionsController < ApplicationController
 
   def new
     @title = "Add Survey Section"
-    survey=Survey.find(params[:survey_id])
+    survey = Survey.find(params[:survey_id])
     prev_section = SurveySection.find(params[:prev_section_id])
     @last_survey_section = survey.survey_sections.last
-    @survey_section = survey.survey_sections.build(:title=>'New Section', :display_order=>prev_section.display_order+1, :modifiable=>true)
+    @survey_section = survey.survey_sections
+                            .build(:title => 'New Section',
+                                   :display_order => prev_section.display_order + 1,
+                                   :modifiable => true)
   end
 
   def edit
@@ -14,10 +17,12 @@ class SurveySectionsController < ApplicationController
   end
 
   def create
-    survey=Survey.find(params[:survey_section][:survey_id])
-    SurveySection.where(:survey_id=>survey.id).where("display_order >= ?",params[:survey_section][:display_order]).update_all("display_order = display_order+1")
-    @survey_section = survey.survey_sections.build(params[:survey_section])
-    @survey_section.display_order=params[:survey_section][:display_order].to_i
+    survey = Survey.find(params[:survey_section][:survey_id])
+    SurveySection.where(:survey_id => survey.id)
+                 .where("display_order >= ?", params[:survey_section][:display_order])
+                 .update_all("display_order = display_order+1")
+    @survey_section = survey.survey_sections.build(survey_section_params)
+    @survey_section.display_order = params[:survey_section][:display_order].to_i
     #@survey_section.questions.build(:text=>'New question',:pick=>'none',:display_order=>0,:display_type=>'default').answers.build(:text=>'string', :response_class=>'string', :display_order=>1, :template=>true)
     if @survey_section.save
       redirect_to :back
@@ -29,7 +34,7 @@ class SurveySectionsController < ApplicationController
   def update
     @title = "Update Survey Section"
     @survey_section = SurveySection.find(params[:id])
-    if @survey_section.update_attributes(params[:survey_section])
+    if @survey_section.update_attributes(survey_section_params)
       render :blank, :layout=>'colorbox'
     else
       render :action => 'edit', :layout=>'colorbox'
@@ -38,32 +43,37 @@ class SurveySectionsController < ApplicationController
 
   def destroy
     @survey_section = SurveySection.find(params[:id])
-    if !@survey_section.survey.template && @survey_section.survey.response_sets.count>0
-      render :text=>"Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead."
+    if !@survey_section.survey.template && @survey_section.survey.response_sets.count > 0
+      render :text => "Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead."
       return false
     end
     if !@survey_section.modifiable
-      render :text=>"This section cannot be removed."
+      render :text => "This section cannot be removed."
       return false
     end
     if !@survey_section.questions.map{|q| q.dependency_conditions}.flatten.blank?
-      render :text=>"The following questions have logic that depend on questions in this section: \n\n"+@survey_section.questions.map{|q| q.dependency_conditions.map{|d| " - "+d.dependency.question.text}}.flatten.join('\n')+"\n\nPlease delete logic before deleting this section.".html_safe
+      render :text => "The following questions have logic that depend on questions in this section: \n\n"+@survey_section.questions.map{|q| q.dependency_conditions.map{|d| " - "+d.dependency.question.text}}.flatten.join('\n')+"\n\nPlease delete logic before deleting this section.".html_safe
       return
     end
     @survey_section.destroy
-    render :text=>""
+    render :text => ""
   end
 
   def sort
     survey = Survey.find(params[:survey_id])
-    satts={:id=>params[:survey_id], :survey_sections_attributes=>{}}
+    satts = { :id => params[:survey_id], :survey_sections_attributes=>{} }
     sections = params[:survey_section]
     sections.each_with_index do |sid, index|
-      satts[:survey_sections_attributes][index.to_s]={:id => sid,:display_order => index}
+      satts[:survey_sections_attributes][index.to_s] = { :id => sid, :display_order => index }
     end
     puts satts
     survey.update_attributes!(satts)
     render :nothing => true
+  end
+
+  private
+  def survey_section_params
+    ::PermittedParams.new(params[:survey_section]).survey_section
   end
 
 end

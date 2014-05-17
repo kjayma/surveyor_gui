@@ -4,7 +4,8 @@ module SurveyorGui
 
       def self.included(base)
 
-        base.send :attr_accessible, *SurveyorGui::PermittedParams.new.survey_section_attributes if defined? ActiveModel::MassAssignmentSecurity
+        base.send :attr_accessible, :title, :display_order,
+                        :questions_attributes, :survey_id, :modifiable if defined? ActiveModel::MassAssignmentSecurity
         base.send :belongs_to, :surveyform, :foreign_key=>:survey_id
         base.send :has_many, :questions, :dependent => :destroy
         base.send :accepts_nested_attributes_for, :questions

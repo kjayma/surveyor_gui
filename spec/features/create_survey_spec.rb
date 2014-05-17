@@ -108,11 +108,10 @@ feature "User creates a new survey using a browser",  %q{
     context "User adds questions of each type to the survey" do
       before :each do
         start_a_new_survey
-        add_question
       end
       scenario "User adds a number question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "number" question type
           select_question_type "Number"
@@ -138,7 +137,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a multiple choice question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "multiple choice" question type
           select_question_type "Multiple Choice (only one answer)"
@@ -169,7 +168,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a choose any question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "multiple choice, multiple answers" question type
           select_question_type "Multiple Choice (multiple answers)"
@@ -200,7 +199,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a dropdown list", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Dropdown" question type
           select_question_type "Dropdown List"
@@ -231,7 +230,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a date question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Date" question type
           select_question_type "Date"
@@ -258,7 +257,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a label", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Label" question type
           select_question_type "Label"
@@ -273,12 +272,12 @@ feature "User creates a new survey using a browser",  %q{
         end
 
         #And I can see the label in my survey and it has no question number
-        expect(find('fieldset')).to have_content(/(?<!1\)\s)You don't need to answer the following questions if you are not comfortable./)
+        expect(page).to have_content(/(?<!1\)\s)You don't need to answer the following questions if you are not comfortable./)
       end
 
       scenario "User adds a text box question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Text Box" question type
           select_question_type "Text Box (for extended text, like notes, etc.)"
@@ -299,7 +298,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a slider question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Slider" question type
           select_question_type "Slider"
@@ -335,7 +334,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User adds a star question", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Star" question type
           select_question_type "Star"
@@ -359,7 +358,7 @@ feature "User creates a new survey using a browser",  %q{
 
       scenario "User includes a file upload in the survey", :js=>true do
         #Given I've added a new question
-        within_frame 0 do
+        add_question do
 
         #Then I select the "Star" question type
           select_question_type "File Upload"
@@ -406,7 +405,7 @@ feature "User creates a new survey using a browser",  %q{
     end
   end
 
-  context "User rearranges sections", :js=>true, :wip=>true do
+  context "User rearranges sections", :js=>true do
     before :each do
       build_a_three_section_survey
     end

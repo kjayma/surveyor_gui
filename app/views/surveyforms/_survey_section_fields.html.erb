@@ -23,7 +23,7 @@
               <% if session[:cut_section] -%>
 
                 <button type="button" id="paste_section"
-                  data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_id => f.object.id) %>"
+                  data-paste_section_surveyform_url="<%= paste_section_surveyform_url(survey_section_id: s.object.id, position: 'over') %>"
                 >Paste Section</button>
 
               <% else -%>

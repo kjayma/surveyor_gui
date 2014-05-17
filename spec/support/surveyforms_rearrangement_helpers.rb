@@ -142,7 +142,6 @@ shared_context "section_cut_and_paste" do
 
   def _paste_item(section, position)
     #And paste it <over_under> <to_item>
-    puts _click_paste_button_js(section, position)
     page.execute_script(_click_paste_button_js(section, position))
     expect(page).not_to have_css('div.jquery_paste_section_started')
     #Then I see cut buttons return

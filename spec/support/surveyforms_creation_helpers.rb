@@ -16,6 +16,7 @@ module SurveyFormsCreationHelpers
 
     def add_question
       #make sure ajax was completed
+      find('input[value="How was Boston?"]')
       fix_node_error do
         all('#add_question').last.click
         expect(page).to have_css('iframe')
@@ -23,6 +24,13 @@ module SurveyFormsCreationHelpers
       within_frame 0 do
         find('form')
         expect(find('h1')).to have_content("Add Question")
+      end
+    end
+
+    def add_section
+      fix_node_error do
+        all('#add_section').last.click
+        expect(page).to have_css('iframe')
       end
     end
 
@@ -50,11 +58,37 @@ module SurveyFormsCreationHelpers
 
   module BuildASurvey
     def build_a_survey
+      #Given I'm on the "Create New Survey" page
       visit new_surveyform_path
+
+      title_the_survey
+      title_the_first_section
+      add_a_text_question
+      add_a_number_question
+      add_a_pick_one_question
+      add_a_pick_any_question
+      add_a_dropdown_question
+      add_a_date_question
+      add_a_label
+      add_a_slider_question
+      add_a_star_question
+      add_a_file_upload
+      add_a_new_section("Entertainment")
+      sleep 3
+
+      question_maker = QuestionsFactory.new
+      question_maker.make_question(3){|text| add_a_text_question(text)}
+      expect(page).to have_content("Unique Question 3")
+    end
+
+    def title_the_survey
       #When I fill in a title
       fill_in "Title", with: "How was Boston?"
       #And I save the survey
       click_button "Save Changes"
+    end
+
+    def title_the_first_section
       #And I click "Edit Section Title"
       click_button "Edit Section Title"
       #Then I see a window pop-up
@@ -65,19 +99,25 @@ module SurveyFormsCreationHelpers
       #And I save the title
         click_button "Save Changes"
       end
+    end
+
+    def add_a_text_question(text="Where did you stay?")
       add_question
       within_frame 0 do
       #And I see a new form for "Add Question"
         find('form')
         expect(find('h1')).to have_content("Add Question")
       #And I frame the question
-        fill_in "question_text", with: "Where did you stay?"
+        fill_in "question_text", with: text
       #And I select the "text" question type
         select_question_type "Text"
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_number_question
       add_question
       #Given I've added a new question
       within_frame 0 do
@@ -91,6 +131,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_pick_one_question
       add_question
       within_frame 0 do
       #Then I select the "multiple choice" question type
@@ -107,6 +150,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_pick_any_question
       #Given I've added a new question
       add_question
       within_frame 0 do
@@ -124,6 +170,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_dropdown_question
       #Given I've added a new question
       add_question
       within_frame 0 do
@@ -141,6 +190,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_date_question
       #And I can see the question in my survey
       #Given I've added a new question
       add_question
@@ -153,6 +205,22 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_label
+      add_question
+      within_frame 0 do
+      #Then I select the "Label" question type
+        select_question_type "Label"
+      #And I frame the question
+        fill_in "question_text", with: "You don't need to answer the following questions if you are not comfortable."
+      #And I save the question
+        click_button "Save Changes"
+      #Then the window goes away
+      end
+    end
+
+    def add_a_text_box_question
       #Given I've added a new question
       add_question
       within_frame 0 do
@@ -164,10 +232,13 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_slider_question
       #Given I've added a new question
       add_question
       within_frame 0 do
-      #Then I select the "Text Box" question type
+      #Then I select the "Slider" question type
         select_question_type "Slider"
       #And I frame the question
         fill_in "question_text", with: "What did you think of the food?"
@@ -183,6 +254,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_star_question
       #Given I've added a new question
       add_question
       within_frame 0 do
@@ -194,6 +268,9 @@ module SurveyFormsCreationHelpers
         click_button "Save Changes"
       #Then the window goes away
       end
+    end
+
+    def add_a_file_upload
       #Given I've added a new question
       add_question
       within_frame 0 do
@@ -204,6 +281,29 @@ module SurveyFormsCreationHelpers
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away
+      end
+    end
+
+    def add_a_new_section(title)
+      #Then I add Section II
+      add_section
+      within_frame 0 do
+        fill_in "Title", with: title
+        click_button "Save Changes"
+      end
+    end
+
+    class QuestionsFactory
+      attr_reader :question_no
+      def initialize
+        @question_no = 1
+      end
+
+      def make_question(quantity,&block)
+        quantity.times do
+          block.call("Unique Question "+@question_no.to_s)
+          @question_no += 1
+        end
       end
     end
   end

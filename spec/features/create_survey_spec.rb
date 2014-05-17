@@ -3,6 +3,7 @@ require 'spec_helper'
 #from spec/support/surveyforms_helpers.rb
 include SurveyFormsCreationHelpers::CreateSurvey
 include SurveyFormsCreationHelpers::BuildASurvey
+include SurveyFormsRearrangementHelpers
 
 feature "User creates a new survey using a browser",  %q{
   As a user
@@ -259,7 +260,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "Text Box" question type
+        #Then I select the "Label" question type
           select_question_type "Label"
 
         #And I frame the question
@@ -300,7 +301,7 @@ feature "User creates a new survey using a browser",  %q{
         #Given I've added a new question
         within_frame 0 do
 
-        #Then I select the "Text Box" question type
+        #Then I select the "Slider" question type
           select_question_type "Slider"
 
         #And I frame the question
@@ -381,10 +382,16 @@ feature "User creates a new survey using a browser",  %q{
     end
   end #end context "user has started a new survey"
 
-  scenario "User saves a survey with all the different question types", :js=>true, :wip=>true do
+  scenario "User saves a survey with all the different question types", :js=>true do
     build_a_survey
     click_button "Save Changes"
     expect(page).to have_content(/[Ss]uccessfully update/)
     expect(page).to have_content("How was Boston?")
   end
+
+  scenario "User rearranges questions and sections", :js=>true, :wip=>true do
+    build_a_survey
+    rearrange_everything
+  end
+
 end #end feature

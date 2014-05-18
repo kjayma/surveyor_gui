@@ -55,7 +55,7 @@ module SurveyFormsCreationHelpers
       end
     end
 
-    def answers
+    def add_answers
       wait_for_ajax
       page.all("div.answer .question_answers_text input")
     end
@@ -160,11 +160,11 @@ module SurveyFormsCreationHelpers
       #And I frame the question
         fill_in "question_text", with: "What type of room did you get?"
       #And I add some choices"
-        answers[0].set("Deluxe King")
+        add_answers[0].set("Deluxe King")
         find(".add_answer img").click
-        answers[1].set("Standard Queen")
+        add_answers[1].set("Standard Queen")
         find(".add_answer img").click
-        answers[2].set("Standard Double")
+        add_answers[2].set("Standard Double")
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away
@@ -179,11 +179,11 @@ module SurveyFormsCreationHelpers
       #And I frame the question
         fill_in "question_text", with: "What did you order from the minibar?"
       #And I add some choices"
-        answers[0].set("Bottled Water")
+        add_answers[0].set("Bottled Water")
         find(".add_answer img").click
-        answers[1].set("Kit Kats")
+        add_answers[1].set("Kit Kats")
         find(".add_answer img").click
-        answers[2].set("Scotch")
+        add_answers[2].set("Scotch")
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away
@@ -198,11 +198,11 @@ module SurveyFormsCreationHelpers
       #And I frame the question
         fill_in "question_text", with: "What neighborhood were you in?"
       #And I add some choices"
-        answers[0].set("Financial District")
+        add_answers[0].set("Financial District")
         find(".add_answer img").click
-        answers[1].set("Back Bay")
+        add_answers[1].set("Back Bay")
         find(".add_answer img").click
-        answers[2].set("North End")
+        add_answers[2].set("North End")
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away
@@ -256,13 +256,13 @@ module SurveyFormsCreationHelpers
       #And I frame the question
         fill_in "question_text", with: "What did you think of the food?"
       #And I add some choices"
-        answers[0].set("Sucked!")
+        add_answers[0].set("Sucked!")
         find(".add_answer img").click
-        answers[1].set("Meh")
+        add_answers[1].set("Meh")
         find(".add_answer img").click
-        answers[2].set("Good")
+        add_answers[2].set("Good")
         find(".add_answer img").click
-        answers[3].set("Wicked good!")
+        add_answers[3].set("Wicked good!")
       #And I save the question
         click_button "Save Changes"
       #Then the window goes away

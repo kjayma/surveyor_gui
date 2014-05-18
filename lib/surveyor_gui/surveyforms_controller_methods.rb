@@ -134,34 +134,47 @@ module SurveyorGui
 
     def paste_section
       @title="Edit Survey"
+      @question_no = 0
       if session[:cut_section]
-        survey_section = SurveySection.find(session[:cut_section])
-        @question_no = 0
-        if params[:survey_section_id]
-          place_under_section = SurveySection.find(params[:survey_section_id])
-          survey = place_under_section.survey
-          survey_id = survey.id
-          survey.survey_sections.where('display_order>?',place_under_section.display_order).update_all('display_order=display_order+1')
-          survey_section.display_order = place_under_section.display_order+1
-          @surveyform = survey
-        else
-          survey_id = params[:survey_id]
-          survey_section.display_order = 0
-          Survey.find(survey_id).survey_sections.update_all('display_order = display_order+1')
-          @surveyform = Surveyform.find(survey_id)
-        end
-        survey_section.survey_id = survey_id
-
-        if survey_section.save
-          @surveyform.reload
-          session[:cut_section]=nil
-          render :new, :layout=>false
-        else
-          render :nothing=>true
-          return false
-        end
+        _continue_paste_section
       else
         render :nothing=>true
+      end
+    end
+
+    def _continue_paste_section
+      survey_section = SurveySection.find(session[:cut_section])
+      place_at_section = SurveySection.find(params[:survey_section_id])
+      survey_section.survey_id = place_at_section.survey_id
+      survey_section.display_order = _paste_to(params[:position], place_at_section.survey, place_at_section)
+      @surveyform = place_at_section.surveyform
+      _save_pasted_object(survey_section, @surveyform, :cut_section)
+    end
+
+    def _paste_to(position, object_parent, object)
+      paste_position = object.display_order + _display_order_offset(position)
+      _make_room(paste_position, object_parent, object)
+      paste_position
+    end
+
+    def _display_order_offset(position)
+      position == "over" ? 0 : 1
+    end
+
+    def _make_room(paste_at, object_parent, object)
+       statement = "object_parent."+object.class.to_s.underscore.pluralize
+       collection = eval(statement)
+       collection.where('display_order >= ?',paste_at).update_all('display_order=display_order+1')
+    end
+
+    def _save_pasted_object(object, surveyform, session_id)
+      if object.save
+        surveyform.reload
+        session[session_id]=nil
+        render :new, :layout=>false
+      else
+        render :nothing=>true
+        return false
       end
     end
 

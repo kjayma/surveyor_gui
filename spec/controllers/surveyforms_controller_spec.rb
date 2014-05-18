@@ -319,4 +319,16 @@ describe SurveyformsController do
       expect(response).to render_template('new')
     end
   end
+
+  context "#cut_question" do
+    def do_get(params = {})
+      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first)]
+      get :cut_question,{:id => 1, :question_id => 1}.merge(params)
+    end
+    it "cuts a question" do
+      do_get
+      expect(response).to be_success
+    end
+  end
 end

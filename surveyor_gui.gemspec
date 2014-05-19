@@ -20,14 +20,14 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "rails", "~> 4.0"
-  s.add_dependency 'dynamic_form', "~> 1.1.4"
+  s.add_dependency 'rails', '~> 4.0.0'
+  s.add_dependency 'dynamic_form', '~> 1.1.4'
   #s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'jquery-ui-sass-rails'
 
   s.add_development_dependency "sqlite3"
 
-  s.add_development_dependency 'sass-rails'
+  s.add_development_dependency 'sass-rails','~> 4.0.2'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'uglifier', '>= 1.0.3'
   s.add_development_dependency('rspec-rails', '~> 2.14.2')

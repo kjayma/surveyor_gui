@@ -31,6 +31,11 @@ namespace :gui_testbed do
 
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
 
+      # not sure why turbolinks gives test problems, anyway better to avoid it?
+      js_file_contents = File.read('app/assets/javascripts/application.js')
+      js_file_contents.sub!('//= require turbolinks', '')
+      File.open('app/assets/javascripts/application.js', 'w'){|f| f.write(js_file_contents) }
+
       Bundler.with_clean_env do
         sh 'bundle install' # run bundle install after Gemfile modifications
       end

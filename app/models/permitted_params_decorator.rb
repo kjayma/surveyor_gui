@@ -48,7 +48,7 @@ PermittedParams.class_eval do
   alias_method :base_survey_attributes, :survey_attributes
   def survey_attributes
     base_survey_attributes +
-    [:title, :access_code, :template,
+    [:title, :access_code, :template, :id,
       survey_sections_attributes: survey_section_attributes]
   end
 
@@ -56,7 +56,7 @@ PermittedParams.class_eval do
   def survey_section_attributes
     base_survey_section_attributes +
     [:title, :display_order, :questions_attributes, :survey_id, :modifiable,
-     questions_attributes: question_attributes]
+     :id, questions_attributes: question_attributes]
   end
 
 end

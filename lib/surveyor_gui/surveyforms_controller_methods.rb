@@ -56,7 +56,7 @@ module SurveyorGui
 
     def update
       @title = "Update Survey"
-      @surveyform = Surveyform.find(params[:surveyform][:id], :include =>:survey_sections)
+      @surveyform = Surveyform.includes(:survey_sections).find(params[:surveyform][:id])
       if @surveyform.update_attributes(surveyforms_params)
         flash[:notice] = "Successfully updated surveyform."
         redirect_to :action=>:index
@@ -69,10 +69,9 @@ module SurveyorGui
 
     def show
       @title = "Show Survey"
-      @survey_locked=true
-      @surveyform = Surveyform.find(params[:id], :include =>:survey_sections)
-      @surveyform = Surveyform.where(:id=>params[:id]).includes(:survey_sections).first
-      @question_no=0
+      @survey_locked = true
+      @surveyform = Surveyform.find(params[:id])
+      @question_no = 0
     end
 
     def destroy
@@ -95,7 +94,7 @@ module SurveyorGui
 
     def insert_survey_section
       survey_id = params[:id]
-      @survey_section = Survey.find(survey_id, :include=> :survey_sections, :order => 'survey_sections.id').survey_sections.last
+      @survey_section = Survey.find(survey_id).survey_sections.reorder('survey_sections.id').last
       if @survey_section
         @question_no = 0
         render "_survey_section_fields" , :layout=> false

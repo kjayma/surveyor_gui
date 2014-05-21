@@ -3,7 +3,7 @@ module SurveyorGui
     module DependencyMethods
       def self.included(base)
         # Associations
-        base.send :attr_accessible, :dependency_conditions_attributes
+        base.send :attr_accessible, :dependency_conditions_attributes if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :dependency_conditions, :reject_if => lambda { |d| d[:operator].blank?}, :allow_destroy => true
 
 #        # HACK: Remove the existing validates_numericality_of block.  By default in Surveyor, it doesn't account for

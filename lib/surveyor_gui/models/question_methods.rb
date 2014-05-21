@@ -8,7 +8,7 @@ module SurveyorGui
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate,
-                  :dynamic_source, :modifiable, :report_code
+                  :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
         base.send :has_many, :responses

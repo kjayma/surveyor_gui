@@ -12,7 +12,7 @@ class DependencysController < ApplicationController
   end
 
   def create
-    @question = Question.new(params[:question])
+    @question = Question.new(question_params)
     if @question.save
       redirect_to :back
     else
@@ -23,7 +23,7 @@ class DependencysController < ApplicationController
   def update
     @title = "Update Question"
     @question = Question.includes(:answers).find(params[:id])
-    if @question.update_attributes(params[:question])
+    if @question.update_attributes(question_params)
       @question.dependency.destroy if @question.dependency.dependency_conditions.blank?
       render :blank, :layout=>'colorbox'
     else
@@ -112,6 +112,11 @@ private
       ['greater than or equal to (>=)','>='],
       ['greater than','>']
     ]
+  end
+
+  private
+  def question_params
+    ::PermittedParams.new(params[:question]).question
   end
 end
 

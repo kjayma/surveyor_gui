@@ -2,15 +2,17 @@ class QuestionsController < ApplicationController
 
   def new
     @title = "Add Question"
-    survey_section=SurveySection.find(params[:survey_section_id])
+    survey_section = SurveySection.find(params[:survey_section_id])
     survey = Survey.find(survey_section.survey_id)
     if params[:prev_question_id]
       prev_question = Question.find(params[:prev_question_id])
-      @question = Question.new(:survey_section_id=>params[:survey_section_id], :display_order=>prev_question.display_order+1)
+      @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :display_order => prev_question.display_order + 1)
     else
-      @question = Question.new(:survey_section_id=>params[:survey_section_id], :display_order=>0)
+      @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :display_order => 0)
     end
-    @question.answers.build(:text=>'')
+    @question.answers.build(:text => '')
   end
 
   def edit
@@ -19,16 +21,18 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    Question.where(:survey_section_id=>params[:question][:survey_section_id]).where("display_order >= ?",params[:question][:display_order]).update_all("display_order = display_order+1")
+    Question.where(:survey_section_id => params[:question][:survey_section_id])
+            .where("display_order >= ?", params[:question][:display_order])
+            .update_all("display_order = display_order+1")
     if !params[:question][:answers_attributes].blank? && !params[:question][:answers_attributes]['0'].blank?
       params[:question][:answers_attributes]['0'][:original_choice] = params[:question][:answers_attributes]['0'][:text]
     end
 
-    @question = Question.new(params[:question])
+    @question = Question.new(question_params)
     if @question.save
-      @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick=='none'
+      @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
       #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
-      render :inline=>'<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout=>'colorbox'
+      render :inline => '<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout=>'colorbox'
     else
       @title = "Add Question"
       render :action => 'new', :layout=>'colorbox'
@@ -38,8 +42,8 @@ class QuestionsController < ApplicationController
   def update
     @title = "Update Question"
     @question = Question.includes(:answers).find(params[:id])
-    if @question.update_attributes(params[:question])
-      @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick=='none'
+    if @question.update_attributes(question_params)
+      @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
       #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
       render :blank, :layout=>'colorbox'
     else
@@ -49,7 +53,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     question = Question.find(params[:id])
-    if !question.survey_section.survey.template && question.survey_section.survey.response_sets.count>0
+    if !question.survey_section.survey.template && question.survey_section.survey.response_sets.count > 0
       flash[:error]="Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead."
       return false
     end
@@ -130,6 +134,11 @@ class QuestionsController < ApplicationController
       @questions.answers.build(:text=>'')
     end
     render :partial => 'no_picks'
+  end
+
+  private
+  def question_params
+    ::PermittedParams.new(params[:question]).question
   end
 
 end

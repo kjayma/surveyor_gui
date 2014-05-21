@@ -6,9 +6,9 @@
         <h1 class="round-top">
           <%= @title %>
             <% if @surveyform.id -%>
-              <input style="'position: relative; left:47%; top:0'" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Survey" />
-              <input style="'position: relative; left:47%; top:0'" onclick="preview_cbox('<%= preview_results_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Results" />
-              <input style="'position: relative; left:47%; top:0'" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Report" />
+              <input class="preview-button" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Survey" />
+              <input class="preview-button" onclick="preview_cbox('<%= preview_results_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Results" />
+              <input class="preview-button" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Report" />
             <% end %>
         </h1>
         <%= simple_form_for @surveyform, :url => "/surveyforms/"+@surveyform.id.to_s do |f| %>

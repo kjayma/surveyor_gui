@@ -1,3 +1,4 @@
+require 'stringio'
 module SurveyorGui
   module Models
     module QuestionMethods
@@ -275,6 +276,21 @@ module SurveyorGui
         dependencies = []
         dependencies << self.dependency
         dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question}}.flatten.uniq
+      end
+
+      def answers_collection
+        self.answers.collect(&:text).join("\n")
+      end
+
+      def answers_collection=(answers_collection)
+        answer_lines = StringIO.new(answers_collection)
+        answer_lines.readlines.each_with_index do |answer_text, index|
+          Answer.create!(
+            question_id: id,
+            display_order: index,
+            text: answer_text
+          )
+        end
       end
 
       private

@@ -8,7 +8,7 @@ module SurveyorGui
         base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
-                  :hide_label, :dummy_blob, :dynamically_generate,
+                  :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -278,19 +278,13 @@ module SurveyorGui
         dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question}}.flatten.uniq
       end
 
-      def answers_collection
-        self.answers.collect(&:text).join("\n")
+      def answers_textbox
+        self.answers.order('display_order asc').collect(&:text).join("\n")
       end
 
-      def answers_collection=(answers_collection)
-        answer_lines = StringIO.new(answers_collection)
-        answer_lines.readlines.each_with_index do |answer_text, index|
-          Answer.create!(
-            question_id: id,
-            display_order: index,
-            text: answer_text
-          )
-        end
+      def answers_textbox=(answers_textbox)
+        collection = TextBoxCollection.new(answers_textbox, answers, Answer, self)
+        collection.update_records
       end
 
       private
@@ -308,7 +302,61 @@ module SurveyorGui
             display_order
         )
       end
+      
+      class TextBoxCollection
+        def initialize(text, nested_objects, nested_model, parent)
+          @text = text
+          @nested_objects = nested_objects
+          @nested_model = nested_model
+          @parent = parent
+        end
+        
+        def update_records
+          _lines.readlines.each_with_index do |line, display_order|
+            _update_or_create(line, display_order) unless line.blank?
+          end
+          _delete_orphans        
+        end
+        
+        private
+        
+        def _lines
+          StringIO.new(@text)
+        end
+        
+        def _update_or_create(line, display_order)
+          nested_objects = _find_nested_if_exists(line.strip)
+          if nested_objects.empty?
+            _create_record(display_order, line)
+          else
+            _update_display_order(nested_objects.first, display_order)
+          end
+        end
+        
+        def _delete_orphans
+          valid_rows = @text.split()
+          @nested_objects.each do |nested_object|
+            nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip}"
+          end
+        end
+        
+        def _find_nested_if_exists(text)
+          @nested_objects.where('text = ?',text)
+        end
+        
+        def _update_display_order(nested_object, index)
+          nested_object.update_attributes(:display_order=>index)
+        end
 
+        def _create_record(display_order, text)      
+          @nested_model.create!(
+            "#{@parent.class.name.underscore}_id".to_sym => @parent.id,
+            display_order: display_order,
+            text: text.strip
+          )
+        end
+      end
+      
     end
   end
 end

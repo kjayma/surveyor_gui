@@ -145,11 +145,9 @@ feature "User creates a new survey using a browser",  %q{
           fill_in "question_text", with: "What type of room did you get?"
 
         #And I add some choices"
-          add_answers[0].set("Deluxe King")
-          find(".add_answer img").click
-          add_answers[1].set("Standard Queen")
-          find(".add_answer img").click
-          add_answers[2].set("Standard Double")
+          fill_in "question_answers_textbox", with: """Deluxe King
+                                                     Standard Queen
+                                                     Standard Double"""
 
         #And I save the question
           click_button "Save Changes"
@@ -176,11 +174,9 @@ feature "User creates a new survey using a browser",  %q{
           fill_in "question_text", with: "What did you order from the minibar?"
 
         #And I add some choices"
-          add_answers[0].set("Bottled Water")
-          find(".add_answer img").click
-          add_answers[1].set("Kit Kats")
-          find(".add_answer img").click
-          add_answers[2].set("Scotch")
+          fill_in "question_answers_textbox", with: """Bottled Water
+                                                     Kit Kats
+                                                     Scotch"""
 
         #And I save the question
           click_button "Save Changes"
@@ -207,11 +203,9 @@ feature "User creates a new survey using a browser",  %q{
           fill_in "question_text", with: "1) What neighborhood were you in?"
 
         #And I add some choices"
-          add_answers[0].set("Financial District")
-          find(".add_answer img").click
-          add_answers[1].set("Back Bay")
-          find(".add_answer img").click
-          add_answers[2].set("North End")
+          fill_in "question_answers_textbox", with: """ Financial District
+                                                      Back Bay
+                                                      North End"""
 
         #And I save the question
           click_button "Save Changes"
@@ -306,13 +300,11 @@ feature "User creates a new survey using a browser",  %q{
           fill_in "question_text", with: "What did you think of the food?"
 
         #And I add some choices"
-          add_answers[0].set("Sucked!")
-          find(".add_answer img").click
-          add_answers[1].set("Meh")
-          find(".add_answer img").click
-          add_answers[2].set("Good")
-          find(".add_answer img").click
-          add_answers[3].set("Wicked good!")
+          fill_in "question_answers_textbox", with: """Sucked!
+                                                     Meh
+                                                     Good
+                                                     Wicked good!"""       
+
 
         #And I save the question
           click_button "Save Changes"

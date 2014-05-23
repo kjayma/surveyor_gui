@@ -24,7 +24,7 @@ describe "questions/edit.html.erb" do
     expect(response).to have_selector("form")
   end
 
-  it "will post a new message on submit" do
+  it "will post a new question on submit" do
     render
     expect(form[:action]).to eql(question_path question)
     expect(form[:method]).to eql('post')

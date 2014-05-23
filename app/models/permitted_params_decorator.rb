@@ -15,7 +15,7 @@ PermittedParams.class_eval do
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
-     :modifiable, :report_code, answers_attributes: answer_attributes]
+     :modifiable, :report_code, :answers_textbox, answers_attributes: answer_attributes]
   end
 
   alias_method :base_dependency_attributes, :dependency_attributes

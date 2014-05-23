@@ -10,42 +10,63 @@ end
 
 describe "questions/edit.html.erb" do
   include CapybaraHelper
-  def message
-    mock_model("Question",
-      :text =>'who are you?',
-      :question_type => 'Multiple Choice'
-      ).as_new_record.as_null_object
-  end
-  helper_method :message
 
-  describe "renders a form to create the message" do
+  let(:question){ FactoryGirl.create(:question) }
+  let(:question2){ FactoryGirl.create(:question, :question_type => 'Multiple Choice (only one answer)') }
+  let(:form){find('form')}
+  
+  before do
+    assign(:question, question)
+  end    
+  
+  it "renders a form" do
+    render
+    expect(response).to have_selector("form")
+  end
+
+  it "will post a new message on submit" do
+    render
+    expect(form[:action]).to eql(question_path question)
+    expect(form[:method]).to eql('post')
+  end
+  
+  it "has a save button" do
+    render
+    expect(form).to have_selector("input[type=submit]")
+  end
+    
+  context "It has a multiple choice field" do
     let (:form) {find('form')}
-    it "renders a form" do
-      render
-      expect(response).to have_selector("form")
+    let(:answer_1){ FactoryGirl.create(:answer, :question => question2, :display_order => 3, :text => "blue")}
+    let(:answer_2){ FactoryGirl.create(:answer, :question => question2, :display_order => 1, :text => "red")}    
+    let(:answer_3){ FactoryGirl.create(:answer, :question => question2, :display_order => 2, :text => "green")}
+   
+    before do
+      [answer_1, answer_2, answer_3].each{|a| question2.answers << a } 
+      assign(:question, question2)    
     end
-    it "will post a new message on submit" do
+    
+    it "renders an answer_collection for the answers" do
       render
-      expect(form[:action]).to eql(messages_path)
-      expect(form[:method]).to eql('post')
-    end
-    it "has a save button" do
-      render
-      expect(form).to have_selector("input[type=submit]")
-    end
-    it "renders a text field for the message title" do
-      render
-      expect(form).to have_field(
-        "message[title]",
-        :type => 'text',
-        :with => 'the title')
-    end
-    it "renders a text area for the message text" do
-      render
+      puts rendered
       expect(rendered).to have_field(
-        'message[text]',
+        'question[answers_collection]',
         :type => 'textarea',
-        :with => 'the message')
+        :with => "red\ngreen\nblue")
     end
   end
+
+
+#    it "renders a text field for the message title" do
+#      render
+#      expect(form).to have_field(
+#        "message[title]",
+#        :type => 'text',
+#        :with => 'the title')
+#    end
+#    it "renders a text area for the message text" do
+#      render
+
+#    end
+#  end
 end

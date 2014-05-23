@@ -1,4 +1,4 @@
-<span class='fl'>
+<!--<span class='fl'>
   Generate list from a database field?
 </span>
 <%= f.input :dynamically_generate, :as => :radio_buttons, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
@@ -6,10 +6,8 @@
   Specify statement used to generate list:<br />
   <%= f.input :dynamic_source, :label=>false %>
 </div>
+-->
 <div id="fixed_source">
-  <strong>Possible Answers:</strong>
-  <div id='sortable_answers'></div>
-    <p class="floatdown2 add_answer">
-      Add Possible Answer <%= image_tag 'addicon.png', :border => 0 %>
-    </p>
+  <strong>Possible Answers:</strong> enter each choice on a separate line.
+  <%= f.input :answers_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
 </div>

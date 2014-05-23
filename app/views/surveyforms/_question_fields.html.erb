@@ -23,19 +23,25 @@
         <span class="question_button_bar">
 
           <button type="button" id="edit_question"
-             data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+             data-replace_question_url="<%=url_for(:action => 'replace_question',
+              id:           f.object.survey_section.survey.id, 
+              question_id:  f.object.id)%>"
              data-edit_question_url="<%=edit_question_url(f.object.id)%>"
              data-question_id="<%= f.object.id.to_s %>"
           >Edit Question</button>
 
           <button type="button" id="cut_question"
-             data-cut_question_surveyform_url="<%=cut_question_surveyform_url(:question_id => f.object.id)%>"
+             data-cut_question_surveyform_url="<%=cut_question_surveyform_url(
+              id:           f.object.survey_section.survey.id, 
+              question_id:  f.object.id)%>"
              data-question_already_cut="<%= session[:cut_question] %>"
           >Cut Question</button>
 
           <button type="button" id="delete_question"
              data-question_url="<%=question_url(f.object.id)%>"
-             data-replace_form_surveyform_url="<%= replace_form_surveyform_url(:survey_section_id => f.object.survey_section_id) %>"
+             data-replace_form_surveyform_url="<%= replace_form_surveyform_url(
+              id:                 f.object.survey_section.survey.id, 
+              survey_section_id:  f.object.survey_section_id) %>"
           >Delete Question</button>
 
           <span style="float:right;">
@@ -57,7 +63,9 @@
 
             <% else -%>
                 <button type="button" id="add_logic"
-                  data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"
+                  data-replace_question_url="<%=url_for(:action => 'replace_question', 
+                    id:           f.object.survey_section.survey.id, 
+                    question_id:  f.object.id)%>"
                   data-new_dependency_url="<%= new_dependency_url(:id=>f.object.id) %>"
                   data-question_id="<%= f.object.id.to_s %>"
                 >Add Logic</button>
@@ -186,7 +194,7 @@
     <div class="question_buttons_bottom">
 
       <button type="button" id="add_question" class="cut"
-        data-insert_new_question_url="<%=insert_new_question_surveyform_url %>"
+        data-insert_new_question_url="<%=insert_new_question_surveyform_url(id: f.object.survey_section.survey.id, ) %>"
         data-new_question_url="<%=new_question_url%>"
         data-prev_question_id="<%= f.object.id.to_s %>"
       >Add Question</button>
@@ -194,7 +202,9 @@
       <% if session[:cut_question] -%>
 
         <button type="button" id="paste_question"
-          data-paste_question_surveyform_url="<%= paste_question_surveyform_url(:question_id=>f.object.id) %>"
+          data-paste_question_surveyform_url="<%= paste_question_surveyform_url(
+              id:           f.object.survey_section.survey.id,
+              question_id:  f.object.id) %>"
         >Paste Question</button>
 
       <% end %>

@@ -11,21 +11,21 @@
                       height:"90%",
                       scrolling:true,
                       iframe:true,
-                      href:"'+preview_survey_surveyresponse_url+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
+                      href:"'+"preview_survey_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
                       :style=>'position: relative; left:47%; top:0' %>
               <%= button_to_function 'Preview Results',
                   'cbox = $.colorbox({width:"90%",
                       height:"90%",
                       scrolling:true,
                       iframe:true,
-                      href:"'+preview_results_surveyresponse_url+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
+                      href:"'+"preview_results_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
                       :style=>'position: relative; left:47%; top:0' %>
               <%= button_to_function 'Preview Report',
                   'cbox = $.colorbox({width:"90%",
                       height:"90%",
                       scrolling:true,
                       iframe:true,
-                      href:"'+preview_report_surveyresponse_url+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
+                      href:"'+"preview_report_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
                       :style=>'position: relative; left:47%; top:0' %>
             <% end %>
         </h1>

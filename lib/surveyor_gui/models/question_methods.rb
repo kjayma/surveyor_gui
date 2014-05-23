@@ -283,8 +283,11 @@ module SurveyorGui
       end
 
       def answers_textbox=(answers_textbox)
-        collection = TextBoxCollection.new(answers_textbox, answers, Answer, self)
-        collection.update_records
+        #this will change answers records, so don't do it unless its a pick any or one
+        if pick != 'none'
+          collection = TextBoxCollection.new(answers_textbox, answers, Answer, self)
+          collection.update_records
+        end
       end
 
       private

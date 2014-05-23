@@ -1,6 +1,6 @@
-<%= simple_fields_for 'question', @questions do |f| %> 
+<%= simple_fields_for 'question', @questions do |f| %>
   <%= f.input :answers_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
-<!--  <%= f.simple_fields_for :answers do |a| %>
+  <!--  <%= f.simple_fields_for :answers do |a| %>
     <%= div_for(a.object) do %>
       <div id='original_choice', data-original_choice="<%= a.object.original_choice %>"></div>
       <div class="fields vertical_collection" style='display: table;'>

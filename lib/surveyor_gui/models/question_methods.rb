@@ -5,6 +5,7 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
+        base.send :attr_writer, :answers_textbox
         base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
@@ -22,6 +23,7 @@ module SurveyorGui
 
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
+        base.send :after_save, :process_answers_textbox
 
         base.class_eval do
 
@@ -282,10 +284,9 @@ module SurveyorGui
         self.answers.order('display_order asc').collect(&:text).join("\n")
       end
 
-      def answers_textbox=(answers_textbox)
-        #this will change answers records, so don't do it unless its a pick any or one
-        if pick != 'none'
-          collection = TextBoxCollection.new(answers_textbox, answers, Answer, self)
+      def process_answers_textbox
+        if !(pick=='none') && !@answers_textbox.nil?
+          collection = TextBoxCollection.new(@answers_textbox, answers, Answer, self)
           collection.update_records
         end
       end
@@ -308,7 +309,7 @@ module SurveyorGui
       
       class TextBoxCollection
         def initialize(text, nested_objects, nested_model, parent)
-          @text = text
+          @text = text.to_s
           @nested_objects = nested_objects
           @nested_model = nested_model
           @parent = parent
@@ -316,7 +317,7 @@ module SurveyorGui
         
         def update_records
           _lines.readlines.each_with_index do |line, display_order|
-            _update_or_create(line, display_order) unless line.blank?
+            _update_or_create(line.strip, display_order) unless line.blank?
           end
           _delete_orphans        
         end
@@ -328,7 +329,7 @@ module SurveyorGui
         end
         
         def _update_or_create(line, display_order)
-          nested_objects = _find_nested_if_exists(line.strip)
+          nested_objects = _find_nested_if_exists(line)
           if nested_objects.empty?
             _create_record(display_order, line)
           else
@@ -351,11 +352,11 @@ module SurveyorGui
           nested_object.update_attributes(:display_order=>index)
         end
 
-        def _create_record(display_order, text)      
+        def _create_record(display_order, text)     
           @nested_model.create!(
             "#{@parent.class.name.underscore}_id".to_sym => @parent.id,
             display_order: display_order,
-            text: text.strip
+            text: text
           )
         end
       end

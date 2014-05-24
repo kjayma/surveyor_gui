@@ -27,6 +27,48 @@ module SurveyformHelper
       last = args.count
       args.take(last - 2).join(', ') + ', ' + args[last - 2] + ' and ' + args[last - 1]
     end
+  end  
+  
+  def render_questions_and_groups_helper(q, ss)
+    #this method will render either a question or a complete question group.
+    #we always iterate through questions, and if we happen to notice a question
+    #belongs to a group, we process the group at that time.
+    #note that questions carry a question_group_id, and this is how we know
+    #that a question is part of a group, and that it should not be rendered individually,
+    #but as part of a group.  
+    if q.object.part_of_group?
+      _render_initial_group(q, ss)
+      _respond_to_a_change_in_group_id(q, ss)
+    else
+      render "question_section", :f => q
+    end  
+  end
+  
+  def render_one_group(qg)
+    qg.simple_fields_for :questions, @current_group.questions do |f|
+      render "question_group_fields", f: f 
+    end
+  end
+  
+  def row_label_if_question_group(question)
+    if question.part_of_group?
+      "<span class=\"row_name\">#{question.text}: </span>".html_safe
+    end
+  end
+  
+  private
+  def _render_initial_group(q, ss)
+    if @current_group.nil?
+      @current_group = QuestionGroupTracker.new(q.object.question_group_id)
+      render "question_group_section", :ss => ss, :q => q 
+    end
+  end
+  
+  def _respond_to_a_change_in_group_id(q, ss)
+    if @current_group.question_group_id != q.object.question_group_id
+      @current_group = QuestionGroupTracker.new(q.object.question_group_id)
+      render "question_group_section", :ss => ss, :q => q 
+    end
   end
 
 end
@@ -135,3 +177,14 @@ def clone_survey(template, as_template=false)
     return nil
   end
 end
+
+class QuestionGroupTracker
+  attr_reader :questions, :question_group_id
+  def initialize(question_group_id)
+    @questions = Question.where('question_group_id=?',question_group_id)
+    @counter = 0
+    @question_group_id = question_group_id
+  end
+end
+
+

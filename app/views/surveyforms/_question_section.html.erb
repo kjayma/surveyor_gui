@@ -1,12 +1,14 @@
+<!-- this code makes it possible to call this part of the view from either an ajax call
+or a reference from the survey_sections.html.erb -->
 <% if local_assigns[:f] -%>
-  <%= render "question_fields", :f => f -%>
+  <%= render "question_wrapper", :f => f -%>
 <% else -%>
   <%= simple_fields_for 'surveyform', @question.survey_section.survey do |sf| %>
     <%= sf.simple_fields_for :survey_sections do |ss| %>
     <% end %>
     <%= sf.simple_fields_for :survey_sections, @question.survey_section do |ss| %>
       <%= ss.simple_fields_for :questions, @question do |q| %>
-        <%= render "question_fields", :f => q -%>
+        <%= render "question_wrapper", :f => q -%>
       <% end %>
     <% end %>
   <% end %>

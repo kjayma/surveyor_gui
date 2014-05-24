@@ -82,7 +82,7 @@
 
             <div class="sortable_questions" id="sortable_question<%= s.object.id.to_s %>">
               <%= s.simple_fields_for :questions do |q| %>
-                <%= render "question_section", :f => q %>
+                <%= render_questions_and_groups_helper q, s %>
               <% end %>
             </div>
 

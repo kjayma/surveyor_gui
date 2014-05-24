@@ -1,0 +1,11 @@
+<% if local_assigns[:ss] -%>
+  <%= render "question_group", ss: ss, f: q -%>
+<% else -%>
+  <%= simple_fields_for 'surveyform', @question.survey_section.survey do |sf| %>
+    <%= sf.simple_fields_for :survey_sections do |ss| %>
+    <% end %>
+    <%= sf.simple_fields_for :survey_sections, @question.survey_section do |ss| %>
+      <%= render "question_group", ss: ss, f: q -%>
+    <% end %>
+  <% end %>
+<% end -%>

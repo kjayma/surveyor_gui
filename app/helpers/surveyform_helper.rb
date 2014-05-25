@@ -37,8 +37,7 @@ module SurveyformHelper
     #that a question is part of a group, and that it should not be rendered individually,
     #but as part of a group.  
     if q.object.part_of_group?
-      _render_initial_group(q, ss)
-      _respond_to_a_change_in_group_id(q, ss)
+      _render_initial_group(q, ss)  ||  _respond_to_a_change_in_group_id(q, ss)
     else
       render "question_section", :f => q
     end  
@@ -66,6 +65,7 @@ module SurveyformHelper
   
   def _respond_to_a_change_in_group_id(q, ss)
     if @current_group.question_group_id != q.object.question_group_id
+      puts "group #{@current_group.question_group.text} id #{q.object.id} ss #{ss.object.id}"
       @current_group = QuestionGroupTracker.new(q.object.question_group_id)
       render "question_group_section", :ss => ss, :q => q 
     end
@@ -179,11 +179,12 @@ def clone_survey(template, as_template=false)
 end
 
 class QuestionGroupTracker
-  attr_reader :questions, :question_group_id
+  attr_reader :questions, :question_group_id, :question_group
   def initialize(question_group_id)
     @questions = Question.where('question_group_id=?',question_group_id)
     @counter = 0
     @question_group_id = question_group_id
+    @question_group = QuestionGroup.find(question_group_id)
   end
 end
 

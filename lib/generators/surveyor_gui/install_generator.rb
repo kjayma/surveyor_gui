@@ -53,7 +53,6 @@ module SurveyorGui
 
     def configurations
       replace_simple_forms_configuration_rb
-      remove_surveyor_require_jquery_css
       add_i18n_enforce_locales
     end
 
@@ -74,15 +73,6 @@ module SurveyorGui
       #code.  Flipping a few switches in the configuration gets the code to work.
       remove_file File.expand_path('config/initializers/simple_form.rb',Rails.root)
       template "config/initializers/simple_form.rb"
-    end
-
-    def remove_surveyor_require_jquery_css
-      #comment line in surveyor_all.css manifest that steps on jquery-ui-rails.
-      #this is somewhat brittle because it assumes surveyor:install generator will
-      #always be run before this generator.
-      gsub_file "app/assets/stylesheets/surveyor_all.css",
-        /^\*=(.*jquery-ui-\d.*custom.*$)/,
-        '*\1'
     end
 
     def add_i18n_enforce_locales

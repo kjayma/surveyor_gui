@@ -9,7 +9,7 @@ module SurveyorGui
         base.send :belongs_to, :surveyform, :foreign_key=>:survey_id
         base.send :has_many, :questions, :dependent => :destroy
         base.send :accepts_nested_attributes_for, :questions
-        base.send :default_scope, :order => 'display_order'
+        base.send :default_scope, lambda{ base.order('display_order') }
 
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses

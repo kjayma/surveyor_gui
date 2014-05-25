@@ -6,27 +6,9 @@
         <h1 class="round-top">
           <%= @title %>
             <% if @surveyform.id -%>
-              <%= button_to_function 'Preview Survey',
-                  'cbox = $.colorbox({width:"90%",
-                      height:"90%",
-                      scrolling:true,
-                      iframe:true,
-                      href:"'+"preview_survey_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
-                      :style=>'position: relative; left:47%; top:0' %>
-              <%= button_to_function 'Preview Results',
-                  'cbox = $.colorbox({width:"90%",
-                      height:"90%",
-                      scrolling:true,
-                      iframe:true,
-                      href:"'+"preview_results_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
-                      :style=>'position: relative; left:47%; top:0' %>
-              <%= button_to_function 'Preview Report',
-                  'cbox = $.colorbox({width:"90%",
-                      height:"90%",
-                      scrolling:true,
-                      iframe:true,
-                      href:"'+"preview_report_surveyresponse_url"+'?suppress_header=true&survey_id='+@surveyform.id.to_s+'", opacity:.3});',
-                      :style=>'position: relative; left:47%; top:0' %>
+              <input class="preview-button" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Survey" />
+              <input class="preview-button" onclick="preview_cbox('<%= preview_results_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Results" />
+              <input class="preview-button" onclick="preview_cbox('<%= preview_survey_surveyresponse_url %>', <%= @surveyform.id %>);" type="button" value="Preview Report" />
             <% end %>
         </h1>
         <%= simple_form_for @surveyform, :url => "/surveyforms/"+@surveyform.id.to_s do |f| %>
@@ -52,3 +34,14 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  function preview_cbox(url, id) {
+    $.colorbox({width:"90%",
+                height:"90%",
+                scrolling:true,
+                iframe:true,
+                href: url + '?suppress_header=true&survey_id='+ id,
+                opacity:.3});
+  }
+</script>

@@ -2,7 +2,7 @@
     <span class='fl'>
       Generate list from a database field?
     </span>
-    <%= f.input :dynamically_generate, :as => :radio, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
+    <%= f.input :dynamically_generate, :as => :radio_buttons, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
     <div id="dynamic_source">
       Specify statement used to generate list:<br />
       <%= f.input :dynamic_source, :label=>false %>

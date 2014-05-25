@@ -18,14 +18,11 @@
 <% question_type = f.object.question_type.downcase
    case
      when question_type == 'slider' -%>
-    <br />
-    <br />
-    <br />
+
     <!-- The slider uses the Jquery UISlider plugin (http://www.filamentgroup.com/lab/update_jquery_ui_16_slider_from_a_select_element/) -->
     <!-- Look in application.js for the hook - it selects all input select elements with "uislider" as the class -->
     <%= f.input :dummy_answer, :collection => f.object.answers.map{|a| a.text}, :as => :select, :label => false,
                 :input_html => {:class => "uislider"}, :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'} %>
-    <br />
 
   <% when question_type.include?( 'stars' ) -%>
     <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
@@ -56,9 +53,13 @@
      <%= f.object.text %>
      </span>
 
-  <% when  question_type.include?('text') -%>
+  <% when  question_type == ('text') -%>
+    <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"1"}%>
+    
+
+  <% when  question_type.include?('text box') -%>
     <br/>
-    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"3"}%>
+    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"3"}%>    
 
   <% when question_type == 'number' -%>
     <br/>

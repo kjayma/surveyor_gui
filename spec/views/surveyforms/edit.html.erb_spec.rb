@@ -13,9 +13,11 @@ describe "surveyforms/edit.html.erb" do
   let(:surveyform){ FactoryGirl.create(:surveyform) }
   let(:ss){ FactoryGirl.create(:survey_section, :surveyform => surveyform, :title => "Rooms", :display_order => 0)}
   let(:question){ FactoryGirl.create(:question, :survey_section => ss) }  
+  let(:answer){ FactoryGirl.create(:answer, :question => question)}
   let(:question1){ FactoryGirl.create(
     :question, 
     survey_section: ss, 
+    text: 'What rooms do you prefer?',
     question_type: "Multiple Choice (only one answer)",
     answers_textbox: "Standard\nDouble\nDeluxe"
    ) }  
@@ -46,7 +48,7 @@ describe "surveyforms/edit.html.erb" do
     answers_textbox: "Good\nBad\nUgly"
    ) } 
   let(:question5){ FactoryGirl.create(:question, :survey_section => ss, text: "What brand of ketchup do they use?") }    
-  
+  let(:answer1){FactoryGirl.create(:answer, :question => question5)}
   
   before do
     surveyform.save
@@ -59,6 +61,8 @@ describe "surveyforms/edit.html.erb" do
     question3.reload
     question4.reload
     question5.reload
+    answer.reload
+    answer1.reload
     assign(:surveyform, surveyform)
     assign(:question_no, 0)
   end    
@@ -70,7 +74,7 @@ describe "surveyforms/edit.html.erb" do
 
   it "shows text questions" do
     render
-    expect(response).to match(/What is your favorite color?/)
+    expect(response).to match(/1\) What is your favorite color?/)
   end
   
   it "shows multiple choice questions" do
@@ -83,11 +87,11 @@ describe "surveyforms/edit.html.erb" do
   it "shows grid questions" do
     render
     expect(response).to match (/Rate the meals/)
-    expect(response).to match(/2\) Rate the meals\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Breakfast.*(?<!\d\)\s)Lunch.*(?<!\d\)\s)Dinner.*/m)
+    expect(response).to match(/3\) Rate the meals\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Breakfast.*(?<!\d\)\s)Lunch.*(?<!\d\)\s)Dinner.*/m)
   end
   
   it "maintains correct question numbering after grid question" do
     render
-    expect(response).to match(/3\) What brand of ketchup do they use?/)
+    expect(response).to match(/4\) What brand of ketchup do they use?/)
   end
 end

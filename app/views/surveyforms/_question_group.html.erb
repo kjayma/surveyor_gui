@@ -79,7 +79,7 @@
       <br />      
       <%= render "question_name_and_number", question_type: f.object.question_type, text: f.object.question_group.text %>
       <br />
-      <div class="question_group">
+      <div class="question_group <%= question_group_class %>">
         <div class="question_group_header">
           <span class="question_group_heading">&nbsp;</span>
           <%= f.object.answers.map {|a| "<span class=\"question_group_heading\">#{a.text}<\/span>"}.join().html_safe %>

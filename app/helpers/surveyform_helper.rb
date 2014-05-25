@@ -55,6 +55,14 @@ module SurveyformHelper
     end
   end
   
+  def question_group_class
+    if @current_group.question_group.display_type == "grid"
+      "grid"
+    else
+      "inline"
+    end
+  end
+  
   private
   def _render_initial_group(q, ss)
     if @current_group.nil?

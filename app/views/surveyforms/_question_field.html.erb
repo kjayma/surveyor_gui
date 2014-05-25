@@ -34,7 +34,6 @@
 
  <% when question_type.include?( 'dropdown' ) -%>
 
-    <br />
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 
   <% when question_type.include?( 'multiple answers' ) %>
@@ -48,43 +47,40 @@
     <% end %>
 
   <% when question_type == 'label' -%>
-    <br/>
      <span style="margin-left: 4.5em;">
      <%= f.object.text %>
      </span>
 
   <% when  question_type == ('text') -%>
-    <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"1"}%>
+    <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:rows=>"1"}%>
     
 
   <% when  question_type.include?('text box') -%>
-    <br/>
-    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{:style=>"margin-left: 4.5em;", :rows=>"3"}%>    
+
+    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{ :rows=>"3"}%>    
 
   <% when question_type == 'number' -%>
-    <br/>
-
     <!-- Prefix -->
-    <span class='fl' style="margin-left: 4.5em;">
+    <span class="fl prefix">
       <% if f.object.answers.first.text.include?('|') %>
         <%= f.object.answers.first.text.split('|')[0] %>&nbsp;
       <% end %>
     </span>
 
     <!-- Number -->
-    <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:size=>"10"}, :wrapper_html=>{:class=>'fl notfirst'} %>
+    <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:size=>"10"}, :wrapper_html=>{:class=>'fl notfirst number'} %>
 
     <!-- Suffix -->
-    &nbsp;
-    <%= f.object.answers.first.text.split('|')[1] %>
+    <span class="suffix fl">
+      &nbsp;
+      <%= f.object.answers.first.text.split('|')[1] %>
+    </span>
 
   <% when question_type == 'date' -%>
-    <br/>
       <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
                   :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
 
   <% when question_type == 'file upload' -%>
-    <br/>
     <%= f.input :dummy_blob, :as => :file, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"} %>
 
   <% else -%>

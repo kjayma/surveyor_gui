@@ -5,7 +5,7 @@ module SurveyorGui
       def self.included(base)
         base.send :belongs_to, :question
         base.send :has_many, :responses
-        base.send :default_scope, :order => 'display_order'
+        base.send :default_scope, lambda { base.order('display_order') }
         base.send :attr_accessible, :text, :response_class, :display_order, :original_choice, :hide_label, :question_id, :display_type if defined? ActiveModel::MassAssignmentSecurity
       end
 

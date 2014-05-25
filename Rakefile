@@ -27,9 +27,14 @@ namespace :gui_testbed do
 
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
-      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'debugger'\ngem 'surveyor', github: 'NUBIC/surveyor'\ngem 'strong_parameters'})
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'debugger'\ngem 'surveyor', github: 'NUBIC/surveyor'})
 
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
+
+      # not sure why turbolinks gives test problems, anyway better to avoid it?
+      js_file_contents = File.read('app/assets/javascripts/application.js')
+      js_file_contents.sub!('//= require turbolinks', '')
+      File.open('app/assets/javascripts/application.js', 'w'){|f| f.write(js_file_contents) }
 
       Bundler.with_clean_env do
         sh 'bundle install' # run bundle install after Gemfile modifications

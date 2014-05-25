@@ -180,14 +180,14 @@ describe SurveyorController do
       end
       context "with update exceptions" do
         it 'retries the update on a constraint violation' do
-          response_set.should_receive(:update_from_ui_hash).ordered.with(responses_ui_hash).and_raise(ActiveRecord::StatementInvalid)
+          response_set.should_receive(:update_from_ui_hash).ordered.with(responses_ui_hash).and_raise(ActiveRecord::StatementInvalid.new(''))
           response_set.should_receive(:update_from_ui_hash).ordered.with(responses_ui_hash)
 
           expect { do_put(:r => responses_ui_hash) }.to_not raise_error
         end
 
         it 'only retries three times' do
-          response_set.should_receive(:update_from_ui_hash).exactly(3).times.with(responses_ui_hash).and_raise(ActiveRecord::StatementInvalid)
+          response_set.should_receive(:update_from_ui_hash).exactly(3).times.with(responses_ui_hash).and_raise(ActiveRecord::StatementInvalid.new(''))
 
           expect { do_put(:r => responses_ui_hash) }.to raise_error(ActiveRecord::StatementInvalid)
         end

@@ -5,7 +5,7 @@ PermittedParams.class_eval do
   def answer_attributes
     base_answer_attributes +
     [:text, :response_class, :display_order, :original_choice, :hide_label,
-     :question_id, :display_type, :_destroy]
+     :question_id, :display_type, :_destroy, :id]
   end
 
   alias_method :base_question_attributes, :question_attributes
@@ -15,7 +15,8 @@ PermittedParams.class_eval do
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
-     :modifiable, :report_code, answers_attributes: answer_attributes]
+     :modifiable, :report_code, answers_attributes: answer_attributes,
+     dependency_attributes: dependency_attributes]
   end
 
   alias_method :base_dependency_attributes, :dependency_attributes

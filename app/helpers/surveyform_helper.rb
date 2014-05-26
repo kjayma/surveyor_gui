@@ -73,7 +73,6 @@ module SurveyformHelper
   
   def _respond_to_a_change_in_group_id(q, ss)
     if @current_group.question_group_id != q.object.question_group_id
-      puts "group #{@current_group.question_group.text} id #{q.object.id} ss #{ss.object.id}"
       @current_group = QuestionGroupTracker.new(q.object.question_group_id)
       render "question_group_section", :ss => ss, :q => q 
     end

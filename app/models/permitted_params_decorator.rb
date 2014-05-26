@@ -12,10 +12,12 @@ PermittedParams.class_eval do
   def question_attributes
     base_question_attributes +
     [:dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group, :text,
+     :text_adjusted_for_groups,
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
-     :modifiable, :report_code, :answers_textbox, answers_attributes: answer_attributes,
+     :modifiable, :report_code, :answers_textbox, :grid_columns_textbox, 
+     :grid_rows_textbox, answers_attributes: answer_attributes,
      dependency_attributes: dependency_attributes]
   end
 

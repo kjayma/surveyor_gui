@@ -17,7 +17,7 @@
     <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
-  <% when :pick_one -%>
+  <% when :pick_one, :grid_one -%>
 
     <%= f.input_field :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio_buttons %>
 
@@ -25,7 +25,7 @@
 
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 
-  <% when :pick_any %>
+  <% when :pick_any, :grid_any %>
 
     <% if f.object.dynamically_generate==false -%>
       <br />

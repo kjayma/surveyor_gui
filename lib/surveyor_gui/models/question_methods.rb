@@ -5,11 +5,12 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :grid_rows_textbox
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group,
-                  :text, :pick, :reference_identifier, :display_order, :display_type,
+                  :text, :text_adjusted_for_group, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
-                  :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox, 
+                  :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
+                  :grid_columns_textbox, :grix_rows_textbox,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -65,6 +66,18 @@ module SurveyorGui
           return false
         end
       end
+      
+      def text_adjusted_for_group
+        if part_of_group?
+          question_group.text
+        else
+          text
+        end
+      end
+      
+      def text_adjusted_for_group=(txt)
+        @text_adjusted_for_group = txt
+      end
 
       #generates descriptions for different types of questions, including those that use widgets
       def question_type
@@ -83,7 +96,7 @@ module SurveyorGui
       #setter for question type.  Sets both pick and display_type
       def question_type_id=(type)
         case type
-        when "pick_one"
+        when "pick_one", "grid_one"
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "")
@@ -99,7 +112,7 @@ module SurveyorGui
           write_attribute(:pick, "one")
           write_attribute(:display_type, "dropdown")
           prep_picks
-        when "pick_any"
+        when "pick_any", "grid_any"
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "")
@@ -119,23 +132,6 @@ module SurveyorGui
         end
       end
 
-#      #setter for pick
-#      def pick=(val)
-#        if self.pick
-#          write_attribute(:pick, self.pick)
-#        else
-#          write_attribute(:pick, val.nil? ? nil : val.to_s)
-#        end
-#      end
-#
-#      #setter for display_type
-#      def display_type=(val)
-#        if self.display_type
-#          write_attribute(:display_type, self.display_type.nil? ? nil : self.display_type.to_s)
-#        else
-#          write_attribute(:display_type, val.nil? ? nil : val.to_s)
-#        end
-#      end
 
       #If the question involves picking from a list of choices, this sets response class.
       def prep_picks
@@ -262,6 +258,14 @@ module SurveyorGui
       def answers_textbox
         self.answers.order('display_order asc').collect(&:text).join("\n")
       end
+      
+      def grid_columns_textbox
+        self.answers.order('display_order asc').collect(&:text).join("\n")
+      end
+      
+      def grid_rows_textbox
+        self.question_group.questions.order('display_order asc').collect(&:text).join("\n")
+      end
 
       def process_answers_textbox
         if !(pick=='none') && !@answers_textbox.nil?
@@ -269,6 +273,14 @@ module SurveyorGui
           collection.update_records
         end
       end
+   
+      def process_grid_rows_textbox
+        if (pick=='grid_any' || pick=='grid_one') && !@grid_rows_textbox.nil?
+          collection = TextBoxCollection.new(@grid_columns_textbox, answers, Answer, self)
+          collection.update_records
+        end
+      end   
+      
 
       private
       def preceding_questions_numbered
@@ -354,9 +366,18 @@ class QuestionTypes
   private
   def _categorize_question(question)
     if question.part_of_group?
-      _categorize_picks(question)
+      _categorize_groups(question)
     else
       _categorize_picks(question)
+    end
+  end
+  
+  def _categorize_groups(question)
+    case question.pick
+    when 'one'
+      _set_question_type(:grid_one)
+    when 'any'
+      _set_question_type(:grid_any)
     end
   end
   
@@ -423,8 +444,8 @@ class QuestionTypes
     [:stars,      "1-5 Stars"],
     [:label,      "Label"],
     [:file,       "File Upload"],
-    [:matrix_one, "Grid (pick one)"],
-    [:matrix_any, "Grid (pick any)"]
+    [:grid_one, "Grid (pick one)"],
+    [:grid_any, "Grid (pick any)"]
     ]     
     types.map{|t| @all << type.new(t[0], t[1])}
   end

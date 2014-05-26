@@ -1,5 +1,5 @@
 <!-- Tack a number onto questions, e.g. "3) What is your name?" but don't do it for labels -->
-<% if question_type != 'Label' -%>
+<% if question_type.id != :label -%>
   <span class="questions">
     <%= (@question_no.to_s+ ') ' + text.to_s)%>
   </span>

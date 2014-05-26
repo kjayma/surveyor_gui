@@ -11,7 +11,7 @@ PermittedParams.class_eval do
   alias_method :base_question_attributes, :question_attributes
   def question_attributes
     base_question_attributes +
-    [:dummy_answer, :question_type, :survey_section_id, :question_group, :text,
+    [:dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group, :text,
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,

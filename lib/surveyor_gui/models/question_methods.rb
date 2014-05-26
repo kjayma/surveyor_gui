@@ -6,10 +6,10 @@ module SurveyorGui
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_writer, :answers_textbox
-        base.send :attr_accessible, :dummy_answer, :question_type, :survey_section_id, :question_group,
+        base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
-                  :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
+                  :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox, 
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -68,33 +68,12 @@ module SurveyorGui
 
       #generates descriptions for different types of questions, including those that use widgets
       def question_type
-        if self.pick == 'one'
-          if self.display_type == 'slider'
-            "Slider"
-          elsif self.display_type == 'stars'
-            "1-5 Stars"
-          elsif self.display_type == 'dropdown'
-            "Dropdown List"
-          else
-            "Multiple Choice (only one answer)"
-          end
-        elsif self.pick == 'any'
-          "Multiple Choice (multiple answers)"
-        else
-          if self.display_type == 'label'  || !self.answers.first
-            "Label"
-          elsif self.answers.first.response_class == 'text'
-            "Text Box (for extended text, like notes, etc.)"
-          elsif self.answers.first.response_class == 'float' || self.answers.first.response_class == 'integer'
-            "Number"
-          elsif self.answers.first.response_class == 'date'
-            "Date"
-          elsif self.answers.first.response_class == 'blob'
-            "File Upload"
-          else
-            "Text"
-          end
-        end
+        @question_type = QuestionTypes.new(self)
+      end
+      
+      def question_type_id
+        @question_type ||= QuestionTypes.new(self)
+        @question_type.id
       end
 
       def dynamically_generate
@@ -102,40 +81,40 @@ module SurveyorGui
       end
 
       #setter for question type.  Sets both pick and display_type
-      def question_type=(type)
+      def question_type_id=(type)
         case type
-        when "Multiple Choice (only one answer)"
+        when "pick_one"
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "")
-        when "Slider"
+        when "slider"
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "slider")
-        when "1-5 Stars"
+        when "stars"
           write_attribute(:pick, "one")
           write_attribute(:display_type, "stars")
           prep_picks
-        when "Dropdown List"
+        when "dropdown"
           write_attribute(:pick, "one")
           write_attribute(:display_type, "dropdown")
           prep_picks
-        when "Multiple Choice (multiple answers)"
+        when "pick_any"
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "")
-        when 'Label'
+        when 'label'
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")
-        when 'Text Box (for extended text, like notes, etc.)'
+        when 'box'
           prep_not_picks('text')
-        when 'Number'
+        when 'number'
           prep_not_picks('float')
-        when 'Date'
+        when 'date'
           prep_not_picks('date')
-        when 'File Upload'
+        when 'file'
           prep_not_picks('blob')
-        when 'Text'
+        when 'string'
           prep_not_picks('string')
         end
       end
@@ -364,3 +343,92 @@ module SurveyorGui
     end
   end
 end
+
+class QuestionTypes
+  attr_accessor :id, :text, :all
+  def initialize(question)
+    _define_question_types
+    _categorize_question(question)
+  end
+  
+  private
+  def _categorize_question(question)
+    if question.part_of_group?
+      _categorize_picks(question)
+    else
+      _categorize_picks(question)
+    end
+  end
+  
+  def _categorize_picks(question)
+    case question.pick
+    when 'one'
+      _categorize_pick_one(question)
+    when 'any'
+      _set_question_type(:pick_any)
+    else
+      _categorize_no_pick(question)
+    end  
+  end
+  
+  def _categorize_pick_one(question)
+    case question.display_type 
+    when 'slider'
+      _set_question_type(:slider)
+    when 'stars'
+      _set_question_type(:stars)
+    when 'dropdown'
+      _set_question_type(:dropdown)
+    else
+      _set_question_type(:pick_one)
+    end  
+  end
+  
+  def _categorize_no_pick(question)      
+    if question.display_type == 'label'  || !question.answers.first
+      _set_question_type(:label)
+    else
+      case question.answers.first.response_class
+      when 'text'
+        _set_question_type(:box)
+      when 'float', 'integer'
+        _set_question_type(:number)
+      when 'date'
+        _set_question_type(:date)
+      when 'blob'
+        _set_question_type(:file)
+      else
+        _set_question_type(:string)
+      end
+    end
+  end  
+  
+  def _set_question_type(id)
+    @id = id
+    @text = @all.select{|t| t.id==id}[0].text
+  end
+  
+  def _define_question_types
+    type = Struct.new(:id, :text)
+    @all = []
+    types = [
+    [:pick_one,   "Multiple Choice (only one answer)"],
+    [:pick_any,   "Multiple Choice (multiple answers)"],    
+    [:dropdown,   "Dropdown List"],
+    [:string,     "Text"],
+    [:number,     "Number"],
+    [:date,       "Date"], 
+    [:box,        "Text Box (for extended text, like notes, etc.)"],
+    [:slider,     "Slider"],
+    [:stars,      "1-5 Stars"],
+    [:label,      "Label"],
+    [:file,       "File Upload"],
+    [:matrix_one, "Grid (pick one)"],
+    [:matrix_any, "Grid (pick any)"]
+    ]     
+    types.map{|t| @all << type.new(t[0], t[1])}
+  end
+end
+
+
+

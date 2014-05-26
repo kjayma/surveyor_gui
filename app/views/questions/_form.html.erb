@@ -17,19 +17,7 @@
         <br />
         <br />
         <strong>Question Type</strong>
-        <%= f.input :question_type, :collection=>
-            [ 'Multiple Choice (only one answer)',
-              'Multiple Choice (multiple answers)',
-              'Dropdown List',
-              'Text',
-              'Number',
-              'Date',
-              'Text Box (for extended text, like notes, etc.)',
-              'Slider',
-              '1-5 Stars',
-              'Label',
-              'File Upload'
-              ] , :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        <%= f.input :question_type_id, :collection=> f.object.question_type.all.map{|t|[t.text, t.id]} , :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
         <br />
         <div id="answer_choice">
           <%= render 'picks', :f => f %>

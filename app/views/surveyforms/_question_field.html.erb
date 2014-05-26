@@ -3,40 +3,29 @@
 <%= f.hidden_field :modifiable %>
 
 <%= row_label_if_question_group f.object %>
-<!-- question_types, a custom getter in question_methods.rb, are:
-  Multiple Choice (only one answer)
-  Multiple Choice (multiple answers)
-  Text
-  Number
-  Date
-  Text Box (for extended text, like notes, etc.)
-  Slider
-  1-5 Stars
-  Label
-  File Upload
--->
-<% question_type = f.object.question_type.downcase
-   case
-     when question_type == 'slider' -%>
+
+<% question_type = f.object.question_type_id
+   case question_type
+     when :slider -%>
 
     <!-- The slider uses the Jquery UISlider plugin (http://www.filamentgroup.com/lab/update_jquery_ui_16_slider_from_a_select_element/) -->
     <!-- Look in application.js for the hook - it selects all input select elements with "uislider" as the class -->
     <%= f.input :dummy_answer, :collection => f.object.answers.map{|a| a.text}, :as => :select, :label => false,
                 :input_html => {:class => "uislider"}, :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'} %>
 
-  <% when question_type.include?( 'stars' ) -%>
+  <% when :stars -%>
     <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
-  <% when question_type.include?( 'only one answer' ) -%>
+  <% when :pick_one -%>
 
     <%= f.input_field :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio_buttons %>
 
- <% when question_type.include?( 'dropdown' ) -%>
+ <% when :dropdown -%>
 
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 
-  <% when question_type.include?( 'multiple answers' ) %>
+  <% when :pick_any %>
 
     <% if f.object.dynamically_generate==false -%>
       <br />
@@ -46,20 +35,20 @@
       <%= f.input_field :dummy_answer, :collection => f.object.answers.collect(&:text), :as => :check_boxes, :label => false %>
     <% end %>
 
-  <% when question_type == 'label' -%>
+  <% when :label -%>
      <span style="margin-left: 4.5em;">
      <%= f.object.text %>
      </span>
 
-  <% when  question_type == ('text') -%>
+  <% when  :text -%>
     <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:rows=>"1"}%>
     
 
-  <% when  question_type.include?('text box') -%>
+  <% when  :box -%>
 
     <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{ :rows=>"3"}%>    
 
-  <% when question_type == 'number' -%>
+  <% when :number -%>
     <!-- Prefix -->
     <span class="fl prefix">
       <% if f.object.answers.first.text.include?('|') %>
@@ -76,11 +65,11 @@
       <%= f.object.answers.first.text.split('|')[1] %>
     </span>
 
-  <% when question_type == 'date' -%>
+  <% when :date -%>
       <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
                   :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
 
-  <% when question_type == 'file upload' -%>
+  <% when :file -%>
     <%= f.input :dummy_blob, :as => :file, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"} %>
 
   <% else -%>

@@ -369,6 +369,40 @@ feature "User creates a new survey using a browser",  %q{
         #And I can browse my files
         expect(page).to have_css("input[type='file']")
       end
+      
+      scenario "User adds a grid - pick one question", :js=>true do
+        #Given I've added a new question
+        add_question do
+        
+        #And I frame the question
+          fill_in "question_text", with: "Rate the service:"
+
+        #Then I select the "Star" question type
+          select_question_type "Grid (pick one)"
+
+        #And I add columns to the grid
+          fill_in "columns", with: "Poor\nOk\nGood\nOutstanding"
+          
+        #And I add columns to the grid
+          fill_in "rows", with: "Front Desk\nConcierge\nRoom Service\nValet"
+
+        #And I save the question
+          click_button "Save Changes"
+
+        #Then the window goes away
+        end
+
+        #And I can see the question in my survey
+        expect(first_question).to have_content("1) Rate the service:")
+
+        #And I see a nice grid of radio buttons
+        expect(page).to have_content(/1\) Rate the service\..*Poor.*Ok.*Good.*Outstanding.*(?<!\d\)\s)Front Desk.*(?<!\d\)\s)Concierge.*(?<!\d\)\s)Room Service.*(?<!\d\)\s)Valet.*/m)
+        
+        expect(page).to have_css("input[type='radio'][value='Poor']")
+        expect(page).to have_css("input[type='radio'][value='Ok']")
+        expect(page).to have_css("input[type='radio'][value='Good']")
+        expect(page).to have_css("input[type='radio'][value='Outstanding']")
+      end
     end
   end #end context "user has started a new survey"
 

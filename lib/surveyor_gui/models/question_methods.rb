@@ -77,6 +77,7 @@ module SurveyorGui
       end
       
       def text_adjusted_for_group=(txt)
+        write_attribute(:text, txt) 
         if part_of_group?
           question_group.update_attributes(text: txt)
         end
@@ -85,7 +86,7 @@ module SurveyorGui
       
       def grid_rows_textbox=(textbox)
         write_attribute(:text, textbox.match(/.*\r/).to_s.strip)
-        @grid_rows_textbox = textbox
+        @grid_rows_textbox = textbox.gsub(/\r/,"")
       end
 
       #generates descriptions for different types of questions, including those that use widgets
@@ -105,15 +106,15 @@ module SurveyorGui
       #setter for question type.  Sets both pick and display_type
       def question_type_id=(type)
         case type
-        when "pick_one"
-          write_attribute(:pick, "one")
-          prep_picks
-          write_attribute(:display_type, "")
         when "grid_one"
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "")
           _update_group_id
+        when "pick_one"
+          write_attribute(:pick, "one")
+          prep_picks
+          write_attribute(:display_type, "")
         when "slider"
           write_attribute(:pick, "one")
           prep_picks
@@ -130,11 +131,11 @@ module SurveyorGui
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "")
-          _update_group_id
         when "grid_any"
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "")
+          _update_group_id
         when 'label'
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")
@@ -304,7 +305,7 @@ module SurveyorGui
       end
    
       def process_grid_rows_textbox
-        #puts "processing grid rows textbox grid?: #{_grid?} tb: #{@grid_rows_textbox} this: #{self.id}"
+        puts "processing grid rows textbox grid?: #{_grid?} tb: #{@grid_rows_textbox} this: #{self.id}"
         if _grid? && !@grid_rows_textbox.nil?
           puts 'got to inner if'
           puts "\n\n#{self.display_order}\n\n"
@@ -314,9 +315,9 @@ module SurveyorGui
             textbox: @grid_rows_textbox, 
             records_to_update: @question_group.questions
           )
-          grid_rows.update_or_create_records do |display_order, new_text|
+          grid_rows.update_or_create_records(pick: self.pick) do |display_order, new_text|
             current_question = _create_a_question(display_order, new_text) 
-            #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
+            puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
             _create_some_answers(current_question)
           end
         end
@@ -401,7 +402,7 @@ end
 
 class TextBoxToRecords
   def initialize(args)
-    @text = args[:textbox].to_s
+    @text = args[:textbox].to_s.gsub("\r","")
     @nested_objects = args[:records_to_update]
   end
   
@@ -428,10 +429,10 @@ class TextBoxToRecords
   end
   
   def _delete_orphans
-    valid_rows = @text.split()
+    valid_rows = @text.split("\n")
     @nested_objects.each do |nested_object|
       puts "deleting #{nested_object.class.name} #{nested_object.id} #{nested_object.text.rstrip} valid #{valid_rows}"
-      nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip.gsub(/\r*\n*/,'').to_s}"
+      nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip}"
     end
   end
   

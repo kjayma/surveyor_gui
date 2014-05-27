@@ -5,12 +5,12 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :grid_rows_textbox
-        base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group,
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox
+        base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :text_adjusted_for_group, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
-                  :grid_columns_textbox, :grix_rows_textbox,
+                  :grid_columns_textbox, :grid_rows_textbox,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -24,7 +24,9 @@ module SurveyorGui
 
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
+        base.send :validates_presence_of, :text_adjusted_for_group, :if => :part_of_group?
         base.send :after_save, :process_answers_textbox
+        base.send :after_save, :process_grid_rows_textbox
 
         base.class_eval do
 
@@ -40,7 +42,6 @@ module SurveyorGui
         end
 
       end
-
 
       def default_args
         self.is_mandatory ||= false
@@ -76,7 +77,15 @@ module SurveyorGui
       end
       
       def text_adjusted_for_group=(txt)
+        if part_of_group?
+          question_group.update_attributes(text: txt)
+        end
         @text_adjusted_for_group = txt
+      end
+      
+      def grid_rows_textbox=(textbox)
+        write_attribute(:text, textbox.match(/.*\r/).to_s.strip)
+        @grid_rows_textbox = textbox
       end
 
       #generates descriptions for different types of questions, including those that use widgets
@@ -96,10 +105,15 @@ module SurveyorGui
       #setter for question type.  Sets both pick and display_type
       def question_type_id=(type)
         case type
-        when "pick_one", "grid_one"
+        when "pick_one"
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "")
+        when "grid_one"
+          write_attribute(:pick, "one")
+          prep_picks
+          write_attribute(:display_type, "")
+          _update_group_id
         when "slider"
           write_attribute(:pick, "one")
           prep_picks
@@ -112,7 +126,12 @@ module SurveyorGui
           write_attribute(:pick, "one")
           write_attribute(:display_type, "dropdown")
           prep_picks
-        when "pick_any", "grid_any"
+        when "pick_any"
+          write_attribute(:pick, "any")
+          prep_picks
+          write_attribute(:display_type, "")
+          _update_group_id
+        when "grid_any"
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "")
@@ -130,6 +149,7 @@ module SurveyorGui
         when 'string'
           prep_not_picks('string')
         end
+        @question_type_id = type
       end
 
 
@@ -244,7 +264,7 @@ module SurveyorGui
         if survey_section.id.nil?
           nil
         else
-          preceding_questions_numbered.count
+          _preceding_questions_numbered.count
         end
       end
 
@@ -264,30 +284,108 @@ module SurveyorGui
       end
       
       def grid_rows_textbox
-        self.question_group.questions.order('display_order asc').collect(&:text).join("\n")
+        if self.question_group && self.question_group.questions
+          self.question_group.questions.order('display_order asc').collect(&:text).join("\n")
+        else
+          nil
+        end
       end
 
       def process_answers_textbox
-        if !(pick=='none') && !@answers_textbox.nil?
-          collection = TextBoxCollection.new(@answers_textbox, answers, Answer, self)
-          collection.update_records
+        if _pick? && !@answers_textbox.nil? && !_grid?
+          updated_answers = TextBoxToRecords.new(
+            textbox: @answers_textbox, 
+            records_to_update: answers
+          )
+          updated_answers.update_or_create_records do |display_order, text|
+            _create_an_answer(display_order, text, self)     
+          end
         end
       end
    
       def process_grid_rows_textbox
-        if (pick=='grid_any' || pick=='grid_one') && !@grid_rows_textbox.nil?
-          collection = TextBoxCollection.new(@grid_columns_textbox, answers, Answer, self)
-          collection.update_records
+        #puts "processing grid rows textbox grid?: #{_grid?} tb: #{@grid_rows_textbox} this: #{self.id}"
+        if _grid? && !@grid_rows_textbox.nil?
+          puts 'got to inner if'
+          puts "\n\n#{self.display_order}\n\n"
+          @first_display_order = self.display_order
+          _create_some_answers(self)
+          grid_rows = TextBoxToRecords.new(
+            textbox: @grid_rows_textbox, 
+            records_to_update: @question_group.questions
+          )
+          grid_rows.update_or_create_records do |display_order, new_text|
+            current_question = _create_a_question(display_order, new_text) 
+            #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
+            _create_some_answers(current_question)
+          end
         end
-      end   
-      
-
-      private
-      def preceding_questions_numbered
-        preceding_questions.delete_if{|p| !p.is_numbered?}
       end
 
-      def preceding_questions
+      private
+      
+      def _update_group_id
+        @question_group = self.question_group || 
+          QuestionGroup.create!(text: @text_adjusted_for_group, display_type: :grid)
+        self.question_group_id = @question_group.id
+      end
+      
+      def _pick?
+        !(pick=="none")
+      end
+      
+      def _grid?
+        @question_type_id == "grid_one" || @question_type_id == "grid_any"
+      end
+      
+      
+      def _create_an_answer(display_order, new_text, current_question)  
+        Answer.create!(
+          question_id: current_question.id,
+          display_order: display_order,
+          text: new_text
+        )
+      end
+      
+      def _create_a_question(display_order, new_text) 
+        puts "making question #{new_text}" 
+          puts "\n\n#{self.display_order}\n\n"
+        Question.create!(
+          display_order: (display_order - 1 + @first_display_order),
+          text: new_text,
+          survey_section_id: survey_section_id,
+          question_group_id: @question_group.id,
+          pick: pick,
+          reference_identifier: reference_identifier,
+          display_type: display_type,
+          is_mandatory: is_mandatory,
+          prefix: prefix, 
+          suffix: suffix,
+          decimals: decimals,
+          modifiable: modifiable,
+          report_code: report_code          
+        )
+      end
+      
+      def _create_some_answers(current_question)        
+        if @grid_columns_textbox.nil?
+          @grid_columns_textbox = " "
+        end
+        columns = TextBoxToRecords.new(
+          textbox: @grid_columns_textbox, 
+          records_to_update: current_question.answers
+        )
+        columns.update_or_create_records do |display_order, text|
+          _create_an_answer(display_order, text, current_question) 
+        end
+        
+      end
+      
+      def _preceding_questions_numbered
+        _preceding_questions.delete_if{|p| !p.is_numbered?}
+      end
+
+      def _preceding_questions
         ##all questions from previous sections, plus all questions with a lower display order than this one
         Question.joins(:survey_section).where(
             '(survey_id = ? and survey_sections.display_order < ?) or (survey_section_id = ? and questions.display_order <= ?)',
@@ -296,64 +394,56 @@ module SurveyorGui
             survey_section.id,
             display_order
         )
-      end
-      
-      class TextBoxCollection
-        def initialize(text, nested_objects, nested_model, parent)
-          @text = text.to_s
-          @nested_objects = nested_objects
-          @nested_model = nested_model
-          @parent = parent
-        end
-        
-        def update_records
-          _lines.readlines.each_with_index do |line, display_order|
-            _update_or_create(line.strip, display_order) unless line.blank?
-          end
-          _delete_orphans        
-        end
-        
-        private
-        
-        def _lines
-          StringIO.new(@text)
-        end
-        
-        def _update_or_create(line, display_order)
-          nested_objects = _find_nested_if_exists(line)
-          if nested_objects.empty?
-            _create_record(display_order, line)
-          else
-            _update_display_order(nested_objects.first, display_order)
-          end
-        end
-        
-        def _delete_orphans
-          valid_rows = @text.split()
-          @nested_objects.each do |nested_object|
-            nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip}"
-          end
-        end
-        
-        def _find_nested_if_exists(text)
-          @nested_objects.where('text = ?',text)
-        end
-        
-        def _update_display_order(nested_object, index)
-          nested_object.update_attributes(:display_order=>index)
-        end
-
-        def _create_record(display_order, text)     
-          @nested_model.create!(
-            "#{@parent.class.name.underscore}_id".to_sym => @parent.id,
-            display_order: display_order,
-            text: text
-          )
-        end
-      end
-      
+      end      
     end
   end
+end
+
+class TextBoxToRecords
+  def initialize(args)
+    @text = args[:textbox].to_s
+    @nested_objects = args[:records_to_update]
+  end
+  
+  def update_or_create_records(update_params={}, &create_object)
+    _lines.readlines.each_with_index do |line, display_order|
+      _update_or_create(line.strip, display_order, update_params, &create_object) unless line.blank?
+    end
+    _delete_orphans        
+  end
+  
+  private
+  
+  def _lines
+    StringIO.new(@text)
+  end
+  
+  def _update_or_create(text, display_order, update_params={}, &create_object)
+    nested_objects = _find_nested_if_exists(text)
+    if nested_objects.empty?
+      create_object.call(display_order, text) 
+    else
+      _update_nested_object(nested_objects.first, display_order, update_params)
+    end
+  end
+  
+  def _delete_orphans
+    valid_rows = @text.split()
+    @nested_objects.each do |nested_object|
+      puts "deleting #{nested_object.class.name} #{nested_object.id} #{nested_object.text.rstrip} valid #{valid_rows}"
+      nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip.gsub(/\r*\n*/,'').to_s}"
+    end
+  end
+  
+  def _find_nested_if_exists(text)
+    @nested_objects.where('text = ?',text)
+  end
+  
+  def _update_nested_object(nested_object, index, update_params)
+    params = {:display_order=>index}.merge(update_params)
+    nested_object.update_attributes(:display_order=>index)
+  end
+
 end
 
 class QuestionTypes
@@ -361,6 +451,10 @@ class QuestionTypes
   def initialize(question)
     _define_question_types
     _categorize_question(question)
+  end
+  
+  def grid?
+    @id == :grid_one || @id == :grid_any
   end
   
   private
@@ -426,7 +520,8 @@ class QuestionTypes
   
   def _set_question_type(id)
     @id = id
-    @text = @all.select{|t| t.id==id}[0].text
+    this = @all.select{|t| t.id==id}[0]
+    @text = this.text
   end
   
   def _define_question_types

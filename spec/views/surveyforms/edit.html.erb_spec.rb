@@ -18,17 +18,18 @@ describe "surveyforms/edit.html.erb" do
     :question, 
     survey_section: ss, 
     text: 'What rooms do you prefer?',
-    question_type: "Multiple Choice (only one answer)",
+    question_type_id: "pick_one",
     answers_textbox: "Standard\nDouble\nDeluxe"
    ) }  
    
-  let(:qg){FactoryGirl.create(:question_group, text: 'Rate the meals.') }
+  let(:qg) {FactoryGirl.create(:question_group, display_type: 'grid', text: 'Rate the meals.') }
+  let(:qg2){FactoryGirl.create(:question_group, display_type: 'grid', text: 'Rate the snacks.') }
   let(:question2){ FactoryGirl.create(
     :question, 
     text: 'Breakfast',
     survey_section: ss, 
     question_group: qg,
-    question_type: "Multiple Choice (only one answer)",
+    question_type_id: "pick_one",
     answers_textbox: "Good\nBad\nUgly"
    ) }    
    let(:question3){ FactoryGirl.create(
@@ -36,7 +37,7 @@ describe "surveyforms/edit.html.erb" do
     text: 'Lunch',
     survey_section: ss, 
     question_group: qg,
-    question_type: "Multiple Choice (only one answer)",
+    question_type_id: "pick_one",
     answers_textbox: "Good\nBad\nUgly"
    ) }   
    let(:question4){ FactoryGirl.create(
@@ -44,11 +45,20 @@ describe "surveyforms/edit.html.erb" do
     text: 'Dinner',
     survey_section: ss, 
     question_group: qg,
-    question_type: "Multiple Choice (only one answer)",
+    question_type_id: "pick_one",
     answers_textbox: "Good\nBad\nUgly"
    ) } 
   let(:question5){ FactoryGirl.create(:question, :survey_section => ss, text: "What brand of ketchup do they use?") }    
   let(:answer1){FactoryGirl.create(:answer, :question => question5)}
+  let(:question6) { FactoryGirl.create(
+    :question, 
+    survey_section: ss, 
+    question_group: qg2,
+    question_type_id: "grid_one",
+    grid_columns_textbox: "Good\nBad\nUgly",
+    grid_rows_textbox: "Brunch\nLinner\nLate Night Snack",
+    text: "Brunch"
+  ) }    
   
   before do
     surveyform.save
@@ -56,11 +66,13 @@ describe "surveyforms/edit.html.erb" do
     ss.reload
     question.reload
     qg.reload
+    qg2.reload
     question1.reload
     question2.reload
     question3.reload
     question4.reload
     question5.reload
+    question6.reload
     answer.reload
     answer1.reload
     assign(:surveyform, surveyform)
@@ -88,6 +100,12 @@ describe "surveyforms/edit.html.erb" do
     render
     expect(response).to match (/Rate the meals/)
     expect(response).to match(/3\) Rate the meals\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Breakfast.*(?<!\d\)\s)Lunch.*(?<!\d\)\s)Dinner.*/m)
+  end
+  
+  it "shows grid questions generated from textboxes" do
+    render
+    expect(response).to match (/Rate the meals/)
+    expect(response).to match(/5\) Rate the snacks\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Brunch.*(?<!\d\)\s)Linner.*(?<!\d\)\s)Late Night Snack.*/m)
   end
   
   it "maintains correct question numbering after grid question" do

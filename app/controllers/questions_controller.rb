@@ -69,27 +69,31 @@ class QuestionsController < ApplicationController
     survey = Survey.find(params[:survey_id])
     qdata = survey.survey_sections.collect(&:questions)
     qatts = {}
-    sidx=0
-    qidx=0
+    qoffset=0
     params.each do |(key, value)|
       if key.include?('sortable_question')
+        value.delete("id")
         value.each_with_index do |q, index|
-          qatts[q] = {:survey_section_id=> /\d+/.match(key).to_s, :display_order=>index+1}
-          qidx = index
+          if Question.find(q.to_i).part_of_group?
+            group_question = Question.find(q)
+            group_question.question_group.questions.each do |gq|
+              qatts[gq.id.to_s] = {:survey_section_id=> /\d+/.match(key).to_s, :display_order=>index+1+qoffset}
+              qoffset += 1
+            end
+          else
+            qatts[q] = {:survey_section_id=> /\d+/.match(key).to_s, :display_order=>index+1+qoffset}
+          end
         end
-        sidx = sidx+qidx+1
       end
     end
-    sidx=0
-    qidx=0
     qdata.each do |s|
       s.each_with_index do |q, index|
-        if qatts[q.id.to_s][:display_order] != q.display_order || q.survey_section_id != qatts[q.id.to_s][:survey_section_id].to_i
+        new_display_order = qatts[q.id.to_s][:display_order]
+        new_survey_section_id = qatts[q.id.to_s][:survey_section_id].to_i
+        if q.display_order != new_display_order || q.survey_section_id != new_survey_section_id
           Question.find(q.id).update_attributes!(:display_order => qatts[q.id.to_s][:display_order], :survey_section_id => qatts[q.id.to_s][:survey_section_id].to_i)
         end
-        qidx = index
       end
-      sidx = sidx+qidx+1
     end
     render :nothing => true
   end

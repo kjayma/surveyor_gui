@@ -7,7 +7,7 @@ module SurveyorGui
         base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_writer, :answers_textbox, :grid_columns_textbox
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
-                  :text, :text_adjusted_for_group, :pick, :reference_identifier, :display_order, :display_type,
+                  :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
                   :grid_columns_textbox, :grid_rows_textbox,
@@ -24,7 +24,6 @@ module SurveyorGui
         
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
-        base.send :validates_presence_of, :text_adjusted_for_group, :if => :part_of_group?
         base.send :after_save, :process_answers_textbox
         base.send :after_save, :process_grid_rows_textbox
 
@@ -68,20 +67,20 @@ module SurveyorGui
         end
       end
       
-      def text_adjusted_for_group
+      def text
         if part_of_group?
           question_group.text
         else
-          text
+          read_attribute(:text)
         end
       end
       
-      def text_adjusted_for_group=(txt)
+      def text=(txt)
         write_attribute(:text, txt) 
         if part_of_group?
           question_group.update_attributes(text: txt)
         end
-        @text_adjusted_for_group = txt
+        @text = txt
       end
       
       def grid_rows_textbox=(textbox)
@@ -339,7 +338,7 @@ module SurveyorGui
       
       def _update_group_id
         @question_group = self.question_group || 
-          QuestionGroup.create!(text: @text_adjusted_for_group, display_type: :grid)
+          QuestionGroup.create!(text: @text, display_type: :grid)
         self.question_group_id = @question_group.id
       end
       

@@ -182,6 +182,7 @@ module SurveyorGui
       if q=Question.find(params[:question_id])
         @surveyform=q.survey_section.surveyform
         q.update_attribute(:survey_section_id,nil)
+        q.question_group.questions.map{|q| q.update_attribute(:survey_section_id,nil)} if q.part_of_group?
         @question_no = 0
         render :new, :layout=>false
         return true

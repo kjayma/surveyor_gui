@@ -20,8 +20,8 @@ Rails.application.routes.draw do
   resources :survey_sections do
     post :sort, :on => :collection
   end
-
-  get '/questions/sort',   :to => 'questions#sort'
+  
+  match '/questions/sort',   :to => 'questions#sort', :via => :post
 
   resources :questions do
     member do

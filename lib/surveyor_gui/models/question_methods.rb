@@ -550,12 +550,12 @@ class QuestionTypes
     @all = []
     types = [
     [:pick_one,   "Multiple Choice (only one answer)"],
-    [:pick_any,   "Multiple Choice (multiple answers)"],    
+    [:pick_any,   "Multiple Choice (multiple answers)"],  
+    [:box,        "Text Box (for extended text, like notes, etc.)"],  
     [:dropdown,   "Dropdown List"],
     [:string,     "Text"],
     [:number,     "Number"],
     [:date,       "Date"], 
-    [:box,        "Text Box (for extended text, like notes, etc.)"],
     [:slider,     "Slider"],
     [:stars,      "1-5 Stars"],
     [:label,      "Label"],

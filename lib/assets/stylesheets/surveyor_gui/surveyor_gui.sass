@@ -411,6 +411,23 @@ body
       input
         :width 10em
 
+.simple_form.edit_question
+  .question_type
+    :position relative
+    .question_type_grid1
+      :float left
+      :width 20em
+      :word_wrap normal
+    .question_type_grid
+      :float left
+      :width 12em
+      :word_wrap normal
+      :margin-top -.8em
+  div#answer_choice, div#number_questions
+    :clear both
+  input#question_submit
+    :clear both
+
 .simple_form.edit_survey_section, .simple_form.new_survey_section
   input[type="text"]
     :width 15em

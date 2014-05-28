@@ -16,8 +16,38 @@
         <%= f.input :is_mandatory, :label => false, :wrapper_html=>{:class=>'fl notfirst'}%>
         <br />
         <br />
-        <strong>Question Type</strong>
-        <%= f.input :question_type_id, :collection=> f.object.question_type.all.map{|t|[t.text, t.id]} , :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        <strong>Question Type</strong><br/>
+        <div class="question_type">
+          <span class="question_type_grid1">
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[0..0] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+          </span>
+          <span class="question_type_grid1">
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[1..1] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+          </span>
+          <br />
+          <span class="question_type_grid">
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[3..6] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+          </span>
+          <span class="question_type_grid">
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[7..9] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[2..2] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+          </span>
+          <span class="question_type_grid">
+            <%= f.input :question_type_id, 
+              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[10..12] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+          </span>
+        </div>
         <br />
         <div id="answer_choice">
           <%= render 'picks', :f => f %>
@@ -33,4 +63,5 @@
         <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>
       </div>
   <% end %>
+  <% 20.times do -%><br/><% end -%>
 </div>

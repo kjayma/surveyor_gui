@@ -1,4 +1,4 @@
-<% @question_no = @question_no + 1 if f.object.id && f.object.question_type != 'Label'-%>
+<% @question_no = @question_no + 1 if f.object.id && f.object.question_type_id != :label -%>
 <%= div_for(f.object) do %>
   <fieldset class="
     fields

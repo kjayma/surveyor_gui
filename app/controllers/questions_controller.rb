@@ -66,35 +66,8 @@ class QuestionsController < ApplicationController
   end
 
   def sort
-    survey = Survey.find(params[:survey_id])
-    qdata = survey.survey_sections.collect(&:questions)
-    qatts = {}
-    qoffset=0
-    params.each do |(key, value)|
-      if key.include?('sortable_question')
-        value.delete("id")
-        value.each_with_index do |q, index|
-          if Question.find(q.to_i).part_of_group?
-            group_question = Question.find(q)
-            group_question.question_group.questions.each do |gq|
-              qatts[gq.id.to_s] = {:survey_section_id=> /\d+/.match(key).to_s, :display_order=>index+1+qoffset}
-              qoffset += 1
-            end
-          else
-            qatts[q] = {:survey_section_id=> /\d+/.match(key).to_s, :display_order=>index+1+qoffset}
-          end
-        end
-      end
-    end
-    qdata.each do |s|
-      s.each_with_index do |q, index|
-        new_display_order = qatts[q.id.to_s][:display_order]
-        new_survey_section_id = qatts[q.id.to_s][:survey_section_id].to_i
-        if q.display_order != new_display_order || q.survey_section_id != new_survey_section_id
-          Question.find(q.id).update_attributes!(:display_order => qatts[q.id.to_s][:display_order], :survey_section_id => qatts[q.id.to_s][:survey_section_id].to_i)
-        end
-      end
-    end
+    survey = Surveyform.find(params[:survey_id])
+    survey.sort_as_per_array(params)
     render :nothing => true
   end
 

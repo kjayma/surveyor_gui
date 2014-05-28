@@ -19,6 +19,16 @@ class QuestionsController < ApplicationController
     @title = "Edit Question"
     @question = Question.includes(:answers).find(params[:id])
   end
+  
+  def adjusted_text
+    if @question.part_of_group?
+      @question.question_group.text
+    else
+      @question.text
+    end
+  end
+  
+  helper_method :adjusted_text
 
   def create
     Question.where(:survey_section_id => params[:question][:survey_section_id])

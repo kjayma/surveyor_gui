@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Question do
   let(:question){ FactoryGirl.create(:question) }
-  let(:question2){ FactoryGirl.create(:question, :question_type=>"Multiple Choice (only one answer)") }
+  let(:question2){ FactoryGirl.create(:question, question_type_id: "pick_one")}
 
   def build_answers_from_answers_textbox
       question2.answers_textbox = "blue\nred\ngreen"

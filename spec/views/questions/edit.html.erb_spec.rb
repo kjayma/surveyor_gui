@@ -12,9 +12,9 @@ describe "questions/edit.html.erb" do
   include CapybaraHelper
 
   let(:question){ FactoryGirl.create(:question) }
-  let(:question2){ FactoryGirl.create(:question, :question_type => 'Multiple Choice (only one answer)') }
+  let(:question2){ FactoryGirl.create(:question, :question_type_id => "pick_one") }
   let(:form){find('form')}
-  
+   
   before do
     assign(:question, question)
   end    

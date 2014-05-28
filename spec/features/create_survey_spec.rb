@@ -381,10 +381,11 @@ feature "User creates a new survey using a browser",  %q{
           select_question_type "Grid (pick one)"
 
         #And I add columns to the grid
-          fill_in "columns", with: "Poor\nOk\nGood\nOutstanding"
+          expect(page).to have_css("#question_grid_columns_textbox")
+          fill_in "question_grid_columns_textbox", with: "Poor\nOk\nGood\nOutstanding"
           
         #And I add columns to the grid
-          fill_in "rows", with: "Front Desk\nConcierge\nRoom Service\nValet"
+          fill_in "question_grid_rows_textbox", with: "Front Desk\nConcierge\nRoom Service\nValet"
 
         #And I save the question
           click_button "Save Changes"
@@ -396,7 +397,7 @@ feature "User creates a new survey using a browser",  %q{
         expect(first_question).to have_content("1) Rate the service:")
 
         #And I see a nice grid of radio buttons
-        expect(page).to have_content(/1\) Rate the service\..*Poor.*Ok.*Good.*Outstanding.*(?<!\d\)\s)Front Desk.*(?<!\d\)\s)Concierge.*(?<!\d\)\s)Room Service.*(?<!\d\)\s)Valet.*/m)
+        expect(page).to have_content(/1\) Rate the service.*Poor.*Ok.*Good.*Outstanding.*(?<!\d\)\s)Front Desk.*(?<!\d\)\s)Concierge.*(?<!\d\)\s)Room Service.*(?<!\d\)\s)Valet/m)
         
         expect(page).to have_css("input[type='radio'][value='Poor']")
         expect(page).to have_css("input[type='radio'][value='Ok']")

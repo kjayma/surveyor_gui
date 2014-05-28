@@ -67,14 +67,6 @@ module SurveyorGui
         end
       end
       
-      def text
-        if part_of_group?
-          question_group.text
-        else
-          read_attribute(:text)
-        end
-      end
-      
       def text=(txt)
         write_attribute(:text, txt) 
         if part_of_group?
@@ -304,10 +296,10 @@ module SurveyorGui
       end
    
       def process_grid_rows_textbox
-        puts "processing grid rows textbox grid?: #{_grid?} tb: #{@grid_rows_textbox} this: #{self.id}"
+        #puts "processing grid rows \ntextbox grid?: #{_grid?} \ntb: #{@grid_rows_textbox} \nthis: #{self.id}\ntext: #{self.text}"
         if _grid? && !@grid_rows_textbox.nil?
-          puts 'got to inner if'
-          puts "\n\n#{self.display_order}\n\n"
+          #puts 'got to inner if'
+          #puts "\n\n#{self.display_order}\n\n"
           @first_display_order = self.display_order
           #_create_some_answers(self)
           grid_rows = TextBoxParser.new(
@@ -316,7 +308,7 @@ module SurveyorGui
           )
           grid_rows.update_or_create_records(pick: self.pick) do |display_order, new_text|
             current_question = _create_a_question(display_order, new_text) 
-            puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
+            #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
             #_create_some_answers(current_question)
           end
           @question_group.questions.each do |question|
@@ -325,7 +317,7 @@ module SurveyorGui
           #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
           #can't seem to override it and everytime a question is deleted, the whole group goes with it.
           #which makes it impossible to delete a question from a grid.
-          puts "\n\n\nTrying to keep me damn groups "
+          #puts "\n\n\nTrying to keep me damn groups "
           begin
             QuestionGroup.find(@question_group)
           rescue
@@ -360,8 +352,8 @@ module SurveyorGui
       end
       
       def _create_a_question(display_order, new_text) 
-        puts "making question #{new_text}" 
-          puts "\n\n#{self.display_order}\n\n"
+        #puts "making question #{new_text}" 
+          #puts "\n\n#{self.display_order}\n\n"
         if !@question_group.questions.collect(&:text).include? new_text
           Question.create!(
             display_order: (display_order - 1 + @first_display_order),
@@ -448,9 +440,10 @@ class TextBoxParser
   
   def _delete_orphans
     valid_rows = @text.split("\n")
+    valid_rows = valid_rows.map{|vr| vr.strip}
     @nested_objects.reload
     @nested_objects.each do |nested_object|
-      puts "possibly deleting #{nested_object.class.name} #{nested_object.id} #{nested_object.text.rstrip} valid #{valid_rows}"
+      #puts "possibly deleting #{nested_object.class.name} #{nested_object.id} #{nested_object.text.rstrip} valid #{valid_rows}"
       nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip}"
     end
     _dedupe

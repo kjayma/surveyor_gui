@@ -11,7 +11,7 @@
         <%= f.hidden_field :modifiable %>
 
         <%= f.label :Question, :input_html=>{:size=>'15'} %>
-        <%= f.input :text , :label => false, :input_html=>{:size=>'55'}%>
+        <%= f.input :text , :label => false, :input_html=>{:size=>'55', value: adjusted_text} %>
         <span class='fl'><strong>Mandatory?</strong></span>
         <%= f.input :is_mandatory, :label => false, :wrapper_html=>{:class=>'fl notfirst'}%>
         <br />

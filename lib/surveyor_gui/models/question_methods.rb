@@ -300,11 +300,12 @@ module SurveyorGui
         if _grid? && !@grid_rows_textbox.nil?
           #puts 'got to inner if'
           #puts "\n\n#{self.display_order}\n\n"
-          @first_display_order = self.display_order
+          display_order_of_first_question_in_group = self.display_order
           #_create_some_answers(self)
           grid_rows = TextBoxParser.new(
             textbox: @grid_rows_textbox, 
-            records_to_update: @question_group.questions
+            records_to_update: @question_group.questions,
+            starting_display_order: display_order_of_first_question_in_group            
           )
           grid_rows.update_or_create_records(pick: self.pick) do |display_order, new_text|
             current_question = _create_a_question(display_order, new_text) 
@@ -356,7 +357,7 @@ module SurveyorGui
           #puts "\n\n#{self.display_order}\n\n"
         if !@question_group.questions.collect(&:text).include? new_text
           Question.create!(
-            display_order: (display_order - 1 + @first_display_order),
+            display_order: (display_order - 1),
             text: new_text,
             survey_section_id: survey_section_id,
             question_group_id: @question_group.id,
@@ -410,6 +411,7 @@ class TextBoxParser
   def initialize(args)
     @text = args[:textbox].to_s.gsub("\r","")
     @nested_objects = args[:records_to_update]
+    @starting_display_order = args.fetch(:starting_display_order,0) 
   end
   
   def each(&block)
@@ -418,7 +420,12 @@ class TextBoxParser
   
   def update_or_create_records(update_params={}, &create_object)
     _lines.readlines.each_with_index do |line, display_order|
-      _update_or_create(line.strip, display_order, update_params, &create_object) unless line.blank?
+      _update_or_create(
+        line.strip, 
+        display_order + @starting_display_order, 
+        update_params, 
+        &create_object
+      ) unless line.blank?
     end
     _delete_orphans        
   end

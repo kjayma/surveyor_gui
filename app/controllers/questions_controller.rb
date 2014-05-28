@@ -71,6 +71,11 @@ class QuestionsController < ApplicationController
       render :text=>"The following questions have logic that depend on this question: \n\n"+question.dependency_conditions.map{|d| " - "+d.dependency.question.text}.join('\n')+"\n\nPlease delete logic before deleting this question.".html_safe
       return
     end
+    if question.part_of_group?
+      question.question_group.questions.each{|q| q.destroy}
+      render :text=>''
+      return
+    end
     question.destroy
     render :text=>''
   end

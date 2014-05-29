@@ -43,33 +43,22 @@ module SurveyorGui
           [:slider,         "Slider"                                          , false,  :one,  :slider,   nil    ],
           [:stars,          "1-5 Stars"                                       , false,  :one,  :stars,    nil    ],
           [:label,          "Label"                                           , false,  :none, :label,    nil    ],
-          [:file,           "File Upload"                                     , true,   :none, :file,     nil    ],
+          [:file,           "File Upload"                                     , false,  :none, :file,     nil    ],
           [:grid_one,       "Grid (pick one)"                                 , true,   :one,  nil,       :grid  ],
           [:grid_any,       "Grid (pick any)"                                 , true,   :any,  nil,       :grid  ],
           [:grid_dropdown,  "Group of Dropdowns"                              , true,   :one,  :dropdown, :grid  ],
-          [:group_inline,   "Inline Question Group"                           , true,   :any,  :any,     :inline]
+          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,     :inline]
        ]      
 
             
         def categorize_question(question)
+          $stdout.sync = true
           all.each do |question_type|
+            print "\t\t#{question_type.id}\n\t\t"
             return question_type.id if _match_found(question, question_type)
+            puts
           end
           raise "No question_type matches question #{question.id}"
-#          if question.part_of_group?
-#            _categorize_groups(question)
-#          else
-#            _categorize_picks(question)
-#          end
-        end
-        
-        def _match_found(question, question_type)
-           question.part_of_group?  == question_type.part_of_group                    &&  
-          (question.pick            == question_type.pick.to_s) || (question_type.pick == :any) &&
-         ((question.display_type.to_s    == question_type.display_type.to_s) || 
-                                       (question_type.display_type == :any))          && 
-         (!question.part_of_group?  ||                                                                    
-          (question.question_group.display_type == question_type.group_display_type.to_s))           
         end
         
         def all
@@ -92,64 +81,23 @@ module SurveyorGui
         end
         
         private
+        
+        def _match_found(question, question_type)
+          question_group_display_type = question.part_of_group? ? question.question_group.display_type : ""
+          
+          _match(question.part_of_group?,     question_type.part_of_group, :part_of_group)          &&
+          _match(question.pick,               question_type.pick.to_s, :pick)                       &&
+          _match(question.display_type.to_s,  question_type.display_type.to_s, :display_type)       &&
+          _match(question_group_display_type, question_type.group_display_type.to_s, :group_display_type)         
+        end
       
-        def _categorize_groups(question)
-          if question.question_group.display_type == "grid"
-            case question.pick
-            when 'one'
-              _set_question_type(:grid_one)
-            when 'any'
-              _set_question_type(:grid_any)
-            end
-          end      
-        end
-        
-        def _categorize_picks(question)
-          case question.pick
-          when 'one'
-            _categorize_pick_one(question)
-          when 'any'
-            _set_question_type(:pick_any)
-          else
-            _categorize_no_pick(question)
-          end  
-        end
-        
-#        def _categorize_pick_one(question)
-#          case question.display_type 
-#          when 'slider'
-#            _set_question_type(:slider)
-#          when 'stars'
-#            _set_question_type(:stars)
-#          when 'dropdown'
-#            _set_question_type(:dropdown)
-#          else
-#            _set_question_type(:pick_one)
-#          end  
-#        end
-#        
-#        def _categorize_no_pick(question)      
-#          if question.display_type == 'label'  || !question.answers.first
-#            _set_question_type(:label)
-#          else
-#            case question.answers.first.response_class
-#            when 'text'
-#              _set_question_type(:box)
-#            when 'float', 'integer'
-#              _set_question_type(:number)
-#            when 'date'
-#              _set_question_type(:date)
-#            when 'blob'
-#              _set_question_type(:file)
-#            else
-#              _set_question_type(:string)
-#            end
-#          end
-#        end  
-#        
-#        def _set_question_type(id)
-#          id
-#        end
+        def _match(question_attribute, question_type_attribute, match_attribute)
+          print "\t#{match_attribute} #{
+          (question_attribute == question_type_attribute) || 
+          (question_type_attribute == :all)  }"
+          (question_attribute == question_type_attribute) || 
+          (question_type_attribute == "all")  
+        end       
       end
     end
       

@@ -21,7 +21,7 @@
 
     <%= f.input_field :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio_buttons %>
 
- <% when :dropdown -%>
+ <% when :dropdown, :grid_dropdown -%>
 
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 

@@ -25,8 +25,9 @@ module SurveyorGui
         
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
-        base.send :after_save, :process_answers_textbox
-        base.send :after_save, :process_grid_rows_textbox
+        base.send :after_save, :build_complex_questions
+        #base.send :after_save, :process_answers_textbox
+        #base.send :after_save, :process_grid_rows_textbox
 
         base.class_eval do
 
@@ -101,12 +102,12 @@ module SurveyorGui
         when "grid_one"
           write_attribute(:pick, "one")
           prep_picks
-          write_attribute(:display_type, "")
+          write_attribute(:display_type, "default")
           _update_group_id
         when "pick_one"
           write_attribute(:pick, "one")
           prep_picks
-          write_attribute(:display_type, "")
+          write_attribute(:display_type, "default")
         when "slider"
           write_attribute(:pick, "one")
           prep_picks
@@ -122,11 +123,11 @@ module SurveyorGui
         when "pick_any"
           write_attribute(:pick, "any")
           prep_picks
-          write_attribute(:display_type, "")
+          write_attribute(:display_type, "default")
         when "grid_any"
           write_attribute(:pick, "any")
           prep_picks
-          write_attribute(:display_type, "")
+          write_attribute(:display_type, "default")
           _update_group_id
         when "grid_dropdown"
           write_attribute(:pick, "one")
@@ -277,6 +278,16 @@ module SurveyorGui
         self.answers.order('display_order asc').collect(&:text).join("\n")
       end
       
+      def build_complex_questions
+        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox 
+          self.question_type.build_complex_question_structure(
+            self, 
+            answers_textbox:      @answers_textbox, 
+            grid_columns_textbox: @grid_columns_textbox, 
+            grid_rows_textbox:    @grid_rows_textbox)
+        end
+      end
+      
       def grid_columns_textbox
         self.answers.order('display_order asc').collect(&:text).join("\n")
       end
@@ -289,50 +300,7 @@ module SurveyorGui
         end
       end
 
-      def process_answers_textbox
-        if _pick? && !@answers_textbox.nil? && !_grid?
-          updated_answers = TextBoxParser.new(
-            textbox: @answers_textbox, 
-            records_to_update: answers
-          )
-          updated_answers.update_or_create_records do |display_order, text|
-            _create_an_answer(display_order, text, self)     
-          end
-        end
-      end
-   
-      def process_grid_rows_textbox
-        #puts "processing grid rows \ntextbox grid?: #{_grid?} \ntb: #{@grid_rows_textbox} \nthis: #{self.id}\ntext: #{self.text}"
-        if _grid? && !@grid_rows_textbox.nil?
-          #puts 'got to inner if'
-          #puts "\n\n#{self.display_order}\n\n"
-          display_order_of_first_question_in_group = self.display_order
-          #_create_some_answers(self)
-          grid_rows = TextBoxParser.new(
-            textbox: @grid_rows_textbox, 
-            records_to_update: @question_group.questions,
-            starting_display_order: display_order_of_first_question_in_group            
-          )
-          grid_rows.update_or_create_records(pick: self.pick, display_type: self.display_type) \
-           do |display_order, new_text|
-            current_question = _create_a_question(display_order, new_text) 
-            #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
-            #_create_some_answers(current_question)
-          end
-          @question_group.questions.each do |question|
-            _create_some_answers(question)
-          end
-          #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
-          #can't seem to override it and everytime a question is deleted, the whole group goes with it.
-          #which makes it impossible to delete a question from a grid.
-          #puts "\n\n\nTrying to keep me damn groups "
-          begin
-            QuestionGroup.find(@question_group)
-          rescue
-            QuestionGroup.create!(@question_group.attributes)
-          end
-        end
-      end
+ 
 
       private
       
@@ -340,59 +308,6 @@ module SurveyorGui
         @question_group = self.question_group || 
           QuestionGroup.create!(text: @text, display_type: :grid)
         self.question_group_id = @question_group.id
-      end
-      
-      def _pick?
-        !(pick=="none")
-      end
-      
-      def _grid?
-        ["grid_one", "grid_any", "grid_dropdown"].include? @question_type_id
-      end
-      
-      
-      def _create_an_answer(display_order, new_text, current_question)  
-        Answer.create!(
-          question_id: current_question.id,
-          display_order: display_order,
-          text: new_text
-        )
-      end
-      
-      def _create_a_question(display_order, new_text) 
-        #puts "making question #{new_text}" 
-          #puts "\n\n#{self.display_order}\n\n"
-        if !@question_group.questions.collect(&:text).include? new_text
-          Question.create!(
-            display_order: (display_order - 1),
-            text: new_text,
-            survey_section_id: survey_section_id,
-            question_group_id: @question_group.id,
-            pick: pick,
-            reference_identifier: reference_identifier,
-            display_type: display_type,
-            is_mandatory: is_mandatory,
-            prefix: prefix, 
-            suffix: suffix,
-            decimals: decimals,
-            modifiable: modifiable,
-            report_code: report_code          
-          )
-        end
-      end
-      
-      def _create_some_answers(current_question)        
-        if @grid_columns_textbox.nil?
-          @grid_columns_textbox = " "
-        end
-        columns = TextBoxParser.new(
-          textbox: @grid_columns_textbox, 
-          records_to_update: current_question.answers
-        )
-        columns.update_or_create_records do |display_order, text|
-          _create_an_answer(display_order, text, current_question) 
-        end
-        
       end
       
       def _preceding_questions_numbered
@@ -411,74 +326,6 @@ module SurveyorGui
       end      
     end
   end
-end
-
-class TextBoxParser
-  include Enumerable
-  def initialize(args)
-    @text = args[:textbox].to_s.gsub("\r","")
-    @nested_objects = args[:records_to_update]
-    @starting_display_order = args.fetch(:starting_display_order,0) 
-  end
-  
-  def each(&block)
-    _lines.readlines.each(&block)
-  end
-  
-  def update_or_create_records(update_params={}, &create_object)
-    _lines.readlines.each_with_index do |line, display_order|
-      _update_or_create(
-        line.strip, 
-        display_order + @starting_display_order, 
-        update_params, 
-        &create_object
-      ) unless line.blank?
-    end
-    _delete_orphans        
-  end
-  
-  private
-  
-  def _lines
-    StringIO.new(@text)
-  end
-  
-  def _update_or_create(text, display_order, update_params={}, &create_object)
-    nested_objects = _find_nested_if_exists(text)
-    if nested_objects.empty?
-      create_object.call(display_order, text) 
-    else
-      _update_nested_object(nested_objects.first, display_order, update_params)
-    end
-  end
-  
-  def _delete_orphans
-    valid_rows = @text.split("\n")
-    valid_rows = valid_rows.map{|vr| vr.strip}
-    @nested_objects.reload
-    @nested_objects.each do |nested_object|
-      #puts "possibly deleting #{nested_object.class.name} #{nested_object.id} #{nested_object.text.rstrip} valid #{valid_rows}"
-      nested_object.destroy unless valid_rows.include? "#{nested_object.text.rstrip}"
-    end
-    _dedupe
-  end
-  
-  def _find_nested_if_exists(text)
-    @nested_objects.where('text = ?',text)
-  end
-  
-  def _update_nested_object(nested_object, index, update_params)
-    params = {:display_order=>index}.merge(update_params)
-    nested_object.update_attributes(params)
-  end
-  
-  def _dedupe
-    grouped = @nested_objects.order('display_order DESC').group(:text).collect(&:id)
-    @nested_objects.each do |obj|
-      obj.destroy unless (grouped.include? obj.id)
-    end
-  end  
-
 end
 
 

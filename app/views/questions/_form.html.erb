@@ -34,6 +34,9 @@
               :collection=> QuestionType.all.map{|t|[t.text, t.id]}[3..5] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
             <%= f.input :question_type_id, 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[9..9] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+            <%= f.input :question_type_id, 
               :collection=> QuestionType.all.map{|t|[t.text, t.id]}[2..2] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>

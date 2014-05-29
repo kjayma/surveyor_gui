@@ -55,11 +55,15 @@ module SurveyformHelper
     end
   end
   
-  def question_group_class
-    if @current_group.question_group.display_type == "grid"
-      "grid"
-    else
+  def question_group_class(question)
+    if @current_group.question_group.display_type == "inline"
       "inline"
+    else
+      if question.question_type_id == :grid_dropdown
+        "dropdown"
+      else
+        "grid"
+      end
     end
   end
   

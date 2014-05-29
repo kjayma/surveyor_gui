@@ -35,19 +35,19 @@ module SurveyorGui
           [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  nil,       nil    ],
           [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  nil,       nil    ],  
           [:box,            "Text Box (for extended text, like notes, etc.)"  , false,  :none, :text,     nil    ],  
-          [:dropdown,       "Dropdown List"                                   , false,  :none, :dropdown, nil    ],
-          [:string,         "Text"                                            , false,  :none, nil,       nil    ],
+          [:dropdown,       "Dropdown List"                                   , false,  :one,  :dropdown, nil    ],
+          [:string,         "Text"                                            , false,  :none, :default,  nil    ],
           [:number,         "Number"                                          , false,  :none, :float,    nil    ],
           [:number,         "Number"                                          , false,  :none, :integer,  nil    ],
-          [:date,           "Date"                                            , false,  :none, :slider,   nil    ], 
-          [:slider,         "Slider"                                          , false,  :one,  :stars,    nil    ],
-          [:stars,          "1-5 Stars"                                       , false,  :one,  :label,    nil    ],
-          [:label,          "Label"                                           , false,  :none, :file,     nil    ],
-          [:file,           "File Upload"                                     , true,   :none, nil,       nil    ],
+          [:date,           "Date"                                            , false,  :none, :date,     nil    ], 
+          [:slider,         "Slider"                                          , false,  :one,  :slider,   nil    ],
+          [:stars,          "1-5 Stars"                                       , false,  :one,  :stars,    nil    ],
+          [:label,          "Label"                                           , false,  :none, :label,    nil    ],
+          [:file,           "File Upload"                                     , true,   :none, :file,     nil    ],
           [:grid_one,       "Grid (pick one)"                                 , true,   :one,  nil,       :grid  ],
           [:grid_any,       "Grid (pick any)"                                 , true,   :any,  nil,       :grid  ],
-          [:grid_dropdown,  "Grid (dropdown)"                                 , true,   :one,  :dropdown, :grid  ],
-          [:group_inline,   "Inline Question Group"                           , true,   :one,  nil,       :inline]
+          [:grid_dropdown,  "Group of Dropdowns"                              , true,   :one,  :dropdown, :grid  ],
+          [:group_inline,   "Inline Question Group"                           , true,   :any,  :any,     :inline]
        ]      
 
             
@@ -64,9 +64,10 @@ module SurveyorGui
         end
         
         def _match_found(question, question_type)
-           question.part_of_group?  == question_type.part_of_group      &&                                     
-           question.pick            == question_type.pick.to_s          &&                                     
-          (question.display_type    == question_type.display_type.to_s  || question_type.display_type.nil?) && 
+           question.part_of_group?  == question_type.part_of_group                    &&  
+          (question.pick            == question_type.pick.to_s) || (question_type.pick == :any) &&
+         ((question.display_type.to_s    == question_type.display_type.to_s) || 
+                                       (question_type.display_type == :any))          && 
          (!question.part_of_group?  ||                                                                    
           (question.question_group.display_type == question_type.group_display_type.to_s))           
         end

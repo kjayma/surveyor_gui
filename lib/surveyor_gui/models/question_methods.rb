@@ -313,7 +313,8 @@ module SurveyorGui
             records_to_update: @question_group.questions,
             starting_display_order: display_order_of_first_question_in_group            
           )
-          grid_rows.update_or_create_records(pick: self.pick) do |display_order, new_text|
+          grid_rows.update_or_create_records(pick: self.pick, display_type: self.display_type) \
+           do |display_order, new_text|
             current_question = _create_a_question(display_order, new_text) 
             #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
             #_create_some_answers(current_question)

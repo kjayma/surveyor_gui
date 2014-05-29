@@ -21,6 +21,7 @@ module SurveyorGui
         ### everything below this point must be commented out to run the rake tasks.
         base.send :accepts_nested_attributes_for, :dependency, :reject_if => lambda { |d| d[:rule].blank?}, :allow_destroy => true
         base.send :mount_uploader, :dummy_blob, BlobUploader
+        base.send :belongs_to, :question_type
         
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
@@ -80,15 +81,15 @@ module SurveyorGui
         @grid_rows_textbox = textbox.gsub(/\r/,"")
       end
 
-      #generates descriptions for different types of questions, including those that use widgets
-      def question_type
-        @question_type = QuestionTypes.new(self)
+      def question_type_id
+        QuestionType.categorize_question(self)
       end
       
-      def question_type_id
-        @question_type ||= QuestionTypes.new(self)
-        @question_type.id
+#      #generates descriptions for different types of questions, including those that use widgets
+      def question_type
+        @question_type = QuestionType.find(question_type_id)
       end
+#      
 
       def dynamically_generate
         'false'
@@ -127,6 +128,11 @@ module SurveyorGui
           prep_picks
           write_attribute(:display_type, "")
           _update_group_id
+        when "grid_dropdown"
+          write_attribute(:pick, "one")
+          prep_picks
+          write_attribute(:display_type, "dropdown")
+          _update_group_id
         when 'label'
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")
@@ -147,7 +153,7 @@ module SurveyorGui
 
       #If the question involves picking from a list of choices, this sets response class.
       def prep_picks
-        write_attribute(:display_type, self.display_type || "default")
+        #write_attribute(:display_type, self.display_type || "default")
         if self.display_type=='stars'
           response_class='integer'
         else
@@ -340,7 +346,7 @@ module SurveyorGui
       end
       
       def _grid?
-        @question_type_id == "grid_one" || @question_type_id == "grid_any"
+        ["grid_one", "grid_any", "grid_dropdown"].include? @question_type_id
       end
       
       
@@ -474,105 +480,7 @@ class TextBoxParser
 
 end
 
-class QuestionTypes
-  attr_accessor :id, :text, :all
-  def initialize(question)
-    _define_question_types
-    _categorize_question(question)
-  end
-  
-  def grid?
-    @id == :grid_one || @id == :grid_any
-  end
-  
-  private
-  def _categorize_question(question)
-    if question.part_of_group?
-      _categorize_groups(question)
-    else
-      _categorize_picks(question)
-    end
-  end
-  
-  def _categorize_groups(question)
-    case question.pick
-    when 'one'
-      _set_question_type(:grid_one)
-    when 'any'
-      _set_question_type(:grid_any)
-    end
-  end
-  
-  def _categorize_picks(question)
-    case question.pick
-    when 'one'
-      _categorize_pick_one(question)
-    when 'any'
-      _set_question_type(:pick_any)
-    else
-      _categorize_no_pick(question)
-    end  
-  end
-  
-  def _categorize_pick_one(question)
-    case question.display_type 
-    when 'slider'
-      _set_question_type(:slider)
-    when 'stars'
-      _set_question_type(:stars)
-    when 'dropdown'
-      _set_question_type(:dropdown)
-    else
-      _set_question_type(:pick_one)
-    end  
-  end
-  
-  def _categorize_no_pick(question)      
-    if question.display_type == 'label'  || !question.answers.first
-      _set_question_type(:label)
-    else
-      case question.answers.first.response_class
-      when 'text'
-        _set_question_type(:box)
-      when 'float', 'integer'
-        _set_question_type(:number)
-      when 'date'
-        _set_question_type(:date)
-      when 'blob'
-        _set_question_type(:file)
-      else
-        _set_question_type(:string)
-      end
-    end
-  end  
-  
-  def _set_question_type(id)
-    @id = id
-    this = @all.select{|t| t.id==id}[0]
-    @text = this.text
-  end
-  
-  def _define_question_types
-    type = Struct.new(:id, :text)
-    @all = []
-    types = [
-    [:pick_one,   "Multiple Choice (only one answer)"],
-    [:pick_any,   "Multiple Choice (multiple answers)"],  
-    [:box,        "Text Box (for extended text, like notes, etc.)"],  
-    [:dropdown,   "Dropdown List"],
-    [:string,     "Text"],
-    [:number,     "Number"],
-    [:date,       "Date"], 
-    [:slider,     "Slider"],
-    [:stars,      "1-5 Stars"],
-    [:label,      "Label"],
-    [:file,       "File Upload"],
-    [:grid_one, "Grid (pick one)"],
-    [:grid_any, "Grid (pick any)"]
-    ]     
-    types.map{|t| @all << type.new(t[0], t[1])}
-  end
-end
+
 
 
 

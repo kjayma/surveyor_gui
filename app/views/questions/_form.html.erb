@@ -20,31 +20,37 @@
         <div class="question_type">
           <span class="question_type_grid1">
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[0..0] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[0..0] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid1">
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[1..1] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[1..1] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <br />
           <span class="question_type_grid">
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[3..6] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[3..5] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+            <%= f.input :question_type_id, 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[2..2] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[7..9] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[7..8] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[2..2] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[11..11] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
             <%= f.input :question_type_id, 
-              :collection=> f.object.question_type.all.map{|t|[t.text, t.id]}[10..12] , 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[12..13] , 
+              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+            <%= f.input :question_type_id, 
+              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[14..15] , 
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
         </div>

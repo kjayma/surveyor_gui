@@ -58,11 +58,8 @@ module SurveyorGui
 
             
         def categorize_question(question)
-          $stdout.sync = true
           all.each do |question_type|
-            print "\t\t#{question_type.id}\n\t\t"
             return question_type.id if _match_found(question, question_type)
-            puts
           end
           raise "No question_type matches question #{question.id}"
         end
@@ -98,9 +95,6 @@ module SurveyorGui
         end
       
         def _match(question_attribute, question_type_attribute, match_attribute)
-          print "\t#{match_attribute} #{
-          (question_attribute == question_type_attribute) || 
-          (question_type_attribute == :all)  }"
           (question_attribute == question_type_attribute) || 
           (question_type_attribute == "all")  
         end       

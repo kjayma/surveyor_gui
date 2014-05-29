@@ -32,8 +32,8 @@ module SurveyorGui
           #                                                                                             group
           #                                                                   part_of_         display  display
           #id               #text                                             group?    pick   type     type     
-          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  nil,       nil    ],
-          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  nil,       nil    ],  
+          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "default", nil    ],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "default", nil    ],  
           [:box,            "Text Box (for extended text, like notes, etc.)"  , false,  :none, :text,     nil    ],  
           [:dropdown,       "Dropdown List"                                   , false,  :one,  :dropdown, nil    ],
           [:string,         "Text"                                            , false,  :none, :default,  nil    ],
@@ -44,10 +44,16 @@ module SurveyorGui
           [:stars,          "1-5 Stars"                                       , false,  :one,  :stars,    nil    ],
           [:label,          "Label"                                           , false,  :none, :label,    nil    ],
           [:file,           "File Upload"                                     , false,  :none, :file,     nil    ],
-          [:grid_one,       "Grid (pick one)"                                 , true,   :one,  nil,       :grid  ],
-          [:grid_any,       "Grid (pick any)"                                 , true,   :any,  nil,       :grid  ],
+          [:grid_one,       "Grid (pick one)"                                 , true,   :one,  "default", :grid  ],
+          [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid  ],
           [:grid_dropdown,  "Group of Dropdowns"                              , true,   :one,  :dropdown, :grid  ],
-          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,     :inline]
+          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,      :inline],
+          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,      :inline],
+          [:repeater,       "Repeater (add as many answers as apply"          , true,   :all,  :all,      :repeater],
+          #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it
+          #but don't treat it differently.  See question 16 and 17 in kitchen_sink_survey.rb. 
+          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "inline",  nil    ],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "inline",  nil    ],
        ]      
 
             

@@ -2,8 +2,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe QuestionType do
-  let(:question_group1) { FactoryGirl.create(:question_group, display_type: "grid") }
-  let(:question_group2) { FactoryGirl.create(:question_group, display_type: "inline") }
+  let(:grid)    { FactoryGirl.create(:question_group, display_type: "grid") }
+  let(:inline)  { FactoryGirl.create(:question_group, display_type: "inline") }
+  let(:repeater){ FactoryGirl.create(:question_group, display_type: "inline") }
   
   let(:textbox)         { FactoryGirl.create(
                             :question,
@@ -57,14 +58,28 @@ describe QuestionType do
   let(:pick_one)        { FactoryGirl.create(
                            :question,
                            pick:             "one",
-                           display_type:      nil,
+                           display_type:      "default",
                            question_group_id: nil
                          )
                         }
   let(:pick_any)        { FactoryGirl.create(
                            :question,
                            pick:             "any",
-                           display_type:      nil,
+                           display_type:      "default",
+                           question_group_id: nil
+                         )
+                        }                        
+  let(:pick_one_inline) { FactoryGirl.create(
+                           :question,
+                           pick:             "one",
+                           display_type:      "inline",
+                           question_group_id: nil
+                         )
+                        }
+  let(:pick_any_inline) { FactoryGirl.create(
+                           :question,
+                           pick:             "any",
+                           display_type:      "inline",
                            question_group_id: nil
                          )
                         }
@@ -92,29 +107,36 @@ describe QuestionType do
   let(:grid_one)        { FactoryGirl.create(
                            :question,
                            pick:             "one",
-                           display_type:      "",
-                           question_group_id: question_group1.id
+                           display_type:      "default",
+                           question_group_id: grid.id
                          )
                         }
   let(:grid_any)        { FactoryGirl.create(
                            :question,
                            pick:             "any",
-                           display_type:      "",
-                           question_group_id: question_group1.id
+                           display_type:      "default",
+                           question_group_id: grid.id
                          )
                         }
   let(:grid_dropdown)   { FactoryGirl.create(
                            :question,
                            pick:             "one",
                            display_type:      "dropdown",
-                           question_group_id: question_group1.id
+                           question_group_id: grid.id
                          )
                         }
   let(:group_inline)   { FactoryGirl.create(
                            :question,
                            pick:             "",
                            display_type:      "",
-                           question_group_id: question_group2.id
+                           question_group_id: inline.id
+                         )
+                        }
+  let(:repeater)   { FactoryGirl.create(
+                           :question,
+                           pick:             "",
+                           display_type:      "",
+                           question_group_id: repeater.id
                          )
                         }
 
@@ -154,6 +176,14 @@ describe QuestionType do
     
     it "recognizes a pick any question" do
       expect(pick_any.question_type.id).to eql :pick_any
+    end
+    
+    it "recognizes an inline pick one question" do
+      expect(pick_one_inline.question_type.id).to eql :pick_one
+    end
+    
+    it "recognizes an inline pick any question" do
+      expect(pick_any_inline.question_type.id).to eql :pick_any
     end
     
     it "recognizes a dropdown question" do

@@ -186,8 +186,20 @@ module SurveyorGui
           [:grid_one,       "Grid (pick one)"                                 , true,   :one,  "default", :grid    ],
           [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid    ],
           [:grid_dropdown,  "Group of Dropdowns"                              , true,   :one,  :dropdown, :grid    ],
-          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,      :inline  ],
-          [:group_inline,   "Inline Question Group"                           , true,   :all,  :all,      :inline  ],
+          [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline  ],
+          #nothing below here shows up on the question builder choices for question type
+          [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline  ],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline  ],  
+          [:box,            "Text Box (for extended text, like notes, etc.)"  , true,   :none, :text,     :inline  ],  
+          [:dropdown,       "Dropdown List"                                   , true,   :one,  :dropdown, :inline  ],
+          [:string,         "Text"                                            , true,   :none, :default,  :inline  ],
+          [:number,         "Number"                                          , true,   :none, :float,    :inline  ],
+          [:number,         "Number"                                          , true,   :none, :integer,  :inline  ],
+          [:date,           "Date"                                            , true,   :none, :date,     :inline  ], 
+          [:slider,         "Slider"                                          , true,   :one,  :slider,   :inline  ],
+          [:stars,          "1-5 Stars"                                       , true,   :one,  :stars,    :inline  ],
+          [:label,          "Label"                                           , true,   :none, :label,    :inline  ],
+          [:file,           "File Upload"                                     , true,   :none, :file,     :inline  ],
           [:repeater,       "Repeater (add as many answers as apply"          , true,   :all,  :all,      :repeater],
           #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it
           #but don't treat it differently.  See question 16 and 17 in kitchen_sink_survey.rb. 

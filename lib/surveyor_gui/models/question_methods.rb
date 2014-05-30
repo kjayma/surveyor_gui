@@ -108,6 +108,7 @@ module SurveyorGui
           write_attribute(:pick, "one")
           prep_picks
           write_attribute(:display_type, "default")
+          _remove_group
         when "slider"
           write_attribute(:pick, "one")
           prep_picks
@@ -124,6 +125,7 @@ module SurveyorGui
           write_attribute(:pick, "any")
           prep_picks
           write_attribute(:display_type, "default")
+          _remove_group
         when "grid_any"
           write_attribute(:pick, "any")
           prep_picks
@@ -308,6 +310,13 @@ module SurveyorGui
         @question_group = self.question_group || 
           QuestionGroup.create!(text: @text, display_type: :grid)
         self.question_group_id = @question_group.id
+      end
+      
+      def _remove_group
+        if part_of_group?
+          question_group.questions.map{|q| q.destroy if q.id != id} 
+          write_attribute(:question_group_id, nil)
+        end
       end
       
       def _preceding_questions_numbered

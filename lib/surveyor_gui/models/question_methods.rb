@@ -5,12 +5,12 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text, :other, :other_text
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
-                  :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit,
+                  :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit, :other, :other_text,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -264,7 +264,7 @@ module SurveyorGui
       end
 
       def answers_textbox
-        self.answers.where('is_exclusive != ?',true).order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('is_exclusive != ?  and response_class != ?',true,"string").order('display_order asc').collect(&:text).join("\n")
       end
       
       def omit
@@ -275,9 +275,18 @@ module SurveyorGui
         answer = self.answers.where('is_exclusive = ?',true).first
         @omit_text = (answer ? answer.text : "none of the above")
       end
+      
+      def other
+        @other = self.answers.where('response_class = ?',"string").size > 0
+      end
+      
+      def other_text
+        answer = self.answers.where('response_class = ?',"string").first
+        @other_text = (answer ? answer.text : "Other")
+      end
                   
       def grid_columns_textbox
-        self.answers.where('is_exclusive != ?',true).order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('is_exclusive != ? and response_class != ?',true,"string").order('display_order asc').collect(&:text).join("\n")
       end
       
       def grid_rows_textbox
@@ -308,6 +317,8 @@ module SurveyorGui
             answers_textbox:      @answers_textbox, 
             omit_text:            @omit_text,
             is_exclusive:         @omit=="1",
+            other_text:           @other_text,
+            other:                @other=="1",
             grid_columns_textbox: @grid_columns_textbox, 
             grid_rows_textbox:    @grid_rows_textbox)
         end

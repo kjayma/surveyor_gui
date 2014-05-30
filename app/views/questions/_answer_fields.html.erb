@@ -28,5 +28,12 @@
   %>: 
   <%= f.input_field :omit, label: false, as: :boolean %>
   <br/><br/><br/>
-  Add a choice for "other": <br/>
+  <%= f.input :other_text, 
+    label: "add a choice for", 
+    hint: "user determines choice", 
+    placeholder: "Other", 
+    as: :string, 
+    wrapper_html: {class: 'other_text fl'} 
+  %>: 
+  <%= f.input_field :other, label: false, as: :boolean %>
 <% end -%>

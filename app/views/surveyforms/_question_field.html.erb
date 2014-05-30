@@ -18,8 +18,15 @@
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
   <% when :pick_one, :grid_one -%>
-
-    <%= f.input_field :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :radio_buttons %>
+    
+    <% f.object.answers.each do |answer| -%>
+      <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
+      <% if answer.response_class == "string" %>
+        <span class="other">
+          <%= f.input_field :dummy_answer,  :as=>:string, :label=>false%>
+        </span>
+      <% end -%>
+    <% end -%>
 
  <% when :dropdown, :grid_dropdown -%>
 
@@ -31,8 +38,16 @@
       <br />
       <span style="font-weight:normal;font-style:italic" class="field_indent">content retrieved from the application will go here.</span>
       <br />
-    <% else -%>
-      <%= f.input_field :dummy_answer, :collection => f.object.answers.collect(&:text), :as => :check_boxes, :label => false %>
+    <% else -%>    
+      <% f.object.answers.each do |answer| -%>
+        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
+        <% if answer.response_class == "string" %>
+          <span class="other">
+            <%= f.input_field :dummy_answer,  :as=>:string, :label=>false%>
+          </span>
+        <% end -%>
+      <% end -%>
+
     <% end %>
 
   <% when :label -%>
@@ -42,7 +57,6 @@
 
   <% when  :string -%>
     <%= f.input :dummy_answer, :as=>:string, :label=>false, :input_html=>{:rows=>"1"}%>
-    
 
   <% when  :box -%>
 

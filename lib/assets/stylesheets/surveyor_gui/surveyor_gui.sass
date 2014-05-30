@@ -205,6 +205,9 @@ body
         .inner_question
           :position relative
           
+        span.other
+          :float left  
+          
         div.question_group.inline
           :margin-left 4em
           div.question_group_header
@@ -251,8 +254,16 @@ body
             
             .row_name
               :display table-cell
+              
             div.radio_buttons, div.check_boxes
               :margin 0
+              :width auto
+            span.other
+              :margin-left 1em
+              :float left
+              input
+                :width 4em
+                :margin-left 0
             span.radio , span.checkbox
               :display table-cell
               :margin 0
@@ -304,6 +315,7 @@ body
         :margin 0
         :float none
         :width auto
+      
   
     div.string, span.prefix, span.suffix, select, textarea, .ui-slider, label, div.date_picker, div.file
       :margin-top 1em      
@@ -435,7 +447,7 @@ body
     :clear both
     
   .questions  
-    .omit_text
+    .omit_text, .other_text
       margin-top: 0
       label
         :width auto

@@ -69,23 +69,29 @@ module SurveyorGui
         is_exclusive          = args[:is_exclusive]
         omit_text             = args[:omit_text].to_s
         grid_columns_textbox  = args[:grid_columns_textbox]
-        grid_rows_textbox     = args[:grid_rows_textbox]
-        _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text)
+        grid_rows_textbox     = args[:grid_rows_textbox] 
+        other                 = args[:other]
+        other_text            = args[:other_text].to_s
+        _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text, other, other_text)
       end
 
       def _process_answers_textbox(question, args)
         is_exclusive = args[:is_exclusive]
-        answers_textbox  = is_exclusive ? args[:answers_textbox]+"\n"+args[:omit_text].to_s : args[:answers_textbox]
+        other        = args[:other]
+        omit_text    = is_exclusive ? "\n"+args[:omit_text].to_s : ""
+        other_text   = other        ? "\n"+args[:other_text].to_s : ""
+        answers_textbox   = args[:answers_textbox] + omit_text + other_text
+        response_class    = other ? "string" : "answer"
         updated_answers = TextBoxParser.new(
           textbox: answers_textbox, 
           records_to_update: question.answers
         )
         updated_answers.update_or_create_records do |display_order, text|
-          _create_an_answer(display_order, text, question, is_exclusive: is_exclusive)     
+          _create_an_answer(display_order, text, question, is_exclusive: is_exclusive, response_class: response_class)     
         end
       end
    
-      def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text)
+      def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text, other, other_text)
         #puts "processing grid rows \ntextbox grid?: #{_grid?(question)} \ntb: #{grid_rows_textbox} \ntb: #{grid_columns_textbox}\nthis: #{question.id}\ntext: #{question.text}"
         #puts 'got to inner if'
         #puts "\n\n#{question.display_order}\n\n"
@@ -102,6 +108,7 @@ module SurveyorGui
         end
         question.question_group.questions.each do |question|
           _create_some_answers(question, grid_columns_textbox)
+          _create_an_other_answer(question, other, other_text)
           _create_an_omit_answer(question, is_exclusive, omit_text)
         end
         #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
@@ -147,6 +154,20 @@ module SurveyorGui
         Answer.create!(params)
       end
       
+      def _create_an_other_answer(question, other, other_text)
+        if other
+          display_order = question.answers.last.display_order+1
+          _create_an_answer(display_order, other_text, question, response_class: "string") 
+        end
+      end
+      
+      def _create_an_omit_answer(question, is_exclusive, omit_text)
+        if is_exclusive
+          display_order = question.answers.last.display_order+1
+          _create_an_answer(display_order, omit_text, question, is_exclusive: is_exclusive) 
+        end
+      end
+      
       def _create_a_question(question, display_order, new_text, args) 
         #puts "making question #{new_text}" 
         #puts "\n\n#{self.display_order}\n\n"
@@ -167,13 +188,6 @@ module SurveyorGui
             report_code:          question.report_code           
           }.merge(args)
           Question.create!(params)
-        end
-      end
-      
-      def _create_an_omit_answer(question, is_exclusive, omit_text)
-        if is_exclusive
-          display_order = question.answers.last.display_order+1
-          _create_an_answer(display_order, omit_text, question, is_exclusive: is_exclusive) 
         end
       end
         

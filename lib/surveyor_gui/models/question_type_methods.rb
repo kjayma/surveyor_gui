@@ -30,7 +30,7 @@ module SurveyorGui
         #looks at id and calls the appropriate methods, eg.
         #if question_type.id is pick_one, calls _build_pick_one
         question.reload
-        puts question.attributes
+        #puts question.attributes
         builder = "_build_"+id.to_s
         send builder.to_sym, question, args
       end
@@ -72,13 +72,14 @@ module SurveyorGui
       end
 
       def _process_answers_textbox(question, args)
-        answers_textbox  = args[:answers_textbox]
+        is_exclusive = args[:is_exclusive]
+        answers_textbox  = is_exclusive ? args[:answers_textbox]+"\n"+args[:omit_text].to_s : args[:answers_textbox]
         updated_answers = TextBoxParser.new(
           textbox: answers_textbox, 
           records_to_update: question.answers
         )
         updated_answers.update_or_create_records do |display_order, text|
-          _create_an_answer(display_order, text, question)     
+          _create_an_answer(display_order, text, question, is_exclusive: is_exclusive)     
         end
       end
    
@@ -133,11 +134,15 @@ module SurveyorGui
       end
       
       
-      def _create_an_answer(display_order, new_text, current_question)  
-        Answer.create!(
+      def _create_an_answer(display_order, new_text, current_question, args={})  
+        params = {
           question_id: current_question.id,
           display_order: display_order,
           text: new_text
+        }.merge(args)
+        
+        Answer.create!(
+          params
         )
       end
       
@@ -268,6 +273,8 @@ class TextBoxParser
   end
   
   def update_or_create_records(update_params={}, &create_object)
+    #takes a code block to customize creation of new objects
+    #update and delete operations are always the same.  For now.
     _lines.readlines.each_with_index do |line, display_order|
       _update_or_create(
         line.strip, 

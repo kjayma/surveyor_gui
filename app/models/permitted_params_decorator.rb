@@ -15,7 +15,7 @@ PermittedParams.class_eval do
      :text_adjusted_for_group,
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
-     :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
+     :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source, :omit_text, :omit,
      :modifiable, :report_code, :answers_textbox, :grid_columns_textbox, 
      :grid_rows_textbox, answers_attributes: answer_attributes,
      dependency_attributes: dependency_attributes]

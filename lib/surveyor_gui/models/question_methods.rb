@@ -5,12 +5,12 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
-                  :grid_columns_textbox, :grid_rows_textbox,
+                  :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -67,19 +67,6 @@ module SurveyorGui
           errors.add(:base,"Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead.")
           return false
         end
-      end
-      
-      def text=(txt)
-        write_attribute(:text, txt) 
-        if part_of_group?
-          question_group.update_attributes(text: txt)
-        end
-        @text = txt
-      end
-      
-      def grid_rows_textbox=(textbox)
-        write_attribute(:text, textbox.match(/.*\r/).to_s.strip)
-        @grid_rows_textbox = textbox.gsub(/\r/,"")
       end
 
       def question_type_id
@@ -277,19 +264,18 @@ module SurveyorGui
       end
 
       def answers_textbox
-        self.answers.order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('is_exclusive != ?',true).order('display_order asc').collect(&:text).join("\n")
       end
       
-      def build_complex_questions
-        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox 
-          self.question_type.build_complex_question_structure(
-            self, 
-            answers_textbox:      @answers_textbox, 
-            grid_columns_textbox: @grid_columns_textbox, 
-            grid_rows_textbox:    @grid_rows_textbox)
-        end
+      def omit
+        @omit = self.answers.where('is_exclusive = ?',true).size > 0
       end
       
+      def omit_text
+        answer = self.answers.where('is_exclusive = ?',true).first
+        @omit_text = (answer ? answer.text : "none of the above")
+      end
+                  
       def grid_columns_textbox
         self.answers.order('display_order asc').collect(&:text).join("\n")
       end
@@ -301,7 +287,31 @@ module SurveyorGui
           nil
         end
       end
-
+      
+      def text=(txt)
+        write_attribute(:text, txt) 
+        if part_of_group?
+          question_group.update_attributes(text: txt)
+        end
+        @text = txt
+      end
+      
+      def grid_rows_textbox=(textbox)
+        write_attribute(:text, textbox.match(/.*\r/).to_s.strip)
+        @grid_rows_textbox = textbox.gsub(/\r/,"")
+      end
+      
+      def build_complex_questions
+        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox 
+          self.question_type.build_complex_question_structure(
+            self, 
+            answers_textbox:      @answers_textbox, 
+            omit_text:            @omit_text,
+            is_exclusive:         @omit=="1",
+            grid_columns_textbox: @grid_columns_textbox, 
+            grid_rows_textbox:    @grid_rows_textbox)
+        end
+      end
  
 
       private

@@ -80,15 +80,16 @@ module SurveyorGui
         other        = args[:other]
         omit_text    = is_exclusive ? "\n"+args[:omit_text].to_s : ""
         other_text   = other        ? "\n"+args[:other_text].to_s : ""
-        answers_textbox   = args[:answers_textbox] + omit_text + other_text
-        response_class    = other ? "string" : "answer"
+        answers_textbox   = args[:answers_textbox] 
         updated_answers = TextBoxParser.new(
           textbox: answers_textbox, 
           records_to_update: question.answers
         )
         updated_answers.update_or_create_records do |display_order, text|
-          _create_an_answer(display_order, text, question, is_exclusive: is_exclusive, response_class: response_class)     
+          _create_an_answer(display_order, text, question)     
         end
+        _create_an_other_answer(question, other, other_text)
+        _create_an_omit_answer(question, is_exclusive, omit_text)
       end
    
       def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text, other, other_text)
@@ -168,7 +169,7 @@ module SurveyorGui
         end
       end
       
-      def _create_a_question(question, display_order, new_text, args) 
+      def _create_a_question(question, display_order, new_text, args={}) 
         #puts "making question #{new_text}" 
         #puts "\n\n#{self.display_order}\n\n"
         if !question.question_group.questions.collect(&:text).include? new_text

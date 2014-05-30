@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  layout 'surveyor_gui_blank'
 
   def new
     @title = "Add Question"

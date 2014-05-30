@@ -1,4 +1,5 @@
 class DependencysController < ApplicationController
+  layout 'surveyor_gui_blank'
 
   def new
     prep_variables

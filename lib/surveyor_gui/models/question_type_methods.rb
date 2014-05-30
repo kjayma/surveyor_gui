@@ -66,9 +66,11 @@ module SurveyorGui
       end
       
       def _build_grid(question,args)
+        is_exclusive          = args[:is_exclusive]
+        omit_text             = args[:omit_text].to_s
         grid_columns_textbox  = args[:grid_columns_textbox]
         grid_rows_textbox     = args[:grid_rows_textbox]
-        _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox)
+        _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text)
       end
 
       def _process_answers_textbox(question, args)
@@ -83,7 +85,7 @@ module SurveyorGui
         end
       end
    
-      def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox)
+      def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text)
         #puts "processing grid rows \ntextbox grid?: #{_grid?(question)} \ntb: #{grid_rows_textbox} \ntb: #{grid_columns_textbox}\nthis: #{question.id}\ntext: #{question.text}"
         #puts 'got to inner if'
         #puts "\n\n#{question.display_order}\n\n"
@@ -100,6 +102,7 @@ module SurveyorGui
         end
         question.question_group.questions.each do |question|
           _create_some_answers(question, grid_columns_textbox)
+          _create_an_omit_answer(question, is_exclusive, omit_text)
         end
         #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
         #can't seem to override it and everytime a question is deleted, the whole group goes with it.
@@ -141,16 +144,14 @@ module SurveyorGui
           text: new_text
         }.merge(args)
         
-        Answer.create!(
-          params
-        )
+        Answer.create!(params)
       end
       
-      def _create_a_question(question, display_order, new_text) 
+      def _create_a_question(question, display_order, new_text, args) 
         #puts "making question #{new_text}" 
         #puts "\n\n#{self.display_order}\n\n"
         if !question.question_group.questions.collect(&:text).include? new_text
-          Question.create!(
+          params = {
             display_order:        (display_order - 1),
             text:                 new_text,
             survey_section_id:    question.survey_section_id,
@@ -163,8 +164,16 @@ module SurveyorGui
             suffix:               question.suffix,
             decimals:             question.decimals,
             modifiable:           question.modifiable,
-            report_code:          question.report_code          
-          )
+            report_code:          question.report_code           
+          }.merge(args)
+          Question.create!(params)
+        end
+      end
+      
+      def _create_an_omit_answer(question, is_exclusive, omit_text)
+        if is_exclusive
+          display_order = question.answers.last.display_order+1
+          _create_an_answer(display_order, omit_text, question, is_exclusive: is_exclusive) 
         end
       end
         
@@ -206,6 +215,7 @@ module SurveyorGui
           [:label,          "Label"                                           , true,   :none, :label,    :inline  ],
           [:file,           "File Upload"                                     , true,   :none, :file,     :inline  ],
           [:repeater,       "Repeater (add as many answers as apply"          , true,   :all,  :all,      :repeater],
+          [:string,         "Text"                                            , true,   :none, :default,  :grid    ],
           #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it
           #but don't treat it differently.  See question 16 and 17 in kitchen_sink_survey.rb. 
           [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "inline",  nil    ],

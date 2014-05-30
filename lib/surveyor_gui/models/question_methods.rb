@@ -277,7 +277,7 @@ module SurveyorGui
       end
                   
       def grid_columns_textbox
-        self.answers.order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('is_exclusive != ?',true).order('display_order asc').collect(&:text).join("\n")
       end
       
       def grid_rows_textbox

@@ -18,22 +18,6 @@
     <% end %>
   <% end -%>
   -->
-  <br/> 
-  <%= f.input :omit_text, 
-    label: "add a choice for", 
-    hint: "will uncheck all other choices", 
-    placeholder: "none of the above", 
-    as: :string, 
-    wrapper_html: {class: 'omit_text fl'} 
-  %>: 
-  <%= f.input_field :omit, label: false, as: :boolean %>
-  <br/><br/><br/>
-  <%= f.input :other_text, 
-    label: "add a choice for", 
-    hint: "user determines choice", 
-    placeholder: "Other", 
-    as: :string, 
-    wrapper_html: {class: 'other_text fl'} 
-  %>: 
-  <%= f.input_field :other, label: false, as: :boolean %>
+  
+  <%= render "answer_options", f: f %>
 <% end -%>

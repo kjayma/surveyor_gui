@@ -5,12 +5,12 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text, :other, :other_text
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text, :other, :other_text, :comments_text, :comments
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox,
-                  :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit, :other, :other_text,
+                  :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit, :other, :other_text, :is_comment, :comments, :comments_text,
                   :dynamic_source, :modifiable, :report_code if defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -284,14 +284,26 @@ module SurveyorGui
         answer = self.answers.where('response_class = ?',"string").first
         @other_text = (answer ? answer.text : "Other")
       end
+      
+      def comments
+        if self.part_of_group?
+          @comments = self.question_group.questions.where('is_comment=?',true).size > 0
+        else
+          @comments = false
+        end
+      end
+            
+      def comments_text
+        is_comment ? self.answers.first.text : "Comments"
+      end
                   
       def grid_columns_textbox
-        self.answers.where('is_exclusive != ? and response_class != ?',true,"string").order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('response_class != ? and is_exclusive = ?',"string",false).order('display_order asc').collect(&:text).join("\n")
       end
       
       def grid_rows_textbox
         if self.question_group && self.question_group.questions
-          self.question_group.questions.order('display_order asc').collect(&:text).join("\n")
+          self.question_group.questions.where('is_comment=?',false).order('display_order asc').collect(&:text).join("\n")
         else
           nil
         end
@@ -319,8 +331,18 @@ module SurveyorGui
             is_exclusive:         @omit=="1",
             other_text:           @other_text,
             other:                @other=="1",
+            comments_text:        @comments_text,
+            comments:             @comments=="1",
             grid_columns_textbox: @grid_columns_textbox, 
             grid_rows_textbox:    @grid_rows_textbox)
+        end
+      end
+      
+      def next_display_order
+        if part_of_group?
+          self.question_group.questions.last.display_order + 1
+        else
+          display_order + 1
         end
       end
  

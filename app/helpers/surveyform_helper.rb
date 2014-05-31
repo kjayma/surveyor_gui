@@ -39,15 +39,19 @@ module SurveyformHelper
     if q.object.part_of_group?
       _render_initial_group(q, ss)  ||  _respond_to_a_change_in_group_id(q, ss)
     else
-      render "question_wrapper", :f => q
+      render "question_wrapper", f: q
     end  
   end
   
   def render_one_group(qg)
     qg.simple_fields_for :questions, @current_group.questions do |f|
-      render "question_group_fields", f: f 
+      if f.object.is_comment != true
+        render "question_group_fields", f: f
+      elsif f.object.is_comment == true
+        "</div>".html_safe+(render "question_field", f: f)+"<div>".html_safe
+      end 
     end
-  end
+  end  
   
   def row_label_if_question_group(question)
     if question.part_of_group?

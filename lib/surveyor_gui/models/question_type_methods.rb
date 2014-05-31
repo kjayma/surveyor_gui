@@ -72,14 +72,22 @@ module SurveyorGui
         grid_rows_textbox     = args[:grid_rows_textbox] 
         other                 = args[:other]
         other_text            = args[:other_text].to_s
-        _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text, other, other_text)
+        is_comment            = args[:comments]
+        comments_text         = args[:comments_text].to_s
+        _process_grid_rows_textbox(
+          question, 
+          grid_columns_textbox, grid_rows_textbox, 
+          is_exclusive,         omit_text, 
+          other,                other_text,
+          is_comment,           comments_text
+        )
       end
 
       def _process_answers_textbox(question, args)
-        is_exclusive = args[:is_exclusive]
-        other        = args[:other]
-        omit_text    = is_exclusive ? "\n"+args[:omit_text].to_s : ""
-        other_text   = other        ? "\n"+args[:other_text].to_s : ""
+        is_exclusive  = args[:is_exclusive]
+        other         = args[:other]
+        omit_text     = is_exclusive ? "\n"+args[:omit_text].to_s : ""
+        other_text    = other        ? "\n"+args[:other_text].to_s : ""
         answers_textbox   = args[:answers_textbox] 
         updated_answers = TextBoxParser.new(
           textbox: answers_textbox, 
@@ -92,7 +100,13 @@ module SurveyorGui
         _create_an_omit_answer(question, is_exclusive, omit_text)
       end
    
-      def _process_grid_rows_textbox(question, grid_columns_textbox, grid_rows_textbox, is_exclusive, omit_text, other, other_text)
+      def _process_grid_rows_textbox(
+        question, 
+        grid_columns_textbox, grid_rows_textbox, 
+        is_exclusive, omit_text, 
+        other, other_text,
+        is_comment, comments_text
+       )
         #puts "processing grid rows \ntextbox grid?: #{_grid?(question)} \ntb: #{grid_rows_textbox} \ntb: #{grid_columns_textbox}\nthis: #{question.id}\ntext: #{question.text}"
         #puts 'got to inner if'
         #puts "\n\n#{question.display_order}\n\n"
@@ -112,6 +126,7 @@ module SurveyorGui
           _create_an_other_answer(question, other, other_text)
           _create_an_omit_answer(question, is_exclusive, omit_text)
         end
+        _create_a_comment(question, is_comment, comments_text)
         #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
         #can't seem to override it and everytime a question is deleted, the whole group goes with it.
         #which makes it impossible to delete a question from a grid.
@@ -169,27 +184,34 @@ module SurveyorGui
         end
       end
       
+      def _create_a_comment(question, is_comment, comments_text)
+        if is_comment          
+          display_order = question.next_display_order
+          question = _create_a_question(question, display_order,comments_text,  is_comment: true, pick: "none", display_type: "default") 
+          answer = _create_an_answer(0, comments_text, question, response_class: "string")
+          answer.update_attribute(:text, "") 
+        end
+      end
+      
       def _create_a_question(question, display_order, new_text, args={}) 
         #puts "making question #{new_text}" 
         #puts "\n\n#{self.display_order}\n\n"
-        if !question.question_group.questions.collect(&:text).include? new_text
-          params = {
-            display_order:        (display_order - 1),
-            text:                 new_text,
-            survey_section_id:    question.survey_section_id,
-            question_group_id:    question.question_group.id,
-            pick:                 question.pick,
-            reference_identifier: question.reference_identifier,
-            display_type:         question.display_type,
-            is_mandatory:         question.is_mandatory,
-            prefix:               question.prefix, 
-            suffix:               question.suffix,
-            decimals:             question.decimals,
-            modifiable:           question.modifiable,
-            report_code:          question.report_code           
-          }.merge(args)
-          Question.create!(params)
-        end
+        params = {
+          display_order:        (display_order - 1),
+          text:                 new_text,
+          survey_section_id:    question.survey_section_id,
+          question_group_id:    question.question_group_id,
+          pick:                 question.pick,
+          reference_identifier: question.reference_identifier,
+          display_type:         question.display_type,
+          is_mandatory:         question.is_mandatory,
+          prefix:               question.prefix, 
+          suffix:               question.suffix,
+          decimals:             question.decimals,
+          modifiable:           question.modifiable,
+          report_code:          question.report_code     
+        }.merge(args)
+        return Question.create!(params)
       end
         
       

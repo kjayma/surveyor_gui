@@ -1,0 +1,10 @@
+<%= simple_fields_for 'question', @questions do |f| %>
+Dropdown
+  Columns: <span class="grid_textbox_hint">add each column as a new line</span><br/>
+  <%= f.input :grid_columns_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
+  <br/><br/>
+  Rows: <span class="grid_textbox_hint">add each row as a new line</span><br/>
+  <%= f.input :grid_rows_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
+
+  <%= render "answer_options", f: f %>
+<% end -%>

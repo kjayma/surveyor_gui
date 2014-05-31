@@ -123,13 +123,17 @@ class QuestionsController < ApplicationController
       @questions = Question.find(params[:id])
     end
     if @questions.answers.empty?
-      @questions.answers.build(:text=>'')
+      @questions.answers.build(text: "", response_class: "answer")
     else
       if !@questions.answers.first.original_choice.blank?
         @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
       end
     end
-    render :partial => 'grid_fields'
+    if params[:question_type_id] == "grid_dropdown"
+      render :partial => 'grid_dropdown_fields'
+    else
+      render :partial => 'grid_fields'
+    end
   end
 
   def render_no_picks_partial

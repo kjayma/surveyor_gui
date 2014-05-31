@@ -246,7 +246,7 @@ module SurveyorGui
           [:file,           "File Upload"                                     , false,  :none, :file,     nil      ],
           [:grid_one,       "Grid (pick one)"                                 , true,   :one,  "default", :grid    ],
           [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid    ],
-          [:grid_dropdown,  "Group of Dropdowns"                              , true,   :one,  :dropdown, :grid    ],
+          [:grid_dropdown,  "Grid (dropdowns)"                                , true,   :one,  :dropdown, :grid    ],
           [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline  ],
           #nothing below here shows up on the question builder choices for question type
           [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline  ],

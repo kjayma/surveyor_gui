@@ -1,5 +1,15 @@
 <%= simple_fields_for 'question', @questions do |f| %>
-Dropdown
+
+  Number of columns:     
+  <%= f.input :dropdown_column_count, :collection => 
+    6.times.map{|i| [(i+1).to_s + " column".pluralize(i+1), i+1]}, 
+    :as => :select, :label => false,
+    :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'} 
+  %>
+  <br/>
+  <div class="grid_dropdown_columns">
+  </div>
+  <br/>
   Columns: <span class="grid_textbox_hint">add each column as a new line</span><br/>
   <%= f.input :grid_columns_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
   <br/><br/>

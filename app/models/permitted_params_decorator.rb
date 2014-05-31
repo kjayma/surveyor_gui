@@ -5,7 +5,7 @@ PermittedParams.class_eval do
   def answer_attributes
     base_answer_attributes +
     [:text, :response_class, :display_order, :original_choice, :hide_label,
-     :question_id, :display_type, :_destroy, :id]
+     :question_id, :display_type, :_destroy, :id, :is_comment]
   end
 
   alias_method :base_question_attributes, :question_attributes

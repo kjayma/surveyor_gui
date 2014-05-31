@@ -6,14 +6,4 @@
   <%= f.input :grid_rows_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
 
   <%= render "answer_options", f: f %>
-  <br/><br/><br/>
-  <%= f.input :comments_text, 
-    label: "at the bottom of questions, add", 
-    hint: "box for notes/comments", 
-    placeholder: "Comments", 
-    as: :string, 
-    wrapper_html: {class: 'comments_text fl'} 
-  %>: 
-  <%= f.input_field :comments, label: false, as: :boolean %>
-
 <% end -%>

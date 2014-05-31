@@ -207,6 +207,13 @@ body
           
         span.other
           :float left  
+        
+        span.other.comments_text  
+          :margin-left 3.5em
+          input
+            :margin-left 1em
+          label
+            :margin-top 0
           
         div.question_group.inline
           :margin-left 4em
@@ -301,6 +308,17 @@ body
         input
           :margin-right 2px
 
+    .inner_question
+      span.radio , span.checkbox      
+        :float left
+    .inner_question
+      .row_name
+        :margin-left 3em
+      span.other
+        :margin-left 1em
+      .question_group_element
+        span.radio , span.checkbox      
+          :float none        
     span.radio , span.checkbox
       :display block
       :float none

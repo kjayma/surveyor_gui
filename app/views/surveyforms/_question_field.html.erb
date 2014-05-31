@@ -17,7 +17,24 @@
     <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
-  <% when :pick_one, :grid_one -%>
+  <% when :pick_one -%>
+    
+    <% f.object.answers.each do |answer| -%>
+      <% if answer.is_comment==true -%>
+          <span class="other comments_text">
+            <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
+          </span>        
+      <% else -%>
+        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
+        <% if answer.response_class == "string" %>
+          <span class="other">
+            <%= f.input_field :dummy_answer,  :as=>:string, :label=> false%>
+          </span>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+    
+  <% when :grid_one -%>
     
     <% f.object.answers.each do |answer| -%>
       <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
@@ -32,7 +49,24 @@
 
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 
-  <% when :pick_any, :grid_any %>
+
+  <% when :pick_any %>    
+    <% f.object.answers.each do |answer| -%>
+      <% if answer.is_comment==true -%>
+          <span class="other comments_text">
+            <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
+          </span>        
+      <% else -%>
+        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
+        <% if answer.response_class == "string" %>
+          <span class="other">
+            <%= f.input_field :dummy_answer,  :as=>:string, :label=> false%>
+          </span>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+    
+  <% when :grid_any %>
 
     <% if f.object.dynamically_generate==false -%>
       <br />

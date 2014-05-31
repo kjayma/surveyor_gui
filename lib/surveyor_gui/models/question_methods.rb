@@ -264,7 +264,7 @@ module SurveyorGui
       end
 
       def answers_textbox
-        self.answers.where('is_exclusive != ?  and response_class != ?',true,"string").order('display_order asc').collect(&:text).join("\n")
+        self.answers.where('is_exclusive != ? and is_comment != ? and response_class != ?',true,true,"string").order('display_order asc').collect(&:text).join("\n")
       end
       
       def omit
@@ -277,11 +277,11 @@ module SurveyorGui
       end
       
       def other
-        @other = self.answers.where('response_class = ?',"string").size > 0
+        @other = self.answers.where('response_class = ? and is_exclusive = ? and is_comment = ?',"string",false, false).size > 0
       end
       
       def other_text
-        answer = self.answers.where('response_class = ?',"string").first
+        answer = self.answers.where('response_class = ? and is_exclusive = ? and is_comment = ?',"string", false, false).first
         @other_text = (answer ? answer.text : "Other")
       end
       
@@ -289,12 +289,17 @@ module SurveyorGui
         if self.part_of_group?
           @comments = self.question_group.questions.where('is_comment=?',true).size > 0
         else
-          @comments = false
+          @comments = self.answers.where('is_comment=?',true).size > 0
         end
       end
             
       def comments_text
-        is_comment ? self.answers.first.text : "Comments"
+        if self.part_of_group?
+          @comments_text = is_comment ? self.answers.first.text : "Comments"
+        else
+          answer = self.answers.where('is_comment=?',true).first
+          @comments_text = (answer ? answer.text : "Comments")
+        end
       end
                   
       def grid_columns_textbox

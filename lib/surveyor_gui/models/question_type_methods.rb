@@ -86,8 +86,10 @@ module SurveyorGui
       def _process_answers_textbox(question, args)
         is_exclusive  = args[:is_exclusive]
         other         = args[:other]
+        is_comment    = args[:comments]
         omit_text     = is_exclusive ? "\n"+args[:omit_text].to_s : ""
         other_text    = other        ? "\n"+args[:other_text].to_s : ""
+        comments_text = is_comment   ? "\n"+args[:comments_text].to_s : ""
         answers_textbox   = args[:answers_textbox] 
         updated_answers = TextBoxParser.new(
           textbox: answers_textbox, 
@@ -98,6 +100,7 @@ module SurveyorGui
         end
         _create_an_other_answer(question, other, other_text)
         _create_an_omit_answer(question, is_exclusive, omit_text)
+        _create_a_comment_answer(question, is_comment, comments_text)     
       end
    
       def _process_grid_rows_textbox(
@@ -181,6 +184,13 @@ module SurveyorGui
         if is_exclusive
           display_order = question.answers.last.display_order+1
           _create_an_answer(display_order, omit_text, question, is_exclusive: is_exclusive) 
+        end
+      end
+      
+      def _create_a_comment_answer(question, is_comment, comments_text)        
+        if is_comment            
+          display_order = question.answers.order('display_order ASC').last.display_order        
+          answer = _create_an_answer(display_order, comments_text, question, response_class: "string", is_comment: true)
         end
       end
       

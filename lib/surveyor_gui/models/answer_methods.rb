@@ -7,7 +7,7 @@ module SurveyorGui
         base.send :has_many, :responses
         base.send :default_scope, lambda { base.order('display_order') }
         base.send :attr_accessible, :text, :response_class, :display_order, :original_choice, :hide_label, :question_id, 
-                  :display_type if defined? ActiveModel::MassAssignmentSecurity
+                  :display_type, :is_comment if defined? ActiveModel::MassAssignmentSecurity
       end
 
       def split_or_hidden_text(part = nil)

@@ -21,6 +21,8 @@ module SurveyorGui
       add_report_code_to_questions
       add_is_comment_to_questions
       add_is_comment_to_answers
+      create_rows
+      create_columns
     )
 
     def migrations

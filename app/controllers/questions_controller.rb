@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
     @title = "Add Question"
     survey_section = SurveySection.find(params[:survey_section_id])
     survey = Survey.find(survey_section.survey_id)
+    @question_group = QuestionGroup.new
     if params[:prev_question_id]
       prev_question = Question.find(params[:prev_question_id])
       @question = Question.new(:survey_section_id => params[:survey_section_id],
@@ -117,6 +118,7 @@ class QuestionsController < ApplicationController
   end
   
   def render_grid_partial
+    index = params[:index].to_i
     if params[:id].blank?
       @questions = Question.new
     else
@@ -129,11 +131,36 @@ class QuestionsController < ApplicationController
         @questions.answers.first.update_attribute(:text,@questions.answers.first.original_choice)
       end
     end
+    if @questions.question_group
+      @question_group=@questions.question_group
+    else
+      @question_group=QuestionGroup.new
+    end
+    (index).times.each {@question_group.columns.build}
     if params[:question_type_id] == "grid_dropdown"
       render :partial => 'grid_dropdown_fields'
     else
       render :partial => 'grid_fields'
     end
+  end
+  
+  def render_grid_dropdown_columns
+    render_grid_partial(params,params[:index])
+    #if params[:id].blank?
+    #  @question_group = QuestionGroup.new
+    #else
+    #  question = Question.find(params[:id])
+    #  if question.part_of_group?
+    #    @question_group = QuestionGroup.new
+    #  else
+    #    @question_group = QuestionGroup.new
+    #  end
+    #end
+    #if @question_group.columns.empty?
+    #  @question_group.columns.new
+    #end
+    #@index = params[:index]
+    #render :partial => 'grid_dropdown_columns'
   end
 
   def render_no_picks_partial

@@ -62,5 +62,11 @@ PermittedParams.class_eval do
     [:title, :display_order, :questions_attributes, :survey_id, :modifiable,
      :id, questions_attributes: question_attributes]
   end
-
+  # column
+  def column
+    strong_parameters.permit(*column_attributes)
+  end
+  def column_attributes
+    [:text, :question_group_id, :answers_textbox]
+  end
 end

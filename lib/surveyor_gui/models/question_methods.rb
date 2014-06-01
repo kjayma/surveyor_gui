@@ -4,9 +4,9 @@ module SurveyorGui
     module QuestionMethods
 
       def self.included(base)
-        base.send :attr_accessor, :dummy_answer, :type, :decimals, :dropdown_column_count
+        base.send :attr_accessor, :dummy_answer, :type, :decimals
         base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text, 
-                  :other, :other_text, :comments_text, :comments
+                  :other, :other_text, :comments_text, :comments, :dropdown_column_count
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
@@ -21,6 +21,8 @@ module SurveyorGui
         base.send :scope, :by_display_order, -> {base.order('display_order')}
         ### everything below this point must be commented out to run the rake tasks.
         base.send :accepts_nested_attributes_for, :dependency, :reject_if => lambda { |d| d[:rule].blank?}, :allow_destroy => true
+        ### everything below this point must be commented out to run the rake tasks.
+        base.send :accepts_nested_attributes_for, :question_group, :reject_if => lambda { |d| d[:rule].blank?}, :allow_destroy => true
         base.send :mount_uploader, :dummy_blob, BlobUploader
         base.send :belongs_to, :question_type
         
@@ -301,6 +303,10 @@ module SurveyorGui
           answer = self.answers.where('is_comment=?',true).first
           @comments_text = (answer ? answer.text : "Comments")
         end
+      end
+               
+      def dropdown_column_count
+        self.question_group ? self.question_group.columns.size : 1
       end
                   
       def grid_columns_textbox

@@ -1,20 +1,25 @@
-<%= simple_fields_for 'question', @questions do |f| %>
-
+<%= simple_fields_for 'question', @questions do |f| %>      
   Number of columns:     
   <%= f.input :dropdown_column_count, :collection => 
-    6.times.map{|i| [(i+1).to_s + " column".pluralize(i+1), i+1]}, 
+    10.times.map{|i| [(i+1).to_s + " column".pluralize(i+1), i+1]}, 
     :as => :select, :label => false,
     :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'} 
   %>
-  <br/>
-  <div class="grid_dropdown_columns">
+  <%= f.simple_fields_for :question_group, @question_group do |qg| %>
+    <%= qg.hidden_field :id %>
+    Columns: <span class="grid_textbox_hint">Columns: enter the choices for each column option on a separate line under "Column Options"</span><br/>
+    <div class="grid_dropdown_columns">
+      <span class="spacer">&nbsp;</span>
+      <%= qg.simple_fields_for :columns do |c| %>
+          <%= render "grid_dropdown_columns", c: c %>
+      <% end -%>
+    </div>
+  <% end -%>
+  <div class="rows">
+    Rows: <span class="grid_textbox_hint">add each row as a new line</span><br/>
+    <%= f.input :grid_rows_textbox, :as => :text, 
+                :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
   </div>
-  <br/>
-  Columns: <span class="grid_textbox_hint">add each column as a new line</span><br/>
-  <%= f.input :grid_columns_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
-  <br/><br/>
-  Rows: <span class="grid_textbox_hint">add each row as a new line</span><br/>
-  <%= f.input :grid_rows_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
 
   <%= render "answer_options", f: f %>
 <% end -%>

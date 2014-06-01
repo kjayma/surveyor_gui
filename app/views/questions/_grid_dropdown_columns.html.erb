@@ -1,0 +1,10 @@
+<%= c.hidden_field :id %>
+<%= c.hidden_field :question_group_id %>
+<div class="column-box">
+  <h3>Column #<%= 1 + c.index %> heading</h3>
+  <%=  c.input :text, as: :string, label: false, placeholder: "column #{1+@index.to_i}"  %><br/>
+  <h3>Column #<%=1 + c.index %> choices</h3>
+  <%=  c.input  :answers_textbox, :as => :text, 
+                :wrapper_html => {:class=>'answers_collection'}, :label => false %>
+</div>
+

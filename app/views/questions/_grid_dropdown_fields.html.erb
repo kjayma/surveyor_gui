@@ -21,5 +21,22 @@
                 :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
   </div>
 
-  <%= render "answer_options", f: f %>
+  <br/><br/><br/>
+  <%= f.input :other_text, 
+    label: "add a choice for", 
+    hint: "user determines choice", 
+    placeholder: "Other", 
+    as: :string, 
+    wrapper_html: {class: 'other_text fl'} 
+  %>: 
+  <%= f.input_field :other, label: false, as: :boolean %>
+  <br/><br/><br/>
+  <%= f.input :comments_text, 
+    label: "at the bottom of questions, add", 
+    hint: "box for notes/comments", 
+    placeholder: "Comments", 
+    as: :string, 
+    wrapper_html: {class: 'comments_text fl'} 
+  %>: 
+  <%= f.input_field :comments, label: false, as: :boolean %>
 <% end -%>

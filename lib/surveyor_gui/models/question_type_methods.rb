@@ -74,14 +74,14 @@ module SurveyorGui
         other_text            = args[:other_text].to_s
         is_comment            = args[:comments]
         comments_text         = args[:comments_text].to_s
+        _cleanup_orphan_grid_dropdown_answers(question)
         _process_grid_rows_textbox(question, grid_rows_textbox)        
         _process_grid_answers(
           question, 
           grid_columns_textbox,
           is_exclusive, omit_text, 
           other, other_text,
-          is_comment, comments_text,
-          column_id=nil
+          is_comment, comments_text
        )  
       _restore_question_group(question) 
       end      
@@ -102,6 +102,7 @@ module SurveyorGui
           other, other_text,
           is_comment, comments_text
        ) 
+       _create_a_comment(question, is_comment, comments_text)
       _restore_question_group(question)       
       end
 
@@ -155,10 +156,17 @@ module SurveyorGui
        )        
         question.question_group.questions.each do |question|
           _create_some_answers(question, grid_columns_textbox, column_id)
-          _create_an_other_answer(question, other, other_text)
+          _create_an_other_answer(question, other, other_text, column_id)
           _create_an_omit_answer(question, is_exclusive, omit_text)
         end
-        _create_a_comment(question, is_comment, comments_text)
+        _create_a_comment(question, is_comment, comments_text) if id != :grid_dropdown
+      end
+      
+      def _cleanup_orphan_grid_dropdown_answers(question)
+        if question.question_group
+          question.question_group.questions.map{|q| q.answers.where('column_id NOT NULL').map{|a| a.destroy}}
+          question.question_group.columns.map{|c| c.destroy}
+        end
       end
       
       def _restore_question_group(question)
@@ -204,7 +212,7 @@ module SurveyorGui
         end
         columns = TextBoxParser.new(
           textbox: grid_columns_textbox, 
-          records_to_update: current_question.answers.where('column_id=?',column_id)
+          records_to_update: current_question.answers.where('column_id=? or column_id IS NULL',column_id)
         )
         columns.update_or_create_records do |display_order, text|
           _create_an_answer(display_order, text, current_question, column_id: column_id) 
@@ -223,16 +231,16 @@ module SurveyorGui
         Answer.create!(params)
       end
       
-      def _create_an_other_answer(question, other, other_text)
+      def _create_an_other_answer(question, other, other_text, column_id=nil)
         if other
           display_order = question.answers.last.display_order+1
-          _create_an_answer(display_order, other_text, question, response_class: "string") 
+          _create_an_answer(display_order, other_text, question, response_class: "string", column_id: column_id) 
         end
       end
       
       def _create_an_omit_answer(question, is_exclusive, omit_text)
         if is_exclusive
-          display_order = question.answers.last.display_order+1
+          display_order = question.answers.size > 0 ? question.answers.last.display_order+1 : 0
           _create_an_answer(display_order, omit_text, question, is_exclusive: is_exclusive) 
         end
       end

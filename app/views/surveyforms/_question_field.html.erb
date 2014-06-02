@@ -45,10 +45,17 @@
       <% end -%>
     <% end -%>
 
- <% when :dropdown, :grid_dropdown -%>
+  <% when :dropdown -%>
 
     <%= f.input :dummy_answer, label: false, :collection => f.object.answers.collect(&:text), :as => :select %>
 
+
+  <% when :grid_dropdown -%>
+    <% f.object.question_group.columns.each do |column|  %>
+      <%= f.input :dummy_answer, label: false, 
+                  :collection => f.object.answers.where('column_id=?',column.id).collect(&:text), 
+                  :as => :select, :wrapper_html=>{:class=>'grid_dropdown_cell'} %>
+    <% end -%>
 
   <% when :pick_any %>    
     <% f.object.answers.each do |answer| -%>

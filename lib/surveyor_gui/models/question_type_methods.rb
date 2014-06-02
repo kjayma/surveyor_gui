@@ -74,13 +74,16 @@ module SurveyorGui
         other_text            = args[:other_text].to_s
         is_comment            = args[:comments]
         comments_text         = args[:comments_text].to_s
-        _process_grid_rows_textbox(
+        _process_grid_rows_textbox(question, grid_rows_textbox)        
+        _process_grid_answers(
           question, 
-          grid_columns_textbox, grid_rows_textbox, 
-          is_exclusive,         omit_text, 
-          other,                other_text,
-          is_comment,           comments_text
-        )
+          grid_columns_textbox,
+          is_exclusive, omit_text, 
+          other, other_text,
+          is_comment, comments_text,
+          column_id=nil
+       )  
+      _restore_question_group(question) 
       end      
       
       def _build_grid_dropdown(question,args)
@@ -92,13 +95,14 @@ module SurveyorGui
         other_text            = args[:other_text].to_s
         is_comment            = args[:comments]
         comments_text         = args[:comments_text].to_s
+        _process_grid_rows_textbox(question, grid_rows_textbox)
         _process_grid_columns_textbox(
           question, 
-          grid_columns_textbox, grid_rows_textbox, 
-          is_exclusive,         omit_text, 
-          other,                other_text,
-          is_comment,           comments_text
-        )
+          is_exclusive, omit_text, 
+          other, other_text,
+          is_comment, comments_text
+       ) 
+      _restore_question_group(question)       
       end
 
       def _process_answers_textbox(question, args)
@@ -123,11 +127,7 @@ module SurveyorGui
    
       def _process_grid_rows_textbox(
         question, 
-        grid_columns_textbox, grid_rows_textbox, 
-        is_exclusive, omit_text, 
-        other, other_text,
-        is_comment, comments_text,
-        column_id=nil
+        grid_rows_textbox
        )
         #puts "processing grid rows \ntextbox grid?: #{_grid?(question)} \ntb: #{grid_rows_textbox} \ntb: #{grid_columns_textbox}\nthis: #{question.id}\ntext: #{question.text}"
         #puts 'got to inner if'
@@ -143,12 +143,25 @@ module SurveyorGui
           current_question = _create_a_question(question, display_order, new_text) 
           #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
         end
+      end
+      
+      def _process_grid_answers(
+        question, 
+        grid_columns_textbox,
+        is_exclusive, omit_text, 
+        other, other_text,
+        is_comment, comments_text,
+        column_id=nil
+       )        
         question.question_group.questions.each do |question|
           _create_some_answers(question, grid_columns_textbox, column_id)
           _create_an_other_answer(question, other, other_text)
           _create_an_omit_answer(question, is_exclusive, omit_text)
         end
         _create_a_comment(question, is_comment, comments_text)
+      end
+      
+      def _restore_question_group(question)
         #work around for infernal :dependent=>:destroy on belongs_to :question_group from Surveyor
         #can't seem to override it and everytime a question is deleted, the whole group goes with it.
         #which makes it impossible to delete a question from a grid.
@@ -161,19 +174,19 @@ module SurveyorGui
       
       def _process_grid_columns_textbox(
           question, 
-          grid_columns_textbox, grid_rows_textbox, 
           is_exclusive,         omit_text, 
           other,                other_text,
           is_comment,           comments_text
         )     
         question.question_group.columns.each do |column|
-          _process_grid_rows_textbox(
+          _process_grid_answers(
             question, 
-            column.answers_textbox, grid_rows_textbox, 
+            column.answers_textbox,
             is_exclusive, omit_text, 
             other, other_text,
-            is_comment, comments_text, column.id
-           )          
+            is_comment, comments_text,
+            column.id
+          )         
         end
       end
       
@@ -191,7 +204,7 @@ module SurveyorGui
         end
         columns = TextBoxParser.new(
           textbox: grid_columns_textbox, 
-          records_to_update: current_question.answers
+          records_to_update: current_question.answers.where('column_id=?',column_id)
         )
         columns.update_or_create_records do |display_order, text|
           _create_an_answer(display_order, text, current_question, column_id: column_id) 

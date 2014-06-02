@@ -59,7 +59,7 @@ module SurveyformHelper
     else
       f.object.answers
     end  
-  end
+  end  
   
   def row_label_if_question_group(question)
     if question.part_of_group?

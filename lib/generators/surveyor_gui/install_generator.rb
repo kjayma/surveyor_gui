@@ -23,6 +23,7 @@ module SurveyorGui
       add_is_comment_to_answers
       create_rows
       create_columns
+      add_column_id_to_answers
     )
 
     def migrations

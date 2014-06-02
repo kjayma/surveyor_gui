@@ -38,7 +38,6 @@ class QuestionsController < ApplicationController
     if !params[:question][:answers_attributes].blank? && !params[:question][:answers_attributes]['0'].blank?
       params[:question][:answers_attributes]['0'][:original_choice] = params[:question][:answers_attributes]['0'][:text]
     end
-
     @question = Question.new(question_params)
     if @question.save
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
@@ -118,7 +117,7 @@ class QuestionsController < ApplicationController
   end
   
   def render_grid_partial
-    index = params[:index].to_i
+    requested_columns = params[:index].to_i
     if params[:id].blank?
       @questions = Question.new
     else
@@ -136,7 +135,9 @@ class QuestionsController < ApplicationController
     else
       @question_group=QuestionGroup.new
     end
-    (index).times.each {@question_group.columns.build}
+    column_count = @question_group.columns.size
+    requested_columns = requested_columns > column_count ? requested_columns - column_count : 0 
+    (requested_columns).times.each {@question_group.columns.build}
     if params[:question_type_id] == "grid_dropdown"
       render :partial => 'grid_dropdown_fields'
     else

@@ -18,7 +18,8 @@ PermittedParams.class_eval do
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source, 
      :omit_text, :omit, :other, :other_text, :is_comment, :comments, :comments_text,
      :modifiable, :report_code, :answers_textbox, :grid_columns_textbox, 
-     :grid_rows_textbox, answers_attributes: answer_attributes,
+     :grid_rows_textbox, :dropdown_column_count, question_group_attributes: question_group_attributes,
+     answers_attributes: answer_attributes,
      dependency_attributes: dependency_attributes]
   end
 
@@ -62,11 +63,16 @@ PermittedParams.class_eval do
     [:title, :display_order, :questions_attributes, :survey_id, :modifiable,
      :id, questions_attributes: question_attributes]
   end
+  alias_method :base_question_group_attributes, :question_group_attributes
+  def question_group_attributes
+    base_question_group_attributes +
+    [:id, columns_attributes: column_attributes]
+  end
   # column
   def column
     strong_parameters.permit(*column_attributes)
   end
   def column_attributes
-    [:text, :question_group_id, :answers_textbox]
+    [:id, :text, :question_group_id, :answers_textbox]
   end
 end

@@ -62,7 +62,7 @@ module SurveyorGui
       end
       
       def _build_grid_dropdown(question, args)
-        _build_grid(question,args)     
+        _build_grid_dropdown(question,args)     
       end
       
       def _build_grid(question,args)
@@ -75,6 +75,24 @@ module SurveyorGui
         is_comment            = args[:comments]
         comments_text         = args[:comments_text].to_s
         _process_grid_rows_textbox(
+          question, 
+          grid_columns_textbox, grid_rows_textbox, 
+          is_exclusive,         omit_text, 
+          other,                other_text,
+          is_comment,           comments_text
+        )
+      end      
+      
+      def _build_grid_dropdown(question,args)
+        is_exclusive          = args[:is_exclusive]
+        omit_text             = args[:omit_text].to_s
+        grid_columns_textbox  = args[:grid_columns_textbox]
+        grid_rows_textbox     = args[:grid_rows_textbox] 
+        other                 = args[:other]
+        other_text            = args[:other_text].to_s
+        is_comment            = args[:comments]
+        comments_text         = args[:comments_text].to_s
+        _process_grid_columns_textbox(
           question, 
           grid_columns_textbox, grid_rows_textbox, 
           is_exclusive,         omit_text, 
@@ -108,7 +126,8 @@ module SurveyorGui
         grid_columns_textbox, grid_rows_textbox, 
         is_exclusive, omit_text, 
         other, other_text,
-        is_comment, comments_text
+        is_comment, comments_text,
+        column_id=nil
        )
         #puts "processing grid rows \ntextbox grid?: #{_grid?(question)} \ntb: #{grid_rows_textbox} \ntb: #{grid_columns_textbox}\nthis: #{question.id}\ntext: #{question.text}"
         #puts 'got to inner if'
@@ -125,7 +144,7 @@ module SurveyorGui
           #puts "current question: #{current_question.text} #{current_question.question_group_id} saved? #{current_question.persisted?} id: #{current_question.id}"
         end
         question.question_group.questions.each do |question|
-          _create_some_answers(question, grid_columns_textbox)
+          _create_some_answers(question, grid_columns_textbox, column_id)
           _create_an_other_answer(question, other, other_text)
           _create_an_omit_answer(question, is_exclusive, omit_text)
         end
@@ -139,7 +158,25 @@ module SurveyorGui
           QuestionGroup.create!(question.question_group.attributes)
         end
       end
-        
+      
+      def _process_grid_columns_textbox(
+          question, 
+          grid_columns_textbox, grid_rows_textbox, 
+          is_exclusive,         omit_text, 
+          other,                other_text,
+          is_comment,           comments_text
+        )     
+        question.question_group.columns.each do |column|
+          _process_grid_rows_textbox(
+            question, 
+            column.answers_textbox, grid_rows_textbox, 
+            is_exclusive, omit_text, 
+            other, other_text,
+            is_comment, comments_text, column.id
+           )          
+        end
+      end
+      
       def _pick?
         !(pick=="none")
       end
@@ -148,7 +185,7 @@ module SurveyorGui
         [:grid_one, :grid_any, :grid_dropdown].include? self.id
       end
       
-      def _create_some_answers(current_question, grid_columns_textbox)       
+      def _create_some_answers(current_question, grid_columns_textbox, column_id)       
         if grid_columns_textbox.nil?
           grid_columns_textbox = " "
         end
@@ -157,7 +194,7 @@ module SurveyorGui
           records_to_update: current_question.answers
         )
         columns.update_or_create_records do |display_order, text|
-          _create_an_answer(display_order, text, current_question) 
+          _create_an_answer(display_order, text, current_question, column_id: column_id) 
         end
         
       end

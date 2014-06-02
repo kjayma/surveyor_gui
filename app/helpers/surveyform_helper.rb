@@ -53,6 +53,14 @@ module SurveyformHelper
     end
   end  
   
+  def question_group_heading(f)
+    if f.object.question_type_id == :grid_dropdown
+      f.object.question_group.columns
+    else
+      f.object.answers
+    end  
+  end
+  
   def row_label_if_question_group(question)
     if question.part_of_group?
       "<span class=\"row_name\">#{question.text}: </span>".html_safe

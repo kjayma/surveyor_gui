@@ -235,11 +235,7 @@ body
             input.string
               :width 6em
           
-        div.question_group.dropdown
-          div.question_group_header
-            :display none
-          
-        div.question_group.grid  
+        div.question_group.grid,  div.question_group.dropdown
           div.question_group_header
             :display table-header-group
           
@@ -252,6 +248,10 @@ body
             :display table-cell
             :text-align center
             :padding 0 1em
+          
+          div.question_group.dropdown
+            span.question_group_heading
+              :text-align right         
           
           div.question_group_element
             :display table-row

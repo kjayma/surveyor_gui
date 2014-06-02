@@ -82,7 +82,7 @@
       <div class="question_group <%= question_group_class(f.object) %>">
         <div class="question_group_header">
           <span class="question_group_heading">&nbsp;</span>
-          <%= f.object.answers.map {|a| "<span class=\"question_group_heading\">#{a.text}<\/span>"}.join().html_safe %>
+          <%= question_group_heading(f).map {|a| "<span class=\"question_group_heading\">#{a.text}<\/span>"}.join().html_safe %>
         </div>
         <%= render_one_group ss -%>
       </div>

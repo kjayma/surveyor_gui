@@ -54,7 +54,7 @@ class QuestionsController < ApplicationController
     @question = Question.includes(:answers).find(params[:id])
     if @question.update_attributes(question_params)
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
-      #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
+      #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads      
       render :blank, :layout=>'colorbox'
     else
       render :action => 'edit', :layout=>'colorbox'
@@ -117,7 +117,6 @@ class QuestionsController < ApplicationController
   end
   
   def render_grid_partial
-    requested_columns = params[:index].to_i
     if params[:id].blank?
       @questions = Question.new
     else
@@ -136,32 +135,18 @@ class QuestionsController < ApplicationController
       @question_group=QuestionGroup.new
     end
     column_count = @question_group.columns.size
-    requested_columns = requested_columns > column_count ? requested_columns - column_count : 0 
-    (requested_columns).times.each {@question_group.columns.build}
+    requested_columns = params[:index] == "NaN" ? column_count : params[:index].to_i
+    if requested_columns >= column_count
+      requested_columns = requested_columns - column_count
+      (requested_columns).times.each {@question_group.columns.build} 
+    else
+      @question_group.trim_columns (column_count-requested_columns)
+    end 
     if params[:question_type_id] == "grid_dropdown"
       render :partial => 'grid_dropdown_fields'
     else
       render :partial => 'grid_fields'
     end
-  end
-  
-  def render_grid_dropdown_columns
-    render_grid_partial(params,params[:index])
-    #if params[:id].blank?
-    #  @question_group = QuestionGroup.new
-    #else
-    #  question = Question.find(params[:id])
-    #  if question.part_of_group?
-    #    @question_group = QuestionGroup.new
-    #  else
-    #    @question_group = QuestionGroup.new
-    #  end
-    #end
-    #if @question_group.columns.empty?
-    #  @question_group.columns.new
-    #end
-    #@index = params[:index]
-    #render :partial => 'grid_dropdown_columns'
   end
 
   def render_no_picks_partial

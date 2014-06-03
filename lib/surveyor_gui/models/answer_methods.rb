@@ -5,9 +5,10 @@ module SurveyorGui
       def self.included(base)
         base.send :belongs_to, :question
         base.send :has_many, :responses
+        base.send :belongs_to, :column
         base.send :default_scope, lambda { base.order('display_order') }
         base.send :attr_accessible, :text, :response_class, :display_order, :original_choice, :hide_label, :question_id, 
-                  :display_type, :is_comment if defined? ActiveModel::MassAssignmentSecurity
+                  :display_type, :is_comment, :column if defined? ActiveModel::MassAssignmentSecurity
       end
 
       def split_or_hidden_text(part = nil)

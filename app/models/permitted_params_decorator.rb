@@ -5,7 +5,7 @@ PermittedParams.class_eval do
   def answer_attributes
     base_answer_attributes +
     [:text, :response_class, :display_order, :original_choice, :hide_label,
-     :question_id, :display_type, :_destroy, :id, :is_comment]
+     :question_id, :display_type, :_destroy, :id, :is_comment, :comment]
   end
 
   alias_method :base_question_attributes, :question_attributes
@@ -41,7 +41,7 @@ PermittedParams.class_eval do
     [:response_set, :question, :answer, :date_value, :time_value,
      :response_set_id, :question_id, :answer_id, :datetime_value,
      :integer_value, :float_value, :unit, :text_value, :string_value,
-     :response_other, :response_group, :survey_section_id, :blob]
+     :response_other, :response_group, :survey_section_id, :blob, :comment]
   end
 
   alias_method :base_response_set_attributes, :response_set_attributes

@@ -24,6 +24,7 @@ module SurveyorGui
       create_rows
       create_columns
       add_column_id_to_answers
+      add_column_id_to_responses
     )
 
     def migrations

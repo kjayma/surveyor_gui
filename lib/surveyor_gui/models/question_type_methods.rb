@@ -265,7 +265,7 @@ module SurveyorGui
         #puts "making question #{new_text}" 
         #puts "\n\n#{self.display_order}\n\n"
         params = {
-          display_order:        (display_order - 1),
+          display_order:        display_order,
           text:                 new_text,
           survey_section_id:    question.survey_section_id,
           question_group_id:    question.question_group_id,

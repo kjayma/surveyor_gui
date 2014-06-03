@@ -30,8 +30,7 @@ module SurveyorGui
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
         base.send :after_save, :build_complex_questions
-        #base.send :after_save, :process_answers_textbox
-        #base.send :after_save, :process_grid_rows_textbox
+        base.send :before_save, :make_room_for_question
 
         base.class_eval do
 
@@ -364,6 +363,15 @@ module SurveyorGui
         end
       end
  
+      def make_room_for_question
+        if new_record?
+          if Question.where('survey_section_id = ? and display_order = ?',survey_section_id, display_order).size > 0
+            Question.where(:survey_section_id => survey_section_id)
+                  .where("display_order >= ?", display_order)
+                  .update_all("display_order = display_order+1")
+          end
+        end
+      end
 
       private
       

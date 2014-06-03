@@ -11,20 +11,17 @@ The lack of a gui front-end limits the utility of surveyor for certain applicati
 
 Surveyor_gui meets this need by providing a gui to create surveys from scratch.  Surveyor_gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.
 
-Surveyor is feature-rich and can create very complex surveys.  Surveyor-gui does not support the full feature set of Surveyor, as it aims to
-create a simple to use front-end that easily can be mastered by an end user.  It still provides quite a bit of power, but sacrifices some
-of Surveyor's breadth in exchange for ease-of-use.
+Surveyor is feature-rich and can create very complex surveys.  Surveyor-gui supports most of the features in Surveyor.
 
 This gem will also provide a reporting capability for Surveyor.
 
 ## Requirements
 
-Surveyor works with:
+SurveyorGui works with:
 
 * Ruby 1.9.3
-* Rails 3.2.17
+* Rails 4
 
-In keeping with the Rails team maintenance [policy] we no longer support Rails 3.0 (stick with v1.3.0 if you need Rails 3.0) or Ruby 1.8.7 (stick with v1.4.0 if you need Ruby 1.8.7).
 
 Some key dependencies are:
 
@@ -67,16 +64,12 @@ The survey editor can be found at '/surveyforms'.  Users can take surveys at the
 This gem provides support for a subset of the Surveyor functionality.  It supports all of the basic question types, but does
 not currently support the following:
 
-  - Question groups
+  - Inline Question groups
   - Questions with multiple entries (e.g., the "Get me started on an improv sketch" question in the kitchen_sink_survey.rb that comes
     with the Surveyor gem.
-  - Grid questions
   - Datetime
-  - Exclusive answers
   - Input masks
   - Rankings
-  - Other type questions (e.g., the "Choose your favorite utensils and enter frequency of use (daily, weekly, monthly, etc...)"
-    in kitchen_sink_survey.rb
   - Repeaters
   - Quizzes
 
@@ -84,6 +77,7 @@ It adds some new question types:
 
   - Star rating (1-5 stars)
   - File upload
+  - Grid dropdown (a grid of dropdowns with up to ten columns.)
 
 Dependencies are partially supported.  The following are not currently supported:
 

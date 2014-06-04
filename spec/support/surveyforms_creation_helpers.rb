@@ -50,7 +50,7 @@ module SurveyFormsCreationHelpers
     end
 
     def select_question_type(type)
-      within ".question_question_type_id" do
+      within ".question_type" do
         choose(type)
       end
     end

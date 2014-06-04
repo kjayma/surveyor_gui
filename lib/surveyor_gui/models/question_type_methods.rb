@@ -2,7 +2,7 @@ module SurveyorGui
   module Models
     module QuestionTypeMethods
 
-      attr_accessor :id, :text, :part_of_group, :pick, :display_type, :group_display_type
+      attr_accessor :id, :text, :part_of_group, :pick, :display_type, :group_display_type, :response_class
 
       def initialize(args)
         @id                 = args[:id]
@@ -11,7 +11,7 @@ module SurveyorGui
         @pick               = args[:pick]
         @display_type       = args[:display_type]
         @group_display_type = args[:group_display_type]
-        
+        @response_class     = args[:response_class]  
       end
 
       def self.included(base)
@@ -287,44 +287,44 @@ module SurveyorGui
       module ClassMethods
 
       AllTypes = [
-          #                                                                                             group
-          #                                                                   part_of_         display  display
-          #id               #text                                             group?    pick   type     type     
-          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "default", nil      ],
-          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "default", nil      ],  
-          [:box,            "Text Box (for extended text, like notes, etc.)"  , false,  :none, :text,     nil      ],  
-          [:dropdown,       "Dropdown List"                                   , false,  :one,  :dropdown, nil      ],
-          [:string,         "Text"                                            , false,  :none, :default,  nil      ],
-          [:number,         "Number"                                          , false,  :none, :float,    nil      ],
-          [:number,         "Number"                                          , false,  :none, :integer,  nil      ],
-          [:date,           "Date"                                            , false,  :none, :date,     nil      ], 
-          [:slider,         "Slider"                                          , false,  :one,  :slider,   nil      ],
-          [:stars,          "1-5 Stars"                                       , false,  :one,  :stars,    nil      ],
-          [:label,          "Label"                                           , false,  :none, :label,    nil      ],
-          [:file,           "File Upload"                                     , false,  :none, :file,     nil      ],
-          [:grid_one,       "Grid (pick one)"                                 , true,   :one,  "default", :grid    ],
-          [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid    ],
-          [:grid_dropdown,  "Grid (dropdowns)"                                , true,   :one,  :dropdown, :grid    ],
-          [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline  ],
+          #                                                                                             group       answer
+          #                                                                   part_of_         display  display     response
+          #id               #text                                             group?    pick   type     type        class
+          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "default", nil,      :all],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "default", nil,      :all],  
+          [:box,            "Text Box (for extended text, like notes, etc.)"  , false,  :none, "default", nil,      :text],  
+          [:dropdown,       "Dropdown List"                                   , false,  :one,  :dropdown, nil,      :all],
+          [:string,         "Text"                                            , false,  :none, "default", nil,      :string],
+          [:number,         "Number"                                          , false,  :none, "default", nil,      :float],
+          [:number,         "Number"                                          , false,  :none, "default", nil,      :integer],
+          [:date,           "Date"                                            , false,  :none, "default", nil,      :date], 
+          [:slider,         "Slider"                                          , false,  :one,  :slider,   nil,      :all],
+          [:stars,          "1-5 Stars"                                       , false,  :one,  :stars,    nil,      :all],
+          [:label,          "Label"                                           , false,  :none, :label,    nil,      :all],
+          [:file,           "File Upload"                                     , false,  :none, "default", nil,      :blob],
+          [:grid_one,       "Grid (pick one)"                                 , true,   :one,  "default", :grid,    :all],
+          [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid,    :all],
+          [:grid_dropdown,  "Grid (dropdowns)"                                , true,   :one,  :dropdown, :grid,    :all],
+          [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline,  :all],
           #nothing below here shows up on the question builder choices for question type
-          [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline  ],
-          [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline  ],  
-          [:box,            "Text Box (for extended text, like notes, etc.)"  , true,   :none, :text,     :inline  ],  
-          [:dropdown,       "Dropdown List"                                   , true,   :one,  :dropdown, :inline  ],
-          [:string,         "Text"                                            , true,   :none, :default,  :inline  ],
-          [:number,         "Number"                                          , true,   :none, :float,    :inline  ],
-          [:number,         "Number"                                          , true,   :none, :integer,  :inline  ],
-          [:date,           "Date"                                            , true,   :none, :date,     :inline  ], 
-          [:slider,         "Slider"                                          , true,   :one,  :slider,   :inline  ],
-          [:stars,          "1-5 Stars"                                       , true,   :one,  :stars,    :inline  ],
-          [:label,          "Label"                                           , true,   :none, :label,    :inline  ],
-          [:file,           "File Upload"                                     , true,   :none, :file,     :inline  ],
-          [:repeater,       "Repeater (add as many answers as apply"          , true,   :all,  :all,      :repeater],
-          [:string,         "Text"                                            , true,   :none, :default,  :grid    ],
+          [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline,  :all],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline,  :all], 
+          [:box,            "Text Box (for extended text, like notes, etc.)"  , false,  :none, "default", :inline,  :text],  
+          [:dropdown,       "Dropdown List"                                   , false,  :one,  :dropdown, :inline,  :any],
+          [:string,         "Text"                                            , false,  :none, "default", :inline,  :string],
+          [:number,         "Number"                                          , false,  :none, "default", :inline,  :float],
+          [:number,         "Number"                                          , false,  :none, "default", :inline,  :integer],
+          [:date,           "Date"                                            , false,  :none, "default", :inline,  :date],  
+          [:slider,         "Slider"                                          , true,   :one,  :slider,   :inline,  :all],
+          [:stars,          "1-5 Stars"                                       , true,   :one,  :stars,    :inline,  :all],
+          [:label,          "Label"                                           , true,   :none, :label,    :inline,  :all],
+          [:file,           "File Upload"                                     , true,   :none, "default", :inline,  :blob],
+          [:repeater,       "Repeater (add as many answers as apply"          , true,   :all,  :all,      :repeater,:all],
+          [:string,         "Text"                                            , true,   :none, :default,  :grid,    :all],
           #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it
           #but don't treat it differently.  See question 16 and 17 in kitchen_sink_survey.rb. 
-          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "inline",  nil    ],
-          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "inline",  nil    ],
+          [:pick_one,       "Multiple Choice (only one answer)"               , false,  :one,  "inline",  nil,      :all],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , false,  :any,  "inline",  nil,      :all],
        ]      
 
             
@@ -337,14 +337,15 @@ module SurveyorGui
         
         def all
           arr = []
-          type = Struct.new(:id, :text, :part_of_group, :pick, :display_type, :group_display_type)
+          type = Struct.new(:id, :text, :part_of_group, :pick, :display_type, :group_display_type, :response_class)
           AllTypes.each do |t|
             arr << QuestionType.new(id:                 t[0], 
                                     text:               t[1], 
                                     part_of_group:      t[2],
                                     pick:               t[3],
                                     display_type:       t[4],
-                                    group_display_type: t[5]
+                                    group_display_type: t[5],
+                                    response_class:     t[6]
                                     )  
           end
           arr
@@ -358,11 +359,14 @@ module SurveyorGui
         
         def _match_found(question, question_type)
           question_group_display_type = question.part_of_group? ? question.question_group.display_type : ""
+          answer = question.answers.first
+          answer_response_class = answer ? answer.response_class : nil
           
           _match(question.part_of_group?,     question_type.part_of_group, :part_of_group)          &&
           _match(question.pick,               question_type.pick.to_s, :pick)                       &&
           _match(question.display_type.to_s,  question_type.display_type.to_s, :display_type)       &&
-          _match(question_group_display_type, question_type.group_display_type.to_s, :group_display_type)         
+          _match(question_group_display_type, question_type.group_display_type.to_s, :group_display_type)  &&
+          _match(answer_response_class,       question_type.response_class.to_s, :response_class)       
         end
       
         def _match(question_attribute, question_type_attribute, match_attribute)

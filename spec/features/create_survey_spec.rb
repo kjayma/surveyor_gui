@@ -118,8 +118,11 @@ feature "User creates a new survey using a browser",  %q{
         #And I frame the question
           fill_in "question_text", with: "How many days did you stay?"
 
+        #And I add the suffix, "Stayed"      
+          fill_in "question_prefix", with: "Stayed"
+          
         #And I add the suffix, "days"
-          fill_in "question_suffix", with: "days"
+          fill_in "question_suffix", with: "days at hotel"
 
         #And I sav the question
           click_button "Save Changes"
@@ -130,7 +133,7 @@ feature "User creates a new survey using a browser",  %q{
         #And I can see the question in my survey
         expect(first_question).to have_content("1) How many days did you stay?")
         expect(page).to have_css("input[type='text']")
-        expect(page).to have_content("days")
+        expect(page).to have_content(/Stayed.*days at hotel/)
       end
 
 

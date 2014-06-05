@@ -38,9 +38,9 @@ module SurveyorGui
             #don't set answer.text if question_type = number.  In this case, text should get set by the prefix and suffix setters.
             #note: Surveyor uses the answer.text field to store prefix and suffix for numbers.
             #if not a number question, go ahead and set the text attribute as normal.
-            if question_type!="Number" && !ans.empty? && ans["0"]
+            if @question_type_id!="number" && !ans.empty? && ans["0"]
               ans["0"].merge!( {"original_choice"=>ans["0"]["text"]})
-              assign_nested_attributes_for_collection_association(:answers, ans)
+              assign_nested_attributes_for_collection_association(:answers, ans)              
             end
           end
         end
@@ -191,14 +191,14 @@ module SurveyorGui
 
       #sets the number prefix
       def prefix=(pre)
-        if self.question_type=='Number'
+        if @question_type_id=="number"
           if self.answers.blank?
             self.answers_attributes={'0'=>{'text'=>pre+'|'}} unless pre.blank?
           else
             if pre.blank?
               self.answers.first.text = 'default'
             else
-              self.answers.first.text = pre+'|' unless pre.blank?
+              self.answers.first.text = pre+'|'
             end
           end
         end
@@ -206,7 +206,7 @@ module SurveyorGui
 
       #sets the number suffix
       def suffix=(suf)
-        if self.question_type=='Number'
+        if @question_type_id=="number"
           if self.answers.first.blank? || self.answers.first.text.blank?
             self.answers_attributes={'0'=>{'text'=>'|'+suf}} unless suf.blank?
           else

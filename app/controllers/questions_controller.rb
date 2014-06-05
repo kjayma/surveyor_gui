@@ -6,10 +6,10 @@ class QuestionsController < ApplicationController
     survey = Survey.find(survey_section.survey_id)
     @question_group = QuestionGroup.new
     if params[:prev_question_id]
-      prev_question = Question.find(params[:prev_question_id])
+      prev_question_display_order = _get_prev_display_order(params[:prev_question_id])
       @question = Question.new(:survey_section_id => params[:survey_section_id],
                                :display_type => "default",
-                               :display_order => prev_question.display_order + 1)
+                               :display_order => prev_question_display_order)
     else
       @question = Question.new(:survey_section_id => params[:survey_section_id],
                                :display_type => "default",
@@ -167,5 +167,13 @@ class QuestionsController < ApplicationController
   def question_params
     ::PermittedParams.new(params[:question]).question
   end
-
+  
+  def _get_prev_display_order(prev_question)
+    prev_question = Question.find(prev_question)
+    if prev_question.part_of_group?
+      prev_question.question_group.questions.last.display_order + 1
+    else
+      prev_question.display_order + 1
+    end
+  end
 end

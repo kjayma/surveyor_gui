@@ -61,6 +61,7 @@ module CutAndPaste
     page.execute_script(_click_paste_button_js(position, section))
     expect(page).not_to have_css('div.jquery_paste_section_started')
     #Then I see cut buttons return
+    sleep 1
     expect(page).to have_content('Cut Section')
   end
 

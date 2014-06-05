@@ -24,9 +24,9 @@ describe Question do
   end
 
   context "with answers" do
-    let(:answer_1){ FactoryGirl.create(:answer, :question => question2, :display_order => 3, :text => "blue")}
-    let(:answer_2){ FactoryGirl.create(:answer, :question => question2, :display_order => 1, :text => "red")}
-    let(:answer_3){ FactoryGirl.create(:answer, :question => question2, :display_order => 2, :text => "green")}
+    let(:answer_1){ FactoryGirl.create(:answer, :question => question2, :display_order => 3, response_class: "answer", :text => "blue")}
+    let(:answer_2){ FactoryGirl.create(:answer, :question => question2, :display_order => 1, response_class: "answer", :text => "red")}
+    let(:answer_3){ FactoryGirl.create(:answer, :question => question2, :display_order => 2, response_class: "answer", :text => "green")}
     before do
       [answer_1, answer_2, answer_3].each{|a| question2.answers << a }
     end

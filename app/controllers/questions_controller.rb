@@ -8,12 +8,14 @@ class QuestionsController < ApplicationController
     if params[:prev_question_id]
       prev_question = Question.find(params[:prev_question_id])
       @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :display_type => "default",
                                :display_order => prev_question.display_order + 1)
     else
       @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :display_type => "default",
                                :display_order => 0)
     end
-    @question.answers.build(:text => '')
+    @question.answers.build(:text => '', :response_class=>"string")
   end
 
   def edit

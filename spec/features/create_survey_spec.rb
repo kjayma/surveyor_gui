@@ -350,7 +350,6 @@ feature "User creates a new survey using a browser",  %q{
       scenario "User includes a file upload in the survey", :js=>true do
         #Given I've added a new question
         add_question do
-
         #Then I select the "Star" question type
           select_question_type "File Upload"
 

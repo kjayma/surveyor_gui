@@ -7,7 +7,9 @@ module CapybaraHelper
     end
   end
 end
-
+RSpec.configure do |config|
+  config.order =  :default
+end
 describe "surveyforms/edit.html.erb" do
   include CapybaraHelper
   let(:surveyform){ FactoryGirl.create(:surveyform) }
@@ -23,41 +25,30 @@ describe "surveyforms/edit.html.erb" do
    ) }  
    
   let(:qg) {FactoryGirl.create(:question_group, display_type: 'grid', text: 'Rate the meals.') }
-  let(:qg2){FactoryGirl.create(:question_group, display_type: 'grid', text: 'Rate the snacks.') }
+  let(:qg2){FactoryGirl.create(:question_group, display_type: 'grid', text: 'Pick your favorite sport') }
+  let(:c1) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Spring", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
+  let(:c2) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Summer", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
+  let(:c3) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Fall", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
+  let(:c4) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Winter", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
   let(:question2){ FactoryGirl.create(
     :question, 
-    text: 'Breakfast',
+    text: 'Rate the meals.',
     survey_section: ss, 
-    question_group: qg,
-    question_type_id: "pick_one",
-    answers_textbox: "Good\nBad\nUgly"
+    question_group: nil,
+    question_type_id: "grid_one",
+    grid_columns_textbox: "Good\nBad\nUgly",
+    grid_rows_textbox: "Breakfast\nLunch\nDinner"
    ) }    
-   let(:question3){ FactoryGirl.create(
-    :question, 
-    text: 'Lunch',
-    survey_section: ss, 
-    question_group: qg,
-    question_type_id: "pick_one",
-    answers_textbox: "Good\nBad\nUgly"
-   ) }   
-   let(:question4){ FactoryGirl.create(
-    :question, 
-    text: 'Dinner',
-    survey_section: ss, 
-    question_group: qg,
-    question_type_id: "pick_one",
-    answers_textbox: "Good\nBad\nUgly"
-   ) } 
+
   let(:question5){ FactoryGirl.create(:question, :survey_section => ss, text: "What brand of ketchup do they use?") }    
   let(:answer1){FactoryGirl.create(:answer, :question => question5)}
   let(:question6) { FactoryGirl.create(
     :question, 
     survey_section: ss, 
     question_group: qg2,
-    question_type_id: "grid_one",
-    grid_columns_textbox: "Good\nBad\nUgly",
-    grid_rows_textbox: "Brunch\nLinner\nLate Night Snack",
-    text: "Brunch"
+    question_type_id: "grid_dropdown",
+    grid_rows_textbox: "TV\nArena",
+    text: "Pick your favorite sport:"
   ) }    
   
   before do
@@ -67,12 +58,13 @@ describe "surveyforms/edit.html.erb" do
     question.reload
     qg.reload
     qg2.reload
+    c1.reload
+    c2.reload
+    c3.reload
+    c4.reload
     question1.reload
     question2.reload
-    question3.reload
-    question4.reload
-    question5.reload
-#    question6.reload
+    question6.reload
     answer.reload
     answer1.reload
     assign(:surveyform, surveyform)
@@ -102,15 +94,13 @@ describe "surveyforms/edit.html.erb" do
     expect(response).to match(/3\) Rate the meals\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Breakfast.*(?<!\d\)\s)Lunch.*(?<!\d\)\s)Dinner.*/m)
   end
 
-#will have to do this one in feature.  The reload issue makes it not work for testing view.  
-#  it "shows grid questions generated from textboxes" do
-#    render
-#    expect(response).to match (/Rate the meals/)
-#    expect(response).to match(/5\) Rate the snacks\..*Good.*Bad.*Ugly.*(?<!\d\)\s)Brunch.*(?<!\d\)\s)Linner.*(?<!\d\)\s)Late Night Snack.*/m)
-#  end
+  it "shows grid dropdowns" do
+    render    
+    expect(response).to match(/4\) Pick your favorite sport.*Spring.*Summer.*Fall.*Winter.*(?<!\d\)\s)TV.*(?<!\d\)\s)Arena/m)
+  end
   
-  it "maintains correct question numbering after grid question" do
+  it "maintains correct question numbering after grid questions" do
     render
-    expect(response).to match(/4\) What brand of ketchup do they use?/)
+    expect(response).to match(/5\) What brand of ketchup do they use?/)
   end
 end

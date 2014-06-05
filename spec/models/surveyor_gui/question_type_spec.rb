@@ -9,8 +9,14 @@ describe QuestionType do
   let(:textbox)         { FactoryGirl.create(
                             :question,
                             pick:             "none",
-                            display_type:     "text",
+                            display_type:     "default",
                             question_group_id: nil
+                          )
+                        }
+  let(:textbox_a)       { FactoryGirl.create(
+                            :answer,
+                            question_id:    textbox.id,
+                            response_class: :text
                           )
                         }
   let(:text)            { FactoryGirl.create(
@@ -20,33 +26,63 @@ describe QuestionType do
                            question_group_id: nil
                           )
                         }
+  let(:text_a)          { FactoryGirl.create(
+                            :answer,
+                            question_id:    text.id,
+                            response_class: :string
+                          )
+                        }
   let(:float)           { FactoryGirl.create(
                            :question,
                            pick:             "none",
-                           display_type:     "float",
+                           display_type:     "default",
                            question_group_id: nil
                          )
+                        }
+  let(:float_a)         { FactoryGirl.create(
+                            :answer,
+                            question_id:    float.id,
+                            response_class: :float
+                          )
                         }
   let(:integer)         { FactoryGirl.create(
                            :question,
                            pick:             "none",
-                           display_type:     "float",
+                           display_type:     "default",
                            question_group_id: nil
                          )
                         }
+  let(:integer_a)       { FactoryGirl.create(
+                            :answer,
+                            question_id:    integer.id,
+                            response_class: :integer
+                          )
+                        }                      
   let(:date)            { FactoryGirl.create(
                            :question,
                            pick:             "none",
-                           display_type:     "date",
+                           display_type:     "default",
                            question_group_id: nil
                          )
+                        }
+  let(:date_a)          { FactoryGirl.create(
+                            :answer,
+                            question_id:    date.id,
+                            response_class: :date
+                          )
                         }
   let(:file)            { FactoryGirl.create(
                            :question,
                            pick:             "none",
-                           display_type:     "file",
+                           display_type:     "default",
                            question_group_id: nil
                          )
+                        }
+  let(:file_a)          { FactoryGirl.create(
+                            :answer,
+                            question_id:    file.id,
+                            response_class: :blob
+                          )
                         }
   let(:label)           { FactoryGirl.create(
                            :question,
@@ -144,9 +180,22 @@ describe QuestionType do
   context "when categorizing question" do
     before do
       text.reload
+      text_a.reload
+      textbox.reload
+      textbox_a.reload
+      float.reload
+      float_a.reload
+      integer.reload
+      integer_a.reload
+      date.reload
+      date_a.reload
+      file.reload
+      file_a.reload
     end
     
     it "recognizes a textbox question" do
+      textbox.reload
+      textbox_a.reload
       expect(textbox.question_type.id).to eql :box
     end
     

@@ -360,7 +360,7 @@ module SurveyorGui
         def _match_found(question, question_type)
           question_group_display_type = question.part_of_group? ? question.question_group.display_type : ""
           answer = question.answers.first
-          answer_response_class = answer ? answer.response_class : nil
+          answer_response_class = answer ? answer.response_class : "string"
           
           _match(question.part_of_group?,     question_type.part_of_group, :part_of_group)          &&
           _match(question.pick,               question_type.pick.to_s, :pick)                       &&

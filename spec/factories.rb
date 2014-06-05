@@ -172,4 +172,10 @@ FactoryGirl.define do
     v.response_other    {}
     v.regexp            {}
   end
+  
+  factory :column do |c|
+    c.association       :question_group
+    c.text              {}
+    c.answers_textbox   {}
+  end
 end

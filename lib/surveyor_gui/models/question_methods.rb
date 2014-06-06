@@ -245,7 +245,15 @@ module SurveyorGui
         when 'label'
           false
         else
-          true
+          if part_of_group? 
+            if question_group.questions.first.id == id
+              true
+            else
+              false
+            end
+          else
+            true
+          end
         end
       end
 

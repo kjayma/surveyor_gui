@@ -12,6 +12,9 @@
         <%= c.hidden_field :id %>
         <td>
           <%= c.input :question_id, :collection => @controlling_questions, :label=>false, :include_blank => false, :input_html => {:style=>"max-width:38em;"} %>
+          <div class="column_id">
+            <%= render "column", c: c, f: f %>
+          </div>
         </td>
         <td>
           <%= c.input :operator, :collection => @operators, :label=>false, :include_blank => false %>

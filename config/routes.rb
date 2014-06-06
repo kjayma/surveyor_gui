@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     collection do
       get 'get_answers'
       get 'get_question_type'
+      get 'get_columns'
     end
   end
   get '/dependency/render_dependency_conditions_partial', :to => 'dependencys#render_dependency_conditions_partial'

@@ -3,12 +3,13 @@ module SurveyformHelper
   def list_dependencies(f)
     controlling_questions = f.object.controlling_questions
 
-    count = controlling_questions.count
+    controlling_question_ids = controlling_questions.map{|q| q.question_number.to_s+')'}.uniq
+    count = controlling_question_ids.count
     retstr ='This question is shown depending on the '
     retstr += 'answer'.pluralize(count)
     retstr += ' to '
     retstr += 'question'.pluralize(count) + ' '
-    retstr + list_phrase(controlling_questions.map{|q| q.question_number.to_s+')'})
+    retstr + list_phrase(controlling_question_ids)
   end
 
   def list_phrase(args)

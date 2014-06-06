@@ -25,14 +25,14 @@ PermittedParams.class_eval do
 
   alias_method :base_dependency_attributes, :dependency_attributes
   def dependency_attributes
-    base_dependency_attributes + [:dependency_conditions_attributes]
+    base_dependency_attributes + [:id, dependency_conditions_attributes: dependency_condition_attributes]
   end
 
   alias_method :base_dependency_condition_attributes, :dependency_condition_attributes
   def dependency_condition_attributes
     base_dependency_condition_attributes +
-    [:dependency_id, :rule_key, :question_id, :operator, :answer_id,
-     :float_value, :integer_value, :join_operator]
+    [:id, :_destroy, :dependency_id, :rule_key, :question_id, :operator, :answer_id,
+     :float_value, :integer_value, :join_operator, :column_id, column_attributes: column_attributes]
   end
 
   alias_method :base_response_attributes, :response_attributes

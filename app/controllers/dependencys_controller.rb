@@ -54,16 +54,35 @@ class DependencysController < ApplicationController
     render :partial => 'dependency_condition_fields'
   end
 
-  def get_answers
+  def get_answers    
     options=""
-    question_id =  params[:question_id]
-    question = Question.find(question_id)
+    question_id               = params[:question_id]
+    question                  = Question.find(question_id)
+    column_id                 = params[:column_id].blank? ? _default_column_id(question) : params[:column_id]
+    dependency_condition_id   = params[:dependency_condition_id]
+    dependency_condition      = dependency_condition_id.blank? ? nil : DependencyCondition.find(dependency_condition_id)
     if question && question.answers
-      question.answers.each_with_index do |a, index|
-        options += '<option ' +
-         (index == 0 ? 'selected="selected" ' : '') +
+      question.answers.where('column_id = ? OR column_id IS NULL',column_id.to_i).each_with_index do |a, index|
+        options += '<option ' + _get_selected_answer(index, dependency_condition, a, column_id) +
          'value="' + a.id.to_s + '"' +
          '>'+a.text.to_s+"</option>"
+      end
+    end
+    render :inline=>options
+  end
+  
+  def get_columns
+    options=""
+    question_id               = params[:question_id]
+    dependency_condition_id   = params[:dependency_condition_id]
+    dependency_condition      = dependency_condition_id.blank? ? nil : DependencyCondition.find(dependency_condition_id)
+    question = Question.find(question_id)
+    if question && question.question_group
+      question.question_group.columns.each_with_index do |c, index|
+        options += '<option ' +
+         _get_selected_column(index, dependency_condition, c) +
+         'value="' + c.id.to_s + '"' +
+         '>'+c.text.to_s+"</option>"
       end
     end
     render :inline=>options
@@ -74,6 +93,7 @@ class DependencysController < ApplicationController
     question = Question.find(question_id)
     response=question.pick
     response += ','+question.question_type_id.to_s
+    response += ','+question_id
     render :inline=>response
   end
 
@@ -114,10 +134,51 @@ private
     ]
   end
 
-  private
   def question_params
     ::PermittedParams.new(params[:question]).question
   end
+  
+  def _default_column_id(question)
+    if question.part_of_group?
+      columns = question.question_group.columns
+      columns.first ? columns.first.id.to_s : ""
+    else
+      ""
+    end
+  end
+  
+  def _get_selected_answer(index, dependency_condition, a, column_id)
+    if _matches_depedency_condition(dependency_condition, a, column_id) 
+      'selected="selected" ' 
+    else 
+      ''
+    end  
+  end
+  
+  def _get_selected_column(index, dependency_condition, column)
+    if _matches_dependency_condition_column(dependency_condition, column) 
+      'selected="selected"'
+    else
+      ''
+    end
+  end
+  
+  def _matches_depedency_condition (dependency_condition, a, column_id)
+    if dependency_condition.nil?  
+      false
+    else
+      (dependency_condition.answer_id == a.id && (column_id.blank? || dependency_condition.column_id == column_id.to_i ))
+    end
+  end
+  
+  def _matches_dependency_condition_column(dependency_condition, column)
+    if dependency_condition.nil?
+      false
+    else
+      dependency_condition.column_id == column.id
+    end
+  end
+  
 end
 
 class QuestionCollection
@@ -160,14 +221,18 @@ class QuestionCollection
 
   def add_question(question)
     _add_to_collection_if_eligible(question)
-    _increment_question_number if question.is_numbered?
+    if question.is_numbered?
+      if !question.part_of_group? || (question.id == question.question_group.questions.last.id) 
+        _increment_question_number
+      end
+    end 
     return self
   end
 
   private
 
   def _get_description(question)
-    @question_number.to_s + ') ' + question.text
+    @question_number.to_s + ') ' + (question.part_of_group? ? question.question_group.text + ": " : "") +question.text
   end
 
   def _add_to_collection(question)

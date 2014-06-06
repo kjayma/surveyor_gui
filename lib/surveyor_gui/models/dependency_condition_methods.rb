@@ -4,8 +4,9 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessible, :dependency_id, :rule_key, :question_id, :operator, :answer_id,
-                  :float_value, :integer_value, :join_operator if defined? ActiveModel::MassAssignmentSecurity
+                  :float_value, :integer_value, :join_operator, :column_id, :columns_attributes if defined? ActiveModel::MassAssignmentSecurity
         base.send :belongs_to, :dependency
+        base.send :belongs_to, :column
         base.send :default_scope, lambda{ base.order('rule_key') }
       end
 

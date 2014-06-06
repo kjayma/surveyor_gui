@@ -222,9 +222,7 @@ class QuestionCollection
   def add_question(question)
     _add_to_collection_if_eligible(question)
     if question.is_numbered?
-      if !question.part_of_group? || (question.id == question.question_group.questions.last.id) 
-        _increment_question_number
-      end
+      _increment_question_number
     end 
     return self
   end
@@ -257,6 +255,6 @@ end
 ## in QuestionMethods.  Not sure why, but leave for now and revisit later.
 class PossibleControllingQuestion < Question
   def is_eligible?
-    question_type!='Label' && question_type!='File Upload'
+    question_type_id!=:label && question_type_id!=:file
   end
 end

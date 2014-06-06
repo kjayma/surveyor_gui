@@ -246,7 +246,7 @@ module SurveyorGui
           false
         else
           if part_of_group? 
-            if question_group.questions.first.id == id
+            if question_group.questions.last.id == self.id
               true
             else
               false

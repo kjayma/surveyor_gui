@@ -148,7 +148,7 @@ private
   end
   
   def _get_selected_answer(index, dependency_condition, a, column_id)
-    if _matches_depedency_condition(dependency_condition, a, column_id) 
+    if _matches_dependency_condition(dependency_condition, a, column_id) 
       'selected="selected" ' 
     else 
       ''
@@ -163,7 +163,7 @@ private
     end
   end
   
-  def _matches_depedency_condition (dependency_condition, a, column_id)
+  def _matches_dependency_condition (dependency_condition, a, column_id)
     if dependency_condition.nil?  
       false
     else

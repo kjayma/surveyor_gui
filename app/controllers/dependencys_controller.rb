@@ -73,7 +73,7 @@ class DependencysController < ApplicationController
     question_id =  params[:question_id]
     question = Question.find(question_id)
     response=question.pick
-    response += ','+question.question_type.id.to_s
+    response += ','+question.question_type_id.to_s
     render :inline=>response
   end
 

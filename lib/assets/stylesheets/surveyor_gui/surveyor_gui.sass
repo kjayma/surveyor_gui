@@ -513,6 +513,25 @@ body
             :margin-left 12px
     .rows
       :clear both
+  
+  .group_inline
+    :display table
+    .group_inline_header
+      :display table-header-group
+      span
+        :display table-cell
+          :margin-right 1em
+    .group_inline_question
+      :display table-row
+      .question
+        :display table-cell
+        input, select
+          :margin-left 0
+          :margin-right 1em
+        input
+          :width 6em
+        select
+          :width 12em
          
 
 .simple_form.edit_survey_section, .simple_form.new_survey_section

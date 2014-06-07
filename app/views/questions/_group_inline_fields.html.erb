@@ -1,0 +1,30 @@
+<%= simple_fields_for 'question', @questions do |f| %>      
+  <%= f.simple_fields_for :question_group, @question_group do |qg| %>
+    <%= qg.hidden_field :id %>
+      <div class="group_inline">
+        <div class="group_inline_header">
+          <span>
+          Question
+          </span>
+          <span>
+          Question Type
+          </span>
+        </div>
+        <%= qg.simple_fields_for :questions do |q| %>
+          <div class="group_inline_question">
+            <%= q.input :text, label: false, as: :string, wrapper_html:{class: "question"} %>              
+            <%= q.input :question_type_id, label: false, collection: QuestionType.all.map{|t|[t.text, t.id]}[0..11].uniq.select{|c| [:box,:number,:date,:text,:dropdown,:pick_one,:pick_any].include? c[1]}, wrapper_html:{class: "question"}   %>
+          </div>
+        <% end -%>
+      </div>
+  <% end -%>
+  <br/><br/><br/>
+  <%= f.input :comments_text, 
+    label: "at the bottom of questions, add", 
+    hint: "box for notes/comments", 
+    placeholder: "Comments", 
+    as: :string, 
+    wrapper_html: {class: 'comments_text fl'} 
+  %>: 
+  <%= f.input_field :comments, label: false, as: :boolean %>
+<% end -%>

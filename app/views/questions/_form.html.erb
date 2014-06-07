@@ -19,41 +19,29 @@
         <strong>Question Type</strong><br/>
         <div class="question_type">
           <span class="question_type_grid1">
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[0..0] , 
+            <%= f.input :question_type_id,
+              collection: question_type_subset([:pick_one]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid1">
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[1..1] , 
+            <%= f.input :question_type_id,
+              collection: question_type_subset([:pick_any]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <br />
           <span class="question_type_grid">
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[3..5] , 
-              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[9..9] , 
-              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[2..2] , 
+            <%= f.input :question_type_id,
+              collection: question_type_subset([:dropdown, :string, :number, :stars, :box]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[7..8] , 
-              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[10..11] , 
+            <%= f.input :question_type_id,
+              collection: question_type_subset([:date, :slider, :label, :file]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[12..13] , 
-              :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
-            <%= f.input :question_type_id, 
-              :collection=> QuestionType.all.map{|t|[t.text, t.id]}[14..15] , 
+            <%= f.input :question_type_id,
+              collection: question_type_subset([:grid_one, :grid_any, :grid_dropdown, :group_inline]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
         </div>

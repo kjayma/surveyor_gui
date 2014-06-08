@@ -153,13 +153,13 @@ class QuestionsController < ApplicationController
       render :partial => 'grid_fields'
     end
   end
-  
+
   def render_group_inline_partial
     if params[:id].blank?
       @questions = Question.new
     else
       @questions = Question.find(params[:id])
-    end    
+    end
     if @questions.question_group
       @question_group=@questions.question_group
     else
@@ -168,7 +168,13 @@ class QuestionsController < ApplicationController
     if @question_group.questions.size == 0
       @question_group.questions.build
     end
-    render :partial => 'group_inline_fields'  
+    if params[:add_row]
+      @question_group = QuestionGroup.new
+      @question_group.questions.build
+      render :partial => 'group_inline_field'
+    else
+      render :partial => 'group_inline_fields'
+    end
   end
 
   def render_no_picks_partial

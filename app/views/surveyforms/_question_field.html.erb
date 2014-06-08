@@ -18,12 +18,12 @@
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>
 
   <% when :pick_one -%>
-    
+
     <% f.object.answers.each do |answer| -%>
       <% if answer.is_comment==true -%>
           <span class="other comments_text">
             <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
-          </span>        
+          </span>
       <% else -%>
         <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
         <% if answer.response_class == "string" %>
@@ -33,9 +33,9 @@
         <% end -%>
       <% end -%>
     <% end -%>
-    
+
   <% when :grid_one -%>
-    
+
     <% f.object.answers.each do |answer| -%>
       <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
       <% if answer.response_class == "string" %>
@@ -52,17 +52,17 @@
 
   <% when :grid_dropdown -%>
     <% f.object.question_group.columns.each do |column|  %>
-      <%= f.input :dummy_answer, label: false, 
-                  :collection => f.object.answers.where('column_id=?',column.id).collect(&:text), 
+      <%= f.input :dummy_answer, label: false,
+                  :collection => f.object.answers.where('column_id=?',column.id).collect(&:text),
                   :as => :select, :wrapper_html=>{:class=>'grid_dropdown_cell'} %>
     <% end -%>
 
-  <% when :pick_any %>    
+  <% when :pick_any %>
     <% f.object.answers.each do |answer| -%>
       <% if answer.is_comment==true -%>
           <span class="other comments_text">
             <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
-          </span>        
+          </span>
       <% else -%>
         <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
         <% if answer.response_class == "string" %>
@@ -72,14 +72,14 @@
         <% end -%>
       <% end -%>
     <% end -%>
-    
+
   <% when :grid_any %>
 
     <% if f.object.dynamically_generate==false -%>
       <br />
       <span style="font-weight:normal;font-style:italic" class="field_indent">content retrieved from the application will go here.</span>
       <br />
-    <% else -%>    
+    <% else -%>
       <% f.object.answers.each do |answer| -%>
         <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
         <% if answer.response_class == "string" %>
@@ -101,7 +101,7 @@
 
   <% when  :box -%>
 
-    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{ :rows=>"3"}%>    
+    <%= f.input :dummy_answer, :as=>:text, :label=>false, :input_html=>{ :rows=>"3"}%>
 
   <% when :number -%>
     <!-- Prefix -->
@@ -119,11 +119,17 @@
       &nbsp;
       <%= f.object.answers.first.text.split('|')[1] %>
     </span>
-
   <% when :date -%>
       <%= f.input :dummy_answer, :as=>:date_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
                   :hint => 'mm/dd/yy', :hint_html=>{:style=>'margin-left:5em;'} %>
 
+  <% when :datetime -%>
+      <%= f.input :dummy_answer, :as=>:datetime_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
+                  :hint => 'mm/dd/yy hh:mm', :hint_html=>{:style=>'margin-left:5em;'} %>
+
+  <% when :time -%>
+      <%= f.input :dummy_answer, :as=>:time_picker, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"},
+                  :hint => 'hh:mm', :hint_html=>{:style=>'margin-left:5em;'} %>
   <% when :file -%>
     <%= f.input :dummy_blob, :as => :file, :label=>false, :input_html=>{:size => "8",:style=>"margin-left: 4.5em;"} %>
 

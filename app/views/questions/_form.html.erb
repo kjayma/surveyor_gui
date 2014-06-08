@@ -31,17 +31,17 @@
           <br />
           <span class="question_type_grid">
             <%= f.input :question_type_id,
-              collection: question_type_subset([:dropdown, :string, :number, :stars, :box]) ,
+              collection: question_type_subset([:dropdown, :string, :number, :stars, :label, :box]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
             <%= f.input :question_type_id,
-              collection: question_type_subset([:date, :slider, :label, :file]) ,
+              collection: question_type_subset([:date, :datetime, :time, :slider ]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
           <span class="question_type_grid">
             <%= f.input :question_type_id,
-              collection: question_type_subset([:grid_one, :grid_any, :grid_dropdown, :group_inline]) ,
+              collection: question_type_subset([:file, :grid_one, :grid_any, :grid_dropdown, :group_inline]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
           </span>
         </div>

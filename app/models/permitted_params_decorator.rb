@@ -15,9 +15,9 @@ PermittedParams.class_eval do
      :text_adjusted_for_group,
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
-     :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source, 
+     :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
      :omit_text, :omit, :other, :other_text, :is_comment, :comments, :comments_text,
-     :modifiable, :report_code, :answers_textbox, :grid_columns_textbox, 
+     :modifiable, :report_code, :answers_textbox, :grid_columns_textbox,
      :grid_rows_textbox, :dropdown_column_count, question_group_attributes: question_group_attributes,
      answers_attributes: answer_attributes,
      dependency_attributes: dependency_attributes]
@@ -66,6 +66,7 @@ PermittedParams.class_eval do
   alias_method :base_question_group_attributes, :question_group_attributes
   def question_group_attributes
     base_question_group_attributes +
+    [:id, columns_attributes: column_attributes, questions_attributes: question_attributes]
     [:id, columns_attributes: column_attributes, dependency_attributes: dependency_attributes]
   end
   # column

@@ -20,13 +20,16 @@ Rails.application.routes.draw do
   resources :survey_sections do
     post :sort, :on => :collection
   end
-  
+
   match '/questions/sort',   :to => 'questions#sort', :via => :post
 
   resources :questions do
     member do
       get 'cut'
     end
+  end
+
+  resources :question_groups do
   end
 
   get '/question/render_answer_fields_partial', :to => 'questions#render_answer_fields_partial'

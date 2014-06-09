@@ -22,7 +22,7 @@ class QuestionsController < ApplicationController
     @title = "Edit Question"
     @question = Question.includes(:answers).find(params[:id])
   end
-  
+
   def adjusted_text
     if @question.part_of_group?
       @question.question_group.text
@@ -30,7 +30,7 @@ class QuestionsController < ApplicationController
       @question.text
     end
   end
-  
+
   helper_method :adjusted_text
 
   def create
@@ -56,7 +56,7 @@ class QuestionsController < ApplicationController
     @question = Question.includes(:answers).find(params[:id])
     if @question.update_attributes(question_params)
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
-      #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads      
+      #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
       render :blank, :layout=>'colorbox'
     else
       render :action => 'edit', :layout=>'colorbox'
@@ -117,7 +117,7 @@ class QuestionsController < ApplicationController
     end
     render :partial => 'answer_fields'
   end
-  
+
   def render_grid_partial
     if params[:id].blank?
       @questions = Question.new
@@ -135,15 +135,16 @@ class QuestionsController < ApplicationController
       @question_group=@questions.question_group
     else
       @question_group=QuestionGroup.new
+      @question_group.columns.build
     end
     column_count = @question_group.columns.size
     requested_columns = params[:index] == "NaN" ? column_count : params[:index].to_i
     if requested_columns >= column_count
       requested_columns = requested_columns - column_count
-      (requested_columns).times.each {@question_group.columns.build} 
+      (requested_columns).times.each {@question_group.columns.build}
     else
       @question_group.trim_columns (column_count-requested_columns)
-    end 
+    end
     if params[:question_type_id] == "grid_dropdown"
       render :partial => 'grid_dropdown_fields'
     else
@@ -167,7 +168,7 @@ class QuestionsController < ApplicationController
   def question_params
     ::PermittedParams.new(params[:question]).question
   end
-  
+
   def _get_prev_display_order(prev_question)
     prev_question = Question.find(prev_question)
     if prev_question.part_of_group?

@@ -5,14 +5,14 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text, 
+        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text,
                   :other, :other_text, :comments_text, :comments, :dropdown_column_count
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox, :dropdown_column_count,
                   :grid_columns_textbox, :grid_rows_textbox, :omit_text, :omit, :other, :other_text, :is_comment, :comments, :comments_text,
-                  :dynamic_source, :modifiable, :report_code, :question_group_attributes if 
+                  :dynamic_source, :modifiable, :report_code, :question_group_attributes if
                   defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :answers, :reject_if => lambda { |a| a[:text].blank?}, :allow_destroy => true
         base.send :belongs_to, :survey_section
@@ -26,7 +26,7 @@ module SurveyorGui
 
         base.send :mount_uploader, :dummy_blob, BlobUploader
         base.send :belongs_to, :question_type
-        
+
         base.send :validate, :no_responses
         base.send :before_destroy, :no_responses
         base.send :after_save, :build_complex_questions
@@ -40,7 +40,7 @@ module SurveyorGui
             #if not a number question, go ahead and set the text attribute as normal.
             if @question_type_id!="number" && !ans.empty? && ans["0"]
               ans["0"].merge!( {"original_choice"=>ans["0"]["text"]})
-              assign_nested_attributes_for_collection_association(:answers, ans)              
+              assign_nested_attributes_for_collection_association(:answers, ans)
             end
           end
         end
@@ -75,12 +75,12 @@ module SurveyorGui
       def question_type_id
         QuestionType.categorize_question(self)
       end
-      
+
 #      #generates descriptions for different types of questions, including those that use widgets
       def question_type
         @question_type = QuestionType.find(question_type_id)
       end
-#      
+#
 
       def dynamically_generate
         'false'
@@ -245,7 +245,7 @@ module SurveyorGui
         when 'label'
           false
         else
-          if part_of_group? 
+          if part_of_group?
             if question_group.questions.last.id == self.id
               true
             else
@@ -277,25 +277,25 @@ module SurveyorGui
       def answers_textbox
         self.answers.where('is_exclusive != ? and is_comment != ? and response_class != ?',true,true,"string").order('display_order asc').collect(&:text).join("\n")
       end
-      
+
       def omit
         @omit = self.answers.where('is_exclusive = ?',true).size > 0
       end
-      
+
       def omit_text
         answer = self.answers.where('is_exclusive = ?',true).first
         @omit_text = (answer ? answer.text : "none of the above")
       end
-      
+
       def other
         @other = self.answers.where('response_class = ? and is_exclusive = ? and is_comment = ?',"string",false, false).size > 0
       end
-      
+
       def other_text
         answer = self.answers.where('response_class = ? and is_exclusive = ? and is_comment = ?',"string", false, false).first
         @other_text = (answer ? answer.text : "Other")
       end
-      
+
       def comments
         if self.part_of_group?
           @comments = self.question_group.questions.where('is_comment=?',true).size > 0
@@ -303,7 +303,7 @@ module SurveyorGui
           @comments = self.answers.where('is_comment=?',true).size > 0
         end
       end
-            
+
       def comments_text
         if self.part_of_group?
           @comments_text = is_comment ? self.answers.first.text : "Comments"
@@ -312,15 +312,15 @@ module SurveyorGui
           @comments_text = (answer ? answer.text : "Comments")
         end
       end
-               
+
       def dropdown_column_count
-        self.question_group ? self.question_group.columns.size : 1
+        @dropdown_column_count = @dropdown_column_count || (self.question_group ? self.question_group.columns.size : 1)
       end
-                  
+
       def grid_columns_textbox
         self.answers.where('response_class != ? and is_exclusive = ?',"string",false).order('display_order asc').collect(&:text).join("\n")
       end
-      
+
       def grid_rows_textbox
         if self.question_group && self.question_group.questions
           self.question_group.questions.where('is_comment=?',false).order('display_order asc').collect(&:text).join("\n")
@@ -328,41 +328,41 @@ module SurveyorGui
           nil
         end
       end
-      
+
       def question_group_attributes=(params)
         question_group.update_attributes(params.except(:id))
         @question_group_attributes=params
       end
-      
+
       def text=(txt)
-        write_attribute(:text, txt) 
+        write_attribute(:text, txt)
         if part_of_group?
           question_group.update_attributes(text: txt)
         end
         @text = txt
       end
-      
+
       def grid_rows_textbox=(textbox)
         write_attribute(:text, textbox.match(/.*\r*/).to_s.strip)
         @grid_rows_textbox = textbox.gsub(/\r/,"")
       end
-      
+
       def build_complex_questions
-        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox 
+        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox
           self.question_type.build_complex_question_structure(
-            self, 
-            answers_textbox:      @answers_textbox, 
+            self,
+            answers_textbox:      @answers_textbox,
             omit_text:            @omit_text,
             is_exclusive:         @omit=="1",
             other_text:           @other_text,
             other:                @other=="1",
             comments_text:        @comments_text,
             comments:             @comments=="1",
-            grid_columns_textbox: @grid_columns_textbox, 
+            grid_columns_textbox: @grid_columns_textbox,
             grid_rows_textbox:    @grid_rows_textbox)
         end
       end
-      
+
       def next_display_order
         if part_of_group?
           self.question_group.questions.last.display_order + 1
@@ -370,7 +370,7 @@ module SurveyorGui
           display_order + 1
         end
       end
- 
+
       def make_room_for_question
         if new_record?
           if Question.where('survey_section_id = ? and display_order = ?',survey_section_id, display_order).size > 0
@@ -382,20 +382,20 @@ module SurveyorGui
       end
 
       private
-      
+
       def _update_group_id
         @question_group = self.question_group ||
           QuestionGroup.create!(text: @text, display_type: :grid)
         self.question_group_id = @question_group.id
       end
-      
+
       def _remove_group
         if part_of_group?
-          question_group.questions.map{|q| q.destroy if q.id != id} 
+          question_group.questions.map{|q| q.destroy if q.id != id}
           write_attribute(:question_group_id, nil)
         end
       end
-      
+
       def _preceding_questions_numbered
         _preceding_questions.delete_if{|p| !p.is_numbered?}
       end
@@ -409,12 +409,7 @@ module SurveyorGui
             survey_section.id,
             display_order
         )
-      end      
+      end
     end
   end
 end
-
-
-
-
-

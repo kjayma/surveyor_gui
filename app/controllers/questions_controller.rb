@@ -145,6 +145,7 @@ class QuestionsController < ApplicationController
     else
       @question_group.trim_columns (column_count-requested_columns)
     end
+    @questions.dropdown_column_count = requested_columns.to_i+1
     if params[:question_type_id] == "grid_dropdown"
       render :partial => 'grid_dropdown_fields'
     else

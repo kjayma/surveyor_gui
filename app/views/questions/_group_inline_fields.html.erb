@@ -1,6 +1,7 @@
 <%= simple_fields_for 'question', @questions do |f| %>
   <%= f.simple_fields_for :question_group, @question_group do |qg| %>
     <%= qg.hidden_field :id %>
+    <%= qg.hidden_field :display_type, value: "inline" %>
       <div class="group_inline">
         <div class="group_inline_header">
           <span>

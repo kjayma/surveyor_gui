@@ -127,6 +127,8 @@ module SurveyorGui
           prep_picks
           write_attribute(:display_type, "dropdown")
           _update_group_id
+        when "group_inline"
+          _update_group_id
         when 'label'
           write_attribute(:pick, "none")
           write_attribute(:display_type, "label")
@@ -327,8 +329,12 @@ module SurveyorGui
       end
 
       def question_group_attributes=(params)
-        question_group.update_attributes(params.except(:id))
-        @question_group_attributes=params
+        if question_group
+          question_group.update_attributes(params.except(:id))
+          @question_group_attributes=params
+        else
+          QuestionGroup.create!(params)
+        end
       end
 
       def text=(txt)
@@ -381,7 +387,7 @@ module SurveyorGui
       private
 
       def _update_group_id
-        @question_group = self.question_group ||
+        @question_group = @question_group || self.question_group ||
           QuestionGroup.create!(text: @text, display_type: :grid)
         self.question_group_id = @question_group.id
       end

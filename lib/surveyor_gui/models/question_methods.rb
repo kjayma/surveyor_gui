@@ -339,7 +339,7 @@ module SurveyorGui
 
       def text=(txt)
         write_attribute(:text, txt)
-        if part_of_group?
+        if part_of_group? && !question_group.display_type == "inline"
           question_group.update_attributes(text: txt)
         end
         @text = txt

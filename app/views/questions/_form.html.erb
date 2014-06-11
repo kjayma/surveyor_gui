@@ -9,6 +9,7 @@
         <%= f.hidden_field :pick %>
         <%= f.hidden_field :display_type %>
         <%= f.hidden_field :modifiable %>
+        <%= f.hidden_field :question_group_id %>
 
         <%= f.label :Question, :input_html=>{:size=>'15'} %>
         <%= f.input :text , :label => false, :input_html=>{:size=>'55', value: adjusted_text} %>
@@ -41,17 +42,8 @@
           </span>
           <span class="question_type_grid">
             <%= f.input :question_type_id,
-              collection: question_type_subset([:file, :grid_one, :grid_any, :grid_dropdown]) ,
+              collection: question_type_subset([:file, :grid_one, :grid_any, :grid_dropdown, :group_inline]) ,
               :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false %>
-            <% if f.object.question_group && f.object.question_group.display_type == "inline" %>
-              <%= f.input :question_type_id,
-                collection: question_type_subset([:group_inline]) ,
-                :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false, :checked => [:group_inline,true] %>
-            <% else %>
-              <%= f.input :question_type_id,
-                collection: question_type_subset([:group_inline]) ,
-                :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false %>
-            <% end -%>
           </span>
         </div>
         <br />
@@ -66,8 +58,8 @@
             <br />
           </div>
         <br />
-        <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>
       </div>
+      <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>
   <% end %>
   <% 20.times do -%><br/><% end -%>
 </div>

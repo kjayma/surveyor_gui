@@ -455,7 +455,7 @@ body
           :position relative
           :top -1.2em
 
-.simple_form.edit_question, .simple_form.new_question
+.simple_form.edit_question, .simple_form.new_question, .simple_form.edit_question_group, .simple_form.new_question_group
   .question_type
     :position relative
     .question_type_grid1
@@ -469,10 +469,11 @@ body
       :margin-top -.8em
   div#answer_choice, div#number_questions
     :clear both
-  input#question_submit
+  input#question_submit, input#question_group_submit
     :clear both
 
   .questions
+    :float left
     .omit_text, .other_text, .comments_text
       margin-top: 0
       label

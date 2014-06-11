@@ -3,6 +3,7 @@ class QuestionGroupsController < ApplicationController
   def new
     @title = "Add Question"
     @question_group = QuestionGroup.new
+    @question_group.questions.build
   end
 
 
@@ -33,7 +34,7 @@ class QuestionGroupsController < ApplicationController
 
   def render_group_inline_partial
     if params[:id].blank?
-      @question_group = Question.new
+      @question_group = QuestionGroup.new
     else
       @question_group = QuestionGroup.find(params[:id])
     end

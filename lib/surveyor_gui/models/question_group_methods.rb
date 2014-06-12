@@ -16,6 +16,8 @@ module SurveyorGui
       def question_type_id
         if display_type == "inline"
           :group_inline
+        else
+          :group_default
         end
       end
 

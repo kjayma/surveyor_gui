@@ -308,6 +308,7 @@ module SurveyorGui
           [:grid_any,       "Grid (pick any)"                                 , true,   :any,  "default", :grid,    :all],
           [:grid_dropdown,  "Grid (dropdowns)"                                , true,   :one,  :dropdown, :grid,    :all],
           [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline,  :all],
+          [:group_default,  "Question Group"                                  , true,   nil,   nil,       :default, :all],
           #nothing below here shows up on the question builder choices for question type
           [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline,  :all],
           [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline,  :all],
@@ -323,6 +324,24 @@ module SurveyorGui
           [:stars,          "1-5 Stars"                                       , true,  :one,  :stars,    :inline,  :all],
           [:label,          "Label"                                           , true,  :none, :label,    :inline,  :all],
           [:file,           "File Upload"                                     , true,  :none, "default", :inline,  :blob],
+          [:repeater,       "Repeater (add as many answers as apply"          , true,  :all,  :all,      :repeater,:all],
+          [:string,         "Text"                                            , true,  :none, :default,  :grid,    :all],
+          
+          
+          [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default",:default,  :all],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default",:default,  :all],
+          [:box,            "Text Box (for extended text, like notes, etc.)"  , true,  :none, "default", :default,  :text],
+          [:dropdown,       "Dropdown List"                                   , true,  :one,  :dropdown, :default,  :all],
+          [:string,         "Text"                                            , true,  :none, "default", :default,  :string],
+          [:number,         "Number"                                          , true,  :none, "default", :default,  :float],
+          [:number,         "Number"                                          , true,  :none, "default", :default,  :integer],
+          [:date,           "Date"                                            , true,  :none, "default", :default,  :date],
+          [:datetime,       "Date and Time"                                   , true,  :none, "default", :default,  :datetime],
+          [:time,           "Time"                                            , true,  :none, "default", :default,  :time],
+          [:slider,         "Slider"                                          , true,  :one,  :slider,   :default,  :all],
+          [:stars,          "1-5 Stars"                                       , true,  :one,  :stars,    :default,  :all],
+          [:label,          "Label"                                           , true,  :none, :label,    :default,  :all],
+          [:file,           "File Upload"                                     , true,  :none, "default", :default,  :blob],
           [:repeater,       "Repeater (add as many answers as apply"          , true,  :all,  :all,      :repeater,:all],
           [:string,         "Text"                                            , true,  :none, :default,  :grid,    :all],
           #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it

@@ -12,7 +12,7 @@ module QuestionHelper
   end
 
   def question_type_subset(args)
-    question_types = QuestionType.all.map{|t|[t.text, t.id]}[0..17].uniq
+    question_types = QuestionType.all.map{|t|[t.text, t.id]}[0..18].uniq
     ordered_types = []
     args.each do |id|
      ordered_types << question_types.select{|t| id == t[1]}.flatten

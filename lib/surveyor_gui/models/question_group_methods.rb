@@ -3,8 +3,8 @@ module SurveyorGui
     module QuestionGroupMethods
       include QuestionAndGroupSharedMethods
       def self.included(base)
-        base.send :attr_accessor, :is_mandatory
-        base.send :attr_writer, :survey_section_id, :question_id
+        base.send :attr_accessor, :is_mandatory, :survey_section_id
+        base.send :attr_writer, :question_id
         base.send :attr_accessible, :questions_attributes if
                   defined? ActiveModel::MassAssignmentSecurity
         base.send :accepts_nested_attributes_for, :questions, :allow_destroy => true
@@ -25,10 +25,6 @@ module SurveyorGui
       def trim_columns(qty_to_trim)
         columns = self.columns.order('id ASC')
         columns.last(qty_to_trim).map{|c| c.destroy}
-      end
-
-      def survey_section_id
-        self.questions.first.survey_section_id if self.questions.first
       end
 
       def question_id

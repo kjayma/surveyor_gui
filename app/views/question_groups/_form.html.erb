@@ -6,7 +6,7 @@
       <%= qg.hidden_field :id %>
       <%= qg.hidden_field :display_type %>
       <%= qg.hidden_field :question_id %>
-      <%= qg.hidden_field :survey_section_id %>
+      <%= qg.hidden_field :survey_section_id, value: @survey_section_id %>
 
       <%= qg.label :Question, :input_html=>{:size=>'15'} %>
       <%= qg.input :text , :input_html=>{:size=>'55'}, :label => false%>

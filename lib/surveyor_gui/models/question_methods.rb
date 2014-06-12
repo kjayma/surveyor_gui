@@ -351,7 +351,7 @@ module SurveyorGui
       end
 
       def build_complex_questions
-        if @answers_textbox || @grid_columns_textbox || @grid_rows_textbox
+        if (@answers_textbox && self.pick!="none") || @grid_columns_textbox || @grid_rows_textbox
           self.question_type.build_complex_question_structure(
             self,
             answers_textbox:      @answers_textbox,

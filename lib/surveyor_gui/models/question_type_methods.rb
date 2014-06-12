@@ -312,7 +312,7 @@ module SurveyorGui
           [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline,  :all],
           [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline,  :all],
           [:box,            "Text Box (for extended text, like notes, etc.)"  , true,  :none, "default", :inline,  :text],
-          [:dropdown,       "Dropdown List"                                   , true,  :one,  :dropdown, :inline,  :answer],
+          [:dropdown,       "Dropdown List"                                   , true,  :one,  :dropdown, :inline,  :all],
           [:string,         "Text"                                            , true,  :none, "default", :inline,  :string],
           [:number,         "Number"                                          , true,  :none, "default", :inline,  :float],
           [:number,         "Number"                                          , true,  :none, "default", :inline,  :integer],

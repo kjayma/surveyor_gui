@@ -2,23 +2,27 @@ class QuestionGroupsController < ApplicationController
 
   def new
     @title = "Add Question"
-    @question_group = QuestionGroup.new
-    @question_group.questions.build
+    @survey_section_id = params[:survey_section_id]
+    @question_group = QuestionGroup.new(text: params[:text])
+    @question_group.questions.build(display_order: params[:display_order])
   end
 
 
   def edit
     @title = "Edit Question Group"
     @question_group = QuestionGroup.includes(:questions).find(params[:id])
+    @survey_section_id = @question_group.questions.first.survey_section_id
   end
 
   def create
     @question_group = QuestionGroup.new(question_group_params)
     if @question_group.save
-      render :inline => '<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout=>'colorbox'
+      #@question_group.questions.update_attributes(survey_section_id: question_group_params[])
+      render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout=>'colorbox'
     else
       @title = "Add Question"
-      redirect_to :action => 'new', :controller => 'questions', :layout=>'colorbox'
+      survey_section_id = question_group_params[:survey_section_id]
+      redirect_to :action => 'new', :controller => 'questions', :layout=>'colorbox', :survey_section_id => survey_section_id
     end
   end
 
@@ -33,17 +37,11 @@ class QuestionGroupsController < ApplicationController
   end
 
   def render_group_inline_partial
-    if params[:id].blank?
-      @question_group = QuestionGroup.new
-    else
-      @question_group = QuestionGroup.find(params[:id])
-    end
-    if @question_group.questions.size == 0
-      @question_group.questions.build
-    end
+    @question_group = QuestionGroup.find(params[:id])
     if params[:add_row]
+      
       @question_group = QuestionGroup.new
-      @question_group.questions.build
+      @question_group.questions.build(display_order: params[:display_order])
       render :partial => 'group_inline_field'
     else
       render :partial => 'group_inline_fields'

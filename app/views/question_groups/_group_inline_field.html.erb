@@ -1,11 +1,11 @@
 <%= simple_fields_for :question_group, @question_group do |qg| %>
       <%= qg.simple_fields_for :questions do |q| %>
         <div class="group_inline_question">
-          <%= q.hidden_field :survey_section_id, value: @question_group.survey_section_id %>
+          <%= q.hidden_field :survey_section_id, value: @survey_section_id %>
           <%= q.input :text, label: false, as: :string, wrapper_html:{class: "question"} %>
           <%= q.input :question_type_id, label: false, collection: QuestionType.all.map{|t|[t.text, t.id]}[0..11].uniq.select{|c| [:box,:number,:date,:string,:dropdown,:pick_one,:pick_any].include? c[1]}, wrapper_html:{class: "question"}   %>
           <%= q.input :answers_textbox, label: false, as: :text, wrapper_html:{class: "question group_answers_textbox"} %>
-          <%= q.hidden_field :display_order, value: 0 %>
+          <%= q.hidden_field :display_order %>
           <span class="delete_group_inline_question">
             <%= link_to_remove_fields "remove", q, ".group_inline_question" %>
           </span>

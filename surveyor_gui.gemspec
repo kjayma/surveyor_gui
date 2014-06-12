@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('factory_girl', '~> 4.4.0')
   s.add_development_dependency('database_cleaner', '~> 1.2.0')
   s.add_development_dependency('rspec-retry')
-  s.add_development_dependency 'debugger'
+  # s.add_development_dependency 'debugger'
 
   s.add_dependency 'surveyor', '~> 1.4.1.pre'
   s.add_dependency 'will_paginate', '~> 3.0.5'

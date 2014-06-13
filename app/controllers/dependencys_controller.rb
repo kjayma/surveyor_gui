@@ -104,7 +104,7 @@ private
     @question = Question.includes(:dependency).find(params[:id]) unless @question
     controlling_questions = get_controlling_question_collection(@question)
     @controlling_questions = controlling_questions.collection
-    @this_question = @question.question_description
+    @this_question = @question.part_of_group? ? @question.question_group.text : @question.question_description
     @operators = get_operators
   end
 

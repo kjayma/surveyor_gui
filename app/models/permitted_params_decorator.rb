@@ -66,7 +66,7 @@ PermittedParams.class_eval do
   alias_method :base_question_group_attributes, :question_group_attributes
   def question_group_attributes
     base_question_group_attributes +
-    [:id, columns_attributes: column_attributes]
+    [:id, columns_attributes: column_attributes, dependency_attributes: dependency_attributes]
   end
   # column
   def column

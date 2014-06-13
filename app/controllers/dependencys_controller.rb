@@ -4,7 +4,11 @@ class DependencysController < ApplicationController
   def new
     prep_variables
     @title = "Add Logic for "+@this_question
-    @question.build_dependency(:rule=>'A')
+    if @question.part_of_group?
+      @question.question_group.build_dependency(:rule=>'A')
+    else
+      @question.build_dependency(:rule=>'A')
+    end
   end
 
   def edit
@@ -24,8 +28,15 @@ class DependencysController < ApplicationController
   def update
     @title = "Update Question"
     @question = Question.includes(:answers).find(params[:id])
-    if @question.update_attributes(question_params)
-      @question.dependency.destroy if @question.dependency.dependency_conditions.blank?
+    if @question.part_of_group?
+      update_object = @question.question_group
+      update_params = question_group_params
+    else
+      update_object = @question
+      update_params = question_params
+    end
+    if update_object.update_attributes(update_params)
+      update_object.dependency.destroy if update_object.dependency.dependency_conditions.blank?
       render :blank, :layout=>'colorbox'
     else
       prep_variables
@@ -41,15 +52,17 @@ class DependencysController < ApplicationController
 
   def render_dependency_conditions_partial
     prep_variables
-    if @question.dependency.nil?
-      @question.build_dependency(:rule=>'A').dependency_conditions.build()
+    @question_or_group = @question.part_of_group? ? @question.question_group : @question
+    @dependency = Dependency.find(params[:dependency_id]) if !params[:dependency_id].blank?
+    if @dependency.nil?
+      @question_or_group.build_dependency(:rule=>'A').dependency_conditions.build()
     end
-    if @question.dependency.dependency_conditions.empty?
-      @question.dependency.dependency_conditions.build()
+    if @question_or_group.dependency.dependency_conditions.empty?
+      @question_or_group.dependency.dependency_conditions.build()
     else
       if params[:add_row]
-        @question = Question.new
-        @question.build_dependency(:rule=>'A').dependency_conditions.build()
+        @question_or_group = eval(@question_or_group.class.name).new
+        @question_or_group.build_dependency.dependency_conditions.build()
       end
     end
     render :partial => 'dependency_condition_fields'
@@ -138,6 +151,10 @@ private
   def question_params
     ::PermittedParams.new(params[:question]).question
   end
+
+  def question_group_params
+    ::PermittedParams.new(params[:question_group]).question_group
+  end  
   
   def _default_column_id(question)
     if question.part_of_group?

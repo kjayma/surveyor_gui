@@ -1,11 +1,20 @@
 <div class="shadebox">
     <h1 ><%= @title %></h1>
-    <%= simple_form_for @question, :url => dependencys_path+'/'+@question.id.to_s do |f| %>
-      <%= f.error_messages %>
-      <%= f.hidden_field :survey_section_id %>
-      <div class = 'dependency_editor'>
-        <%= render "dependency", f: f %>
-      </div>
-  <% end %>
+    <% if @question.part_of_group? -%>
+      <%= simple_form_for @question.question_group, :url => dependencys_path+'/'+@question.id.to_s do |g| %>
+        <%= g.error_messages %>
+        <div class = 'dependency_editor'>
+          <%= render "dependency", f: g %>
+        </div>
+      <% end %>
+    <% else -%>  
+      <%= simple_form_for @question, :url => dependencys_path+'/'+@question.id.to_s do |q| %>
+        <%= q.error_messages %>
+        <%= q.hidden_field :survey_section_id %>
+        <div class = 'dependency_editor'>
+          <%= render "dependency", f: q %>
+        </div>
+      <% end %>
+    <% end -%>
   <% 24.times.each do %><br/><% end -%>
 </div>

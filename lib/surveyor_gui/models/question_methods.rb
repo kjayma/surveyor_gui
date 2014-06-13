@@ -2,6 +2,7 @@ require 'stringio'
 module SurveyorGui
   module Models
     module QuestionMethods
+      include QuestionAndGroupSharedMethods
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
@@ -268,11 +269,7 @@ module SurveyorGui
       end
 
 
-      def controlling_questions
-        dependencies = []
-        dependencies << self.dependency
-        dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question}}.flatten.uniq
-      end
+      #def controlling_questions in QuestionAndGroupSharedMethods
 
       def answers_textbox
         self.answers.where('is_exclusive != ? and is_comment != ? and response_class != ?',true,true,"string").order('display_order asc').collect(&:text).join("\n")

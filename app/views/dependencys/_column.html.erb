@@ -1,1 +1,1 @@
-<%= c.input :column_id, label: false, :collection => f.object.part_of_group? ? f.object.question_group.columns : [["",""]], wrapper_html: {class: "fl not_first"} %>
+<%= c.input :column_id, label: false, :collection => d.object.question_group ? d.object.question_group.columns : [["",""]], wrapper_html: {class: "fl not_first"} %>

@@ -10,7 +10,7 @@
           <td>Question</td><td>Condition</td><td>Answer</td>
         </tr>
       </thead>
-      <tbody id="dependency_conditions_partial" data-question_id="<%= f.object.id.to_s %>"></tbody>
+      <tbody id="dependency_conditions_partial" data-question_id="<%= @question.id.to_s %>" data-dependency_id="<%= d.object.id.to_s %>"></tbody>
     </table>
     <p class="floatdown2 add_condition">
       Add a Condition <%= image_tag 'addicon.png', :border => 0 %>

@@ -8,10 +8,10 @@
   >
     <div class="inner_question">
       <!-- if dependencies, notify the user with a highlighted message at the top of the question -->
-      <% if f.object.dependency -%>
+      <% if f.object.question_group.dependent? -%>
         <span class="question_logic_notifier">
           <!-- list_dependencies tells the user which other questions determine whether this one is displayed -->
-          <%= list_dependencies(f) if f.object.dependency %>.<br/>
+          <%= list_dependencies(f.object.question_group) if f.object.question_group.dependent? %>.<br/>
         </span>
       <% end -%>
 
@@ -46,7 +46,7 @@
 
           <span style="float:right;">
 
-            <% if f.object.dependency -%>
+            <% if f.object.question_group.dependent? -%>
 
               <button type="button" id="delete_logic"
                  data-replace_question_url="<%=url_for(:action => 'replace_question', :question_id => f.object.id)%>"

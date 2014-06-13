@@ -12,6 +12,12 @@ module SurveyorGui
         columns = self.columns.order('id ASC')
         columns.last(qty_to_trim).map{|c| c.destroy}
       end
+      
+      def controlling_questions
+        dependencies = []
+        dependencies << self.dependency
+        dependencies.map{|d| d.dependency_conditions.map{|dc| dc.question}}.flatten.uniq
+      end
     end
   end
 end

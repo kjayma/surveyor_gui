@@ -1,7 +1,7 @@
 module SurveyformHelper
 
-  def list_dependencies(f)
-    controlling_questions = f.object.controlling_questions
+  def list_dependencies(o)
+    controlling_questions = o.controlling_questions
 
     controlling_question_ids = controlling_questions.map{|q| q.question_number.to_s+')'}.uniq
     count = controlling_question_ids.count

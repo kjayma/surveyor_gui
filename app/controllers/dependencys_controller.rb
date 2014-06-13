@@ -244,7 +244,11 @@ class QuestionCollection
   end
 
   def _this_is_not_the_base_question?(question)
-    question.id != @base_question.id
+    if question.part_of_group?
+      question.question_group_id != @base_question.question_group_id
+    else
+      question.id != @base_question.id
+    end
   end
 
   def _increment_question_number

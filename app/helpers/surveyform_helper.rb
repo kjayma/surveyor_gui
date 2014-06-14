@@ -56,14 +56,17 @@ module SurveyformHelper
   
   def question_group_heading(f)
     if f.object.question_type_id == :grid_dropdown
-      f.object.question_group.columns
+      heading = f.object.question_group.columns
+    elsif f.object.question_group.display_type == "grid"
+      heading = f.object.answers
     else
-      f.object.answers
+      heading = []
     end  
+    heading.map {|a| "<span class=\"question_group_heading #{f.object.question_type_id.to_s}\" >#{a.text}<\/span>"}.join().html_safe
   end  
   
   def row_label_if_question_group(question)
-    if question.part_of_group?
+    if question.part_of_group? 
       "<span class=\"row_name\">#{question.text}: </span>".html_safe
     end
   end

@@ -26,7 +26,7 @@
              data-replace_question_url="<%=url_for(:action => 'replace_question',
               id:           f.object.survey_section.survey.id,
               question_id:  f.object.id)%>"
-             data-edit_question_url="<%= (f.object.part_of_group? && f.object.question_group.display_type == 'inline') ? edit_question_group_url(f.object.question_group.id) : edit_question_url(f.object.id)%>"
+             data-edit_question_url="<%= (f.object.part_of_group? && f.object.question_group.display_type != 'grid') ? edit_question_group_url(f.object.question_group.id) : edit_question_url(f.object.id)%>"
              data-question_id="<%= f.object.id.to_s %>"
           >Edit Question</button>
 
@@ -82,7 +82,7 @@
       <div class="question_group <%= question_group_class(f.object) %>">
         <div class="question_group_header">
           <span class="question_group_heading">&nbsp;</span>
-          <%= question_group_heading(f).map {|a| "<span class=\"question_group_heading #{f.object.question_type_id.to_s}\" >#{a.text}<\/span>"}.join().html_safe %>
+          <%= question_group_heading(f) %>
         </div>
         <%= render_one_group ss -%>
       </div>

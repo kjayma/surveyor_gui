@@ -14,14 +14,19 @@ module SurveyorGui
       end
 
       def question_type_id
-        if display_type == "inline"
-          :group_inline
-        else
-          :group_default
-        end
+        @question_type_id ||= display_type == "inline" ? :group_inline : :group_default
       end
 
-      def question_type_id=(x)
+      def question_type_id=(question_type_id)
+        case question_type_id
+        when "group_default"
+          write_attribute(:display_type, "default")
+        when "group_inline"
+          write_attribute(:display_type, "inline")
+        when "repeater"
+          write_attribute(:display_type, "repeater")
+        end      
+        @question_type_id = question_type_id
       end
 
       def trim_columns(qty_to_trim)

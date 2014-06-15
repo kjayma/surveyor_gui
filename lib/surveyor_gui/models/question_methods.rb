@@ -73,6 +73,10 @@ module SurveyorGui
         end
       end
 
+      def dynamically_generate
+        'false'
+      end
+      
       def question_type_id
         QuestionType.categorize_question(self)
       end
@@ -82,10 +86,6 @@ module SurveyorGui
         @question_type = QuestionType.find(question_type_id)
       end
 #
-
-      def dynamically_generate
-        'false'
-      end
 
       #setter for question type.  Sets both pick and display_type
       def question_type_id=(type)

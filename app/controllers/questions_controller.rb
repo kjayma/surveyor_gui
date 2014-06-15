@@ -9,19 +9,23 @@ class QuestionsController < ApplicationController
     if params[:prev_question_id]
       prev_question_display_order = _get_prev_display_order(params[:prev_question_id])
       @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :text => params[:text],
                                :display_type => "default",
                                :display_order => prev_question_display_order)
     else
       @question = Question.new(:survey_section_id => params[:survey_section_id],
+                               :text => params[:text],
                                :display_type => "default",
-                               :display_order => 0)
+                               :display_order => params[:display_order] || 0)
     end
+    @question.question_type_id = params[:question_type_id] if !params[:question_type_id].blank?
     @question.answers.build(:text => '', :response_class=>"string")
   end
 
   def edit
     @title = "Edit Question"
     @question = Question.includes(:answers).find(params[:id])
+    @question.question_type_id = params[:question_type_id] if !params[:question_type_id].blank?
   end
 
   def adjusted_text

@@ -46,7 +46,11 @@ class DependencysController < ApplicationController
 
   def destroy
     question = Question.find(params[:id])
-    question.dependency.destroy
+    if question.part_of_group?
+      question.question_group.dependency.destroy
+    else
+      question.dependency.destroy
+    end
     render :nothing=>true
   end
 

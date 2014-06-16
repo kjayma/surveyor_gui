@@ -3,8 +3,21 @@ class QuestionGroupsController < ApplicationController
   def new
     @title = "Add Question"
     @survey_section_id = params[:survey_section_id]
-    @question_group = QuestionGroup.new(text: params[:text], question_type_id: params[:question_type_id])
-    @question_group.questions.build(display_order: params[:display_order])
+    @question_group = QuestionGroup.new(
+      text: params[:text], 
+      question_type_id: params[:question_type_id])
+    original_question = Question.find(params[:question_id]) if !params[:question_id].blank?
+    if original_question
+      @question_group.questions.build(
+        display_order: params[:display_order], 
+        id: params[:question_id], 
+        question_type_id: original_question.question_type_id,
+        pick: original_question.pick,
+        display_type: original_question.display_type)
+    else      
+      @question_group.questions.build(
+        display_order: params[:display_order])
+    end
   end
 
 
@@ -19,6 +32,8 @@ class QuestionGroupsController < ApplicationController
     @question_group = QuestionGroup.new(question_group_params)
     if @question_group.save
       #@question_group.questions.update_attributes(survey_section_id: question_group_params[])
+      original_question = Question.find(question_group_params[:question_id]) if !question_group_params[:question_id].blank?
+      original_question.destroy
       render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout=>'colorbox'
     else
       @title = "Add Question"

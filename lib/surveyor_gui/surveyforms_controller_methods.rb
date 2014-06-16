@@ -224,9 +224,13 @@ module SurveyorGui
 
     def replace_question
       question_id = params[:question_id]
-      @question = Question.find(question_id)
-      @question_no = 0
-      render "_question_section" , :layout=> false
+      begin
+        @question = Question.find(question_id)
+        @question_no = 0
+        render "_question_section" , :layout=> false
+      rescue
+        render inline: "not found"  
+      end
     end
 
     private

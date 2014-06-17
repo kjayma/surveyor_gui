@@ -49,6 +49,9 @@ module SurveyorGui
         _process_answers_textbox(question, args)
       end
 
+      def _build_stars(question, args)
+      end
+      
       def _build_dropdown(question, args)
         _process_answers_textbox(question, args)
       end

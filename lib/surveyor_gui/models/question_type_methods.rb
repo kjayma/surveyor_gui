@@ -312,6 +312,7 @@ module SurveyorGui
           [:grid_dropdown,  "Grid (dropdowns)"                                , true,   :one,  :dropdown, :grid,    :all],
           [:group_inline,   "Inline Question Group"                           , true,   nil,   nil,       :inline,  :all],
           [:group_default,  "Question Group"                                  , true,   nil,   nil,       :default, :all],
+          [:repeater,       "Repeater (multiple responses)"                   , true,   nil,  :all,       :repeater, :all],
           #nothing below here shows up on the question builder choices for question type
           [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default", :inline,  :all],
           [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default", :inline,  :all],
@@ -327,7 +328,6 @@ module SurveyorGui
           [:stars,          "1-5 Stars"                                       , true,  :one,  :stars,    :inline,  :all],
           [:label,          "Label"                                           , true,  :none, :label,    :inline,  :all],
           [:file,           "File Upload"                                     , true,  :none, "default", :inline,  :blob],
-          [:repeater,       "Repeater (add as many answers as apply"          , true,  :all,  :all,      :repeater,:all],
           [:string,         "Text"                                            , true,  :none, :default,  :grid,    :all],
           
           
@@ -345,7 +345,22 @@ module SurveyorGui
           [:stars,          "1-5 Stars"                                       , true,  :one,  :stars,    :default,  :all],
           [:label,          "Label"                                           , true,  :none, :label,    :default,  :all],
           [:file,           "File Upload"                                     , true,  :none, "default", :default,  :blob],
-          [:repeater,       "Repeater (add as many answers as apply"          , true,  :all,  :all,      :repeater,:all],
+          
+          [:pick_one,       "Multiple Choice (only one answer)"               , true,   :one,  "default",:repeater,  :all],
+          [:pick_any,       "Multiple Choice (multiple answers)"              , true,   :any,  "default",:repeater,  :all],
+          [:box,            "Text Box (for extended text, like notes, etc.)"  , true,  :none, "default", :repeater,  :text],
+          [:dropdown,       "Dropdown List"                                   , true,  :one,  :dropdown, :repeater,  :all],
+          [:string,         "Text"                                            , true,  :none, "default", :repeater,  :string],
+          [:number,         "Number"                                          , true,  :none, "default", :repeater,  :float],
+          [:number,         "Number"                                          , true,  :none, "default", :repeater,  :integer],
+          [:date,           "Date"                                            , true,  :none, "default", :repeater,  :date],
+          [:datetime,       "Date and Time"                                   , true,  :none, "default", :repeater,  :datetime],
+          [:time,           "Time"                                            , true,  :none, "default", :repeater,  :time],
+          [:slider,         "Slider"                                          , true,  :one,  :slider,   :repeater,  :all],
+          [:stars,          "1-5 Stars"                                       , true,  :one,  :stars,    :repeater,  :all],
+          [:label,          "Label"                                           , true,  :none, :label,    :repeater,  :all],
+          [:file,           "File Upload"                                     , true,  :none, "default", :repeater,  :blob],
+          
           [:string,         "Text"                                            , true,  :none, :default,  :grid,    :all],
           #surveyor seems to have an inline option that doesn't actually render inline yet.  Recognize it
           #but don't treat it differently.  See question 16 and 17 in kitchen_sink_survey.rb.

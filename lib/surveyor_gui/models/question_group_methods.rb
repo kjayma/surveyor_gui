@@ -14,7 +14,18 @@ module SurveyorGui
       end
 
       def question_type_id
-        @question_type_id ||= display_type == "inline" ? :group_inline : :group_default
+        if !@question_type_id 
+          @question_type = case display_type
+          when "inline"
+            :group_inline
+          when "default"
+            :group_default
+          when "repeater"
+            :repeater
+          end
+        else
+          @question_type_id
+        end
       end
 
       def question_type_id=(question_type_id)

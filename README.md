@@ -61,16 +61,12 @@ The survey editor can be found at '/surveyforms'.  Users can take surveys at the
 
 ## Limitations
 
-This gem provides support for a subset of the Surveyor functionality.  It supports all of the basic question types, but does
-not currently support the following:
+This gem provides support for a subset of the Surveyor functionality.  It supports all of the basic question types, and
+most of the complicated question types, but does not currently support the following:
 
-  - Inline Question groups
   - Questions with multiple entries (e.g., the "Get me started on an improv sketch" question in the kitchen_sink_survey.rb that comes
     with the Surveyor gem.
-  - Datetime
   - Input masks
-  - Rankings
-  - Repeaters
   - Quizzes
 
 It adds some new question types:

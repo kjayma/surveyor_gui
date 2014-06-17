@@ -539,7 +539,7 @@ body
   .group_inline
     :display table
     
-    div.sortable_questions
+    div.sortable_questions, div.sortable_group_questions
       display: table-row-group
 
     .group_inline_header
@@ -570,6 +570,11 @@ body
     :margin-top -5px
     :vertical-align top
     :width 20em
+    
+  .add_question
+    :display table-row
+    span
+      :display table-cell
 
 .simple_form.edit_survey_section, .simple_form.new_survey_section
   input[type="text"]

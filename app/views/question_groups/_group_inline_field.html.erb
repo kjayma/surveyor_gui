@@ -1,7 +1,7 @@
 <%= simple_fields_for :question_group, @question_group do |qg| %>
-  <div class="sortable_questions">
+  <div class="sortable_group_questions" id="sortable_question<%= @survey_section_id.to_s %>">
       <%= qg.simple_fields_for :questions do |q| %>
-        <div class="group_inline_question">
+        <%= div_for(q.object, class: "group_inline_question") do %>
           <div class="handle"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></div>
           <%= q.hidden_field :survey_section_id, value: @survey_section_id %>
           <%= q.hidden_field :id %>
@@ -15,7 +15,7 @@
           <span class="delete_group_inline_question">
             <%= link_to_remove_fields "remove", q, ".group_inline_question" %>
           </span>
-        </div>
+        <% end -%>
       <% end -%>
   </div>
 <% end -%>

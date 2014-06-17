@@ -372,8 +372,10 @@ module SurveyorGui
 
 
         def categorize_question(question)
+          question_group_display_type = question.part_of_group? ? question.question_group.display_type : ""
+          answer = question.answers.first
           all.each do |question_type|
-            return question_type.id if _match_found(question, question_type)
+            return question_type.id if _match_found(question, question_type, question_group_display_type, answer)
           end
           raise "No question_type matches question #{question.id}"
         end
@@ -400,9 +402,7 @@ module SurveyorGui
 
         private
 
-        def _match_found(question, question_type)
-          question_group_display_type = question.part_of_group? ? question.question_group.display_type : ""
-          answer = question.answers.first
+        def _match_found(question, question_type, question_group_display_type, answer)
           answer_response_class = answer ? answer.response_class : "string"
 
           _match(question.part_of_group?,     question_type.part_of_group, :part_of_group)          &&

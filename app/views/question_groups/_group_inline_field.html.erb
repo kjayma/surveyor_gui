@@ -2,6 +2,7 @@
       <%= qg.simple_fields_for :questions do |q| %>
         <div class="group_inline_question">
           <%= q.hidden_field :survey_section_id, value: @survey_section_id %>
+          <%= q.hidden_field :id %>
           <%= q.input :text, label: false, as: :string, wrapper_html:{class: "question"} %>
           <%= q.input :question_type_id, label: false, collection: QuestionType.all.map{|t|[t.text, t.id]}[0..11].uniq.select{|c| [:box,:number,:date,:string,:dropdown,:pick_one,:pick_any].include? c[1]}, wrapper_html:{class: "question"}   %>
           <%= q.input :answers_textbox, label: false, as: :text, wrapper_html:{class: "question group_answers_textbox"} %>

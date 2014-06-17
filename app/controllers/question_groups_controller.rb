@@ -33,7 +33,7 @@ class QuestionGroupsController < ApplicationController
     if @question_group.save
       #@question_group.questions.update_attributes(survey_section_id: question_group_params[])
       original_question = Question.find(question_group_params[:question_id]) if !question_group_params[:question_id].blank?
-      original_question.destroy
+      original_question.destroy if original_question
       render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout=>'colorbox'
     else
       @title = "Add Question"

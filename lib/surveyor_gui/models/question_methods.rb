@@ -6,7 +6,7 @@ module SurveyorGui
 
       def self.included(base)
         base.send :attr_accessor, :dummy_answer, :type, :decimals
-        base.send :attr_writer, :answers_textbox, :grid_columns_textbox, :omit, :omit_text,
+        base.send :attr_writer, :grid_columns_textbox, :omit, :omit_text,
                   :other, :other_text, :comments_text, :comments, :dropdown_column_count
         base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
@@ -275,6 +275,12 @@ module SurveyorGui
 
       def answers_textbox
         self.answers.where('is_exclusive != ? and is_comment != ? and response_class != ?',true,true,"string").order('display_order asc').collect(&:text).join("\n")
+      end
+      
+      def answers_textbox=(textbox)
+        #change updated_at as a hack to force dirty record for change on answers_textbox
+        write_attribute(:updated_at, Time.now)
+        @answers_textbox=textbox
       end
 
       def omit

@@ -1,19 +1,19 @@
 <%= simple_fields_for :question_group, @question_group do |qg| %>
   <%= qg.hidden_field :id %>
   <%= qg.hidden_field :display_type, value: "inline" %>
-    <div class="group_inline">
-      <div class="group_inline_header">
-        <span>
-        Question
-        </span>
-        <span>
+  <div class="group_inline">
+    <div class="group_inline_header">
+      <span>
+        Sub Question
+      </span>
+      <span>
         Question Type
-        </span>
-        <span>
+      </span>
+      <span>
         Possible Answers
-        </span>
-      </div>
-      <%= render "group_inline_field", qg: qg %>
-      Add Question <%= image_tag("addicon.png", class:"add_group_inline_question") %>
+      </span>
     </div>
+    <%= render "group_inline_field", qg: qg %>
+    Add Question <%= image_tag("addicon.png", class:"add_group_inline_question") %>
+  </div>
 <% end -%>

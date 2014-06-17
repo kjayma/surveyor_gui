@@ -1,6 +1,7 @@
 <%= simple_fields_for :question_group, @question_group do |qg| %>
       <%= qg.simple_fields_for :questions do |q| %>
         <div class="group_inline_question">
+          <span class="fl ui-icon ui-icon-arrowthick-2-n-s"></span>
           <%= q.hidden_field :survey_section_id, value: @survey_section_id %>
           <%= q.hidden_field :id %>
           <%= q.input :text, label: false, as: :string, wrapper_html:{class: "question"} %>

@@ -484,8 +484,11 @@ body
 
   .questions
     :float left
-    .ui-icon-arrowthick-2-n-s
-      :float right
+    .handle
+      :display table-cell
+      :width 16px
+      .ui-icon
+        :float right
     .omit_text, .other_text, .comments_text
       margin-top: 0
       label
@@ -535,11 +538,18 @@ body
 
   .group_inline
     :display table
+    
+    div.sortable_questions
+      display: table-row-group
+
     .group_inline_header
       :display table-header-group
       span
         :display table-cell
           :margin-right 1em
+      span.handle
+        :width 16px    
+          
     .group_inline_question
       :display table-row
       .question

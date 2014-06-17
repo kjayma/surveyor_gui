@@ -74,6 +74,8 @@ module SurveyformHelper
   def question_group_class(question)
     if @current_group.question_group.display_type == "inline"
       "inline"
+    elsif @current_group.question_group.display_type == "default"
+      "default"
     else
       if question.question_type_id == :grid_dropdown
         "dropdown"

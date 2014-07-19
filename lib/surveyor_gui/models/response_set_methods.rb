@@ -11,7 +11,7 @@ module SurveyorGui
       #determine whether a mandatory question is missing a response.  Only applicable if the question is not dependent on other questions,
       #or if it is dependent, but has been triggered for inclusion by a previous answer.
       def triggered_mandatory_missing
-        qs = survey.sections_with_questions.map(&:questions).flatten
+        qs = survey.sections.map(&:questions).flatten
         ds = Dependency.all(:include => :dependency_conditions, :conditions => {:dependency_conditions => {:question_id => qs.map(&:id) || responses.map(&:question_id)}})
         triggered = qs - ds.select{|d| !d.is_met?(self)}.map(&:question)
         triggered_mandatory = triggered.select{|q| q.mandatory?}

@@ -16,7 +16,7 @@
         = ff.input :api_id, :as => :quiet
         -# the next three lines add for sureyor_gui
         - if renderer==:stars
-          = ff.input :answer_id, :as => :radio_buttons, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :include_blank => (renderer != :slider), :label => q.text, :input_html => { :disabled => disabled }
+          = ff.input :answer_id, :as => :radio, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]], :include_blank => (renderer != :slider), :label => q.text, :input_html => { :disabled => disabled }
         - else
           = ff.input :answer_id, :as => :select, :collection => q.answers.map{|a| [a.text, a.id]}, :include_blank => (renderer != :slider), :label => q.text, :input_html => { :disabled => disabled }
     - else # :default, :inline, :inline_default

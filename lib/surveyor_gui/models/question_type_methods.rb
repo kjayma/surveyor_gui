@@ -484,7 +484,7 @@ class TextBoxParser
   end
 
   def _dedupe
-    grouped = @nested_objects.order('display_order DESC').group(:text).collect(&:id)
+    grouped = @nested_objects.order('display_order DESC').uniq{|n| n.id}.collect(&:id)
     @nested_objects.each do |obj|
       obj.destroy unless (grouped.include? obj.id)
     end

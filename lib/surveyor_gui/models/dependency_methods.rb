@@ -14,7 +14,7 @@ module SurveyorGui
         base.class_eval do
           _validators.reject!{ |key, _| key == :question_id }
 
-          _validate_callbacks.reject! do |callback|
+          _validate_callbacks.delete_if do |callback|
             if callback.raw_filter.class==ActiveModel::Validations::NumericalityValidator
               [[:question_id], [:question_group_id]].include? callback.raw_filter.attributes
             end

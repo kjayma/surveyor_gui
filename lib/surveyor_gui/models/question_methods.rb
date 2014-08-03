@@ -406,7 +406,7 @@ module SurveyorGui
       end
 
       def _preceding_questions_numbered
-        _preceding_questions.delete_if{|p| !p.is_numbered?}
+        _preceding_questions.to_a.delete_if{|p| !p.is_numbered?}
       end
 
       def _preceding_questions

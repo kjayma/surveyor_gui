@@ -1,4 +1,5 @@
 module SurveyformHelper
+  require 'deep_cloneable'
 
   def list_dependencies(o)
     controlling_questions = o.controlling_questions
@@ -104,111 +105,53 @@ end
 
 class SurveyCloneFactory
   def initialize(id, as_template=false)
-    @template = Surveyform.find(id.to_i)
+    @survey = Surveyform.find(id.to_i)
     @as_template = as_template
   end
 
   def clone
-    #the built-in clone method provided by Ruby on Rails gets us a clone of the Survey model, but does not clone the nested models. We have to do that ourselves.
-    s2 = @template.dup
-    s2.api_id = Surveyor::Common.generate_api_id
-    s2.survey_version = Survey.where(access_code: @template.access_code).maximum(:survey_version) + 1
-    #s2.user_id = current_user.id
-    question_table = {}
-    answer_table = {}
-    question_group_table = {}
-    columns_table = {}
-    #build a clone by starting with the original survey @template and traversing down through the nested @template models of survey_section, question, answer, dependency, dependency condition.
-    #any model with a suffix of '2' indicates the cloned model.
-  
-    @template.survey_sections.each do |ss|
-      ss2 = s2.survey_sections.build(ss.attributes)
-      ss2.survey_id = nil
-      ss2.id        = nil
-      ss2.modifiable = true
-      ss.questions.each do |q|
-        q2 = ss2.questions.build(q.attributes)
-        q2.survey_section_id = nil
-        q2.id = nil
-        q2.api_id = Surveyor::Common.generate_api_id        
-        q.answers.each do |a|
-          a = q2.answers.build(a.attributes)
-          a.question_id = nil
-          a.id = nil
-          a.api_id = Surveyor::Common.generate_api_id
-          a.original_choice = a.text
-        end
-        if q.dependency
-          d2 = q2.build_dependency(q.dependency.attributes)
-          d2.question_id = nil
-          d2.id = nil
-          q.dependency.dependency_conditions.each do |dc|
-            #null dependency_id to avoid triggering validation on dup rules.
-            dc2 = d2.dependency_conditions.build(dc.attributes.merge(:id=> nil, :dependency_id => nil))
-          end
-        end
-      end
-    end
-
-    s2.template = @as_template
-    #s2.access_code = s2.title+Time.now.to_s
-    if s2.save
-      #if we leave the clone as is, the cloned dependency_condition object will have foreign keys pointing to the original @templates, not the cloned objects.
-      #therefore the dependencies will act against the parent and not the clone. To correct this, we set up a cross reference by traversing the original models,
-      #and building a table indexed by the original ids which contains a hash of each corresponding new id.
-  
-      @template.survey_sections.each_with_index do |ss, idx1|
-        ss.questions.each_with_index do |q, idx2|
-          question_table[q.id.to_s]={:new_id => s2.survey_sections[idx1].questions[idx2].id}
-          q.answers.each_with_index do |a, idx3|
-            answer_table[a.id.to_s]={:new_id => s2.survey_sections[idx1].questions[idx2].answers[idx3].id}
-          end
-        end
-      end
-
-      question_groups = @template.survey_sections.map{|ss| ss.questions.map{|q| q.question_group}}.flatten.uniq.delete_if{|qg| qg.nil?}
-      question_groups = (question_groups.count == 1 && question_groups[0].nil?) ? [] : question_groups
-      question_groups.each do |qg|
-        qg2 = QuestionGroup.new(qg.attributes)
-        qg2.id = nil
-        qg2.api_id = Surveyor::Common.generate_api_id
-        qg.columns.each do |col|
-          col2 = qg2.columns.build(col.attributes.merge(:id=>nil, :question_group_id => nil))         
-        end
-        qg2.save!
-        qg2.reload
-        question_group_table[qg.id.to_s] = {:new_id => qg2.id}
-        qg.columns.each_with_index do |col, idx1|
-          columns_table[col.id.to_s] = {:new_id => qg2.columns[idx1].id}
-        end
-      end
-
-      #now we traverse the clone and reassign foreign keys in question_groups and the dependency_condition object based on the cross reference table.
-      s2.survey_sections.each do |ss|
-        ss.questions.each do |q|
-          if q.part_of_group?
-            q.update_attributes(question_group_id: question_group_table[q.question_group_id.to_s][:new_id])
-            q.answers.each do |a|
-              if a.column_id
-                p "a #{a.id} a.colid #{a.column_id} table #{columns_table}"
-                a.update_attributes(column_id: columns_table[a.column_id.to_s][:new_id])
-              end
-            end
-          end
-          if q.dependency
-            q.dependency.dependency_conditions.each do |dc|
-              dc.question_id = question_table[dc.question_id.to_s][:new_id]
-              dc.answer_id = answer_table[dc.answer_id.to_s][:new_id] if dc.answer_id
-              dc.save!
-            end
-          end
-        end
-      end
-
-      return s2
+    cloned_survey = _deep_clone 
+    _set_api_keys(cloned_survey)
+    if cloned_survey.save!
+      return cloned_survey 
     else
-      raise s2.errors.messages.map{|m| m}.join(',')
+      raise cloned_survey.errors.messages.map{|m| m}.join(',')
       return nil
+    end
+  end
+  
+  private
+  
+  def _initial_clone
+    initial_clone = @survey
+    initial_clone.api_id = Surveyor::Common.generate_api_id                                                       
+    initial_clone.survey_version = Survey.where(access_code: @survey.access_code).maximum(:survey_version) + 1  
+    return initial_clone
+  end 
+
+  def _deep_clone
+    _initial_clone.deep_clone include: { 
+      sections:   
+        {
+          questions: [
+            :answers,
+            {dependency: :dependency_conditions},
+            {question_group: :columns}
+          ]
+        }
+    }, 
+    use_dictionary: true
+  end 
+
+  def _set_api_keys(cloned_survey)
+    cloned_survey.sections.each do |section|
+      section.questions.each do |question|
+        question.api_id = Surveyor::Common.generate_api_id
+        question.question_group.api_id = Surveyor::Common.generate_api_id if question.part_of_group?
+        question.answers.each do |answer|
+          answer.api_id = Surveyor::Common.generate_api_id
+        end
+      end
     end
   end
 end

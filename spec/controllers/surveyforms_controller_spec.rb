@@ -231,7 +231,7 @@ describe SurveyformsController do
 
   context "#destroy" do
 
-    context "responses were submitted" do
+    context "no responses were submitted" do
       def do_delete
         delete :destroy, :id => survey_with_no_responses
       end
@@ -243,7 +243,7 @@ describe SurveyformsController do
       end
     end
 
-    context "no responses were submitted" do
+    context "responses were submitted" do
       def do_delete
         delete :destroy, :id => survey_with_responses
       end
@@ -252,6 +252,11 @@ describe SurveyformsController do
         do_delete
         expect(response).to redirect_to(surveyforms_url)
         expect(Survey.exists?(survey_with_responses.id)).to be_true
+      end
+
+      it "displays a flash message warning responses were collected" do
+        do_delete
+        expect(flash[:error]).to have_content /not be deleted/i
       end
     end
   end
@@ -329,6 +334,28 @@ describe SurveyformsController do
     it "cuts a question" do
       do_get
       expect(response).to be_success
+    end
+  end
+
+  context "#clone_survey" do
+    def do_put(params={})
+      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first, text: 'my cloned question')]
+      put :clone_survey,{id: survey.id}
+    end
+
+    it "creates a new survey" do
+      expect{do_put}.to change{Survey.count}.by(1)
+    end
+
+    it "gives a different id to the clone" do
+      do_put
+      expect(Survey.last.id).not_to eql survey.id
+    end
+
+    it "copies the text of the question" do
+      do_put
+      expect(Survey.last.survey_sections.first.questions.first.text).to eql 'my cloned question'
     end
   end
 end

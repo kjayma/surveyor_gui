@@ -5,10 +5,10 @@ module SurveyorGui
       include QuestionAndGroupSharedMethods
 
       def self.included(base)
-        base.send :attr_accessor, :dummy_answer, :type, :decimals
+        base.send :attr_accessor, :dummy_answer, :dummy_answer_array, :type, :decimals
         base.send :attr_writer, :grid_columns_textbox, :omit, :omit_text,
                   :other, :other_text, :comments_text, :comments, :dropdown_column_count
-        base.send :attr_accessible, :dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id,
+        base.send :attr_accessible, :dummy_answer, :dummy_answer_array, :question_type, :question_type_id, :survey_section_id, :question_group_id,
                   :text, :pick, :reference_identifier, :display_order, :display_type,
                   :is_mandatory,  :prefix, :suffix, :answers_attributes, :decimals, :dependency_attributes,
                   :hide_label, :dummy_blob, :dynamically_generate, :answers_textbox, :dropdown_column_count,

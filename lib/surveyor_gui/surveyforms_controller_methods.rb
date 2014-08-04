@@ -81,7 +81,11 @@ module SurveyorGui
         flash[:notice] = "Successfully destroyed survey."
         redirect_to surveyforms_url
       else
-        flash.now[:error] = 'Survey could not be deleted.'
+        if @surveyform.response_sets.count > 0
+          flash[:error] = 'This survey has responses and can not be deleted' 
+        else
+          flash[:error] = 'Survey could not be deleted.'
+        end
         redirect_to surveyforms_url
       end
     end
@@ -232,6 +236,18 @@ module SurveyorGui
         render inline: "not found"  
       end
     end
+     
+    def clone_survey
+      @title = "Clone Survey"
+      @surveyform = SurveyCloneFactory.new(params[:id]).clone
+      if @surveyform.save
+        flash[:notice] = "Successfully created survey, questionnaire, or form."
+        redirect_to edit_surveyform_path(@surveyform)
+      else
+        flash[:error] = "Could not clone the survey, questionnaire, or form."
+        render :action => 'new'
+      end
+    end     
 
     private
     def surveyforms_params

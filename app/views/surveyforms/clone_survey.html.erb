@@ -1,0 +1,13 @@
+<div class="column3">
+  <div class="shadebox round">
+    <div id="survey">
+        <h1 class="round-top"><%= @title %></h1>
+        <%= simple_form_for @surveyform, :url => create_cloned_surveyform_path do |f| %>
+          <%= f.error_messages %>
+          <%= f.hidden_field :id %>
+          <%= f.input :title, :label => "New Title",:hint => 'Name this survey, questionnaire, or form', :input_html=>{:style=>'width:25em;'}, :label_html=>{:style=>'width:6em;'}%>
+          <%= f.button :submit, @title %>
+      <% end %>
+    </div>
+  </div>
+</div>

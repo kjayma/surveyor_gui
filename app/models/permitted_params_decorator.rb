@@ -11,14 +11,14 @@ PermittedParams.class_eval do
   alias_method :base_question_attributes, :question_attributes
   def question_attributes
     base_question_attributes +
-    [:dummy_answer, :question_type, :question_type_id, :survey_section_id, :question_group_id, :text,
+    [:question_type, :question_type_id, :survey_section_id, :question_group_id, :text,
      :text_adjusted_for_group,
      :pick, :reference_identifier, :display_order, :display_type, :is_mandatory,
      :prefix, :suffix, :decimals, :dependency_attributes, :id,
      :hide_label, :dummy_blob, :dynamically_generate, :dynamic_source,
      :omit_text, :omit, :other, :other_text, :is_comment, :comments, :comments_text,
      :modifiable, :report_code, :answers_textbox, :grid_columns_textbox, :_destroy,
-     :grid_rows_textbox, :dropdown_column_count, question_group_attributes: [:id, :display_type, columns_attributes: column_attributes, questions_attributes: [:id, :pick, :display_order, :display_type, :text, :question_type_id, :_destroy]],
+     :grid_rows_textbox, :dropdown_column_count, :dummy_answer, dummy_answer_array: [], question_group_attributes: [:id, :display_type, columns_attributes: column_attributes, questions_attributes: [:id, :pick, :display_order, :display_type, :text, :question_type_id, :_destroy]],
      answers_attributes: answer_attributes,
      dependency_attributes: dependency_attributes]
   end

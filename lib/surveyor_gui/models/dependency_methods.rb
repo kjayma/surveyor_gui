@@ -12,13 +12,7 @@ module SurveyorGui
 #        # This means we do need to account for adding new records, and the validation has to be modified.  Unfortunately,
 #        # in Rails 3.2 there is no easy way to modify an existing validation.  We have to hack it out and replace it.
         base.class_eval do
-          _validators.reject!{ |key, _| key == :question_id }
-
-          _validate_callbacks.delete_if do |callback|
-            if callback.raw_filter.class==ActiveModel::Validations::NumericalityValidator
-              [[:question_id], [:question_group_id]].include? callback.raw_filter.attributes
-            end
-          end
+          reset_callbacks(:validate)
 
           def dependency_conditions_attributes=(dac)
             dac = _set_rule_keys(dac)
@@ -30,6 +24,8 @@ module SurveyorGui
         end
         base.send :validates_numericality_of, :question_id, :if => Proc.new { |d| d.question_group_id.nil? && !d.new_record? }
         base.send :validates_numericality_of, :question_group_id, :if => Proc.new { |d| d.question_id.nil? && !d.new_record?}
+        base.send :validates_presence_of, :rule
+        base.send :validates_format_of, :rule, :with => /\A(?:and|or|\)|\(|[A-Z]|\s)+\Z/ #TODO properly formed parenthesis etc.
 
         # Attribute aliases
         #base.send :alias_attribute, :dependent_question_id, :question_id

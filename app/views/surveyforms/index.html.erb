@@ -22,7 +22,7 @@
       <td><%= survey.survey_version %></td>
       <td><%= link_to "Show", survey %>&nbsp
       <%= link_to "Edit", edit_surveyform_path(survey) %>&nbsp
-      <%= link_to "Clone", clone_surveyform_path(survey) %>&nbsp
+      <%= link_to "Clone", clone_survey_surveyform_path(survey) %>&nbsp
       <%= link_to "Destroy", survey, data: { confirm: 'Are you sure?' }, :method => :delete %> </td>
     </tr>
   <% end %>

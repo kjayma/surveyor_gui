@@ -64,7 +64,7 @@
             <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
           </span>
       <% else -%>
-        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
+        <%= f.input_field :dummy_answer_array, label: false, collection: [answer.text], :as => :check_boxes %>
         <% if answer.response_class == "string" %>
           <span class="other">
             <%= f.input_field :dummy_answer,  :as=>:string, :label=> false%>
@@ -81,7 +81,7 @@
       <br />
     <% else -%>
       <% f.object.answers.each do |answer| -%>
-        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :check_boxes %>
+        <%= f.input_field :dummy_answer_array, label: false, collection: [answer.text], :as => :check_boxes %>
         <% if answer.response_class == "string" %>
           <span class="other">
             <%= f.input_field :dummy_answer,  :as=>:string, :label=>false%>

@@ -138,6 +138,10 @@ module SurveyorGui
           prep_not_picks('float')
         when 'date'
           prep_not_picks('date')
+        when 'time'
+          prep_not_picks('time')
+        when 'datetime'
+          prep_not_picks('datetime')          
         when 'file'
           prep_not_picks('blob')
         when 'string'

@@ -3,13 +3,6 @@ module SurveyorControllerCustomMethods
     base.send :layout, 'surveyor_modified'
   end
 
-  def edit
-    root = File.expand_path('../../', __FILE__)
-    #place the surveyor_gui views ahead of the default surveyor view in order of preference
-    #so we can load customized partials.
-    prepend_view_path(root+'/views')
-    super
-  end
   def update
     question_ids_for_dependencies = (params[:r] || []).map{|k,v| v["question_id"] }.compact.uniq
     saved = load_and_update_response_set_with_retries

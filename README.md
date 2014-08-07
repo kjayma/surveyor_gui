@@ -38,9 +38,10 @@ A more exhaustive list can be found in the gemspecs for Surveyor [surveyor] and 
 
 ## Install
 
-Add surveyor-gui to your Gemfile:
+Add surveyor and surveyor-gui to your Gemfile:
 
-    gem 'surveyor_gui', git: 'git://github.com/kjayma/surveyor_gui.git'
+    gem 'surveyor', github: 'NUBIC/surveyor'
+    gem 'surveyor_gui', github:'kjayma/surveyor_gui'
 
 You will also need a javascript runtime, like node.js or therubyracer.  If you
 have not yet installed one, add
@@ -90,7 +91,7 @@ data integrity of the survey response data.
 
 Surveys may be saved as templates.  This allows them to be cloned when creating a new survey (cloning is a pending feature).  It is
 possible to mark certain parts of a survey as unmodifiable so that they will always be present when a survey is cloned.
-
+  
 A template library feature is pending.
 
 ## Dynamic Generation
@@ -107,3 +108,18 @@ If you want to try out surveyor-gui before incorporating it into an application,
     cd testbed
 
 Start the rails server and go to /surveyforms
+
+## Reports
+Reports are currently experimental.  For now, reports can make use of basic question types, but cannot handle grid or
+group questions.
+
+Highcharts.js is used for graphics, and must be licensed for commercial use.  Planning to replace with Rickshawgraphs at
+some point soon.
+
+If you would like to try reports, replace the git URL in the installation instructions above with the following:
+
+    gem 'surveyor_gui', github:'kjayma/surveyor_gui', :branch => 'reports'
+    
+after following installation instructions, perform this additional step:
+
+    bundle exec rake highcharts:update

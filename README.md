@@ -123,3 +123,7 @@ If you would like to try reports, replace the git URL in the installation instru
 after following installation instructions, perform this additional step:
 
     bundle exec rake highcharts:update
+
+To see reports, try using the "Preview Reports" button on the survey editor, or take the survey and try
+"localhost:3000/surveyor_gui/reports/:id/show" where :id is the survey id.  Preview reports will create some dummy
+responses using randomized answers.  

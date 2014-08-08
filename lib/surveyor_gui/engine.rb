@@ -21,7 +21,7 @@ module SurveyorGui
       end
     end
     initializer "surveyor_guie.assets.precompile" do |app|
-      app.config.assets.precompile += %w[surveyor_all.js surveyor_gui_all.js surveyor_all.css surveyor_gui_all.css *.png *.gif]
+      app.config.assets.precompile += %w[surveyor_all.js surveyor_gui_all.js surveyor_all.css surveyor_gui_all.css surveyor_add_ons.js surveyor_add_ons.css *.png *.gif]
     end
   end
 end

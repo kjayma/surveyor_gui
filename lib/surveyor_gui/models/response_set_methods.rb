@@ -27,6 +27,12 @@ module SurveyorGui
              :show_mandatory => arr[0].map{|d| d.question_group_id.nil? ? (d.question.is_mandatory? ? "q_#{d.question_id}" : nil) : "g_#{d.question_group_id}"},
              :hide => arr[1].map{|d| d.question_group_id.nil? ? "q_#{d.question_id}" : "g_#{d.question_group_id}"}}
       end
+      def correctness_hash
+        { :questions => Survey.where(id: self.survey_id).includes(sections: :questions).first.sections.map(&:questions).flatten.compact.size,
+          :responses => responses.to_a.compact.size,
+          :correct => responses.find_all(&:correct?).compact.size
+        }
+      end     
     end
   end
 end

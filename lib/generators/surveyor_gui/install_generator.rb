@@ -7,6 +7,13 @@ module SurveyorGui
     desc "Generate surveyor README, migrations, assets and sample survey"
     class_option :skip_migrations, :type => :boolean, :desc => "skip migrations, but generate everything else"
 
+    def dependencies
+      generate "simple_form:install"
+      generate "surveyor:install"
+      rake "highcharts:update"
+      rake "db:migrate db:test:prepare"
+    end
+
     def migrations
       unless options[:skip_migrations]
         rake 'railties:install:migrations'

@@ -1,8 +1,6 @@
 surveyor_gui
 ============
 
-THE FIRST VERSION OF THIS GEM IS UNDER DEVELOPMENT!
-
 Surveyor_gui complements the surveyor gem.
 
 The surveyor gem is used to create surveys by parsing a file written in the Surveyor DSL.  It does not include a gui for creating surveys, although it does provide a gui for taking surveys.
@@ -20,7 +18,7 @@ This gem will also provide a reporting capability for Surveyor.
 SurveyorGui works with:
 
 * Ruby 1.9.3
-* Rails 4
+* Rails 4, 4.1
 
 
 Some key dependencies are:
@@ -106,6 +104,9 @@ Then run
 
 Start the rails server and go to /surveyforms
 
+Before contributing, please run the tests:
+    bundle exec rspec spec
+
 ## Taking surveys
 
 Go to /surveys (or click the link at the bottom of the surveyforms home page) to see the surveys and take one.
@@ -142,9 +143,16 @@ Add "response_set.rb" to your app/models directory.
 
 Put the following in the file:
 
-    class ResponseSet
+    class ResponseSet < ActiveRecord::Base
       def report_user_name
         user = User.find(self.user_id)
         user.first_name + " " + user.last_name
       end
     end
+
+You'll also need to explicitly require this file during intialization - create a config/initializers/surveyor_gui.rb and
+add one line: "require 'response_set'.
+
+Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, app/views/layouts/surveyor_gui_default.rb.  You may need to make a copy of it
+and put it in your own app/views/layout directory so that it can be customized (for instance, to add a Devise
+login/logout link).

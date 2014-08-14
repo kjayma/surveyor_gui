@@ -4,7 +4,7 @@
       %h1.round_top
         = @title
       %br
-      - if @response_sets.empty?
+      - if @response_sets.where(test_data: false).empty?
         %br
         Sorry, no responses available yet. &nbsp;Ask some people to take the survey.
         %br

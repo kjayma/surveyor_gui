@@ -1,7 +1,7 @@
 class SurveyorGui::ResponsesController < ApplicationController
 
   # ReportPreviewWrapper wraps preview in a database transaction so test data is not permanently saved.
-  around_action 'ReportPreviewWrapper.new'.to_sym, only: :preview
+  around_action :report_preview_wrapper, only: :preview
   layout 'surveyor_gui_default'
 
   def index
@@ -35,5 +35,11 @@ class SurveyorGui::ResponsesController < ApplicationController
       flash[:error] = "Survey/Questionnnaire not found."
       redirect_to :back
     end
+  end
+
+  private
+
+  def report_preview_wrapper
+    ReportPreviewWrapper.new
   end
 end

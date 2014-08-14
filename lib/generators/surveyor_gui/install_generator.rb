@@ -10,14 +10,12 @@ module SurveyorGui
     def dependencies
       generate "simple_form:install"
       generate "surveyor:install"
-      rake "highcharts:update"
       rake "db:migrate db:test:prepare"
-    end
-
-    def migrations
-      unless options[:skip_migrations]
+      rake "highcharts:update"
+      unless options[:skip_migration]
         rake 'railties:install:migrations'
       end
+      rake "db:migrate db:test:prepare"
     end
 
     def configurations

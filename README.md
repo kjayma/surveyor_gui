@@ -53,12 +53,9 @@ to your Gemfile.
 Bundle, install, and migrate:
 
     bundle install
-    rails g surveyor:install
-    rails g simple_form:install
     rails g surveyor_gui:install
-    bundle exec rake highcharts:update
-    bundle exec rake db:migrate
 
+Note that the installer will run db:migrate (so any un-applied migrations you have in your project will be pulled in).
 The survey editor can be found at '/surveyforms'.  Users can take surveys at the '/surveys' url.
 
 ## Limitations
@@ -100,7 +97,8 @@ A template library feature is pending.
 
 ## Test environment
 
-If you want to try out surveyor-gui before incorporating it into an application, run
+If you want to try out surveyor-gui before incorporating it into an application, or contribute, clone the repository.
+Then run
 
     bundle install
     bundle exec rake gui_testbed

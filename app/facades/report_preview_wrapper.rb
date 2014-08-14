@@ -8,5 +8,4 @@ module ReportPreviewWrapper
       end
     end
   end  
-
 end

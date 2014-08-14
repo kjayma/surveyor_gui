@@ -4,6 +4,26 @@ $LOAD_PATH << File.expand_path('../lib', __FILE__)
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
+###### INSTALL
+
+desc 'install the dependencies' 
+namespace :surveyor_gui do
+  task :install do
+    Bundler.with_clean_env do
+      sh 'bundle install'
+      sh 'bundle exec rails generate simple_form:install'
+      sh 'bundle exec rake highcharts:update'
+      sh 'bundle exec rails generate surveyor:install'
+      sh 'bundle exec rake db:migrate db:test:prepare'
+      sh 'bundle exec rails generate surveyor_gui:install'
+      sh 'bundle exec rake db:migrate db:test:prepare'
+      sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'
+    end
+  end
+end
+
+
+
 ###### RSPEC
 
 RSpec::Core::RakeTask.new(:spec)

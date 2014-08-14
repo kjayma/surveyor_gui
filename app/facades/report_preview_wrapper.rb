@@ -1,5 +1,5 @@
-class ReportPreviewWrapper
-  def initialize
+module ReportPreviewWrapper
+  def wrap_in_transaction 
     ActiveRecord::Base.transaction do
       begin
         yield
@@ -8,5 +8,4 @@ class ReportPreviewWrapper
       end
     end
   end  
-
 end

@@ -25,7 +25,7 @@
             <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
           </span>
       <% else -%>
-        <%= f.input_field :dummy_answer, label: false, collection: [answer.text], :as => :radio_buttons %>
+        <%= f.input_field :dummy_answer, label: (f.object.repeater? ? answer.text : false), collection: [answer.text], collection: [answer.text], :as => :radio_buttons%>
         <% if answer.response_class == "string" %>
           <span class="other">
             <%= f.input_field :dummy_answer,  :as=>:string, :label=> false%>
@@ -64,7 +64,7 @@
             <%= f.input :dummy_answer,  :as=>:string, label: answer.text %>
           </span>
       <% else -%>
-        <%= f.input_field :dummy_answer_array, label: false, collection: [answer.text], :as => :check_boxes %>
+        <%= f.input_field :dummy_answer_array, label: (f.object.repeater? ? answer.text : false), collection: [answer.text], :as => :check_boxes %>
         <% if answer.response_class == "string" %>
           <span class="other">
             <%= f.input_field :dummy_answer,  :as=>:string, :label=> false%>

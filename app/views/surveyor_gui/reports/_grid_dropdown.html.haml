@@ -1,0 +1,56 @@
+- question_group.questions.each do |q|
+  = render "graphs", q: q
+  = render "surveyor_gui/shared/new_line"
+%table.report_data.report_data_display
+  %tr{:style => "font-weight:bold;"}
+    %td &nbsp;
+    %td &nbsp;
+    %td User Id
+    %td 
+    - question_group.columns.each do |column|
+      %td
+        = column.text
+    - @response_sets.each do |response_set| 
+      - question_group.questions.is_not_comment.each_with_index do |question, index|
+        %tr{class: index==0 ? "first_row" : nil}
+          %td &nbsp;
+          %td &nbsp;
+          %td
+            %span.user_id
+              = response_set.report_user_name
+          %td
+            = question.text
+          - question_group.columns.each do |column|
+            %td
+              -if (response = Response.where(response_set_id: response_set.id, question_id: question.id, column_id: column.id).first)
+                = response.answer.text
+      = render "surveyor_gui/shared/grid_comments", question_group: question_group            
+      = render "surveyor_gui/shared/new_line"
+%table.report_data_functions
+  %tr
+    %td &nbsp;
+    %td &nbsp;
+    %td{:style => "font-weight:bold;"}
+      &nbsp;
+    - question_group.columns.each do |column|
+      %td{style: "font-weight:bold; text-align: center;", colspan: "#{column.answers.count/question_group.questions.count}"}
+        = column.text
+  %tr
+    %td &nbsp;
+    %td &nbsp;
+    %td
+    - question_group.columns.each do |column|
+      - column.answers.map{|a| a.text}.uniq.each do |answer|
+        %td
+          = answer
+  - question_group.questions.is_not_comment.each do |q|
+    %tr
+      %td &nbsp;
+      %td &nbsp;
+      %td
+        = q.text
+      - question_group.columns.each do |column| 
+        - Answer.where(question_id: q.id, column_id: column.id).each do |a|
+          %td.table_number
+            = @responses.where(question_id: q.id, column_id: column.id, answer_id: a.id).count
+= render "surveyor_gui/shared/new_line"

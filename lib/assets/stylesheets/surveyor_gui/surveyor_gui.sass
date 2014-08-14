@@ -262,6 +262,12 @@ body
           span.question_group_heading.grid_dropdown
             :text-align right
 
+          &.repeater
+            div.question_group_element
+              label
+                :display block 
+                :text-align center
+
           div.question_group_element
             :display table-row
             :height 1.5em
@@ -567,7 +573,7 @@ body
     :display none
   textarea
     :margin-left 0
-    :margin-top -5px
+    :margin-top -3px
     :vertical-align top
     :width 20em
     
@@ -625,3 +631,20 @@ table#number_hint
   :margin-left 2em
   td, tr
     :border 1px solid
+
+.surveyor_gui_report
+  .show_data, .hide_data
+    :margin-top .25em
+    :margin-bottom .5em
+  tr.question_group_header
+    td
+      :font-weight bold
+  span.user_id
+    :display none
+  tr.first_row span.user_id
+    :display block
+
+span.preview_multiple_choice_answer
+  :font-style italic 
+  :font-weight bold
+    

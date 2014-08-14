@@ -56,6 +56,7 @@ Bundle, install, and migrate:
     rails g surveyor:install
     rails g simple_form:install
     rails g surveyor_gui:install
+    bundle exec rake highcharts:update
     bundle exec rake db:migrate
 
 The survey editor can be found at '/surveyforms'.  Users can take surveys at the '/surveys' url.
@@ -81,6 +82,9 @@ Dependencies are partially supported.  The following are not currently supported
 - counts (count the number of answers checked or entered)
 - Regexp validations
 
+You can open the kitchen_sink survey that comes with Surveyor, but a few of the questions will not behave as expected
+because of the discrepancies noted above.
+
 ## Locking
 
 This gem enforces locking on surveys.  A survey may be modified up until a user submits a response.  At that point, the survey
@@ -94,11 +98,6 @@ possible to mark certain parts of a survey as unmodifiable so that they will alw
   
 A template library feature is pending.
 
-## Dynamic Generation
-
-A pending feature that allows a list of answers to be dynamically generated from the database.  When creating a question, the survey creator
-enters a special code that specifies the table from which to draw the answers.
-
 ## Test environment
 
 If you want to try out surveyor-gui before incorporating it into an application, run
@@ -109,21 +108,45 @@ If you want to try out surveyor-gui before incorporating it into an application,
 
 Start the rails server and go to /surveyforms
 
+## Taking surveys
+
+Go to /surveys (or click the link at the bottom of the surveyforms home page) to see the surveys and take one.
+
 ## Reports
-Reports are currently experimental.  For now, reports can make use of basic question types, but cannot handle grid or
-group questions.
 
-Highcharts.js is used for graphics, and must be licensed for commercial use.  Planning to replace with Rickshawgraphs at
-some point soon.
+Surveyor_gui now provides reports!  
 
-If you would like to try reports, replace the git URL in the installation instructions above with the following:
+You can see a report of all survey responses, or view an individual response.
 
-    gem 'surveyor_gui', github:'kjayma/surveyor_gui', :branch => 'reports'
-    
-after following installation instructions, perform this additional step:
-
-    bundle exec rake highcharts:update
+Highcharts.js is used for graphics, and must be licensed for commercial use.  Future development will replace Highcharts with Rickshawgraphs.
 
 To see reports, try using the "Preview Reports" button on the survey editor, or take the survey and try
 "localhost:3000/surveyor_gui/reports/:id/show" where :id is the survey id.  Preview reports will create some dummy
 responses using randomized answers.  
+
+You can also view an individual response at "localhost:3000/surveyor_gui/results/:id/show".
+
+## Devise etc.
+
+Surveyor_Gui does not provide direct support for Devise at this time, however, you can certainly hook it into
+your user model.
+
+The underlying, Surveyor gem provides a user_id attribute in the ResponseSet model.
+
+Surveyor_gui reports assume there will be a unique user for eash Survey response, and reports on results by user.
+If the response set has a user id, it will identify the response by user_id (not ideal).  If no user_id is available, it will
+default to the response_set.id (even worse).
+
+If you have a user model, you can override this behavior.  The current, but temporary, approach is to monkey patch the ResponseSet model's report_user_name method.  It will change the way user are identified on reports.  For instance, to identify users by first and last name (assuming you have a user model named User), you might do something like
+this:
+
+Add "response_set.rb" to your app/models directory.
+
+Put the following in the file:
+
+    class ResponseSet
+      def report_user_name
+        user = User.find(self.user_id)
+        user.first_name + " " + user.last_name
+      end
+    end

@@ -1,0 +1,70 @@
+= render "surveyor_gui/shared/question_number", q: q
+- if q.display_type == 'label'
+  = render "surveyor_gui/shared/new_line"
+- else
+  = render "graphs", q: q
+  - if [:pick_one,:pick_any,:dropdown,:number,:date,:datetime,:time,:stars,:slider, :string, :box].include? q.question_type_id
+    = render "surveyor_gui/shared/new_line"
+    - if q.question_type_id == :stars
+      = render "surveyor_gui/shared/stars_report_data", q: q, toggle: true
+    - elsif [:number,:date,:datetime,:time].include? q.question_type_id
+      = render "surveyor_gui/shared/report_data", q: q, toggle: true
+      %tr
+        %td
+        %td
+        %td
+          %table.report_data_function
+            - response_formatter = ReportFormatter.new(q, @responses)
+            - if q.question_type_id == :numbers
+              %tr
+                %td{:style => "font-weight:bold;"} Total
+                %td.table_number
+                  = q.prefix
+                  = response_formatter.stats(:sum) 
+                  \&nbsp;#{q.suffix}
+            %tr
+              %td{:style => "font-weight:bold;"} Min
+              %td.table_number
+                = q.prefix
+                = response_formatter.stats(:min) 
+                \&nbsp;#{q.suffix}
+            %tr
+              %td{:style => "font-weight:bold;"} Max
+              %td.table_number
+                = q.prefix
+                = response_formatter.stats(:max) 
+                \&nbsp;#{q.suffix}
+            %tr
+              %td{:style => "font-weight:bold;"} Average
+              %td.table_number
+                = q.prefix
+                = response_formatter.stats(:average) 
+                \&nbsp;#{q.suffix}
+    - elsif q.pick=='any' || q.pick=='one'            
+      = render "surveyor_gui/shared/report_data", q: q, toggle: true
+      %tr
+        %td
+        %td
+        %td
+          %table.report_data_functions
+            %tr
+              %td{:style => "font-weight:bold;"}
+                Answer
+              %td{:style => "font-weight:bold;"}
+                Count
+            - q.answers.is_not_comment.each do |answer| 
+              %tr
+                %td
+                  = answer.text
+                %td.table_number
+                  = @responses.where(question_id: q.id, answer_id: answer.id).count
+    - else
+      = render "surveyor_gui/shared/report_data", q: q, toggle: false 
+    = render "surveyor_gui/shared/new_line"
+  - elsif q.question_type_id == :file
+    %tr
+      %td &nbsp;
+      %td &nbsp;
+      %td
+        This question was used for file uploads.
+    = render "surveyor_gui/shared/new_line"

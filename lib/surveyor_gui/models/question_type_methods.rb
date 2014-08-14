@@ -157,7 +157,7 @@ module SurveyorGui
         is_comment, comments_text,
         column_id=nil
        )
-        question.question_group.questions.each do |question|
+        question.question_group.questions.is_not_comment.each do |question|
           _create_some_answers(question, grid_columns_textbox, column_id)
           _create_an_other_answer(question, other, other_text, column_id)
           _create_an_omit_answer(question, is_exclusive, omit_text)

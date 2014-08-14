@@ -1,0 +1,24 @@
+%tr{class: toggle ? "report_data report_data_display" : "report_data"}
+  %td
+  %td
+  %td
+    %table
+      %tr{:style => "font-weight:bold;"}
+        %td User Id
+        %td Response
+      - @responses.where(:question_id => q.id).each do |r|
+        - response_formatter = ReportFormatter.new(q, @responses)
+        %tr
+          %td= r.response_set.report_user_name
+          %td.table_number
+            = q.prefix
+            - if [:number, :date, :datetime, :time].include? q.question_type_id
+              = response_formatter.format_stats(r.response_value.to_f) 
+            - else
+              = r.response_value
+              \&nbsp;
+            = q.suffix
+        - if q.answers.is_comment.count > 0
+          = render "surveyor_gui/shared/new_line"
+          = render "surveyor_gui/shared/pick_comments", q: q, extra_column: false
+= render "surveyor_gui/shared/new_line"

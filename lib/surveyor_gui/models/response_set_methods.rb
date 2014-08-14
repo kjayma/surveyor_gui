@@ -32,7 +32,11 @@ module SurveyorGui
           :responses => responses.to_a.compact.size,
           :correct => responses.find_all(&:correct?).compact.size
         }
-      end     
+      end
+
+      def report_user_name
+        self.user_id || self.id
+      end
     end
   end
 end

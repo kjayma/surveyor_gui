@@ -1,0 +1,15 @@
+/ get comment line for pick questions
+- if [:pick_one, :pick_any, :dropdown, :slider].include? q.question_type_id  
+  - a = q.answers.where(is_comment: true)
+  - if a && a.first
+    - comment = @response_set.responses.where(question_id: q.id, answer_id: a.first.id).first
+    - if comment
+      %tr
+        %td &nbsp;
+        - if extra_column
+          %td &nbsp;
+        %td
+          = a.first.text+":"
+        %td
+          = comment.string_value if comment
+    = render "surveyor_gui/shared/new_line"

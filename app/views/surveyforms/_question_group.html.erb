@@ -79,7 +79,7 @@
       <br />
       <%= render "question_name_and_number", question_type: f.object.question_type, text: f.object.question_group.text %>
       <br />
-      <div class="question_group <%= question_group_class(f.object) %>">
+      <div class="question_group <%= question_group_class(f.object) %> <%= f.object.repeater? ? "repeater" : nil %>">
         <div class="question_group_header">
           <span class="question_group_heading">&nbsp;</span>
           <%= question_group_heading(f) %>

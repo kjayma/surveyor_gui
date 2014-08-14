@@ -1,0 +1,21 @@
+- if [:pick_one,:pick_any,:dropdown,:number,:date,:datetime,:time,:stars,:slider,:grid_one, :grid_any, :grid_dropdown].include? q.question_type_id
+  %tr{:class => q.surveyresponse_class(@response_sets)}
+    %td &nbsp;
+  %tr{:class => q.surveyresponse_class(@response_sets)}
+    %td
+    %td
+    %td
+      - if q.display_type=='stars'
+        - 10.times.each do |index|
+          %input{name: "star#{q.id.to_s}", type: "radio", class: "star {split:2}", disabled: "disabled", checked: (index+1)==star_average(@responses,q) ? "checked" : nil} 
+      - else
+        %div{:id => "hi_chart#{q.id}", :style => "height:410px; margin: 0; clear:both; min-width: 800px"}
+          = high_chart("hi_chart"+q.id.to_s , @chart[q.id.to_s]) do
+            - if q.pick == 'one' && !([:grid_one, :grid_dropdown].include? q.question_type_id)
+              = "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y;}".html_safe
+              = "options.plotOptions.pie.dataLabels = {}".html_safe
+              = "options.plotOptions.pie.dataLabels.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed()+' %';}".html_safe
+            - elsif q.question_type_id == :grid_dropdown
+              = "options.plotOptions.column.dataLabels.formatter = function() {if(this.y != 0) {return this.y;}}"
+            - else
+              = "options.tooltip.formatter = function() {return '<b>'+ this.x +'</b>: '+ this.y;}".html_safe

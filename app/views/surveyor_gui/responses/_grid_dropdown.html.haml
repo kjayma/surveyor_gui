@@ -1,0 +1,20 @@
+%tr{:style => "font-weight:bold;"}
+  %td &nbsp;
+  %td &nbsp;
+  %td 
+  - question_group.columns.each do |column|
+    %td
+      = column.text
+  - question_group.questions.is_not_comment.each_with_index do |question, index|
+    %tr{class: index==0 ? "first_row" : nil}
+      %td &nbsp;
+      %td &nbsp;
+      %td
+        = question.text
+      - question_group.columns.each do |column|
+        %td
+          -if (response = Response.where(response_set_id: @response_set.id, question_id: question.id, column_id: column.id).first)
+            = response.answer.text
+/ retrieve comments, if any
+= render "surveyor_gui/shared/grid_comments", question_group: question_group
+= render "surveyor_gui/shared/new_line"

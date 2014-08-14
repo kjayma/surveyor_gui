@@ -1,0 +1,33 @@
+- @question_no = 1
+- @survey.survey_sections.each do |ss|
+  %h3= ss.title
+  %br
+  - ss.questions.each do |q|
+    %div{class: q.surveyresponse_class(@response_sets)}
+      %div{class: q.repeater? ? "repeater" : "non_repeater"}
+        - if q.part_of_group?
+          - @question_group = @question_group || QuestionGroupTracker.new(q.question_group)
+          - if @question_group.check_for_new_group(q)
+            - if ["default", "inline", "repeater", "grid"].include? q.question_group.display_type
+              %table
+                %tr
+                  %td
+                    &nbsp;
+                  %td{colspan: 3}
+                    = @question_no.to_s+") #{q.question_group.text}"          
+                    - @question_no += 1
+                %tr
+                  %td &nbsp;
+                - if ["default", "inline", "repeater"].include? q.question_group.display_type
+                  - if q.question_group.display_type == "repeater"
+                    = render "repeater", question_group: q.question_group 
+                  - q.question_group.questions.each do |group_question|
+                    %table
+                      = render "single_question", q: group_question
+                - elsif [:grid_one, :grid_any].include? q.question_type_id
+                  = render "grid", question_group: q.question_group, question_type: q.question_type_id
+                - elsif q.question_type_id == :grid_dropdown
+                  = render "grid_dropdown", question_group: q.question_group
+        - else
+          %table
+            = render "single_question", q: q 

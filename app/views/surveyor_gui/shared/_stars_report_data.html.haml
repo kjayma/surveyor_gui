@@ -1,0 +1,14 @@
+%tr.report_data.report_data_display
+  %td
+  %td
+  %td
+    %table
+      %tr{:style => "font-weight:bold;"}
+        %td User Id
+        %td Response
+      - @responses.where(:question_id => q.id).each do |r|
+        %tr
+          %td= r.response_set.report_user_name
+          %td
+            - 5.times.each do |index|
+              %input{name: "star#{'d1'+r.id.to_s}", type: "radio", class: "star", disabled: "disabled", checked:  ( (index+1)== r.integer_value ? "checked" : nil )}

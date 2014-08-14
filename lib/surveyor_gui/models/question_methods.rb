@@ -33,6 +33,9 @@ module SurveyorGui
         base.send :after_save, :build_complex_questions
         base.send :before_save, :make_room_for_question
 
+        base.send :scope, :is_not_comment, -> { base.where(is_comment: false) }
+        base.send :scope, :is_comment, -> { base.where(is_comment: true) }
+
         base.class_eval do
 
           def answers_attributes=(ans)
@@ -160,7 +163,7 @@ module SurveyorGui
           response_class='answer'
         end
         if self.answers.blank?
-          self.answers_attributes={'0'=>{'response_class'=>response_class}}
+          self.answers_attributes={'0'=>{'text'=>'default', 'response_class'=>response_class}}
         else
           self.answers.map{|a|a.response_class=response_class}
         end
@@ -392,6 +395,10 @@ module SurveyorGui
                   .update_all("display_order = display_order+1")
           end
         end
+      end
+
+      def repeater?
+        part_of_group? ? (question_group.display_type=="repeater" ? true : false ) : false
       end
 
       private

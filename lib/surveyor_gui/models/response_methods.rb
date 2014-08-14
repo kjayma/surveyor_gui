@@ -19,19 +19,22 @@ module SurveyorGui
         base.send :mount_uploader, :blob, BlobUploader
       end
 
+      VALUE_TYPE = ['float', 'integer', 'string', 'datetime', 'text']
+
       def response_value
-        if float_value
-          float_value
-        elsif integer_value
-          integer_value
-        elsif string_value
-          string_value
-        elsif datetime_value
-          datetime_value
-        elsif text_value
-          text_value
-        elsif string_value
-          string_value
+        response_class = self.answer.response_class
+        if self.question.pick=='none'
+          _no_pick_value(response_class)
+        else
+          return self.answer.text
+        end
+      end
+
+      def is_comment?
+        if self.answer
+          self.answer.is_comment?
+        else
+          false
         end
       end
 
@@ -44,6 +47,20 @@ module SurveyorGui
 
       def delete_empty_dir
         FileUtils.rm_rf(File.join(Rails.root.to_s,'public',BlobUploader.store_dir))
+      end
+
+      def _no_pick_value(response_class)
+        VALUE_TYPE.each do |value_type|
+          value_attribute = value_type+'_value'
+          if instance_eval(value_attribute)
+            if response_class == "time"
+              return self.datetime_value - self.datetime_value.beginning_of_day
+            else
+              return instance_eval(value_attribute)
+            end
+          end
+        end
+        nil
       end
     end
   end

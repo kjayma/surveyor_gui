@@ -13,7 +13,7 @@ module SurveyorGui
 		  else
 			  template=false
       end
-      @title = "Modify " + (template ? "Templates" : "Surveys")
+      @title = "Manage " + (template ? "Templates" : "Surveys")
 	   	@surveyforms = Surveyform.where('template = ?',template).search(params[:search]).order(:title).paginate(:page => params[:page])
     end
 

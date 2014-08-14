@@ -1,0 +1,14 @@
+<br />
+<div class="column3">
+  <div class="shadebox round surveyor_gui_report">
+    <div id="Survey">
+      <h1 class="round-top"><%= @title %></h1>
+      <h2><%= @survey.title %></h2>
+      <span>
+          <button class = 'show_data'  >Show Data</button>
+          <button class = 'hide_data'  >Hide Data</button> 
+      </span>     
+      <%= render 'show_report' %>
+    </div>
+  </div>
+</div>

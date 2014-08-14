@@ -1,0 +1,42 @@
+= render "graphs", q: question_group.questions.first
+= render "surveyor_gui/shared/new_line"
+%tr
+  %td &nbsp;
+  %td &nbsp;
+  %td
+    %table.report_data.report_data_display
+      %tr{:style => "font-weight:bold;"}
+        %td User Id
+        %td 
+        - question_group.questions.is_not_comment.first.answers.each do |answer|
+          %td
+            = answer.text
+        - @response_sets.each do |response_set| 
+          - question_group.questions.is_not_comment.each_with_index do |question, index|
+            %tr{class: index==0 ? "first_row" : nil}
+              %td
+                %span.user_id
+                  = response_set.report_user_name
+              %td
+                = question.text
+              - question.answers.each do |answer|
+                %td
+                  - if Response.where(response_set_id: response_set.id, question_id: question.id, answer_id: answer.id).count > 0 
+                    .ui-icon.ui-icon-check 
+          = render "surveyor_gui/shared/grid_comments", question_group: question_group            
+          = render "surveyor_gui/shared/new_line"
+    %table.report_data_functions
+      %tr
+        %td{:style => "font-weight:bold;"}
+          &nbsp;
+        - question_group.questions.first.answers.each do |answer|
+          %td{:style => "font-weight:bold;"}
+            = answer.text
+      - question_group.questions.each do |q|
+        %tr
+          %td
+            = q.text        
+          - q.answers.each do |answer| 
+            %td.table_number
+              = @responses.where(question_id: q.id, answer_id: answer.id).count
+      = render "surveyor_gui/shared/new_line"

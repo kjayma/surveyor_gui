@@ -34,9 +34,9 @@ describe SurveyformsController do
 
     context "index parameters specify surveys" do
 
-      it "set the title to 'modify surveys'" do
+      it "set the title to 'manage surveys'" do
         do_get()
-        assigns(:title).should eq("Modify Surveys")
+        assigns(:title).should eq("Manage Surveys")
       end
 
       it "should not populate an array of templates" do
@@ -57,9 +57,9 @@ describe SurveyformsController do
 
     context "index parameters specify survey templates" do
 
-      it "set the title to 'modify templates'" do
+      it "set the title to 'manage templates'" do
         do_get(:template=>"true")
-        assigns(:title).should eq("Modify Templates")
+        assigns(:title).should eq("Manage Templates")
       end
 
       it "should populate an array of templates" do

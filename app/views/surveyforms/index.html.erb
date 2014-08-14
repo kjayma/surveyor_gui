@@ -23,7 +23,9 @@
       <td><%= link_to "Show", survey %>&nbsp
       <%= link_to "Edit", edit_surveyform_path(survey) %>&nbsp
       <%= link_to "Clone", clone_survey_surveyform_path(survey) %>&nbsp
-      <%= link_to "Destroy", survey, data: { confirm: 'Are you sure?' }, :method => :delete %> </td>
+      <%= link_to "Destroy", survey, data: { confirm: 'Are you sure?' }, :method => :delete %>&nbsp; 
+      <%= link_to "Run Report", surveyor_gui_report_path(survey) %> &nbsp;
+      <%= link_to "View Responses" , surveyor_gui_responses_path(id: survey) %></td>
     </tr>
   <% end %>
 </table>

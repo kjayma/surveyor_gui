@@ -29,6 +29,8 @@ module SurveyorGui
 
     def assets
       directory "app/assets"
+      directory "app/models"
+      directory "app/views"
     end
 
     private

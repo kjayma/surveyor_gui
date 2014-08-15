@@ -43,7 +43,7 @@ module SurveyorGui
     end
 
     def create
-      @surveyform = Surveyform.new(surveyforms_params)
+      @surveyform = Surveyform.new(surveyforms_params.merge(user_id: @current_user.nil? ? @current_user : @current_user.id))
       if @surveyform.save
         flash[:notice] = "Successfully created survey."
         @title = "Edit Survey"

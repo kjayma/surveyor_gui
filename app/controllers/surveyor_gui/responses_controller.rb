@@ -10,7 +10,7 @@ class SurveyorGui::ResponsesController < ApplicationController
   end
  
   def preview 
-    user_id = defined?(current_user) ? current_user.id : 1 
+    user_id = defined?(current_user) && current_user ? current_user.id : nil 
     @title = "Show Response"
     @survey = Survey.find(params[:survey_id])
     @response_set = ResponseSet.create(:survey => @survey, :user_id => user_id, :test_data => true)

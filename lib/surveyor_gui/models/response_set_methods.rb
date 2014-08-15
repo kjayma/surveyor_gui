@@ -35,10 +35,19 @@ module SurveyorGui
 
       def report_user_name
         user_name = nil
-        if defined? ResponseSetUser
-          user_name = ResponseSetUser.new(self.id).report_user_name(self.user_id)
+        if class_exists?('ResponseSetUser')
+          user_name = ResponseSetUser.new(self.user_id).report_user_name
         end
         user_name || self.user_id || self.id
+      end
+      
+      private
+
+      def class_exists?(class_name)
+        klass = Module.const_get(class_name)
+        return klass.is_a?(Class)
+      rescue NameError
+        return false
       end
     end
   end

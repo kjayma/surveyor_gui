@@ -127,16 +127,18 @@ You can also view an individual response at "localhost:3000/surveyor_gui/results
 
 ## Devise etc.
 
-Surveyor_Gui does not provide direct support for Devise at this time, however, you can certainly hook it into
-your user model.
+Surveyor_Gui will work with Devise or like gems.
 
-The underlying, Surveyor gem provides a user_id attribute in the ResponseSet model.
+The underlying Surveyor gem provides a user_id attribute in the ResponseSet model.  When responses are created, it will
+try to set the user_id to current_user.
 
 Surveyor_gui reports assume there will be a unique user for eash Survey response, and reports on results by user.
-If the response set has a user id, it will identify the response by user_id (not ideal).  If no user_id is available, it will
-default to the response_set.id (even worse).
+If the response set has a user id, (which will be the case if you've setup Devise in the typical way) it will identify the response by user_id.  If no user_id is available, it will
+default to the response_set.id.
 
-If you have a user model, you can override this behavior.  Surveyor_gui creates a response_set_user.rb file in your app/models directory.  Edit it to define the identifier you would like to use for users in reports.  For instance, if your user model is User, and you would like to see the user's email address on reports, edit the file as follows...
+You may want to identify users by something other than id on reports.  This can be done easily.  
+
+Surveyor_gui creates a response_set_user.rb file in your app/models directory.  Edit it to define the identifier you would like to use for users in reports.  For instance, if your user model is User, and you would like to see the user's email address on reports, edit the file as follows...
 
 In the initialize method, add the following line:
 
@@ -144,12 +146,10 @@ In the initialize method, add the following line:
 
 In the report_user_name method, add the following line:
 
-    @user.email
+    @user ? @user.email : nil
 
 If you wanted the users full name, you could add something like this:
 
-    @user.last_name + ', ' + @user.first_name
+    @user ? @user.last_name + ', ' + @user.first_name : nil
 
-Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, app/views/layouts/surveyor_gui_default.rb.  You may need to make a copy of it
-and put it in your own app/views/layout directory so that it can be customized (for instance, to add a Devise
-login/logout link).
+Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, surveyor_gui_default.rb.  A copy will be placed in your application's app/views/layouts directory.  You may need edit it for various reasons, such as adding a Devise login/logout link.

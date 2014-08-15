@@ -12,7 +12,7 @@ class SurveyorGui::ReportsController < ApplicationController
     response_qty = 5 
     @title = "Preview Report for "+response_qty.to_s+" randomized responses"
     @survey = Survey.find(params[:survey_id])
-    user_id = defined?(current_user) ? current_user.id : 1 
+    user_id = defined?(current_user) && current_user ? current_user.id : nil
     response_qty.times.each {
       @response_set = ResponseSet.create(survey: @survey, user_id: user_id, test_data: true)
       ReportResponseGenerator.new(@survey).generate_1_result_set(@response_set)

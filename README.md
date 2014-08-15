@@ -136,22 +136,19 @@ Surveyor_gui reports assume there will be a unique user for eash Survey response
 If the response set has a user id, it will identify the response by user_id (not ideal).  If no user_id is available, it will
 default to the response_set.id (even worse).
 
-If you have a user model, you can override this behavior.  The current, but temporary, approach is to monkey patch the ResponseSet model's report_user_name method.  It will change the way user are identified on reports.  For instance, to identify users by first and last name (assuming you have a user model named User), you might do something like
-this:
+If you have a user model, you can override this behavior.  Surveyor_gui creates a response_set_user.rb file in your app/models directory.  Edit it to define the identifier you would like to use for users in reports.  For instance, if your user model is User, and you would like to see the user's email address on reports, edit the file as follows...
 
-Add "response_set.rb" to your app/models directory.
+In the initialize method, add the following line:
 
-Put the following in the file:
+    @user = User.find(user_id)
 
-    class ResponseSet < ActiveRecord::Base
-      def report_user_name
-        user = User.find(self.user_id)
-        user.first_name + " " + user.last_name
-      end
-    end
+In the report_user_name method, add the following line:
 
-You'll also need to explicitly require this file during intialization - create a config/initializers/surveyor_gui.rb and
-add one line: "require 'response_set'.
+    @user.email
+
+If you wanted the users full name, you could add something like this:
+
+    @user.last_name + ', ' + @user.first_name
 
 Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, app/views/layouts/surveyor_gui_default.rb.  You may need to make a copy of it
 and put it in your own app/views/layout directory so that it can be customized (for instance, to add a Devise

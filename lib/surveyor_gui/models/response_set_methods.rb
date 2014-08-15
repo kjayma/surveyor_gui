@@ -3,7 +3,6 @@ module SurveyorGui
     module ResponseSetMethods
 
       def self.included(base)
-        #has_many :users, :primary_key => :user_id, :foreign_key => :id
         base.send :has_many, :responses, :dependent=>:destroy
         base.send :attr_accessible, :survey, :responses_attributes, :user_id, :survey_id, :test_data if defined? ActiveModel::MassAssignmentSecurity
       end
@@ -35,7 +34,11 @@ module SurveyorGui
       end
 
       def report_user_name
-        self.user_id || self.id
+        user_name = nil
+        if defined? ResponseSetUser
+          user_name = ResponseSetUser.new(self.id).report_user_name(self.user_id)
+        end
+        user_name || self.user_id || self.id
       end
     end
   end

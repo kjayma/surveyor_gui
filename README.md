@@ -39,7 +39,7 @@ A more exhaustive list can be found in the gemspecs for Surveyor [surveyor] and 
 Add surveyor and surveyor-gui to your Gemfile:
 
     gem 'surveyor', github: 'NUBIC/surveyor'
-    gem 'surveyor_gui', github:'kjayma/surveyor_gui'
+    gem 'surveyor_gui'
 
 You will also need a javascript runtime, like node.js or therubyracer.  If you
 have not yet installed one, add
@@ -129,7 +129,11 @@ You can also view an individual response at "localhost:3000/surveyor_gui/results
 
 Surveyor_Gui will work with Devise or like gems.
 
-The underlying Surveyor gem provides a user_id attribute in the ResponseSet model.  When responses are created, it will
+Surveyor_gui adds a user_id attribute to the Survey model.  It will try to set user_id to current_user when a new survey
+is defined.  The gem does not provide any access control over survey creation and update, but you can add that to your
+application using the user_id attribute.
+
+In addition, the underlying Surveyor gem provides a user_id attribute in the ResponseSet model.  When responses are created, it will
 try to set the user_id to current_user.
 
 Surveyor_gui reports assume there will be a unique user for eash Survey response, and reports on results by user.

@@ -50,6 +50,7 @@ feature "User creates a dependency using browser", %q{
     end 
     expect(page).to have_content("Hotel ratings")
     expect(page).to have_content("Rate the service")
+    expect(page).to have_css('input[type="radio"][value="'+answer1.id.to_s+'"]')
     #Then I don't see the second question just yet
     expect(page).not_to have_content("Who was your concierge?")
     #When I click yes as the answer to the first question

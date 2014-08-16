@@ -1,4 +1,4 @@
-Rails.application.routes.draw do
+SurveyorGui::Engine.routes.draw do
 
   resources :surveyforms do
     member do
@@ -47,25 +47,22 @@ Rails.application.routes.draw do
   end
   get '/dependency/render_dependency_conditions_partial', :to => 'dependencys#render_dependency_conditions_partial'
 
-  namespace :surveyor_gui do
-    resources :reports,
-      :only=>[
-              'show',
-              'preview',
-              'show_pdf'] do
-        member do
-          get 'show'
-          get 'preview'
-          get 'show_pdf'
-        end
-      end
-    resources :survey, only: ['show'] do
-    end
-    resources :responses, only: ['show', 'index', 'preview'] do
+  resources :reports,
+    :only=>[
+            'show',
+            'preview',
+            'show_pdf'] do
       member do
+        get 'show'
         get 'preview'
+        get 'show_pdf'
       end
+    end
+  resources :survey, only: ['show'] do
+  end
+  resources :responses, only: ['show', 'index', 'preview'] do
+    member do
+      get 'preview'
     end
   end
-
 end

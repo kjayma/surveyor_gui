@@ -1,6 +1,6 @@
 module SurveyorControllerCustomMethods
   def self.included(base)
-    base.send :layout, 'surveyor_modified'
+    base.send :layout, 'surveyor_gui/surveyor_modified'
   end
 
   def edit
@@ -83,7 +83,7 @@ module SurveyorControllerCustomMethods
 
   end
 end
-class SurveyorController < ApplicationController
+class SurveyorGui::SurveyorController < ApplicationController
   include Surveyor::SurveyorControllerMethods
   include SurveyorControllerCustomMethods
 end

@@ -1,4 +1,4 @@
-module SurveyorGui::ReportHelper
+module SurveyorGui::ReportsHelper
 
   def question_should_display(q)
     display=true

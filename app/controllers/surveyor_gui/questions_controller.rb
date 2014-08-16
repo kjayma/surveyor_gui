@@ -1,5 +1,5 @@
-class QuestionsController < ApplicationController
-  layout 'surveyor_gui_blank'
+class SurveyorGui::QuestionsController < ApplicationController
+  layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
     @title = "Add Question"
@@ -49,10 +49,10 @@ class QuestionsController < ApplicationController
     if @question.save
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
       #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
-      render :inline => '<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout => 'surveyor_gui_blank'
+      render :inline => '<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout => 'surveyor_gui/surveyor_gui_blank'
     else
       @title = "Add Question"
-      render :action => 'new', :layout => 'surveyor_gui_blank'
+      render :action => 'new', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 
@@ -62,9 +62,9 @@ class QuestionsController < ApplicationController
     if @question.update_attributes(question_params)
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
       #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
-      render :blank, :layout => 'surveyor_gui_blank'
+      render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'
     else
-      render :action => 'edit', :layout => 'surveyor_gui_blank'
+      render :action => 'edit', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 

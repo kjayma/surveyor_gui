@@ -1,4 +1,4 @@
-class QuestionGroupsController < ApplicationController
+class SurveyorGui::QuestionGroupsController < ApplicationController
 
   def new
     @title = "Add Question"
@@ -34,11 +34,11 @@ class QuestionGroupsController < ApplicationController
       #@question_group.questions.update_attributes(survey_section_id: question_group_params[])
       original_question = Question.find(question_group_params[:question_id]) if !question_group_params[:question_id].blank?
       original_question.destroy if original_question
-      render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout => 'surveyor_gui_blank'
+      render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout => 'surveyor_gui/surveyor_gui_blank'
     else
       @title = "Add Question"
       survey_section_id = question_group_params[:survey_section_id]
-      redirect_to :action => 'new', :controller => 'questions', :layout => 'surveyor_gui_blank', :survey_section_id => survey_section_id
+      redirect_to :action => 'new', :controller => 'questions', :layout => 'surveyor_gui/surveyor_gui_blank', :survey_section_id => survey_section_id
     end
   end
 
@@ -46,7 +46,7 @@ class QuestionGroupsController < ApplicationController
     @title = "Update Question"
     @question_group = QuestionGroup.includes(:questions).find(params[:id])
     if @question_group.update_attributes(question_group_params)
-      render :blank, :layout => 'surveyor_gui_blank'
+      render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'
       #If a nested question is destroyed, the Question model performs a cascade delete
       #on the parent QuestionGroup (stuck with this behaviour as it is a Surveyor default).
       #Need to check for this and restore question group.
@@ -58,7 +58,7 @@ class QuestionGroupsController < ApplicationController
         QuestionGroup.create!(scrubbed_params)
       end     
     else
-      render :action => 'edit', :layout => 'surveyor_gui_blank'
+      render :action => 'edit', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 

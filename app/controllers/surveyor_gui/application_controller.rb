@@ -1,3 +1,3 @@
-class ApplicationController < ActionController::Base
+class SurveyorGui::ApplicationController < ActionController::Base
   protect_from_forgery
 end

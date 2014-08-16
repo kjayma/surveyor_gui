@@ -1,5 +1,5 @@
-class DependencysController < ApplicationController
-  layout 'surveyor_gui_blank'
+class SurveyorGui::DependencysController < ApplicationController
+  layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
     prep_variables
@@ -21,7 +21,7 @@ class DependencysController < ApplicationController
     if @question.save
       redirect_to :back
     else
-      render :action => 'new', :layout => 'surveyor_gui_blank'
+      render :action => 'new', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 
@@ -37,10 +37,10 @@ class DependencysController < ApplicationController
     end
     if update_object.update_attributes(update_params)
       update_object.dependency.destroy if update_object.dependency.dependency_conditions.blank?
-      render :blank, :layout => 'surveyor_gui_blank'
+      render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'
     else
       prep_variables
-      render :action => 'edit', :layout => 'surveyor_gui_blank'
+      render :action => 'edit', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 

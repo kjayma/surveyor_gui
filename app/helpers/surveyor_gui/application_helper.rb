@@ -1,2 +1,2 @@
-module ApplicationHelper
+module SurveyorGui::ApplicationHelper
 end

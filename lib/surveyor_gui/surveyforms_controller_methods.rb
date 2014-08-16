@@ -2,7 +2,7 @@ module SurveyorGui
   module SurveyformsControllerMethods
 
     def self.included(base)
-      base.send :layout, 'surveyor_gui_default'
+      base.send :layout, 'surveyor_gui/surveyor_gui_default'
     end
 
     def index

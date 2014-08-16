@@ -1,5 +1,5 @@
-class SurveySectionsController < ApplicationController
-  layout 'surveyor_gui_blank'
+class SurveyorGui::SurveyorGui::SurveySectionsController < ApplicationController
+  layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
     @title = "Add Survey Section"
@@ -28,7 +28,7 @@ class SurveySectionsController < ApplicationController
     if @survey_section.save
       redirect_to :back
     else
-      render :action => 'new', :layout => 'surveyor_gui_blank'
+      render :action => 'new', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 
@@ -36,9 +36,9 @@ class SurveySectionsController < ApplicationController
     @title = "Update Survey Section"
     @survey_section = SurveySection.find(params[:id])
     if @survey_section.update_attributes(survey_section_params)
-      render :blank, :layout => 'surveyor_gui_blank'
+      render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'
     else
-      render :action => 'edit', :layout => 'surveyor_gui_blank'
+      render :action => 'edit', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 

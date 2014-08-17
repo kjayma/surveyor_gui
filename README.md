@@ -11,7 +11,9 @@ Surveyor_gui meets this need by providing a gui to create surveys from scratch. 
 
 Surveyor is feature-rich and can create very complex surveys.  Surveyor-gui supports most of the features in Surveyor.
 
-This gem will also provide a reporting capability for Surveyor.
+This gem also provides a reporting capability for Surveyor.
+
+Surveyor_gui is a mountable engine.
 
 ## Requirements
 

@@ -24,7 +24,7 @@ module SurveyorGui
     end
 
     def routes
-      route('mount SurveyorGui::Engine => "/", :as => "surveyor_gui"')
+      route('mount SurveyorGui::Engine => "/surveyor_gui", :as => "surveyor_gui"')
     end
 
     def assets

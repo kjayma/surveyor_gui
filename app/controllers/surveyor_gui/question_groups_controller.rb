@@ -1,8 +1,9 @@
 class SurveyorGui::QuestionGroupsController < ApplicationController
+  layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
     @title = "Add Question"
-    @survey_section_id = params[:survey_section_id]
+    @survey_section_id = question_params[:survey_section_id]
     @question_group = QuestionGroup.new(
       text: params[:text], 
       question_type_id: params[:question_type_id])
@@ -25,7 +26,8 @@ class SurveyorGui::QuestionGroupsController < ApplicationController
     @title = "Edit Question Group"
     @question_group = QuestionGroup.includes(:questions).find(params[:id])
     @question_group.question_type_id = params[:question_type_id]
-    @survey_section_id = @question_group.questions.first.survey_section_id
+    @survey_section_id = question_params[:survey_section_id]
+    p "edit survey sect id #{@survey_section_id}"
   end
 
   def create
@@ -81,4 +83,8 @@ class SurveyorGui::QuestionGroupsController < ApplicationController
   def question_group_params
     ::PermittedParams.new(params[:question_group]).question_group
   end
+  def question_params
+    params.permit(:survey_section_id, :id, :text, :question_id, :question_type_id, :display_order, :pick, :display_type) 
+  end
+
 end

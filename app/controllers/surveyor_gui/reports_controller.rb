@@ -10,15 +10,15 @@ class SurveyorGui::ReportsController < ApplicationController
 
   def preview
     response_qty = 5 
+    user_ids = response_qty.times.map{|i| -1*i}
     @title = "Preview Report for "+response_qty.to_s+" randomized responses"
     @survey = Survey.find(params[:survey_id])
-    user_id = defined?(current_user) && current_user ? current_user.id : nil
-    response_qty.times.each {
+    user_ids.each do |user_id|
       @response_set = ResponseSet.create(survey: @survey, user_id: user_id, test_data: true)
       ReportResponseGenerator.new(@survey).generate_1_result_set(@response_set)
-    }
-    @response_sets = ResponseSet.where(survey_id: @survey.id, test_data: true, user_id: user_id)
-    @responses = Response.joins(:response_set, :answer).where('user_id = ? and survey_id = ? and test_data = ? and answers.is_comment = ?',user_id,params[:survey_id],true, false)
+    end
+    @response_sets = ResponseSet.where(survey_id: @survey.id, test_data: true).where('user_id in (?)', user_ids)
+    @responses = Response.joins(:response_set, :answer).where('user_id in (?) and survey_id = ? and test_data = ? and answers.is_comment = ?',user_ids,params[:survey_id],true, false)
     if (!@survey)
       flash[:notice] = "Survey/Questionnnaire not found."
       redirect_to :back

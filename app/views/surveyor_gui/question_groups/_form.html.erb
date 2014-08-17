@@ -1,4 +1,5 @@
 <div class="question_group_editor shadebox">
+  <%= render "surveyor_gui/partials/url_helpers" %>
   <h1 ><%= @title %></h1>
   <%= simple_form_for @question_group do |qg| %>
     <div class = 'questions'>
@@ -6,7 +7,7 @@
       <%= qg.hidden_field :id %>
       <%= qg.hidden_field :display_type %>
       <%= qg.hidden_field :question_id %>
-      <%= qg.hidden_field :survey_section_id, value: @survey_section_id %>
+      <%= qg.input :survey_section_id, as: :hidden, input_html: { value: @survey_section_id }%>
 
       <%= qg.label :Question, :input_html=>{:size=>'15'} %>
       <%= qg.input :text , :input_html=>{:size=>'55'}, :label => false%>

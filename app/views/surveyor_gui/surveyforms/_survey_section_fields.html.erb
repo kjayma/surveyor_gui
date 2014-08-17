@@ -15,24 +15,23 @@
             <% if !@survey_locked && (s.object.modifiable?) %>
 
               <button type="button" id="edit_section_title"
-                      data-replace_survey_section_url="<%=url_for(
-                        action: 'replace_survey_section', 
+                      data-replace_survey_section_url="<%=surveyor_gui.replace_survey_section_surveyform_path(
                         survey_section_id: s.object.id,
                         id: f.object.id)%>"
-                      data-edit_survey_section_url="<%=edit_survey_section_url(s.object.id)%>"
+                      data-edit_survey_section_url="<%=surveyor_gui.edit_survey_section_url(s.object.id)%>"
                       data-survey_section_id="<%=s.object.id%>"
               >Edit Section Title</button>
 
               <% if session[:cut_section] -%>
 
                 <button type="button" id="paste_section"
-                  data-paste_section_surveyform_url="<%= paste_section_surveyform_url(survey_section_id: s.object.id, position: 'over') %>"
+                  data-paste_section_surveyform_url="<%= surveyor_gui.paste_section_surveyform_url(survey_section_id: s.object.id, position: 'over') %>"
                 >Paste Section</button>
 
               <% else -%>
 
                 <button type="button" id="cut_section"
-                        data-cut_section_surveyform_url="<%=cut_section_surveyform_url(
+                        data-cut_section_surveyform_url="<%=surveyor_gui.cut_section_surveyform_url(
                           id: f.object.id, 
                           survey_section_id: s.object.id)%>"
                         data-survey_section_id="<%=s.object.id%>"
@@ -43,7 +42,7 @@
 
               <button type="button" id="delete_section"
                       data-survey_section_id="<%=s.object.id%>"
-                      data-survey_section_url="<%= survey_section_url(s.object.id)%>"
+                      data-survey_section_url="<%= surveyor_gui.survey_section_url(s.object.id)%>"
               >Delete Section</button>
 
             <% end -%>
@@ -62,14 +61,14 @@
               <div class="question_buttons_top">
 
                   <button type="button" id="add_question" class="cut"
-                    data-insert_new_question_url="<%=insert_new_question_surveyform_url(f.object.id)%>"
-                    data-new_question_url="<%=new_question_url%>"
+                    data-insert_new_question_url="<%=surveyor_gui.insert_new_question_surveyform_url(f.object.id)%>"
+                    data-new_question_url="<%=surveyor_gui.new_question_url%>"
                   >Add Question</button>
 
                   <% if session[:cut_question] -%>
 
                     <button type="button" id="paste_question"
-                      data-paste_question_surveyform_url="<%= paste_question_surveyform_url(
+                      data-paste_question_surveyform_url="<%= surveyor_gui.paste_question_surveyform_url(
                         id:                 f.object.id,
                         survey_section_id:  s.object.id) %>"
                     >Paste Question</button>
@@ -92,8 +91,8 @@
                 <div class="section_button_bar_bottom_inner">
 
                   <button type="button" id="add_section"
-                    data-new_survey_section_url="<%=new_survey_section_url%>"
-                    data-insert_survey_section_url="<%= url_for(:action => 'insert_survey_section',:id => f.object.id) %>"
+                    data-new_survey_section_url="<%=surveyor_gui.new_survey_section_url%>"
+                    data-insert_survey_section_url="<%= surveyor_gui.insert_survey_section_surveyform_path(:action => 'insert_survey_section',:id => f.object.id) %>"
                     data-survey_section_id="<%= s.object.id.to_s %>"
                     data-survey_id="<%= s.object.survey.id.to_s %>"
                   >Add Section</button>
@@ -101,7 +100,7 @@
                   <% if session[:cut_section] -%>
 
                     <button type="button" id="paste_section"
-                      data-paste_section_surveyform_url="<%= paste_section_surveyform_url(:survey_section_id => s.object.id) %>"
+                      data-paste_section_surveyform_url="<%= surveyor_gui.paste_section_surveyform_url(:survey_section_id => s.object.id) %>"
                     >Paste Section</button>
 
                   <% end -%>

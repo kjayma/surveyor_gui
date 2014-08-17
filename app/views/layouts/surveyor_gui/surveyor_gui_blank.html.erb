@@ -7,6 +7,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+    <div id="surveyor_gui_mount_point" data-surveyor_gui_mount_point="<%= SurveyorGui::Engine.routes.default_scope[:module] %>">
     <%= yield %>
   </body>
 </html>

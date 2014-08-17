@@ -23,7 +23,7 @@ feature "User creates a dependency using browser", %q{
 
   scenario "user creates a dependency", js: true do
     #Given I have a survey with two questions
-    visit surveyforms_path 
+    visit surveyor_gui.surveyforms_path 
     expect(page).to have_content("Hotel ratings")
     within "tr", text: "Hotel ratings" do
       click_link "Edit"

@@ -28,15 +28,16 @@ SurveyorGui::Engine.routes.draw do
     member do
       get 'cut'
     end
+    collection do
+      get 'render_answer_fields_partial'
+      get 'render_grid_partial'
+      get 'render_group_inline_partial'
+      get 'render_no_picks_partial'
+    end
   end
 
   resources :question_groups do
   end
-
-  get '/question/render_answer_fields_partial', :to => 'questions#render_answer_fields_partial'
-  get '/question/render_grid_partial', :to => 'questions#render_grid_partial'
-  get '/question_group/render_group_inline_partial', :to => 'question_groups#render_group_inline_partial'
-  get '/question/render_no_picks_partial', :to => 'questions#render_no_picks_partial'
 
   resources :dependencys do
     collection do

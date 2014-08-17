@@ -1,6 +1,7 @@
 <div class="question_editor shadebox">
+    <%= render "surveyor_gui/partials/url_helpers" %>
     <h1 ><%= @title %></h1>
-    <%= simple_form_for @question do |f| %>
+    <%= simple_form_for [surveyor_gui, @question] do |f| %>
       <div class = 'questions'>
         <%= f.error_messages %>
         <%= f.hidden_field :id %>

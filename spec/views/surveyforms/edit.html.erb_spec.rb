@@ -10,7 +10,7 @@ end
 RSpec.configure do |config|
   config.order =  :default
 end
-describe "surveyforms/edit.html.erb" do
+describe "surveyor_gui/surveyforms/edit.html.erb" do
   include CapybaraHelper
   let(:surveyform){ FactoryGirl.create(:surveyform) }
   let(:ss){ FactoryGirl.create(:survey_section, :surveyform => surveyform, :title => "Rooms", :display_order => 0)}

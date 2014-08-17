@@ -6,15 +6,15 @@
         <h1 class="round-top">
           <%= @title %>
             <% if @surveyform.id -%>
-              <input class="preview-button" onclick="preview_cbox('<%= survey_url(@surveyform.id) %>',
+              <input class="preview-button" onclick="preview_cbox('<%= surveyor_gui.survey_url(@surveyform.id) %>',
                 <%= @surveyform.id %>);" type="button" value="Preview Survey" />
-              <input class="preview-button" onclick="preview_cbox('<%= preview_response_url(@surveyform.id) %>', 
+              <input class="preview-button" onclick="preview_cbox('<%= surveyor_gui.preview_response_url(@surveyform.id) %>', 
                 <%= @surveyform.id %>);" type="button" value="Preview Response" />
-              <input class="preview-button" onclick="preview_cbox('<%= preview_report_url(@surveyform.id) %>', 
+              <input class="preview-button" onclick="preview_cbox('<%= surveyor_gui.preview_report_url(@surveyform.id) %>', 
                 <%= @surveyform.id %>);" type="button" value="Preview Report" />
             <% end %>
         </h1>
-        <%= simple_form_for @surveyform, :url => "/surveyforms/"+@surveyform.id.to_s do |f| %>
+        <%= simple_form_for [surveyor_gui, @surveyform] do |f| %>
           <%= f.error_messages %>
           <br/>
           <%= f.hidden_field :id %>

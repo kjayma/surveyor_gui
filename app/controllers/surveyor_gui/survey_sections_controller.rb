@@ -1,4 +1,4 @@
-class SurveyorGui::SurveyorGui::SurveySectionsController < ApplicationController
+class SurveyorGui::SurveySectionsController < ApplicationController
   layout 'surveyor_gui/surveyor_gui_blank'
 
   def new

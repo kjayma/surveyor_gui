@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SurveyorGui</title>
+    <%= stylesheet_link_tag    "surveyor_gui_all", :media => "all" %>
+    <%= javascript_include_tag "surveyor_gui_all" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div id="surveyor_gui_mount_point" data-surveyor_gui_mount_point="<%= surveyor_gui.surveyforms_path %>"></div>
+   <% flash.each do |key, value| %>
+     <%= content_tag(:div, value, :class => "flash #{key}") %>
+   <% end %>
+   <%= yield %>
+
+  </body>
+</html>

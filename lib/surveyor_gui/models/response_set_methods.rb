@@ -35,10 +35,11 @@ module SurveyorGui
 
       def report_user_name
         user_name = nil
+        fake_users = {'0'=>'Bob', '-1'=>'Kishore','-2'=>'Tina','-3'=>'Xiao','-4'=>'Marshal','-5'=>'Lana','-6'=>'Demarius','-7'=>'Taylor','-8'=>'Cameron','-9'=>'Clio'} 
         if class_exists?('ResponseSetUser')
           user_name = ResponseSetUser.new(self.user_id).report_user_name
         end
-        user_name || self.user_id || self.id
+        user_name || fake_users[self.user_id.to_s] || self.id
       end
       
       private

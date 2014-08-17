@@ -8,7 +8,6 @@ feature "User creates a new survey using a browser",  %q{
   As a user
   I want to create a new survey using a browser
   So that I don't have to learn the Surveyor DSL or dive into technical weeds} do
-
   #force a cr/lf to make the output look better
   scenario " " do
   end
@@ -16,7 +15,7 @@ feature "User creates a new survey using a browser",  %q{
   context "User has not yet started a new survey" do
     scenario "User starts a new survey" do
       #Given I'm on the surveyform web page
-      visit surveyforms_path
+      visit surveyor_gui.surveyforms_path
 
       #When I click "New Survey"
       click_link "New Survey"
@@ -27,7 +26,7 @@ feature "User creates a new survey using a browser",  %q{
 
     scenario "User gives the survey a title" do
       #Given I'm on the "Create New Survey" page
-      visit new_surveyform_path
+      visit surveyor_gui.new_surveyform_path
 
       #When I fill in a title
       fill_in "Title", with: "How was Boston?"

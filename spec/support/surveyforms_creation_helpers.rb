@@ -1,7 +1,7 @@
 module SurveyFormsCreationHelpers
   module CreateSurvey
     def start_a_new_survey
-      visit new_surveyform_path
+      visit surveyor_gui.new_surveyform_path
       fill_in "Title", with: "How was Boston?"
       click_button "Save Changes"
     end
@@ -64,7 +64,7 @@ module SurveyFormsCreationHelpers
   module BuildASurvey
     def build_a_survey
       #Given I'm on the "Create New Survey" page
-      visit new_surveyform_path
+      visit surveyor_gui.new_surveyform_path
 
       title_the_survey
       title_the_first_section
@@ -89,14 +89,14 @@ module SurveyFormsCreationHelpers
     end
 
     def build_a_three_question_survey
-      visit new_surveyform_path
+      visit surveyor_gui.new_surveyform_path
       title_the_survey
       question_maker = QuestionsFactory.new
       question_maker.make_question(3){|text| add_a_text_question(text)}
     end
 
     def build_a_three_section_survey
-      visit new_surveyform_path
+      visit surveyor_gui.new_surveyform_path
       title_the_survey
       title_the_first_section ("Unique Section 1")
       add_a_new_section("Unique Section 2")

@@ -8,7 +8,7 @@ module CapybaraHelper
   end
 end
 
-describe "questions/edit.html.erb" do
+describe "surveyor_gui/questions/edit.html.erb" do
   include CapybaraHelper
 
   let(:question){ FactoryGirl.create(:question) }
@@ -16,17 +16,18 @@ describe "questions/edit.html.erb" do
   let(:form){find('form')}
    
   before do
+    @routes = SurveyorGui::Engine.routes
     assign(:question, question)
   end    
   
   it "renders a form" do
-    render
+    render 
     expect(response).to have_selector("form")
   end
 
   it "will post a new question on submit" do
     render
-    expect(form[:action]).to eql(question_path question)
+    expect(form[:action]).to eql(surveyor_gui.question_path question)
     expect(form[:method]).to eql('post')
   end
   

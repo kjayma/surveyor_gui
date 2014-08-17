@@ -31,7 +31,7 @@
       - r = @response_set.responses.where(:question_id => q.id).first
       = q.prefix
       - if [:number, :date, :datetime, :time].include? q.question_type_id
-        = ReportFormatter.new(q,r).format_stats(r.response_value.to_f) 
+        = ReportFormatter.new(q,r).format_stats(r.response_value.to_f) if r
       - else
         = r.response_value if r
         \&nbsp;

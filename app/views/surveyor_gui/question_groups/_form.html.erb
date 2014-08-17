@@ -1,0 +1,57 @@
+<div class="question_group_editor shadebox">
+  <%= render "surveyor_gui/partials/url_helpers" %>
+  <h1 ><%= @title %></h1>
+  <%= simple_form_for @question_group do |qg| %>
+    <div class = 'questions'>
+      <%= qg.error_messages %>
+      <%= qg.hidden_field :id %>
+      <%= qg.hidden_field :display_type %>
+      <%= qg.hidden_field :question_id %>
+      <%= qg.input :survey_section_id, as: :hidden, input_html: { value: @survey_section_id }%>
+
+      <%= qg.label :Question, :input_html=>{:size=>'15'} %>
+      <%= qg.input :text , :input_html=>{:size=>'55'}, :label => false%>
+      <span class='fl'>
+        <strong>Mandatory?</strong>
+      </span>
+      <%= qg.input :is_mandatory, :label => false, :as=>:boolean, :wrapper_html=>{:class=>'fl notfirst'}%>
+      <br />
+      <br />
+      <strong>Question Type</strong><br/>
+      <div class="question_type">
+        <span class="question_type_grid1">
+          <%= qg.input :question_type_id,
+            collection: question_type_subset([:pick_one]) ,
+            :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        </span>
+        <span class="question_type_grid1">
+          <%= qg.input :question_type_id,
+            collection: question_type_subset([:pick_any]) ,
+            :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        </span>
+        <div style="clear:both"></div>
+        <span class="question_type_grid">
+          <%= qg.input :question_type_id,
+            collection: question_type_subset([:dropdown, :string, :number, :stars, :label, :box]) ,
+            :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        </span>
+        <span class="question_type_grid">
+          <%= qg.input :question_type_id,
+            collection: question_type_subset([:date, :datetime, :time, :slider, :group_default ]) ,
+            :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false%>
+        </span>
+        <span class="question_type_grid">
+          <%= qg.input :question_type_id,
+            collection: question_type_subset([:file, :grid_one, :grid_any, :grid_dropdown, :group_inline, :repeater]) ,
+            :as => :radio_buttons , :wrapper_html=>{:size=>'60'}, :label => false %>
+        </span>
+      </div>
+      <br />
+      <div id="answer_choice">
+        <%= render "group_inline_fields", f: qg %>
+      </div>
+    </div>
+    <%= qg.button :submit, 'Save Changes', :id=>'question_group_submit' %>
+  <% end -%>
+  <% 20.times do -%><br/><% end -%>
+</div>

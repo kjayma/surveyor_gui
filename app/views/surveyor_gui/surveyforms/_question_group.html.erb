@@ -1,0 +1,116 @@
+<% @question_no = @question_no + 1 if f.object.id && f.object.question_type != 'Label'-%>
+<%= div_for(f.object) do %>
+  <fieldset class="
+    fields
+    questions
+    <%= f.object.is_mandatory ? 'mandatory_questions' : 'optional_questions' %>
+    <%= !@survey_locked && (f.object.modifiable) ? '' : 'not_modifiable' %>"
+  >
+    <div class="inner_question">
+      <!-- if dependencies, notify the user with a highlighted message at the top of the question -->
+      <% if f.object.question_group.dependent? -%>
+        <span class="question_logic_notifier">
+          <!-- list_dependencies tells the user which other questions determine whether this one is displayed -->
+          <%= list_dependencies(f.object.question_group) if f.object.question_group.dependent? %>.<br/>
+        </span>
+      <% end -%>
+
+      <!-- display the button bar unless a user has already submitted responses, thus locking the survey, or   -->
+      <!-- the survey is explicitly marked not modifiable (e.g., an administrator locks it).                   -->
+      <% if !@survey_locked && (f.object.modifiable?) -%>
+        <span class="fl ui-icon ui-icon-arrowthick-2-n-s"></span>
+
+        <span class="question_button_bar">
+
+          <button type="button" id="edit_question"
+             data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(
+              id:           f.object.survey_section.survey.id,
+              question_id:  f.object.id)%>"
+             data-edit_question_url="<%= (f.object.part_of_group? && f.object.question_group.display_type != 'grid') ? surveyor_gui.edit_question_group_url(f.object.question_group.id) : surveyor_gui.edit_question_url(f.object.id)%>"
+             data-question_id="<%= f.object.id.to_s %>"
+          >Edit Question</button>
+
+          <button type="button" id="cut_question"
+             data-cut_question_surveyform_url="<%=surveyor_gui.cut_question_surveyform_url(
+              id:           f.object.survey_section.survey.id,
+              question_id:  f.object.id)%>"
+             data-question_already_cut="<%= session[:cut_question] %>"
+          >Cut Question</button>
+
+          <button type="button" id="delete_question"
+             data-question_url="<%=surveyor_gui.question_url(f.object.id)%>"
+             data-replace_form_surveyform_url="<%= surveyor_gui.replace_form_surveyform_url(
+              id:                 f.object.survey_section.survey.id,
+              survey_section_id:  f.object.survey_section_id) %>"
+          >Delete Question</button>
+
+          <span style="float:right;">
+
+            <% if f.object.question_group.dependent? -%>
+
+              <button type="button" id="delete_logic"
+                 data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(:question_id => f.object.id)%>"
+                 data-dependency_url="<%= surveyor_gui.dependency_url(f.object.id) %>"
+                 data-question_id="<%= f.object.id.to_s %>"
+              >Delete Logic</button>
+
+
+              <button type="button" id="edit_logic"
+                data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(:question_id => f.object.id)%>"
+                data-edit_dependency_url="<%= surveyor_gui.edit_dependency_url(f.object.id) %>"
+                data-question_id="<%= f.object.id.to_s %>"
+              >Edit Logic</button>
+
+            <% else -%>
+                <button type="button" id="add_logic"
+                  data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(
+                    id:           f.object.survey_section.survey.id,
+                    question_id:  f.object.id)%>"
+                  data-new_dependency_url="<%= surveyor_gui.new_dependency_url(:id=>f.object.id) %>"
+                  data-question_id="<%= f.object.id.to_s %>"
+                >Add Logic</button>
+            <% end %>
+
+          </span>
+        </span>
+
+      <% end %>
+      <br />
+      <br />
+      <%= render "question_name_and_number", question_type: f.object.question_type, text: f.object.question_group.text %>
+      <br />
+      <div class="question_group <%= question_group_class(f.object) %> <%= f.object.repeater? ? "repeater" : nil %>">
+        <div class="question_group_header">
+          <span class="question_group_heading">&nbsp;</span>
+          <%= question_group_heading(f) %>
+        </div>
+        <%= render_one_group ss -%>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <% if !@survey_locked && (f.object.modifiable?) -%>
+
+    <div class="question_buttons_bottom">
+
+      <button type="button" id="add_question" class="cut"
+        data-insert_new_question_url="<%=surveyor_gui.insert_new_question_surveyform_url(id: f.object.survey_section.survey.id, ) %>"
+        data-new_question_url="<%=surveyor_gui.new_question_url%>"
+        data-prev_question_id="<%= f.object.id.to_s %>"
+      >Add Question</button>
+
+      <% if session[:cut_question] -%>
+
+        <button type="button" id="paste_question"
+          data-paste_question_surveyform_url="<%= surveyor_gui.paste_question_surveyform_url(
+              id:           f.object.survey_section.survey.id,
+              question_id:  f.object.id) %>"
+        >Paste Question</button>
+
+      <% end %>
+
+    </div>
+
+  <% end %>
+<% end %>

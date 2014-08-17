@@ -1,10 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe SurveyformsController do
+describe SurveyorGui::SurveyformsController do
   include Surveyor::Engine.routes.url_helpers
-#  before do
-#    @routes = Surveyor::Engine.routes
-#  end
+  include SurveyorGui::Engine.routes.url_helpers
+  before do
+    self.routes = SurveyorGui::Engine.routes
+  end
 
   let!(:survey) { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
   let!(:survey_beta) { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
@@ -106,7 +107,7 @@ describe SurveyformsController do
 
       it "returns to the edit page" do
         do_post(:title=>'New surv')
-        expect(response).to redirect_to(edit_surveyform_url(assigns(:surveyform).id))
+        expect(response).to redirect_to(edit_surveyform_path(assigns(:surveyform).id))
       end
 
       it "resets question_no to 0" do
@@ -133,7 +134,7 @@ describe SurveyformsController do
       context "when sections are valid" do
         it "redirects to the edit page" do
           do_post @survey_with_sections
-          expect(response).to redirect_to(edit_surveyform_url(assigns(:surveyform).id))
+          expect(response).to redirect_to(edit_surveyform_path(assigns(:surveyform).id))
         end
       end
 
@@ -191,7 +192,7 @@ describe SurveyformsController do
 
       it "redirects to index" do
         do_put(:id=>survey.id,:surveyform=>{:id=>survey.id})
-        expect(response).to redirect_to(surveyforms_url)
+        expect(response).to redirect_to(surveyforms_path)
       end
 
     end
@@ -238,7 +239,7 @@ describe SurveyformsController do
 
       it "successfully destroys the survey" do
         do_delete
-        expect(response).to redirect_to(surveyforms_url)
+        expect(response).to redirect_to(surveyforms_path)
         expect(Survey.exists?(survey_with_no_responses.id)).to be_false
       end
     end
@@ -250,7 +251,7 @@ describe SurveyformsController do
 
       it "fails to delete the survey" do
         do_delete
-        expect(response).to redirect_to(surveyforms_url)
+        expect(response).to redirect_to(surveyforms_path)
         expect(Survey.exists?(survey_with_responses.id)).to be_true
       end
 

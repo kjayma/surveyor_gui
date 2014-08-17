@@ -11,7 +11,9 @@ Surveyor_gui meets this need by providing a gui to create surveys from scratch. 
 
 Surveyor is feature-rich and can create very complex surveys.  Surveyor-gui supports most of the features in Surveyor.
 
-This gem will also provide a reporting capability for Surveyor.
+This gem also provides a reporting capability for Surveyor.
+
+Surveyor_gui is a mountable engine.
 
 ## Requirements
 
@@ -86,6 +88,9 @@ This gem enforces locking on surveys.  A survey may be modified up until a user 
 can no longer be edited for structural changes (i.e., /surveyform/edit will not permit any changes).  This protects the
 data integrity of the survey response data.
 
+If you want to unlock a survey, you will need to manually delete all of the child ResponseSet records (e.g.,
+Survey.find(1).response_set.all.each{|r| r.destroy} ). Use appropriate caution!
+
 ## Templates
 
 Surveys may be saved as templates.  This allows them to be cloned when creating a new survey (cloning is a pending feature).  It is
@@ -156,4 +161,19 @@ If you wanted the users full name, you could add something like this:
 
     @user ? @user.last_name + ', ' + @user.first_name : nil
 
-Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, surveyor_gui_default.rb.  A copy will be placed in your application's app/views/layouts directory.  You may need edit it for various reasons, such as adding a Devise login/logout link.
+Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, surveyor_gui_default.rb.  A copy will be placed in your application's app/views/layouts directory.  You may need edit it for various reasons, such as adding a Devise login/logout link.  Keep in mind that surveyor_gui works in an isolated namespace, so devise helpers need to be namespaced to the main app. That means that any view local to surveyor_gui would need to refer to Devise's new_user_registration_path as main_app.new_user_registration_path.  If you wanted to add a login/logout link to the surveyor_gui_default layout, you might add something like this:
+
+    <% if user_signed_in? %>
+      Logged in as <strong><%= current_user.email %></strong>.
+      <%= link_to 'Edit profile', main_app.edit_user_registration_path %> |
+      <%= link_to "Logout", main_app.destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "Sign up", main_app.new_user_registration_path %> |
+      <%= link_to "Login", main_app.new_user_session_path %>
+    <% end %>
+
+
+## Surveyor
+
+Please take a look at the NUBIC/surveyor on github.  The README.doc file will help you to understand how the surveyor engine works.  Also, the wiki has a very useful data diagram that will help you to grasp the data
+structure of the surveys and responses.

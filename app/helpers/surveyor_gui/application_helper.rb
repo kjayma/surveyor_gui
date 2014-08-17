@@ -1,0 +1,2 @@
+module SurveyorGui::ApplicationHelper
+end

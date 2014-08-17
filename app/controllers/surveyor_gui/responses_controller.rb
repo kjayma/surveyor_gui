@@ -2,7 +2,7 @@ class SurveyorGui::ResponsesController < ApplicationController
   include ReportPreviewWrapper
   # ReportPreviewWrapper wraps preview in a database transaction so test data is not permanently saved.
   around_action :wrap_in_transaction, only: :preview
-  layout 'surveyor_gui_default'
+  layout 'surveyor_gui/surveyor_gui_default'
 
   def index
     @title = "Survey Responses"
@@ -16,6 +16,7 @@ class SurveyorGui::ResponsesController < ApplicationController
     @response_set = ResponseSet.create(:survey => @survey, :user_id => user_id, :test_data => true)
     ReportResponseGenerator.new(@survey).generate_1_result_set(@response_set)
     @responses = @response_set.responses
+    @response_sets = [@response_set]
     if (!@survey)
       flash[:notice] = "Survey/Questionnnaire not found."
       redirect_to :back
@@ -28,6 +29,7 @@ class SurveyorGui::ResponsesController < ApplicationController
     @response_set = ResponseSet.find(params[:id])
     @survey = @response_set.survey
     @responses = @response_set.responses
+    @response_sets = [@response_set]
     if (!@response_set)
       flash[:error] = "Response not found"
       redirect_to :back

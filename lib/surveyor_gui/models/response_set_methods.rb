@@ -39,7 +39,7 @@ module SurveyorGui
         if class_exists?('ResponseSetUser')
           user_name = ResponseSetUser.new(self.user_id).report_user_name
         end
-        user_name || fake_users[self.user_id.to_s] 
+        user_name || fake_users[self.user_id.to_s] || self.id
       end
       
       private

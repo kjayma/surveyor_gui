@@ -10,7 +10,9 @@ History for Surveyor
 
 ### Fixes
 
-- Fixes error on report preview in which no users are shown and report data is empty.  Will now show fake user names.
+- Fixes error on preview report in which no users are shown and report data is empty.  Will now show fake user names.
+- Fixes error on preview response and show response when dependencies are set. Also shows correct user name on reponse
+  index.
 
 0.0.3
 ------

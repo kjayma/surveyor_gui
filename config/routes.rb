@@ -31,12 +31,14 @@ SurveyorGui::Engine.routes.draw do
     collection do
       get 'render_answer_fields_partial'
       get 'render_grid_partial'
-      get 'render_group_inline_partial'
       get 'render_no_picks_partial'
     end
   end
 
   resources :question_groups do
+    collection do
+      get 'render_group_inline_partial'
+    end
   end
 
   resources :dependencys do

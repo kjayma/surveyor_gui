@@ -21,9 +21,10 @@
                 - if ["default", "inline", "repeater"].include? q.question_group.display_type
                   - if q.question_group.display_type == "repeater"
                     = render "repeater", question_group: q.question_group 
-                  - q.question_group.questions.each do |group_question|
-                    %table
-                      = render "single_question", q: group_question
+                  - else
+                    - q.question_group.questions.each do |group_question|
+                      %table
+                        = render "single_question", q: group_question
                 - elsif [:grid_one, :grid_any].include? q.question_type_id
                   = render "grid", question_group: q.question_group, question_type: q.question_type_id
                 - elsif q.question_type_id == :grid_dropdown

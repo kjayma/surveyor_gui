@@ -26,3 +26,7 @@
             %td
               &nbsp;
                  
+- question_group.questions.each do |group_question|
+  %table
+    = render "graphs", q: group_question
+    = render "surveyor_gui/shared/new_line"

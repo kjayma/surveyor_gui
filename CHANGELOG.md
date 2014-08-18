@@ -1,6 +1,15 @@
 History for Surveyor
 ====================
 
+0.1.1
+------
+
+### Fixes
+
+- Restores ability to add new questions to groups
+
+- Suppresses redundant data from being show on repeating group questions
+
 0.1.0
 ------
 

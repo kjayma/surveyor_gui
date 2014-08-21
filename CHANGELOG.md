@@ -1,5 +1,10 @@
 History for Surveyor
 ====================
+0.1.2
+------
+### Fixes
+
+- Adds statistics back to repeating group questions
 
 0.1.1
 ------

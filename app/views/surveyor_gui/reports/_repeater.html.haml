@@ -10,7 +10,8 @@
             %td
               = group_question.text
        
-        - question_ids = question_group.questions.collect(&:id)
+        - questions    = question_group.questions
+        - question_ids = questions.collect(&:id)
         - responses = @responses.where('responses.question_id in (?)', question_ids).map{|r| {response_set_id: r.response_set_id, question_id: r.question_id, response: r.response_value}}
         - @response_sets.each do |response_set| 
           - (responses.select{|response| response[:response_set_id]==response_set.id}.count/question_ids.count).times do |index|
@@ -18,15 +19,9 @@
               %td
                 %span.user_id
                   = response_set.report_user_name
-              - question_ids.each do |question_id|
+              - questions.each do |question|
                 %td
-                  - if response = responses.select{|response| response[:response_set_id] == response_set.id && response[:question_id] == question_id}[index]
-                    = response[:response]
-          %tr
-            %td
-              &nbsp;
-                 
-- question_group.questions.each do |group_question|
-  %table
-    = render "graphs", q: group_question
-    = render "surveyor_gui/shared/new_line"
+                  - if response = responses.select{|response| response[:response_set_id] == response_set.id && response[:question_id] == question.id}[index]
+                    - response_formatter = ReportFormatter.new(question, @responses)
+                    = response_formatter.format_stats(response[:response])
+          = render "surveyor_gui/shared/new_line"

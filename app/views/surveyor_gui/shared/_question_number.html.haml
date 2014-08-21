@@ -1,9 +1,11 @@
 %tr{:class => q.surveyresponse_class(@response_sets)}
   %td
     &nbsp;
-  %td{colspan: "2", style: q.question_type_id==:label ? "font-weight: bold;" : "" }
-    - if q.is_numbered? && !q.part_of_group?
+  - if q.is_numbered? && !q.part_of_group?
+    %td{colspan: "2", style: q.question_type_id==:label ? "font-weight: bold;" : "" }
       = @question_no.to_s + ") #{q.text}"
       - @question_no += 1
-    - elsif !q.repeater?
+  - else
+    %td
+    %td{style: q.question_type_id==:label ? "font-weight: bold;" : "" }
       = q.text

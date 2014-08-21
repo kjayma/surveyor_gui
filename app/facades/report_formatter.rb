@@ -31,9 +31,11 @@ class ReportFormatter
   
   def format_stats(stat)
     if @question.question_type_id == :number
-      STAT_FORMATS[@question.question_type_id] % stat 
+      STAT_FORMATS[@question.question_type_id] % stat.to_f 
+    elsif [:date, :datetime, :time].include? @question.question_type_id 
+      format_time_stat(stat.to_f)
     else
-      format_time_stat(stat)
+      stat
     end
   end  
 

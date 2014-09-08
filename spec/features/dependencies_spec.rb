@@ -28,6 +28,7 @@ feature "User creates a dependency using browser", %q{
     within "tr", text: "Hotel ratings" do
       click_link "Edit"
     end
+
     expect(page).to have_content("Rate the service")
     #And I click Add Logic on the second question
     within "fieldset.questions", text: "Who was your concierge" do
@@ -38,6 +39,9 @@ feature "User creates a dependency using browser", %q{
     within_frame 0 do
       #And it has logic, which defaults to checking the first question for the answer "yes"
       expect(page).to have_content("conditions")
+      expect(page).to have_css("option", text: 'Rate the service')
+      expect(page).to have_css("option", text: 'equal to')
+      expect(page).to have_css("option", text: 'yes')
       click_button "Save Changes"
     end
     #Then I see that this survey has been updated to include a dependency

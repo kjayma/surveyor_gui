@@ -8,6 +8,7 @@ require 'jquery-ui-sass-rails'
 
 require 'will_paginate'
 require 'simple_form'
+require 'foundation-rails'
 require 'colorbox-rails'
 require 'jquery-form-rails'
 require 'carrierwave'

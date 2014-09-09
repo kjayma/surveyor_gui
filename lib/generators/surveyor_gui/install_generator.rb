@@ -8,7 +8,8 @@ module SurveyorGui
     class_option :skip_migrations, :type => :boolean, :desc => "skip migrations, but generate everything else"
 
     def dependencies
-      generate "simple_form:install"
+      generate "foundation:install -f" 
+      generate "simple_form:install --foundation"
       generate "surveyor:install"
       rake "db:migrate db:test:prepare"
       rake "highcharts:update"

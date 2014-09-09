@@ -13,6 +13,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+    <nav class="top-bar"></nav>
     <div id="surveyor_gui_mount_point" data-surveyor_gui_mount_point="<%= surveyor_gui.surveyforms_path %>"></div>
    <% flash.each do |key, value| %>
      <%= content_tag(:div, value, :class => "flash #{key}") %>

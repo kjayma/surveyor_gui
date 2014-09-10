@@ -22,13 +22,14 @@ module SurveyFormsCreationHelpers
         expect(page).to have_css('iframe')
       end
       within_frame 0 do
-      #then wait for window to pop up
+        #then wait for window to pop up
         find('form')
         expect(find('h1')).to have_content("Add Question")
-      #then enter the question details
+        #then enter the question details
         block.call
-      #then the window closes
+        #then the window closes
       end
+      wait_for_ajax
       expect(page).not_to have_css('div.jquery_add_question_started')
     end
 

@@ -1,12 +1,19 @@
-surveyor_gui
+surveyor_gui - Add Surveys to your Rails application
 ============
 [![Gem Version](https://badge.fury.io/rb/surveyor_gui.svg)](http://badge.fury.io/rb/surveyor_gui)
 
-Surveyor_gui complements the surveyor gem.
+Need a way to quickly add surveys to your Rails application?  Need a way for users to create customizable surveys with little or no training?  Need reports and graphs out of the box?
 
-The surveyor gem is used to create surveys by parsing a file written in the Surveyor DSL.  It does not include a gui for creating surveys, although it does provide a gui for taking surveys.
+Surveyor_gui can help!
 
-The lack of a gui front-end limits the utility of surveyor for certain applications.
+Builds on the popular Surveyor gem
+============
+
+Surveyor_gui is built over Surveyor gem.
+
+Surveyor does some things really well.  Surveyor can be used to build rich surveys with a wide variety of questions types, and it provides a web page for users to take those surveys.  However, it lacks two key abilities - the ability to build and edit surveys using a browser and to report on survey results without additional coding.  In order to build a survey using Surveyor, you need to create a text file using Surveyor's DSL, and then call a Rake task to parse it.  
+
+The lack of a gui front-end and reports limits the utility of surveyor for certain applications.
 
 Surveyor_gui meets this need by providing a gui to create surveys from scratch.  Surveyor_gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.
 

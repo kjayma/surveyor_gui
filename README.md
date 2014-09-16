@@ -1,12 +1,24 @@
-surveyor_gui
+surveyor_gui 
 ============
 [![Gem Version](https://badge.fury.io/rb/surveyor_gui.svg)](http://badge.fury.io/rb/surveyor_gui)
+## Add Surveys to your Rails application
 
-Surveyor_gui complements the surveyor gem.
+Need a way to quickly add surveys to your Rails application?  Need a way for users to create customizable surveys with little or no training?  Need reports and graphs out of the box?  Don't want to use a third-party service or closed solution?
 
-The surveyor gem is used to create surveys by parsing a file written in the Surveyor DSL.  It does not include a gui for creating surveys, although it does provide a gui for taking surveys.
+Surveyor_gui can help!
 
-The lack of a gui front-end limits the utility of surveyor for certain applications.
+You can add surveyor_gui to a new or existing rails application to provide a way to create and administer surveys.
+
+You can find some screenshots at the bottom of this README.
+
+Builds on the popular Surveyor gem
+============
+
+Surveyor_gui is built over Surveyor gem.
+
+Surveyor does some things really well.  Surveyor can be used to build rich surveys with a wide variety of questions types, and it provides a web page for users to take those surveys.  However, it lacks two key abilities - the ability to build and edit surveys using a browser and to report on survey results without additional coding.  In order to build a survey using Surveyor, you need to create a text file using Surveyor's DSL, and then call a Rake task to parse it.  
+
+The lack of a gui front-end and reports limits the utility of surveyor for certain applications.
 
 Surveyor_gui meets this need by providing a gui to create surveys from scratch.  Surveyor_gui bypasses the need to create a Surveyor DSL file, and directly updates the Surveyor tables to build a survey.
 
@@ -178,3 +190,22 @@ Note that SurveyorGui controllers expect to use surveyor_gui's own layout view, 
 
 Please take a look at the NUBIC/surveyor on github.  The README.doc file will help you to understand how the surveyor engine works.  Also, the wiki has a very useful data diagram that will help you to grasp the data
 structure of the surveys and responses.
+
+
+## Screenshots
+
+### Manage surveys
+
+![](https://raw.github.com/kjayma/surveyor_gui/screenshots/Screenshot%20from%202014-09-16%2016:54:18.png)
+
+### Build surveys
+
+![](https://raw.github.com/kjayma/surveyor_gui/screenshots/Screenshot%20from%202014-09-16%2016:59:36.png)
+
+### Add questions
+
+![](https://raw.github.com/kjayma/surveyor_gui/screenshots/Screenshot%20from%202014-09-16%2017:03:57.png)
+
+### Get reports
+
+![](https://raw.githubusercontent.com/kjayma/surveyor_gui/screenshots/Screenshot%20from%202014-09-16%2017:04:41.png)

@@ -12,7 +12,7 @@ module SurveyorGui
         base.send :default_scope, lambda{ base.order('display_order') }
 
         base.send :validate, :no_responses
-        base.send :before_destroy, :no_responses
+        base.send :before_destroy, :no_responses, prepend: true
       end
 
       #don't let a survey be deleted or changed if responses have been submitted

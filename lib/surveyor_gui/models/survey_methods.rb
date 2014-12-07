@@ -9,7 +9,7 @@ module SurveyorGui
         base.send :accepts_nested_attributes_for, :survey_sections, :allow_destroy => true
 
         base.send :validate, :no_responses
-        base.send :before_destroy, :no_responses
+        base.send :before_destroy, :no_responses, prepend: true
 
       end
 

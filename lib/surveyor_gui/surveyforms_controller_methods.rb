@@ -1,6 +1,5 @@
 module SurveyorGui
   module SurveyformsControllerMethods
-    require 'permitted_params_decorator'
 
     def self.included(base)
       base.send :layout, 'surveyor_gui/surveyor_gui_default'

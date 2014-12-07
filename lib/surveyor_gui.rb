@@ -1,3 +1,4 @@
+require 'surveyor'
 module SurveyorGui
   require 'surveyor_gui/engine' if defined?(Rails) && Rails::VERSION::MAJOR >= 3
   autoload :VERSION, 'surveyor_gui/version'
@@ -11,7 +12,6 @@ require 'simple_form'
 require 'colorbox-rails'
 require 'jquery-form-rails'
 require 'carrierwave'
-require 'surveyor'
 require 'dynamic_form'
 require 'lazy_high_charts'
 require 'enumerable_extenders'

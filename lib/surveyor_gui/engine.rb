@@ -1,5 +1,4 @@
 require 'rails'
-require 'surveyor'
 require 'surveyor_gui'
 require 'haml' # required for view resolution
 
@@ -17,6 +16,11 @@ module SurveyorGui
         require_dependency(c)
       end
       Dir.glob(root + "app/facades/*.rb").each do |c|
+        require_dependency(c)
+      end
+      c = Dir.glob(File.expand_path('../',root)+'/app/controllers/surveyor_controller.rb').first
+      require_dependency(c)
+      Dir.glob(File.expand_path('../',root)+'/app/models/*.rb').each do |c|
         require_dependency(c)
       end
     end

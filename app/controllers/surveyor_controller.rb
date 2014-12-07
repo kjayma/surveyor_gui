@@ -83,7 +83,7 @@ module SurveyorControllerCustomMethods
 
   end
 end
-class SurveyorGui::SurveyorController < ApplicationController
+class SurveyorController < ApplicationController
   include Surveyor::SurveyorControllerMethods
   include SurveyorControllerCustomMethods
 end

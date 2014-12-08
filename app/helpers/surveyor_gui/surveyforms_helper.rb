@@ -136,7 +136,11 @@ module SurveyorGui
           {
             questions: [
               :answers,
-              {dependency: :dependency_conditions},
+              {
+                dependency: {
+                  dependency_conditions: [:question, :answer]
+                }
+              },
               {question_group: :columns}
             ]
           }

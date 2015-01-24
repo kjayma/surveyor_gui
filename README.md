@@ -69,7 +69,7 @@ Bundle, install, and migrate:
     rails g surveyor_gui:install
 
 Note that the installer will run db:migrate (so any un-applied migrations you have in your project will be pulled in).
-The survey editor can be found at '/surveyforms'.  Users can take surveys at the '/surveys' url.
+The survey editor can be found at '/surveyor_gui/surveyforms'.  Users can take surveys at the '/surveys' url.
 
 ## Limitations
 

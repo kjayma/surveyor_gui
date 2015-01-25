@@ -69,6 +69,7 @@ Bundle, install, and migrate:
     rails g surveyor_gui:install
 
 Note that the installer will run db:migrate (so any un-applied migrations you have in your project will be pulled in).
+
 You will need to add mountpoints to your routes.rb file.  E.g., a starting routes.rb might look like this:
 
 
@@ -78,7 +79,8 @@ You will need to add mountpoints to your routes.rb file.  E.g., a starting route
     end
 
 SurveyorGui::Engine points to the survey editor.  Surveyor::Engine points to the url where users will take the surveys.
-The routes.rb file in the testbed application (see Test Environment section) uses the default mountpoints noted above.
+The routes.rb file in the testbed application (see Test Environment section) uses the default mountpoints noted above, however
+they are arbitrary and can be change to anything you would prefer (e.g., mount SurveyorGui::Engine => "my/survey/engine", :as => "surveyor_gui").
 
 ## Limitations
 

@@ -69,7 +69,16 @@ Bundle, install, and migrate:
     rails g surveyor_gui:install
 
 Note that the installer will run db:migrate (so any un-applied migrations you have in your project will be pulled in).
-The survey editor can be found at '/surveyor_gui/surveyforms'.  Users can take surveys at the '/surveys' url.
+You will need to add mountpoints to your routes.rb file.  E.g., a starting routes.rb might look like this:
+
+
+    Rails.application.routes.draw do
+      mount SurveyorGui::Engine => "/surveyor_gui", :as => "surveyor_gui"
+      mount Surveyor::Engine => "/surveys", :as => "surveyor"
+    end
+
+SurveyorGui::Engine points to the survey editor.  Surveyor::Engine points to the url where users will take the surveys.
+The routes.rb file in the testbed application (see Test Environment section) uses the default mountpoints noted above.
 
 ## Limitations
 
@@ -120,14 +129,13 @@ Then run
     bundle exec rake gui_testbed
     cd testbed
 
-Start the rails server and go to /surveyforms
+Start the rails server.
+
+The survey editor can be found at '/surveyor_gui/surveyforms'.  Take surveys by going to the '/surveys' url or clicking the
+link at the bottom of the surveyforms home page.
 
 Before contributing, please run the tests:
     bundle exec rspec spec
-
-## Taking surveys
-
-Go to /surveys (or click the link at the bottom of the surveyforms home page) to see the surveys and take one.
 
 ## Reports
 

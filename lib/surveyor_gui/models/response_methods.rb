@@ -26,7 +26,11 @@ module SurveyorGui
         if self.question.pick=='none'
           _no_pick_value(response_class)
         else
-          return self.answer.text
+          if self.answer.data_export_identifier == 'other'
+            self.string_value
+          else
+            return self.answer.text
+          end
         end
       end
 

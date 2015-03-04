@@ -23,8 +23,8 @@ module SurveyorGui
       Dir.glob(File.expand_path('../',root)+'/app/models/*.rb').each do |c|
         require_dependency(c)
       end
-      Dir.glob(Rails.root + 'app/decorators/**/*_decorator*.rb').each do |decorator|
-        require_dependency(decorator)
+      Dir.glob(Rails.root + "app/decorators/**/*_decorator*.rb").each do |c|
+        require_dependency(c)
       end
     end
     initializer "surveyor_gui.assets.precompile" do |app|

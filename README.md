@@ -126,9 +126,9 @@ A template library feature is pending.
 
 Surveyor_gui is mounted as an engine. Engine model and controller classes can be extended by open classing them in the main Rails application. Open classing an Engine class redefines it for use in the main application. This is usually implemented by using the decorator pattern. (from [rails guides](http://guides.rubyonrails.org/engines.html#improving-engine-functionality))
 
-Eg: For overriding module `SurveyfromsConrollerMethods`, 
+For overriding module `SurveyfromsConrollerMethods`, 
 
-Step 1. create file `surveyforms_conroller_methods_decorator.rb` under `app/decorators/modules/surveyor_gui`
+Step 1. Create file `surveyforms_conroller_methods_decorator.rb` under `app/decorators/modules/surveyor_gui`
 Step 2. For simple modificaions, consider `module_eval`, for complex modificaions, try `ActiveSupport::Concern`
 
 ###### Sample decorator code:

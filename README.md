@@ -122,6 +122,35 @@ possible to mark certain parts of a survey as unmodifiable so that they will alw
   
 A template library feature is pending.
 
+## Overriding/Extending surveyor_gui functionality
+
+Surveyor_gui is mounted as an engine. Engine model and controller classes can be extended by open classing them in the main Rails application. Open classing an Engine class redefines it for use in the main application. This is usually implemented by using the decorator pattern. (from [rails guides](http://guides.rubyonrails.org/engines.html#improving-engine-functionality))
+
+For overriding module `SurveyfromsConrollerMethods`, 
+
+Step 1. Create file `surveyforms_conroller_methods_decorator.rb` under `app/decorators/modules/surveyor_gui`
+Step 2. For simple modificaions, consider `module_eval`, for complex modificaions, try `ActiveSupport::Concern`
+
+###### Sample decorator code:
+```
+SurveyorGui::SurveyformsControllerMethods.module_eval do 
+  def create
+    params["surveyform"]["service_category"] = params["surveyform"]["service_category"].try(:to_i)
+    @surveyform = Surveyform.new(surveyforms_params.merge(user_id: @current_user.nil? ? @current_user : @current_user.id))
+    if @surveyform.save
+      flash[:notice] = I18n.t('create.success')
+      @title = "Edit Survey"
+      @question_no = 0
+      redirect_to edit_surveyform_path(@surveyform.id)
+    else
+      render :action => 'new'
+    end
+  end
+end
+```
+
+This code overrides `create` method defined in `SurveyformsControllerMethods` module.
+
 ## Test environment
 
 If you want to try out surveyor-gui before incorporating it into an application, or contribute, clone the repository.

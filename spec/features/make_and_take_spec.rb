@@ -133,6 +133,7 @@ feature "Bug fix #41", %q{
       click_button "Click here to finish"
 
       #Then I am prevented from continuing and told of mandatory question
+      sleep(1)
       expect(page).to have_content("You must complete all required fields")
 
       expect(page).to have_content("question 1) Was it snowing?")

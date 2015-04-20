@@ -23,7 +23,7 @@
                 %td
                   - if Response.where(response_set_id: response_set.id, question_id: question.id, answer_id: answer.id).count > 0 
                     .ui-icon.ui-icon-check 
-          = render "surveyor_gui/shared/grid_comments", question_group: question_group            
+          = render "surveyor_gui/shared/grid_comments", question_group: question_group
           = render "surveyor_gui/shared/new_line"
     %table.report_data_functions
       %tr
@@ -35,8 +35,9 @@
       - question_group.questions.each do |q|
         %tr
           %td
-            = q.text        
+            = q.text
           - q.answers.each do |answer| 
             %td.table_number
-              = @responses.where(question_id: q.id, answer_id: answer.id).count
+              = @responses.select { |r| r.question_id == q.id and r.answer_id == answer.id }.length
+
       = render "surveyor_gui/shared/new_line"

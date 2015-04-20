@@ -57,7 +57,7 @@
                 %td
                   = answer.text
                 %td.table_number
-                  = @responses.where(question_id: q.id, answer_id: answer.id).count
+                  = @responses.select { |r| r.question_id == q.id and r.answer_id == answer.id }.length
     - elsif !q.repeater?
       = render "surveyor_gui/shared/report_data", q: q, toggle: false 
     = render "surveyor_gui/shared/new_line"

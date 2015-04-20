@@ -7,21 +7,20 @@
         %td User Id
         %td Response
       - response_formatter = ReportFormatter.new(q, @responses)
-      - @response_sets.each do |response_set| 
-        - @responses.where(question_id: q.id, response_set_id: response_set).each do |r|
-          %tr
-            %td= r.response_set.report_user_name
-            %td.table_number
-              = q.prefix
-              - if [:number, :date, :datetime, :time].include? q.question_type_id
-                = response_formatter.format_stats(r.response_value.to_f) 
-              - else
-                = r.response_value
-                \&nbsp;
-              = q.suffix
-          - if q.answers.is_comment.count > 0
-            = render "surveyor_gui/shared/new_line"
-            = render "surveyor_gui/shared/pick_comments", q: q, extra_column: false
-        - if q.question_type_id == :pick_any
+      - q.responses.each do |r|
+        %tr
+          %td= r.response_set.report_user_name
+          %td.table_number
+            = q.prefix
+            - if [:number, :date, :datetime, :time].include? q.question_type_id
+              = response_formatter.format_stats(r.response_value.to_f) 
+            - else
+              = r.response_value
+              \&nbsp;
+            = q.suffix
+        - if q.answers.select { |a| a.is_comment == 't' }.count > 0
           = render "surveyor_gui/shared/new_line"
+          = render "surveyor_gui/shared/pick_comments", q: q, extra_column: false
+      - if q.question_type_id == :pick_any
+        = render "surveyor_gui/shared/new_line"
 = render "surveyor_gui/shared/new_line"

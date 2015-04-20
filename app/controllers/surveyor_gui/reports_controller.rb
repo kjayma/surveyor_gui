@@ -28,9 +28,12 @@ class SurveyorGui::ReportsController < ApplicationController
   end
 
   def show
-    @survey = Survey.find(params[:id])
-    @response_sets = ResponseSet.where(survey_id: @survey.id, test_data: false)
-    @responses = Response.joins(:response_set, :answer).where('survey_id = ? and test_data = ? and answers.is_comment=?',@survey.id,false, false)  
+    @survey = Survey.includes({
+      response_sets: [responses: [question: [:answers]]],
+      survey_sections: [questions: [:answers, responses: [:response_set, :answer]]]
+    }).find(params[:id])
+    @response_sets = @survey.response_sets.select { |rs| !rs.test_data }
+    @responses = @response_sets.flat_map(&:responses).select { |r| !r.is_comment }
     @title = "Show report for #{@survey.title}"
     if @responses.count > 0
       generate_report(@survey.id, false)

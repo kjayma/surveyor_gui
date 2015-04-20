@@ -9,8 +9,7 @@ module SurveyorGui
         base.send :default_scope, lambda { base.order('display_order') }
         base.send :attr_accessible, :text, :response_class, :display_order, :original_choice, :hide_label, :question_id, 
                   :display_type, :is_comment, :column if defined? ActiveModel::MassAssignmentSecurity
-        base.send :scope, :is_not_comment, -> { base.where(is_comment: false) }
-        base.send :scope, :is_comment, -> { base.where(is_comment: true) }
+        base.send :scope, :is_not_comment, -> { not base.is_comment }
       end
 
       def split_or_hidden_text(part = nil)

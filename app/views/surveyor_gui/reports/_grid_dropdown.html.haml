@@ -11,7 +11,7 @@
       %td
         = column.text
     - @response_sets.each do |response_set| 
-      - question_group.questions.is_not_comment.each_with_index do |question, index|
+      - question_group.questions.select(&:is_not_comment).each_with_index do |question, index|
         %tr{class: index==0 ? "first_row" : nil}
           %td &nbsp;
           %td &nbsp;
@@ -52,5 +52,5 @@
       - question_group.columns.each do |column| 
         - Answer.where(question_id: q.id, column_id: column.id).each do |a|
           %td.table_number
-            = @responses.where(question_id: q.id, column_id: column.id, answer_id: a.id).count
+            = @responses.select { |r| r.question_id == q.id and r.column_id == column.id and r.answer_id == answer.id }.length
 = render "surveyor_gui/shared/new_line"

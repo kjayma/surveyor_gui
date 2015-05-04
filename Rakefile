@@ -51,10 +51,6 @@ namespace :gui_testbed do
   task :migrate do
     chdir('testbed') do
       Bundler.with_clean_env do
-        sh 'bundle exec rails generate simple_form:install'
-        sh 'bundle exec rake highcharts:update'
-        sh 'bundle exec rails generate surveyor:install'
-        sh 'bundle exec rake db:migrate db:test:prepare'
         sh 'bundle exec rails generate surveyor_gui:install'
         sh 'bundle exec rake db:migrate db:test:prepare'
         sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'

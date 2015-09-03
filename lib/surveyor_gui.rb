@@ -5,7 +5,7 @@ module SurveyorGui
 end
 require 'jquery-rails'
 require 'sass-rails'
-require 'jquery-ui-sass-rails'
+require 'jquery-ui-rails'
 
 require 'will_paginate'
 require 'simple_form'

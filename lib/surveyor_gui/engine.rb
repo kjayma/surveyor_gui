@@ -18,6 +18,10 @@ module SurveyorGui
       Dir.glob(root + "app/facades/*.rb").each do |c|
         require_dependency(c)
       end
+      Dir.glob(Rails.root + "app/decorators/**/*_decorator*.rb").each do |decorator|
+        puts "Loading decorator: #{decorator}"
+        require_dependency(decorator)
+      end
       c = Dir.glob(File.expand_path('../',root)+'/app/controllers/surveyor_controller.rb').first
       require_dependency(c)
       Dir.glob(File.expand_path('../',root)+'/app/models/*.rb').each do |c|

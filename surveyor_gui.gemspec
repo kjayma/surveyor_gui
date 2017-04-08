@@ -7,11 +7,11 @@ require "surveyor_gui/version"
 Gem::Specification.new do |s|
   s.name        = "surveyor_gui"
   s.version     = SurveyorGui::VERSION
-  s.authors     = ["Kevin Jay"]
-  s.email       = ["kjayma@gmail.com"]
-  s.homepage    =  %q{http://github.com/kjayma/surveyor_gui}
+  s.authors     = ["Kevin Jay", "Ashley Engelund"]
+  s.email       = ["kjayma@gmail.com", "ashley@ashleycaroline.com"]
+  s.homepage    =  %q{http://github.com/weedySeaDragon/surveyor_gui}
   s.post_install_message = %q{Thanks for installing surveyor_gui! The time has come to run the surveyor_gui generator and migrate your database, even if you are upgrading.}
-  s.summary     = "A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
+  s.summary     = "Ashley Engelund's modifications to surveyor_gui: A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
 
   #s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 

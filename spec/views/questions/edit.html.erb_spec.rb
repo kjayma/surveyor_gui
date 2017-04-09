@@ -8,7 +8,7 @@ module CapybaraHelper
   end
 end
 
-describe "surveyor_gui/questions/edit.html.erb" do
+describe "surveyor_gui/questions/edit.html.erb", type: :view do
   include CapybaraHelper
 
   let(:question){ FactoryGirl.create(:question) }

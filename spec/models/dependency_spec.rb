@@ -53,9 +53,9 @@ describe Dependency, "when evaluating dependency conditions of a question in a r
     @dep3 = Dependency.new(:rule => "A or B", :question_id => 1)
     @dep4 = Dependency.new(:rule => "!(A and B) and C", :question_id => 1)
     
-    @dep_c = mock_model(DependencyCondition, :id => 1, :rule_key => "A", :to_hash => {:A => true})
-    @dep_c2 = mock_model(DependencyCondition, :id => 2, :rule_key => "B", :to_hash => {:B => false})
-    @dep_c3 = mock_model(DependencyCondition, :id => 3, :rule_key => "C", :to_hash => {:C => true})
+    @dep_c = instance_double(DependencyCondition, :id => 1, :rule_key => "A", :to_hash => {:A => true})
+    @dep_c2 = instance_double(DependencyCondition, :id => 2, :rule_key => "B", :to_hash => {:B => false})
+    @dep_c3 = instance_double(DependencyCondition, :id => 3, :rule_key => "C", :to_hash => {:C => true})
 
     @dep.stub(:dependency_conditions).and_return([@dep_c])
     @dep2.stub(:dependency_conditions).and_return([@dep_c, @dep_c2])
@@ -64,10 +64,10 @@ describe Dependency, "when evaluating dependency conditions of a question in a r
   end
 
   it "knows if the dependencies are met" do
-    @dep.is_met?(@response_set).should be_true
-    @dep2.is_met?(@response_set).should be_false
-    @dep3.is_met?(@response_set).should be_true
-    @dep4.is_met?(@response_set).should be_true
+    @dep.is_met?(@response_set).should  be_truthy
+    @dep2.is_met?(@response_set).should be_falsey
+    @dep3.is_met?(@response_set).should  be_truthy
+    @dep4.is_met?(@response_set).should  be_truthy
   end
 
   it "returns the proper keyed pairs from the dependency conditions" do

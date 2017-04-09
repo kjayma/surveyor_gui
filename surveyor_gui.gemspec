@@ -21,10 +21,11 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # ruby version 2.3.1 or greater
-  s.required_ruby_version = '~> 2.3.1'
+  s.required_ruby_version = '~> 2.3.1', '>= 2.3.1'
+
     # this version is required for capybara-webkit
 
-  s.add_dependency 'rails', '> 4.0.0'
+  s.add_dependency 'rails',  '~> 4.0', '> 4.0.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
   #s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'jquery-ui-rails'
@@ -46,10 +47,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency('database_cleaner', '~> 1.2.0')
   s.add_development_dependency('rspec-retry')
 
-  s.add_dependency 'surveyor', '~> 1.4.1.pre'
+  s.add_dependency 'surveyor'
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
-  s.add_dependency 'simple_form', '~> 3.0.2'
+  s.add_dependency 'simple_form', '~> 3.0.2', '>= 3.0.2'
   s.add_dependency 'carrierwave'
   s.add_dependency 'colorbox-rails', '~> 0.1.1'
   s.add_dependency 'jquery-form-rails', '~> 1.0.1'

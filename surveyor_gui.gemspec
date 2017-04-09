@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
     # this version is required for capybara-webkit
 
 
-  s.add_dependency 'rails',  '~> 4.0', '> 4.0.0'
+  s.add_dependency 'rails', '~> 4.2.7.1',  '> 4.2.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
 
   s.add_dependency 'jquery-ui-rails'
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'surveyor'
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
-  s.add_dependency 'simple_form', '~> 3.0.2', '>= 3.0.2'
+  s.add_dependency 'simple_form', '~> 3.3.1'
   s.add_dependency 'carrierwave'
   s.add_dependency 'colorbox-rails', '~> 0.1.1'
   s.add_dependency 'jquery-form-rails', '~> 1.0.1'

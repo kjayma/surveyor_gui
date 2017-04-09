@@ -1,8 +1,11 @@
 <div id="box" class="boxshadow round">
+
   <div class="column3">
     <input id='pass_cbox_data' type="hidden">
     <div class="shadebox round">
+
       <div id="survey">
+
         <h1 class="round-top">
           <%= @title %>
             <% if @surveyform.id -%>
@@ -14,24 +17,38 @@
                 <%= @surveyform.id %>);" type="button" value="Preview Report" />
             <% end %>
         </h1>
+
         <%= simple_form_for [surveyor_gui, @surveyform] do |f| %>
+
           <%= f.error_messages %>
+
           <br/>
+
           <%= f.hidden_field :id %>
           <%= f.label :title, :required => false,  :style => 'font-size: 150%;' %>
+
           <%= f.input :title, :input_html => { :size => '35', :style=>'margin-top: 0.5%; font-size: 110%; float:left;'}, :required=>false , :label=>false%>
+
           <%= f.input :template, :disabled=>@survey_locked, :label => false, :input_html=>{:style=>"float:right;"} %>
+
           <span style='position:relative; float: right;'>Template?&nbsp;
 
           </span><br/><br />
+
+          <div class="survey_pramble">
+            <%= f.input :preamble %>
+          </div>
+
           <div class="sortable_sections" data-survey_locked=<%= @survey_locked %>>
             <%= render "survey_section_fields", :s => builder , :f => f %>
           </div>
+
           <% if @survey_locked%>
             <p><button class="go_back" type="button">Go Back</button></p>
           <% else -%>
             <p><%= f.button :submit,  'Save Changes' %></p>
           <% end -%>
+
         <% end %>
       </div>
     </div>

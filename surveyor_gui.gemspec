@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["kjayma@gmail.com", "ashley@ashleycaroline.com"]
   s.homepage    =  %q{http://github.com/weedySeaDragon/surveyor_gui}
   s.post_install_message = %q{Thanks for installing surveyor_gui! The time has come to run the surveyor_gui generator and migrate your database, even if you are upgrading.}
-  s.summary     = "Ashley Engelund's modifications to surveyor_gui: A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
+  s.summary     = "Ashley Engelund's modifications to surveyor_gui: Rspec 3, jquery-ui (vs. -sass-rails). A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
 
   #s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '> 4.0.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
   #s.add_dependency 'jquery-ui-rails'
-  s.add_dependency 'jquery-ui-sass-rails'
+  s.add_dependency 'jquery-ui-rails'
 
   s.add_development_dependency "sqlite3"
 

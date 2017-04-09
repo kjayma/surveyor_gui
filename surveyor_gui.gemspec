@@ -10,25 +10,42 @@ Gem::Specification.new do |s|
   s.authors     = ["Kevin Jay", "Ashley Engelund"]
   s.email       = ["kjayma@gmail.com", "ashley@ashleycaroline.com"]
   s.homepage    =  %q{http://github.com/weedySeaDragon/surveyor_gui}
+
   s.post_install_message = %q{Thanks for installing surveyor_gui! The time has come to run the surveyor_gui generator and migrate your database, even if you are upgrading.}
   s.summary     = "Ashley Engelund's modifications to surveyor_gui: Rspec 3, jquery-ui (vs. -sass-rails). A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
 
-  #s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.files = `git ls-files`.split("\n") - ['irb']
+  #s.files = `git ls-files`.split("\n") - ['irb']
+
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
+
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  # s.executables = ['surveyor_gui']
+
+
   s.require_paths = ["lib"]
 
   # ruby version 2.3.1 or greater
   s.required_ruby_version = '~> 2.3.1', '>= 2.3.1'
-
     # this version is required for capybara-webkit
+
 
   s.add_dependency 'rails',  '~> 4.0', '> 4.0.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
-  #s.add_dependency 'jquery-ui-rails'
+
   s.add_dependency 'jquery-ui-rails'
+
+  s.add_dependency 'surveyor'
+  s.add_dependency 'will_paginate', '~> 3.0.5'
+
+  s.add_dependency 'simple_form', '~> 3.0.2', '>= 3.0.2'
+  s.add_dependency 'carrierwave'
+  s.add_dependency 'colorbox-rails', '~> 0.1.1'
+  s.add_dependency 'jquery-form-rails', '~> 1.0.1'
+  s.add_dependency 'deep_cloneable', '~> 2.0.0'
+  s.add_dependency 'lazy_high_charts'
+
 
   s.add_development_dependency "sqlite3"
 
@@ -47,13 +64,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency('database_cleaner', '~> 1.2.0')
   s.add_development_dependency('rspec-retry')
 
-  s.add_dependency 'surveyor'
-  s.add_dependency 'will_paginate', '~> 3.0.5'
-
-  s.add_dependency 'simple_form', '~> 3.0.2', '>= 3.0.2'
-  s.add_dependency 'carrierwave'
-  s.add_dependency 'colorbox-rails', '~> 0.1.1'
-  s.add_dependency 'jquery-form-rails', '~> 1.0.1'
-  s.add_dependency 'deep_cloneable', '~> 2.0.0'  
-  s.add_dependency 'lazy_high_charts' 
 end

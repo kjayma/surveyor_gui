@@ -19,7 +19,7 @@ describe Surveyor::Common, "" do
     }.each{|k, v| Surveyor::Common.to_normalized_string(k).should == v}
   end
   it "should have a list of operators" do
-    %w(== != < > <= >= =~).each{|operator| Surveyor::Common::OPERATORS.include?(operator).should be_true }
+    %w(== != < > <= >= =~).each{|operator| Surveyor::Common::OPERATORS.include?(operator).should be_truthy }
   end
   describe '#generate_api_id' do
     def generate

@@ -1,6 +1,26 @@
 surveyor_gui 
 ============
-[![Gem Version](https://badge.fury.io/rb/surveyor_gui.svg)](http://badge.fury.io/rb/surveyor_gui)
+
+version =  0.2.1
+
+Some differences with the surveyor_gui fork:
+
+* uses the [HeHStudy/surveyor](https://github.com/HeHStudy/surveyor) fork of the [NUBIC surveyor gem](https://nubic.github.io/surveyor/)
+  - this handles mandatory fields
+  - does more with validations
+  - but has not been updated as recently
+ 
+* uses jquery-ui-rails instead of jquery-ui-sass-rails 
+ 
+* fixes some RSpec testing issues:
+  - doesn't install this _and_ surveyor (which causes Surveyor to show up twice in the routes.rb file)
+  - updates to RSpec 3+  (including code changes under `/spec/`). Note that `/spec/features` still fail
+
+---
+---
+
+*From the original README:*
+
 ## Add Surveys to your Rails application
 
 Need a way to quickly add surveys to your Rails application?  Need a way for users to create customizable surveys with little or no training?  Need reports and graphs out of the box?  Don't want to use a third-party service or closed solution?

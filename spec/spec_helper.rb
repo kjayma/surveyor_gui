@@ -7,7 +7,12 @@ rescue LoadError => e
 end
 
 require 'rspec/rails'
-require 'rspec/autorun'
+#require 'rspec/autorun'
+
+require 'rspec/mocks'
+
+require 'rspec/rails/matchers'
+require 'rspec/collection_matchers'
 
 require 'capybara/rails'
 require 'capybara/rspec'
@@ -26,7 +31,7 @@ Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 Capybara.app = Rack::ShowExceptions.new(Testbed::Application)
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.maintain_test_schema! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)
+#ActiveRecord::Migration.maintain_test_schema! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)
 
 
 Capybara.register_driver :poltergeist do |app|
@@ -36,7 +41,7 @@ end
 Capybara.server_port = 3001
 Capybara.asset_host = "http://lvh.me:3001"
 
-Capybara.javascript_driver = :poltergeist
+#Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
   config.include JsonSpec::Helpers
@@ -44,7 +49,8 @@ RSpec.configure do |config|
   config.include SurveyorUIHelpers
   config.include WaitForAjax
 
-  config.treat_symbols_as_metadata_keys_with_true_values = true
+  config.include Capybara::DSL
+  config.infer_spec_type_from_file_location!
 
   # == Mock Framework
   #
@@ -55,9 +61,10 @@ RSpec.configure do |config|
   # config.mock_with :rr
   config.mock_with :rspec
 
-  # config.expect_with :rspec do |c|
-  #   c.syntax = :expect
-  # end
+  # use both old 'should' syntax and the newer 'expect' syntax:
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -70,7 +77,7 @@ RSpec.configure do |config|
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
-  config.infer_base_class_for_anonymous_controllers = false
+  config.infer_base_class_for_anonymous_controllers = true
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
@@ -100,20 +107,27 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before :each do
+  config.before :each do | example |
+
     if example.metadata[:clean_with_truncation] || example.metadata[:js]
       DatabaseCleaner.strategy = :truncation
     else
       DatabaseCleaner.strategy = :transaction
     end
+
     DatabaseCleaner.start
+
   end
 
   config.after :each do
     Capybara.reset_sessions!
     DatabaseCleaner.clean
   end
+
+
 end
+
+
 JsonSpec.configure do
   exclude_keys "id", "created_at", "updated_at", "uuid", "modified_at", "completed_at"
 end

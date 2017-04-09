@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe SurveyorController do
+describe SurveyorController, :type => :controller do
   include Surveyor::Engine.routes.url_helpers
   before do
     @routes = Surveyor::Engine.routes
@@ -246,7 +246,8 @@ describe SurveyorController do
   end
 
   context "#export" do
-    render_views
+
+    render_views(true)
 
     let(:json) {
       get :export, :survey_code => survey.access_code, :format => 'json'

@@ -1,5 +1,7 @@
 module CutAndPaste
+
   def construct_scenario
+
     examples = """
     |from_item     | over_under | to_item     | order|
     |2             | over       | 1           | 213  |
@@ -15,14 +17,19 @@ module CutAndPaste
     |3             | under      | 1           | 132  |
     |3             | under      | 2           | 123  |
     """
+
     #ScenarioOutline class found in spec/support/scenario_outline_helpers.rb
     #use to simulate Cucumber type Scenario Outline
     ScenarioOutline.new(examples)
+
   end
 
   def run_scenario
+    
     @scenario.examples.each do |example|
+
       #e.g. puts "cut Unique Question 1 and paste it under Unique Question 2 resulting in 213"
+
       puts "\tcut #{example.from_item} \
               and paste it #{example.over_under} #{example.to_item}\
               resulting in #{example.order}"
@@ -128,12 +135,16 @@ module CutAndPaste
     end
     regexp = Regexp.new exp
     #Then I see the questions in the correct order
+
     expect(page).to have_content(regexp)
+
   end
 end
 
 shared_context "question_cut_and_paste" do
+
   include CutAndPaste
+
   def initialize
     @scenario = construct_scenario
     @item_name = "Question"
@@ -150,7 +161,9 @@ end
 
 
 shared_context "section_cut_and_paste" do
+
   include CutAndPaste
+
   def initialize
     @item_name = "Section"
     @scenario = construct_scenario
@@ -163,6 +176,7 @@ shared_context "section_cut_and_paste" do
   def _paste_item(position, section)
     paste_section(position, section)
   end
+
 end
 
 shared_context "question_and_section_cut_and_paste" do

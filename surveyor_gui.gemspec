@@ -31,12 +31,12 @@ Gem::Specification.new do |s|
     # this version is required for capybara-webkit
 
 
-  s.add_dependency 'rails', '~> 4.2.7.1',  '> 4.2.0'
+  s.add_dependency 'rails', '~> 4.2.8',  '>= 4.2.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor'
+  s.add_dependency 'surveyor', '~> 1.5.0', '>= 1.5.0'
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'
@@ -45,6 +45,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-form-rails', '~> 1.0.1'
   s.add_dependency 'deep_cloneable', '~> 2.0.0'
   s.add_dependency 'lazy_high_charts'
+
+  s.add_dependency 'formtastic'
 
 
   s.add_development_dependency "sqlite3"

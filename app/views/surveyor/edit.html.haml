@@ -15,7 +15,7 @@
 
     - if @survey.preamble.size > 0
       .survey_preamble
-        = @survey.preamble
+        = @survey.preamble.html_safe
 
 
     .previous_section= previous_section

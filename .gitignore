@@ -34,6 +34,7 @@ config/initializers/secret_token.rb
 /log/*.log
 /tmp
 
+tmp/cache
 # Ignore testbed
 testbed
 
@@ -41,4 +42,6 @@ testbed
 .ruby-version
 .ruby-gemset
 
-Gemfile.lock
+
+.idea/
+

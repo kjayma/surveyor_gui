@@ -1,5 +1,20 @@
-History for Surveyor
+History for Surveyor_GUI
 ====================
+
+0.2.2
+-----
+- ruby 2.4.0
+
+
+
+0.2.1
+-----
+
+- Rails 4.0
+- ruby 2.3.1
+
+
+
 0.1.2
 ------
 ### Fixes

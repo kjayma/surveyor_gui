@@ -1,3 +1,4 @@
 module SurveyorGui
-  VERSION = "0.2.1"
+  # ruby 2.4.0
+  VERSION = "0.2.2"
 end

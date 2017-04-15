@@ -1,20 +1,25 @@
 surveyor_gui 
 ============
 
-version =  0.2.1
+current version =  0.2.2
 
 Some differences with the surveyor_gui fork:
 
-* uses the [HeHStudy/surveyor](https://github.com/HeHStudy/surveyor) fork of the [NUBIC surveyor gem](https://nubic.github.io/surveyor/)
-  - this handles mandatory fields
-  - does more with validations
-  - but has not been updated as recently
+* surveyor:  uses the [weedySeaDragon/ae-surveyor](https://github.com/weedySeaDragon/ae-surveyor) fork of the [NUBIC **surveyor** gem](https://nubic.github.io/surveyor/)
+  - is recently updated
+
  
 * uses jquery-ui-rails instead of jquery-ui-sass-rails 
  
 * fixes some RSpec testing issues:
   - doesn't install this _and_ surveyor (which causes Surveyor to show up twice in the routes.rb file)
   - updates to RSpec 3+  (including code changes under `/spec/`). Note that `/spec/features` still fail
+
+
+## Requirements
+- ruby 2.4.0
+
+
 
 ---
 ---
@@ -48,7 +53,7 @@ This gem also provides a reporting capability for Surveyor.
 
 Surveyor_gui is a mountable engine.
 
-## Requirements
+## Requirements (for OLDER versions of the gem / original forks)
 
 SurveyorGui works with:
 

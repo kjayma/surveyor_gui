@@ -13,10 +13,7 @@
 
     .survey_title= @survey.translation(I18n.locale)[:title]
 
-    - if @survey.preamble.size > 0
-      .survey_preamble
-        = @survey.preamble.html_safe
-
+    = survey_preamble_html @survey
 
     .previous_section= previous_section
 
@@ -25,6 +22,8 @@
     = render "/partials/section", :f => f
 
     .next_section= next_section
+
+    = survey_postscript_html @survey
 
   %br
 

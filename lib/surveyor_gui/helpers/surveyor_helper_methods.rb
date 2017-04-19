@@ -85,7 +85,7 @@ module SurveyorGui
 
       def html_div_html_safe(model, method, id, css_class)
 
-        if (model.respond_to? method) && (model.send(method).size > 0)
+        if ( model.respond_to? method) && (model.send(method).present? )
           content_tag(:div, model.send(method).html_safe, id: "#{id}", class: "#{css_class}")
         else
           ''

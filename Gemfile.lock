@@ -14,7 +14,7 @@ GIT
 PATH
   remote: .
   specs:
-    surveyor_gui (0.2.2)
+    surveyor_gui (0.2.3)
       carrierwave
       colorbox-rails (~> 0.1.1)
       deep_cloneable (~> 2.0.0)

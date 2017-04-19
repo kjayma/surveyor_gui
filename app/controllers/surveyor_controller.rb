@@ -1,7 +1,10 @@
 module SurveyorControllerCustomMethods
+
+
   def self.included(base)
     base.send :layout, 'surveyor_gui/surveyor_modified'
   end
+
 
   def edit
     root = File.expand_path('../../', __FILE__)
@@ -10,8 +13,10 @@ module SurveyorControllerCustomMethods
     prepend_view_path(root+'/views')
     super
   end
+
+
   def update
-    question_ids_for_dependencies = (params[:r] || []).map{|k,v| v["question_id"] }.compact.uniq
+    question_ids_for_dependencies = (params[:r] || []).map {|k, v| v["question_id"]}.compact.uniq
     saved = load_and_update_response_set_with_retries
 
     if saved && params[:finish] && !@response_set.mandatory_questions_complete?
@@ -27,7 +32,7 @@ module SurveyorControllerCustomMethods
       last_question_number = 0
       @response_set.survey.survey_sections.each do |ss|
         index = 0
-        ss.questions.where('display_type!=?','label').each do |q|
+        ss.questions.where('display_type!=?', 'label').each do |q|
           if q.triggered?(@response_set)
             question_number[q.id.to_s] = last_question_number = last_question_of_previous_section + index + 1
             index = index + 1
@@ -48,7 +53,7 @@ module SurveyorControllerCustomMethods
       respond_to do |format|
         format.js do
 
-          render :json=>{"flashmsg"=>flashmsg}
+          render :json => {"flashmsg" => flashmsg}
         end
         format.html do
           flash[:notice] = flashmsg.join('<br />')
@@ -56,7 +61,8 @@ module SurveyorControllerCustomMethods
         end
       end
       return
-#    elsif @response_set.survey.id.to_s == evaluation_institution.institution.vendor_value_analysis_questionnaire_id && saved && params[:finish]
+
+      #    elsif @response_set.survey.id.to_s == evaluation_institution.institution.vendor_value_analysis_questionnaire_id && saved && params[:finish]
     elsif saved && params[:finish]
       return redirect_with_message(surveyor_finish, :notice, t('surveyor.completed_survey'))
     end
@@ -76,13 +82,15 @@ module SurveyorControllerCustomMethods
           render :json => @response_set.reload.all_dependencies(question_ids_for_dependencies)
         else
           render :text => "No response set #{params[:response_set_code]}",
-            :status => 404
+                 :status => 404
         end
       end
     end
 
   end
 end
+
+
 class SurveyorController < ApplicationController
   include Surveyor::SurveyorControllerMethods
   include SurveyorControllerCustomMethods

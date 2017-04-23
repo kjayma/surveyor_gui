@@ -10,7 +10,14 @@ module SurveyorControllerCustomMethods
     root = File.expand_path('../../', __FILE__)
     #place the surveyor_gui views ahead of the default surveyor view in order of preference
     #so we can load customized partials.
+
+    # This will clobber the main application. BAD BAD BAD!
     prepend_view_path(root+'/views')
+
+    # Instead, search for the surveyor gem path and just be sure that we are ahead of *that*.
+    #  Thus the main application can still override views as needed.
+
+
     super
   end
 
@@ -22,7 +29,7 @@ module SurveyorControllerCustomMethods
     if saved && params[:finish] && !@response_set.mandatory_questions_complete?
       #did not complete mandatory fields
       ids, remove, question_ids, flashmsg = {}, {}, [], []
-      flashmsg << "You must complete all required fields before submitting the survey.  Please fill in the following:"
+      flashmsg << I18n.t('surveyor_gui.update.complete_required')
 
       triggered_mandatory_missing = @response_set.triggered_mandatory_missing
 
@@ -48,8 +55,9 @@ module SurveyorControllerCustomMethods
           flashmsg << "&nbsp;&nbsp;" + m.survey_section.title
         end
 
-        flashmsg << "&nbsp;&nbsp;&nbsp;&nbsp;question&nbsp;" + question_number[m.id.to_s].to_s + ') '+ m.text
+        flashmsg << "&nbsp;&nbsp;&nbsp;&nbsp;#{t('activerecord.attributes.question.text')}&nbsp;" + question_number[m.id.to_s].to_s + ') '+ m.text
       end
+
       respond_to do |format|
         format.js do
 
@@ -62,7 +70,9 @@ module SurveyorControllerCustomMethods
       end
       return
 
+
       #    elsif @response_set.survey.id.to_s == evaluation_institution.institution.vendor_value_analysis_questionnaire_id && saved && params[:finish]
+
     elsif saved && params[:finish]
       return redirect_with_message(surveyor_finish, :notice, t('surveyor.completed_survey'))
     end
@@ -81,7 +91,7 @@ module SurveyorControllerCustomMethods
         if @response_set
           render :json => @response_set.reload.all_dependencies(question_ids_for_dependencies)
         else
-          render :text => "No response set #{params[:response_set_code]}",
+          render :text => "#{t('surveyor_gui.update.no_response_set')} #{params[:response_set_code]}",
                  :status => 404
         end
       end

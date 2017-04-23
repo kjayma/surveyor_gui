@@ -1,6 +1,7 @@
 module SurveyorGui
   module Helpers
     module SurveyorGuiHelperMethods
+
       # Responses
       def response_for(response_set, question, answer = nil, response_group = nil, column_id = nil)
         return nil unless response_set && question && question.id
@@ -75,6 +76,18 @@ module SurveyorGui
         html_div_html_safe(q, text_method, "#{q.id}-#{id_name}", "#{text_class_name} #{q_classes}")
 
       end
+
+
+      #--------
+      #  Answers
+
+
+      # HTML for a Bootstrap tooltop
+      def tool_tip_from_help(answer)
+        "data-toggle='tooltip' title='#{answer.help_text_for(nil, I18n.locale) unless g && g.display_type == "grid"}'"
+      end
+
+
 
       # HTML for text that should be displayed as html_safe, surrounded by a div with the id and class
       #

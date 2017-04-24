@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor', '~> 1.5.1', '>= 1.5.1'  # ruby 2.4.0
+  s.add_dependency 'surveyor', '~> 1.5.4', '>= 1.5.1'  # ruby 2.4.0
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'
@@ -51,10 +51,14 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "sqlite3"
 
+
   s.add_development_dependency 'sass-rails','~> 4.0.2'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'uglifier', '>= 1.0.3'
   s.add_development_dependency('rspec-rails', '~> 3.5.2')
+  s.add_development_dependency('web-console', '~> 2.0')
+  s.add_development_dependency('byebug')
+
   s.add_development_dependency('rspec-collection_matchers')
   s.add_development_dependency('capybara')
   s.add_development_dependency('launchy', '~> 2.4.2')

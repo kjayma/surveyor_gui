@@ -5,17 +5,22 @@ module SurveyorGui
       # Responses
       def response_for(response_set, question, answer = nil, response_group = nil, column_id = nil)
         return nil unless response_set && question && question.id
-        result = response_set.responses.detect{|r| 
-          (r.question_id == question.id) && 
-          (answer.blank? ? true : r.answer_id == answer.id) && 
-          (r.response_group.blank? ? true : r.response_group.to_i == response_group.to_i) && 
-          (r.column_id.blank? ? true : r.column_id == column_id.to_i)}
+        result = response_set.responses.detect {|r|
+          (r.question_id == question.id) &&
+              (answer.blank? ? true : r.answer_id == answer.id) &&
+              (r.response_group.blank? ? true : r.response_group.to_i == response_group.to_i) &&
+              (r.column_id.blank? ? true : r.column_id == column_id.to_i)}
         result.blank? ? response_set.responses.build(
-          question_id: question.id, 
-          response_group: response_group, 
-          column_id: column_id) : result
+            question_id: question.id,
+            response_group: response_group,
+            column_id: column_id) : result
       end
 
+
+      # ---------------
+      #
+      #   Preambles and Postscripts
+      #
 
       # HTML to display for a surveys's preamble
       def survey_preamble_html(survey)
@@ -23,7 +28,7 @@ module SurveyorGui
         s_preamble_id = 'preamble'
         s_preamble_class = 'survey_preamble'
 
-        pre_post_survey_html_text( survey, :preamble, s_preamble_id, s_preamble_class )
+        pre_post_survey_html_text(survey, :preamble, s_preamble_id, s_preamble_class)
 
       end
 
@@ -34,7 +39,7 @@ module SurveyorGui
         s_postscript_class = 'question_postscript'
         s_postscript_id = 'postscript'
 
-        pre_post_survey_html_text( survey, :postscript, s_postscript_id, s_postscript_class )
+        pre_post_survey_html_text(survey, :postscript, s_postscript_id, s_postscript_class)
 
       end
 
@@ -53,7 +58,7 @@ module SurveyorGui
         q_preamble_id = 'preamble'
         q_preamble_class = 'question_preamble'
 
-        pre_post_q_html_text(question, :preamble, q_preamble_id, q_preamble_class,  question.css_class(response_set))
+        pre_post_q_html_text(question, :preamble, q_preamble_id, q_preamble_class, question.css_class(response_set))
 
 
       end
@@ -65,7 +70,7 @@ module SurveyorGui
         q_postscript_class = 'question_postscript'
         q_postscript_id = 'postscript'
 
-        pre_post_q_html_text(question, :postscript, q_postscript_id, q_postscript_class,  question.css_class(response_set))
+        pre_post_q_html_text(question, :postscript, q_postscript_id, q_postscript_class, question.css_class(response_set))
 
       end
 
@@ -88,7 +93,6 @@ module SurveyorGui
       end
 
 
-
       # HTML for text that should be displayed as html_safe, surrounded by a div with the id and class
       #
       # if the model has this method defined (ex: if 'preamble' is defined for the Question model),
@@ -98,7 +102,7 @@ module SurveyorGui
 
       def html_div_html_safe(model, method, id, css_class)
 
-        if ( model.respond_to? method) && (model.send(method).present? )
+        if (model.respond_to? method) && (model.send(method).present?)
           content_tag(:div, model.send(method).html_safe, id: "#{id}", class: "#{css_class}")
         else
           ''

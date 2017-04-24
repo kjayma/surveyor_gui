@@ -1,4 +1,9 @@
+require_relative File.join(__dir__, '../../app/controllers/concerns/surveyor_gui_missing_info_flash_builder' )
+
 module SurveyorControllerCustomMethods
+
+
+  include SurveyorGui::MissingInfoFlashBuilder
 
 
   def self.included(base)
@@ -27,36 +32,36 @@ module SurveyorControllerCustomMethods
     saved = load_and_update_response_set_with_retries
 
     if saved && params[:finish] && !@response_set.mandatory_questions_complete?
-      #did not complete mandatory fields
+      # did NOT complete mandatory fields
+
       ids, remove, question_ids, flashmsg = {}, {}, [], []
-      flashmsg << I18n.t('surveyor_gui.update.complete_required')
 
-      triggered_mandatory_missing = @response_set.triggered_mandatory_missing
+      triggered_mandatory_missing_qs = @response_set.triggered_mandatory_missing
 
-      survey_section = ''
-      question_number = {}
+      # <KEY = question.id.to_s >: < VALUE = question number [1 based index; starting at 1, not 0] >
+      displayed_question_numbers = {}
+
       last_question_of_previous_section = 0
       last_question_number = 0
-      @response_set.survey.survey_sections.each do |ss|
+
+      @response_set.survey.survey_sections.each do | ss |
         index = 0
-        ss.questions.where('display_type!=?', 'label').each do |q|
+
+        ss.questions.where('display_type!=?', 'label').each do | q |
+
           if q.triggered?(@response_set)
-            question_number[q.id.to_s] = last_question_number = last_question_of_previous_section + index + 1
+            displayed_question_numbers[q.id.to_s] = last_question_number = last_question_of_previous_section + index + 1
             index = index + 1
           end
+
         end
+
         last_question_of_previous_section = last_question_number
       end
 
-      triggered_mandatory_missing.each do |m|
-        if m.survey_section_id != survey_section
-          survey_section = m.survey_section_id
-          flashmsg << ""
-          flashmsg << "&nbsp;&nbsp;" + m.survey_section.title
-        end
 
-        flashmsg << "&nbsp;&nbsp;&nbsp;&nbsp;#{t('activerecord.attributes.question.text')}&nbsp;" + question_number[m.id.to_s].to_s + ') '+ m.text
-      end
+      flashmsg =  build_main_missing_flash( triggered_mandatory_missing_qs, displayed_question_numbers )
+
 
       respond_to do |format|
         format.js do
@@ -64,7 +69,7 @@ module SurveyorControllerCustomMethods
           render :json => {"flashmsg" => flashmsg}
         end
         format.html do
-          flash[:notice] = flashmsg.join('<br />')
+          flash[:notice] = flashmsg
           redirect_to surveyor.edit_my_survey_path(:anchor => anchor_from(params[:section]), :section => section_id_from(params))
         end
       end
@@ -74,7 +79,7 @@ module SurveyorControllerCustomMethods
       #    elsif @response_set.survey.id.to_s == evaluation_institution.institution.vendor_value_analysis_questionnaire_id && saved && params[:finish]
 
     elsif saved && params[:finish]
-      return redirect_with_message(surveyor_finish, :notice, t('surveyor.completed_survey'))
+      return redirect_with_message(surveyor_finish, :notice, '') # t('surveyor.completed_survey'))
     end
 
 

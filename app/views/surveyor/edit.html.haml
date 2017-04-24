@@ -3,6 +3,8 @@
   - unless (types = flash.keys.select{|k| ['notice', 'error', 'warning'].include?(k)}).blank?
     .surveyor_flash
       = flash_messages(types)
+      -# clear messages now that they've been displayed so any outer views/layouts don't display them for a 2nd time
+      - flash.clear
       .close
 
   = semantic_form_for(@response_set, :as => :r, :url => surveyor.update_my_survey_path, :html => {:method => :put, :id => "survey_form", :class => @survey.custom_class}) do |f|

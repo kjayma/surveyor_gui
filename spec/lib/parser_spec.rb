@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe Surveyor::Parser do
   let(:parser){ Surveyor::Parser.new }
   it "should return a survey object" do
-    Surveyor::Parser.new.parse("survey 'hi' do\n end").is_a?(Survey).should be_true
+    Surveyor::Parser.new.parse("survey 'hi' do\n end").is_a?(Survey).should be_truthy
   end
   context "basic questions" do
     include_context "favorites"

@@ -17,21 +17,21 @@ describe Response, "when saving a response" do
 
   it "should be correct if the question has no correct_answer_id" do
     @response.question.correct_answer_id.should be_nil
-    @response.correct?.should be_true
+    @response.correct?.should be_truthy
   end
 
   it "should be correct if the answer's response class != answer" do
     @response.answer.response_class.should_not == "answer"
-    @response.correct?.should be_true
+    @response.correct?.should be_truthy
   end
 
   it "should be (in)correct if answer_id is (not) equal to question's correct_answer_id" do
     @answer = FactoryGirl.create(:answer, :response_class => "answer")
     @question = FactoryGirl.create(:question, :correct_answer => @answer)
     @response = FactoryGirl.create(:response, :question => @question, :answer => @answer)
-    @response.correct?.should be_true
+    @response.correct?.should be_truthy
     @response.answer = FactoryGirl.create(:answer, :response_class => "answer").tap { |a| a.id = 143 }
-    @response.correct?.should be_false
+    @response.correct?.should be_falsey
   end
 
   it "should be in order by created_at" do

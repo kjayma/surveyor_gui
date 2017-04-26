@@ -1,6 +1,31 @@
 surveyor_gui 
 ============
-[![Gem Version](https://badge.fury.io/rb/surveyor_gui.svg)](http://badge.fury.io/rb/surveyor_gui)
+
+current version =  0.2.3
+
+Some differences with the surveyor_gui fork:
+
+* surveyor:  uses the [weedySeaDragon/ae-surveyor](https://github.com/weedySeaDragon/ae-surveyor) fork of the [NUBIC **surveyor** gem](https://nubic.github.io/surveyor/)
+  - is recently updated
+
+ 
+* uses jquery-ui-rails instead of jquery-ui-sass-rails 
+ 
+* fixes some RSpec testing issues:
+  - doesn't install this _and_ surveyor (which causes Surveyor to show up twice in the routes.rb file)
+  - updates to RSpec 3+  (including code changes under `/spec/`). Note that `/spec/features` still fail
+
+
+## Requirements
+- ruby 2.4.0
+
+
+
+---
+---
+
+*From the original README:*
+
 ## Add Surveys to your Rails application
 
 Need a way to quickly add surveys to your Rails application?  Need a way for users to create customizable surveys with little or no training?  Need reports and graphs out of the box?  Don't want to use a third-party service or closed solution?
@@ -28,7 +53,7 @@ This gem also provides a reporting capability for Surveyor.
 
 Surveyor_gui is a mountable engine.
 
-## Requirements
+## Requirements (for OLDER versions of the gem / original forks)
 
 SurveyorGui works with:
 

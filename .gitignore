@@ -31,9 +31,11 @@ config/initializers/secret_token.rb
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
-/tmp
 
-tmp/cache
+tmp
+
+
+
 # Ignore testbed
 testbed
 
@@ -42,5 +44,8 @@ testbed
 .ruby-gemset
 
 
+# ignore IDE and files for development tools
+
+# RubyMine IDE
 .idea/
 

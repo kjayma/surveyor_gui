@@ -15,7 +15,8 @@
 
     .survey_title= @survey.translation(I18n.locale)[:title]
 
-    = survey_preamble_html @survey
+    - if (@section.id == @sections.first.id) # only show if it's the first section
+      = survey_preamble_html(@survey)
 
     .previous_section= previous_section
 

@@ -16,8 +16,11 @@
     = ff.input :answer_id, :as => :surveyor_radio,
                  :collection => [[a.text_for(nil, @render_context, I18n.locale), a.id]],
                  :label => false,
-                 :input_html => {:class => a.css_class, :disabled => disabled, :'data-toggle' => 'tooltip', title: (a.help_text_for(nil, I18n.locale) unless g && g.display_type == 'grid') },
-                 :response_class => a.response_class
+                 :wrapper_html => {:class => 'tooltipinfo'},
+                 :input_html => {:class => "#{a.css_class} tooltipinfo",
+                                  :disabled => disabled },
+                 :response_class => a.response_class,
+                 tooltipinfo: (a.help_text_for(nil, I18n.locale) unless g && g.display_type == 'grid')
     =#           :hint  => a.help_text_for(@render_context, I18n.locale) unless g && g.display_type == "grid"
 
 

@@ -12,6 +12,7 @@ feature "Survey Creator rearranges survey",  %q{
   #force a cr/lf to make the output look better
   scenario " " do
   end
+
   context "Survey creator rearranges questions", :js=>true do
     before :each do
       build_a_three_question_survey
@@ -41,6 +42,7 @@ feature "Survey Creator rearranges survey",  %q{
     scenario "Survey Creator cuts and pastes questions" do
       run_scenario
     end
+
   end
 
   context "Survey creator rearranges sections", :js=>true do

@@ -4,19 +4,20 @@ require 'rubygems'
 require 'factory_girl'
 
 FactoryGirl.define do
+
   sequence(:unique_survey_access_code){|n| "simple survey #{UUIDTools::UUID.random_create.to_s}" }
 
   factory :survey do |s|
     s.title           "Simple survey"
     s.description     "A simple survey for testing"
-    s.access_code     { FactoryGirl.generate :unique_survey_access_code }
+    s.access_code     { generate :unique_survey_access_code }
     s.survey_version  0
   end
 
   factory :surveyform do |s|
     s.title           "Simple survey"
     s.description     "A simple survey for testing"
-    s.access_code     { FactoryGirl.generate :unique_survey_access_code }
+    s.access_code     { generate :unique_survey_access_code }
     s.survey_version  0
   end
 

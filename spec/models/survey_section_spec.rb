@@ -5,9 +5,11 @@ describe SurveySection do
     let(:survey_section){ FactoryGirl.create(:survey_section) }
 
   context "when creating" do
-    it "is invalid without #title" do
+    it "validate: is invalid without #title" do
       survey_section.title = nil
-      survey_section.should have(1).error_on(:title)
+      #survey_section.should have(1).error_on(:title)
+      survey_section.valid?
+      expect(survey_section.errors[:title].size).to eq(1)
     end
   end
 
@@ -18,7 +20,7 @@ describe SurveySection do
     before do
       [question_1, question_2, question_3].each{|q| survey_section.questions << q }
     end
-    it{ survey_section.should have(3).questions}
+    it{ expect(survey_section.questions.count).to eq(3)}
     it "gets questions in order" do
       survey_section.questions.order("display_order asc").should == [question_2, question_3, question_1]
       survey_section.questions.order("display_order asc").map(&:display_order).should == [1,2,3]

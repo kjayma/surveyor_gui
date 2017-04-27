@@ -1,10 +1,15 @@
 module SurveyFormsCreationHelpers
+
   module CreateSurvey
+
     def start_a_new_survey
+
       visit surveyor_gui.new_surveyform_path
       fill_in "Title", with: "How was Boston?"
       click_button "Save Changes"
+
     end
+
 
     def first_section_title
       find('.survey_section h2')

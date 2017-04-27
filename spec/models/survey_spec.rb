@@ -7,33 +7,37 @@ describe Survey do
   context "when creating" do
     it "is invalid without #title" do
       survey.title = nil
-      survey.should have(1).error_on :title
+      #survey.should have(1).error_on :title
+      survey.valid?
+      expect(survey.errors[:title].size).to eq(1)
     end
     it "adjust #survey_version" do
       original = Survey.new(:title => "Foo")
-      original.save.should be_true
+      original.save.should be_truthy
       original.survey_version.should == 0
       imposter = Survey.new(:title => "Foo")
-      imposter.save.should be_true
+      imposter.save.should be_truthy
       imposter.title.should == "Foo"
       imposter.survey_version.should == 1
       bandwagoneer = Survey.new(:title => "Foo")
-      bandwagoneer.save.should be_true
+      bandwagoneer.save.should be_truthy
       bandwagoneer.title.should == "Foo"
       bandwagoneer.survey_version.should == 2
     end
     it "prevents duplicate #survey_version" do
       original = Survey.new(:title => "Foo")
-      original.save.should be_true
+      original.save.should be_truthy
       imposter = Survey.new(:title => "Foo")
-      imposter.save.should be_true
+      imposter.save.should be_truthy
       imposter.survey_version = 0
-      imposter.save.should be_false
-      imposter.should have(1).error_on(:survey_version)
+      imposter.save.should be_falsey
+      #imposter.should have(1).error_on(:survey_version)
+      imposter.valid?
+      expect(imposter.errors[:survey_version].size).to eq(1)
     end
     it "doesn't adjust #title when" do
       original = FactoryGirl.create(:survey, :title => "Foo")
-      original.save.should be_true
+      original.save.should be_truthy
       original.update_attributes(:title => "Foo")
       original.title.should == "Foo"
     end
@@ -51,31 +55,31 @@ describe Survey do
     it "#active_at on a certain date/time" do
       survey.inactive_at = 2.days.from_now
       survey.active_at = 2.days.ago
-      survey.active?.should be_true
+      survey.active?.should be_truthy
     end
     it "#inactive_at on a certain date/time" do
       survey.active_at = 3.days.ago
       survey.inactive_at = 1.days.ago
-      survey.active?.should be_false
+      survey.active?.should be_falsey
     end
     it "#activate! and #deactivate!" do
       survey.activate!
-      survey.active?.should be_true
+      survey.active?.should be_truthy
       survey.deactivate!
-      survey.active?.should be_false
+      survey.active?.should be_falsey
     end
     it "nils out past values of #inactive_at on #activate!" do
       survey.inactive_at = 5.days.ago
-      survey.active?.should be_false
+      survey.active?.should be_falsey
       survey.activate!
-      survey.active?.should be_true
+      survey.active?.should be_truthy
       survey.inactive_at.should be_nil
     end
     it "nils out pas values of #active_at on #deactivate!" do
       survey.active_at = 5.days.ago
-      survey.active?.should be_true
+      survey.active?.should be_truthy
       survey.deactivate!
-      survey.active?.should be_false
+      survey.active?.should be_falsey
       survey.active_at.should be_nil
     end
   end
@@ -96,14 +100,16 @@ describe Survey do
       s3.questions << q4
     end
 
-    it{ survey.should have(3).sections}
+    it{ expect(survey.sections.count).to eq(3)}
     it "gets survey_sections in order" do
       survey.sections.order("display_order asc").should == [s3, s1, s2]
       survey.sections.order("display_order asc").map(&:display_order).should == [1,2,3]
     end
     it "gets survey_sections_with_questions in order" do
-      survey.sections.order("display_order asc").map{|ss| ss.questions.order("display_order asc")}.flatten.should have(4).questions
-      survey.sections.order("display_order asc").map{|ss| ss.questions.order("display_order asc")}.flatten.should == [q4,q1,q3,q2]
+      sections_ordered = survey.sections.order("display_order asc").map{|ss| ss.questions.order("display_order asc")}.flatten
+      expect(sections_ordered.count).to eq(4) # .should have(4).questions
+      #survey.sections.order("display_order asc").map{|ss| ss.questions.order("display_order asc")}.flatten.should == [q4,q1,q3,q2]
+      expect(sections_ordered).to eq([q4,q1,q3,q2])
     end
     it "deletes child survey_sections when deleted" do
       survey_section_ids = survey.sections.map(&:id)

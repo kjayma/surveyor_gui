@@ -1,0 +1,11 @@
+en:
+  activerecord:
+    attributes:
+      question:
+        text: "Fråga"
+
+
+  surveyor_gui:
+    update:
+      complete_required: "Du måste fylla i alla obligatoriska fält innan du skickar undersökningen. Fyll i följande:"
+      no_response_set: "No respose set"

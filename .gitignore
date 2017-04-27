@@ -8,7 +8,6 @@ capybara-*.html
 /vendor/bundle
 /log/*
 log/*
-/tmp/*
 /public/system/*
 /coverage/
 /spec/tmp/*
@@ -34,6 +33,7 @@ config/initializers/secret_token.rb
 /log/*.log
 /tmp
 
+tmp/cache
 # Ignore testbed
 testbed
 
@@ -41,4 +41,6 @@ testbed
 .ruby-version
 .ruby-gemset
 
-Gemfile.lock
+
+.idea/
+

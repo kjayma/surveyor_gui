@@ -31,6 +31,12 @@ module SurveyorControllerCustomMethods
     question_ids_for_dependencies = (params[:r] || []).map {|k, v| v["question_id"]}.compact.uniq
     saved = load_and_update_response_set_with_retries
 
+    # need to know if we need to check to see if all needed questions are complete
+    #  - do we need to check (are we finished with the section / survey / question)
+    #  - what are the questions that must be completed?  (all for the section / survey / this question)
+    # but all we have is the question_id that was just sent to us.
+
+
     if saved && params[:finish] && !@response_set.mandatory_questions_complete?
       # did NOT complete mandatory fields
 
@@ -103,6 +109,46 @@ module SurveyorControllerCustomMethods
     end
 
   end
+
+
+  def enough_qs_complete?(response, question_id)
+
+    # what level do we need to check? (the whole survey, each section, each question?)
+    # TODO we'd call the appropriate method based on some option being set
+    section_qs_complete?(response, question_id)
+
+  end
+
+  def section_qs_complete?(response, question_id)
+    # what section is this question in
+    # including this response for this question_id, is the section now complete?
+
+    # a variation of the method in Surveyor::Models::ResponseSetMethods . progressHash:
+
+    # get all of the questions for the Survey  [ seems like this is the only thing that needs to change]
+    #  qs = Survey.where(id: self.survey_id).includes(sections: :questions).first.sections.map(&:questions).flatten
+
+    # get all of the dependencies for all of the questions
+    #  ds = dependencies(qs.map(&:id))
+
+    # get all of the dependency questions actually triggered (used) for the response
+    #  triggered = qs - ds.select{|d| !d.is_met?(self)}.map(&:question)
+
+    # set the results for our progress
+    #  { :questions => qs.compact.size,
+    #    :triggered => triggered.compact.size,
+    #    :triggered_mandatory => triggered.select{|q| q.mandatory?}.compact.size,
+    #    :triggered_mandatory_completed => triggered.select{|q| q.mandatory? and is_answered?(q)}.compact.size
+    #  }
+
+
+  end
+
+  def survey_qs_complete?(response, question_id)
+
+
+  end
+
 end
 
 

@@ -13,7 +13,7 @@
 
     = render 'partials/section_menu'  unless @sections.size < 3
 
-    .survey_title= @survey.translation(I18n.locale)[:title]
+    .survey_title= survey_title
 
     - if (@section.id == @sections.first.id) # only show if it's the first section
       = survey_preamble_html(@survey)

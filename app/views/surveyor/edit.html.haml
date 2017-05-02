@@ -1,3 +1,6 @@
+- provide(:meta_page_title, surveyor_edit_header_page_title(@response_set) )
+
+
 #surveyor
 
   - unless (types = flash.keys.select{|k| ['notice', 'error', 'warning'].include?(k)}).blank?

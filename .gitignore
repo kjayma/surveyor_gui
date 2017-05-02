@@ -36,6 +36,7 @@ tmp
 
 
 
+
 # Ignore testbed
 testbed
 
@@ -49,3 +50,4 @@ testbed
 # RubyMine IDE
 .idea/
 
+/tmp/

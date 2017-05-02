@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor', '~> 1.5.7', '>= 1.5.1'  # ruby 2.4.0
+  s.add_dependency 'surveyor', '~> 1.5.8', '>= 1.5.1'  # ruby 2.4.0
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'

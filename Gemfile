@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # path: '/Users/ashleyengelund/github/ae/ae-surveyor' #
-gem 'surveyor',  git: 'https://github.com/weedySeaDragon/ae-surveyor.git'
+gem 'surveyor', git: 'https://github.com/weedySeaDragon/ae-surveyor.git'
 
 # to install a gem from github, enter this at the command line:
 #  gem install surveyor  -l  https://github.com/weedySeaDragon/ae-surveyor.git

@@ -1,40 +1,52 @@
 - if !(q.part_of_group? and ["default","inline"].include? q.question_group.display_type)
   %tr
-    %td &nbsp;
+    %td.spacer &nbsp;
+
 %tr
-  %td
+  %td.spacer
   %td
   - if q.part_of_group? and ["default","inline"].include? q.question_group.display_type
-    %td
-      = q.text
-  %td  
+    %td.question-group-text
+      .question= q.text
+
+  %td
+
     - if [:slider, :pick_any].include? q.question_type_id  
       %table
         %tr
           - q.answers.is_not_comment.each do |a|
             - responses = @response_set.responses.where(question_id: q.id).collect(&:answer_id)
             - if responses.include?(a.id)
-              %td
+              %td.answer
                 %span.preview_multiple_choice_answer
                   = a.text
             - else
               %td.preview_answer
                 %span
                   = a.text
+
     - elsif q.question_type_id == :stars
       - 5.times.each do |index|
         - if @response_set.responses.where(question_id: q.id).first
           %input{name: "star#{q.id.to_s}", type: "radio", class: "star", disabled: 'disabled', checked: (index+1)== @response_set.responses.where(question_id: q.id).first.integer_value ? "checked" : nil}
+
     - elsif q.answers.first && q.answers.first.response_class == 'blob' && response=@response_set.responses.where(:question_id => q.id).first
-      = link_to "click to open", response.blob_url
+      = link_to "click to open", response.blob_url, class: 'answer blob'
+
     - elsif q.question_type_id != :label
+
       - r = @response_set.responses.where(:question_id => q.id).first
-      = q.prefix
+
+      .question-prefix= q.prefix
+
       - if [:number, :date, :datetime, :time].include? q.question_type_id
         = ReportFormatter.new(q,r).format_stats(r.response_value.to_f) if r
+
       - else
-        = r.response_value if r
+        .answer= r.response_value if r
         \&nbsp;
-      = q.suffix
+
+      .question-suffix= q.suffix
+
 = render "surveyor_gui/shared/new_line"
 = render "surveyor_gui/shared/pick_comments", q: q, extra_column: true 

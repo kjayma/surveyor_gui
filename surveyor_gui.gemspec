@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor', '~> 1.5.8', '>= 1.5.1'  # ruby 2.4.0
+  s.add_dependency 'surveyor', '~> 1.5.9', '>= 1.5.1'  # ruby 2.4.0
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'
@@ -44,7 +44,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'colorbox-rails', '~> 0.1.1'
   s.add_dependency 'jquery-form-rails', '~> 1.0.1'
   s.add_dependency 'deep_cloneable', '~> 2.0.0'
-  s.add_dependency 'lazy_high_charts'
+
+  s.add_dependency 'chartkick'
 
   s.add_dependency 'formtastic'
 

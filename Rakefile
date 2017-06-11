@@ -53,7 +53,7 @@ namespace :gui_testbed do
       Bundler.with_clean_env do
         # AE: no need to manually install these and surveyor; they are installed when surveyor_gui is installed
           #sh 'bundle exec rails generate simple_form:install'
-          #sh 'bundle exec rake highcharts:update'
+
           #sh 'bundle exec rails generate surveyor:install'
           #sh 'bundle exec rake db:migrate db:test:prepare'
 

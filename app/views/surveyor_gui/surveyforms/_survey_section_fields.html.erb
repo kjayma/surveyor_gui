@@ -1,6 +1,7 @@
 <%= simple_fields_for 'surveyform', @surveyform || @survey_section.survey do |f| %>
   <%= f.simple_fields_for :survey_sections, @survey_section do |s| %>
 
+    <%# if the underlying object has been saved (== it has an id) %>
     <% if s.object.id -%>
       <%= div_for(s.object) do %>
 
@@ -113,11 +114,15 @@
           </div>
         </fieldset>
       <% end %>
+
     <% else -%>
+      <%# else the underlying object for this form has not been saved yet (it does not have an id) %>
+
       <%= s.hidden_field :id %>
       <%= s.hidden_field :title %>
       <%= s.hidden_field :display_order %>
       <%= s.hidden_field :modifiable %>
+
       <%= s.simple_fields_for :questions do |q| %>
         <%= q.hidden_field :id %>
         <%= q.hidden_field :text %>

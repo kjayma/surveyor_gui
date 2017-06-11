@@ -3,7 +3,12 @@
   <head>
     <title>SurveyorGui</title>
     <%= stylesheet_link_tag    "surveyor_gui_all", :media => "all" %>
+
+
+    <%= yield :javascript_for_view if content_for?(:javascript_for_view) %>
+
     <%= javascript_include_tag "surveyor_gui_all" %>
+
     <%= csrf_meta_tags %>
   </head>
   <body>

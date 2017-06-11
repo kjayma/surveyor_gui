@@ -1,20 +1,20 @@
-%tr{:style => "font-weight:bold;"}
-  %td &nbsp;
-  %td &nbsp;
-  %td &nbsp;
+%tr.grid-response-answers
+  %td.spacer &nbsp;
+  %td.spacer &nbsp;
+  %td.spacer &nbsp;
   - question_group.questions.first.answers.each do |answer|
-    %td
+    %td.grid-answer-label
       = answer.text
 - question_group.questions.is_not_comment.each_with_index do |question, index|
-  %tr{class: index==0 ? "first_row" : nil}
-    %td &nbsp;
-    %td &nbsp;
-    %td
+  %tr.grid-question-row{class: index==0 ? "first_row" : nil}
+    %td.spacer &nbsp;
+    %td.spacer &nbsp;
+    %td.grid-question-text
       = question.text
     - question.answers.each do |answer|
-      %td
+      %td.grid-answer
         - if Response.where(response_set_id: @response_set.id, question_id: question.id, answer_id: answer.id).count > 0 
-          .ui-icon.ui-icon-check 
+          x
 / retrieve comments, if any
 = render "surveyor_gui/shared/grid_comments", question_group: question_group
 = render "surveyor_gui/shared/new_line"

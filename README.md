@@ -15,16 +15,46 @@ Some differences with the surveyor_gui fork:
   - doesn't install this _and_ surveyor (which causes Surveyor to show up twice in the routes.rb file)
   - updates to RSpec 3+  (including code changes under `/spec/`). Note that `/spec/features` still fail
 
+* uses the `chartkick` gem and Google Charts instead of the `lazy-highcharts` gem and HighCharts
+
+
 
 ## Requirements
 - ruby 2.4.0
 
 
+### Issues and Notes
+
+- surveryor_gui adds some answer formats, notably  _grids_ 
+  
+  ```
+  Question #q: Mark your first, second, and third choice for your favorite ice cream flavors
+  
+  | 1st Choice                    | 2nd Choice                    | 3rd choice  |
+  | ◻︎ vanilla                     | ◻︎ vanilla                     | ◻︎ vanilla                     |
+  | ◻︎ chocolate                   | ◻︎ chocolate                   | ◻︎ chocolate                   |
+  | ◻︎ strawberry                  | ◻︎ strawberry                  | ◻︎ strawberry                  |
+  | ◻︎ chocolate-chip cookie dough | ◻︎ chocolate-chip cookie dough | ◻︎ chocolate-chip cookie dough |
+  | ◻︎ mint chocolate chip         | ◻︎ mint chocolate chip         | ◻︎ mint chocolate chip         |
+  | ◻︎ kale                        | ◻︎ kale                        | ◻︎ kale                        |
+  
+  ```
+  
+  
+   - Grids are accomplished by creating a _question group_:  each **row** is made into a separate _question_ and all of the questions for all of the rows belong to that _question group._
+     It looks like this is just 1 question with a grid (rows and columns) of different possible answers,
+     but it's really 1 _question group_ that has 3 questions.
+     
+    
+   - Grid questions do not create "well formed" parameters when a user selects (and their browser sends) a response. I had to modify the `surveyor` gem (my version of it) to handle this.
+
 
 ---
----
 
-*From the original README:*
+--------------------------------
+
+**From the original README:**
+--------------
 
 ## Add Surveys to your Rails application
 

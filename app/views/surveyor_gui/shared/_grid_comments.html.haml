@@ -1,10 +1,10 @@
 - question = question_group.questions.where(is_comment: true)
 - if question && !question.empty? && response = question.first.responses.first
   = render "surveyor_gui/shared/new_line"
-  %tr
-    %td &nbsp;
-    %td &nbsp;
-    %td
+  %tr.grid-comments
+    %td.spacer &nbsp;
+    %td.spacer &nbsp;
+    %td.grid-question-text
       = question.first.text+":"
-    %td
+    %td.grid-response
       = response.string_value

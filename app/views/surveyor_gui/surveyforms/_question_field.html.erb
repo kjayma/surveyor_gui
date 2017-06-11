@@ -4,6 +4,7 @@
 
 <%= row_label_if_question_group f.object %>
 
+
 <% question_type = f.object.question_type_id
    case question_type
      when :slider -%>
@@ -12,7 +13,7 @@
       <!-- Look in application.js for the hook - it selects all input select elements with "uislider" as the class -->
       <%= f.input :dummy_answer, :collection => f.object.answers.map{|a| a.text}, :as => :select, :label => false,
                   :input_html => {:class => "uislider"}, :include_blank => false, :wrapper_html=>{:class => 'shrink_slider'} %>
-      </slider>
+      </div>
   <% when :stars -%>
     <%= f.input :dummy_answer, label: false, :collection => [[nil,1],[nil,2],[nil,3],[nil,4],[nil,5]],
                 :as => :radio_buttons, :input_html=>{:class=>'star'}, :wrapper_html=>{:class=>'star'} %>

@@ -2,7 +2,7 @@
   %tr
     %td.spacer &nbsp;
 
-%tr
+%tr.question
   %td.spacer
   %td
   - if q.part_of_group? and ["default","inline"].include? q.question_group.display_type
@@ -12,7 +12,7 @@
   %td
 
     - if [:slider, :pick_any].include? q.question_type_id  
-      %table
+      %table.slider-or-pick-any
         %tr
           - q.answers.is_not_comment.each do |a|
             - responses = @response_set.responses.where(question_id: q.id).collect(&:answer_id)

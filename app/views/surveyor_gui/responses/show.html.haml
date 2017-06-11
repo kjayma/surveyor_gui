@@ -8,29 +8,29 @@
         %h1.round-top= @title
         - @question_no = 1
 
-        %h2= @survey.title
+        %h2.survey-title= @survey.title
         - @question_no = 1
 
-        - @survey.survey_sections.each do |ss|
-          %h3= ss.title
+        - @survey.survey_sections.each do |survey_sect|
+          %h3= survey_sect.title
           %br
 
-          - ss.questions.each do |q|
+          - survey_sect.questions.each do |q|
             %div{class: q.surveyresponse_class(@response_sets)}
 
               %div{class: q.repeater? ? "repeater" : "non_repeater"}
 
                 - if q.part_of_group?
-                  - @question_group = @question_group || QuestionGroupTracker.new(q.question_group)
+                  - @question_group = @question_group || QuestionGroupTracker.new(q.question_group_id)
 
                   - if @question_group.check_for_new_group(q)
 
                     - if ["default", "inline", "repeater", "grid"].include? q.question_group.display_type
-                      %table
-                        %tr
+                      %table.question-group
+                        %tr.question-group-text
                           %td.spacer
                             &nbsp;
-                          %td{colspan: 3}
+                          %td.question-group-text{colspan: 3}
                             = @question_no.to_s+") #{q.question_group.text}"
                             - @question_no += 1
 
@@ -53,7 +53,7 @@
                           = render "grid_dropdown", question_group: q.question_group
 
                 - else
-                  %table
+                  %table.survey-results
                     = render "surveyor_gui/shared/question_number", q: q
                     = render "survey_results", q: q
 

@@ -17,25 +17,25 @@
             - response_formatter = ReportFormatter.new(q, @responses)
             - if q.question_type_id == :numbers
               %tr
-                %td{:style => "font-weight:bold;"} Total
+                %td{:style => "font-weight:bold;"}= I18n.t('surveyor_gui.total')
                 %td.table_number
                   = q.prefix
                   = response_formatter.stats(:sum) 
                   \&nbsp;#{q.suffix}
             %tr
-              %td{:style => "font-weight:bold;"} Min
+              %td{:style => "font-weight:bold;"}= I18n.t('surveyor_gui.min')
               %td.table_number
                 = q.prefix
                 = response_formatter.stats(:min) 
                 \&nbsp;#{q.suffix}
             %tr
-              %td{:style => "font-weight:bold;"} Max
+              %td{:style => "font-weight:bold;"}= I18n.t('surveyor_gui.max')
               %td.table_number
                 = q.prefix
                 = response_formatter.stats(:max) 
                 \&nbsp;#{q.suffix}
             %tr
-              %td{:style => "font-weight:bold;"} Average
+              %td{:style => "font-weight:bold;"}= I18n.t('surveyor_gui.average')
               %td.table_number
                 = q.prefix
                 = response_formatter.stats(:average) 
@@ -49,9 +49,9 @@
           %table.report_data_functions
             %tr
               %td{:style => "font-weight:bold;"}
-                Answer
+                =I18n.t('surveyor_gui.answer')
               %td{:style => "font-weight:bold;"}
-                Count
+                =I18n.t('surveyor_gui.count')
             - q.answers.is_not_comment.each do |answer| 
               %tr
                 %td
@@ -66,5 +66,5 @@
       %td &nbsp;
       %td &nbsp;
       %td
-        This question was used for file uploads.
+        =I18n.t('surveyor_gui.reports.q_used_for_uploads')
     = render "surveyor_gui/shared/new_line"

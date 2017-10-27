@@ -7,10 +7,10 @@ module SurveyorGui
   
       controlling_question_ids = controlling_questions.map{|q| q.question_number.to_s+')'}.uniq
       count = controlling_question_ids.count
-      retstr ='This question is shown depending on the '
-      retstr += 'answer'.pluralize(count)
-      retstr += ' to '
-      retstr += 'question'.pluralize(count) + ' '
+      retstr ='This question is shown depending on the ' # FIXME I18n
+      retstr += 'answer'.pluralize(count) # FIXME I18n
+      retstr += ' to ' # FIXME I18n
+      retstr += 'question'.pluralize(count) + ' ' # FIXME I18n
       retstr + list_phrase(controlling_question_ids)
     end
   
@@ -25,10 +25,10 @@ module SurveyorGui
       when 1
         args[0]
       when 2
-        args[0] + ' and ' + args[1]
+        args[0] + ' and ' + args[1] # FIXME I18n
       else
         last = args.count
-        args.take(last - 2).join(', ') + ', ' + args[last - 2] + ' and ' + args[last - 1]
+        args.take(last - 2).join(', ') + ', ' + args[last - 2] + ' and ' + args[last - 1] # FIXME I18n
       end
     end  
     

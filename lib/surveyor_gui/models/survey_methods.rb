@@ -22,7 +22,9 @@ module SurveyorGui
           self.response_sets.where('test_data = ?',true).each {|r| r.destroy}
         end
         if !template && response_sets.count>0
-          errors.add(:base,"Responses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead.")
+          errors.add(:base,
+                     I18n.t('surveyor_gui.surveys.no_responses.already_has_responses') + ' ' +  I18n.t('surveyor_gui.surveys.no_responses.create_new_survey_instead') )
+
           return false
         end
       end

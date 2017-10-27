@@ -31,12 +31,14 @@ Gem::Specification.new do |s|
     # this version is required for capybara-webkit
 
 
+  s.add_dependency  'surveyor', '~> 1.6',  '>= 1.6'
+
+
   s.add_dependency 'rails', '~> 4.2.8',  '>= 4.2.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor', '~> 1.5.9', '>= 1.5.1'  # ruby 2.4.0
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'

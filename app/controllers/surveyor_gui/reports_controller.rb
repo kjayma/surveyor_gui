@@ -12,14 +12,12 @@ class SurveyorGui::ReportsController < ApplicationController
   around_action :wrap_in_transaction, only: :preview
   layout 'surveyor_gui/surveyor_gui_default'
 
-  #GRAPH_COLORS = ['#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
-
 
   def preview
 
     response_qty = 5
     user_ids = response_qty.times.map { |i| -1*i }
-    @title = "Preview Report for "+response_qty.to_s+" randomized responses"
+    @title = I18n.t('surveyor_gui.reports.preview.title', response_qty: response_qty.to_s)
     @survey = Survey.find(params[:survey_id])
 
     user_ids.each do |user_id|
@@ -31,7 +29,7 @@ class SurveyorGui::ReportsController < ApplicationController
     @responses = Response.joins(:response_set, :answer).where('user_id in (?) and survey_id = ? and test_data = ? and answers.is_comment = ?', user_ids, params[:survey_id], true, false)
 
     if (!@survey)
-      flash[:notice] = "Survey/Questionnnaire not found."
+      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
       redirect_to :back
     end
 
@@ -45,11 +43,11 @@ class SurveyorGui::ReportsController < ApplicationController
     @survey = Survey.find(params[:id])
     @response_sets = ResponseSet.where(survey_id: @survey.id, test_data: false)
     @responses = Response.joins(:response_set, :answer).where('survey_id = ? and test_data = ? and answers.is_comment=?', @survey.id, false, false)
-    @title = "Show report for #{@survey.title}" # FIXME I18n
+    @title = I18n.t('surveyor_gui.reports.show.title', survey_title: @survey.title)
     if @responses.count > 0
       generate_report(@survey.id, false)
     else
-      flash[:error] = "No responses have been collected for this survey" # FIXME I18n
+      flash[:error] = I18n.t('surveyor_gui.reports.show.no_responses')
       redirect_to surveyforms_path
     end
   end

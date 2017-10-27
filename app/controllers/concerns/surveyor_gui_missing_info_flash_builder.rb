@@ -44,7 +44,7 @@ module SurveyorGui
 
 
     def flash_main_missing_title
-      "<span class='title'>" + I18n.t('surveyor_gui.update.complete_required') + "</span>"
+      "<span class='title'>" + I18n.t('surveyor_gui.survey.did_not_complete_required_title') + "</span>"
     end
 
 

@@ -1,20 +1,20 @@
-<%= simple_fields_for 'Question', @question do |f| %>
+<%= simple_fields_for 'Question', @question do |f| %>  <%# FIXME I18n %>
     <span class='fl'>
-      Generate list from a database field?
+      Generate list from a database field?  <%# FIXME I18n %>
     </span>
     <%= f.input :dynamically_generate, :as => :radio_buttons, :label => false, :wrapper_html=>{:class=>'fl notfirst'}, :input_html=>{:class=>'fl notfirst'} %><br /><br />
     <div id="dynamic_source">
-      Specify statement used to generate list:<br />
+      Specify statement used to generate list:<br />  <%# FIXME I18n %>
       <%= f.input :dynamic_source, :label=>false %>
     </div>
     <div id="fixed_source">
-      <strong>Possible Answers:</strong>
+      <strong>Possible Answers:</strong>  <%# FIXME I18n %>
       <div id='sortable_answers'>
         <%= f.simple_fields_for @answers do |a| %>
           <%= render 'answer_fields', :a => a %>
         <% end %>
         <p class="floatdown2">
-          Add Possible Answer<%= link_to_add_fields "Add Answer", @questions.id, f, :answers, 'a' %>
+          Add Possible Answer<%= link_to_add_fields "Add Answer", @questions.id, f, :answers, 'a' %>  <%# FIXME I18n %>
         </p>
       </div>
     </div>

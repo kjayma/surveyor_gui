@@ -14,11 +14,11 @@
 
         <%= f.label :Question, :input_html=>{:size=>'15'} %>
         <%= f.input :text , :label => false, :input_html=>{:size=>'55', value: adjusted_text} %>
-        <span class='fl'><strong>Mandatory?</strong></span>
+        <span class='fl'><strong>Mandatory?</strong></span>  <%# FIXME I18n %>
         <%= f.input :is_mandatory, :label => false, :wrapper_html=>{:class=>'fl notfirst'}%>
         <br />
         <br />
-        <strong>Question Type</strong><br/>
+        <strong>Question Type</strong><br/>  <%# FIXME I18n %>
         <div class="question_type">
           <span class="question_type_grid1">
             <%= f.input :question_type_id,
@@ -55,12 +55,12 @@
 
           <div id="report_code" style="display:none">
             <br />
-            <%= f.input :report_code, :label=>'Report Code', :label_html=>{:style=>'width:10em;'},:hint=>'Use this code to uniquely identify application data driven questions for reporting.' %>
+            <%= f.input :report_code, :label=>'Report Code', :label_html=>{:style=>'width:10em;'},:hint=>'Use this code to uniquely identify application data driven questions for reporting.' %>  <%# FIXME I18n %>
             <br />
           </div>
         <br />
       </div>
-      <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>
+      <%= f.button :submit, 'Save Changes', :id=>'question_submit' %>  <%# FIXME I18n %>
   <% end %>
   <% 20.times do -%><br/><% end -%>
 </div>

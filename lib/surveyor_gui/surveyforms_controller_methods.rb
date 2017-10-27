@@ -16,18 +16,18 @@ module SurveyorGui
       else
         template=false
       end
-      @title = "Manage " + (template ? "Templates" : "Surveys")
+      @title = "Manage " + (template ? "Templates" : "Surveys")  # FIXME I18n
       @surveyforms = Surveyform.where('template = ?', template).search(params[:search]).order(:title).paginate(:page => params[:page])
     end
 
 
     def new
       # TODO I18n translation localization needed
-      @title = "Create New "+ (params[:template] == 'template' ? 'Template' : 'Survey')
+      @title = "Create New "+ (params[:template] == 'template' ? 'Template' : 'Survey')  # FIXME I18n
       @hide_survey_type = params[:hide_survey_type]
       template = params[:template] == 'template' ? true : false
       @surveyform = Surveyform.new(:template => template)
-      @surveyform.survey_sections.build(:title => 'Section 1', :display_order => 0, :modifiable => true) #.questions.build(:text=>'New question',:pick=>'none',:display_order=>0,:display_type=>'default', :modifiable=>modifiable).answers.build(:text=>'string', :response_class=>'string', :display_order=>1, :template=>true)
+      @surveyform.survey_sections.build(:title => 'Section 1', :display_order => 0, :modifiable => true) #.questions.build(:text=>'New question',:pick=>'none',:display_order=>0,:display_type=>'default', :modifiable=>modifiable).answers.build(:text=>'string', :response_class=>'string', :display_order=>1, :template=>true)  # FIXME I18n
       @question_no = 0
     end
 
@@ -41,9 +41,9 @@ module SurveyorGui
       @surveyform.response_sets.where('test_data=?', true).map {|r| r.destroy}
       if !@surveyform.template && @surveyform.response_sets.count>0
         @survey_locked=true
-        flash.now[:error] = "Reponses have already been collected for this survey, therefore modifications are not permitted."
+        flash.now[:error] = I18n.t('surveyor_gui.surveyforms.edit.already_has_responses')
       end
-      @title = "Edit "+ (@surveyform.template ? 'Template' : 'Survey')
+      @title = "Edit "+ (@surveyform.template ? 'Template' : 'Survey')  # FIXME I18n
       @surveyform.survey_sections.build if @surveyform.survey_sections.blank?
       @question_no = 0
       @url = "update"
@@ -54,8 +54,8 @@ module SurveyorGui
       # TODO I18n translation localization needed
       @surveyform = Surveyform.new(surveyforms_params.merge(user_id: @current_user.nil? ? @current_user : @current_user.id))
       if @surveyform.save
-        flash[:notice] = "Successfully created survey."
-        @title = "Edit Survey"
+        flash[:notice] = "Successfully created survey."  # FIXME I18n
+        @title = "Edit Survey"  # FIXME I18n
         @question_no = 0
         redirect_to edit_surveyform_path(@surveyform.id)
       else
@@ -69,10 +69,10 @@ module SurveyorGui
       @title = "Update Survey"
       @surveyform = Surveyform.includes(:survey_sections).find(params[:surveyform][:id])
       if @surveyform.update_attributes(surveyforms_params)
-        flash[:notice] = "Successfully updated surveyform."
+        flash[:notice] = "Successfully updated surveyform."  # FIXME I18n
         redirect_to :action => :index
       else
-        flash[:error] = "Changes not saved."
+        flash[:error] = "Changes not saved."  # FIXME I18n
         @question_no = 0
         render :action => 'edit'
       end
@@ -81,7 +81,7 @@ module SurveyorGui
 
     def show
       # TODO I18n translation localization needed
-      @title = "Show Survey"
+      @title = "Show Survey"  # FIXME I18n
       @survey_locked = true
       @surveyform = Surveyform.find(params[:id])
       @question_no = 0
@@ -93,13 +93,13 @@ module SurveyorGui
       @surveyform = Surveyform.find(params[:id])
       @surveyform.destroy
       if !@surveyform
-        flash[:notice] = "Successfully destroyed survey."
+        flash[:notice] = "Successfully destroyed survey."  # FIXME I18n
         redirect_to surveyforms_url
       else
         if @surveyform.response_sets.count > 0
-          flash[:error] = 'This survey has responses and can not be deleted'
+          flash[:error] = 'This survey has responses and can not be deleted'  # FIXME I18n
         else
-          flash[:error] = 'Survey could not be deleted.'
+          flash[:error] = 'Survey could not be deleted.'  # FIXME I18n
         end
         redirect_to surveyforms_url
       end
@@ -158,7 +158,7 @@ module SurveyorGui
 
     def paste_section
       # TODO I18n translation localization needed
-      @title="Edit Survey"
+      @title="Edit Survey"  # FIXME I18n
       @question_no = 0
       if session[:cut_section]
         _continue_paste_section
@@ -226,7 +226,7 @@ module SurveyorGui
 
     def paste_question
       # TODO I18n translation localization needed
-      @title="Edit Survey"
+      @title="Edit Survey"  # FIXME I18n
       if session[:cut_question]
         @question = Question.find(session[:cut_question])
         @question_no = 0
@@ -265,20 +265,20 @@ module SurveyorGui
         @question_no = 0
         render "_question_section", :layout => false
       rescue
-        render inline: "not found"
+        render inline: "not found"  # FIXME I18n
       end
     end
 
 
     def clone_survey
       # TODO I18n translation localization needed
-      @title = "Clone Survey"
+      @title = "Clone Survey"  # FIXME I18n
       @surveyform = SurveyCloneFactory.new(params[:id]).clone
       if @surveyform.save
-        flash[:notice] = "Successfully created survey, questionnaire, or form."
+        flash[:notice] = "Successfully created survey, questionnaire, or form."  # FIXME I18n
         redirect_to edit_surveyform_path(@surveyform)
       else
-        flash[:error] = "Could not clone the survey, questionnaire, or form."
+        flash[:error] = "Could not clone the survey, questionnaire, or form."  # FIXME I18n
         render :action => 'new'
       end
     end

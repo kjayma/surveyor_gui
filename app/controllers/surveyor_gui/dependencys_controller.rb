@@ -3,7 +3,7 @@ class SurveyorGui::DependencysController < ApplicationController
 
   def new
     prep_variables
-    @title = "Add Logic for "+@this_question
+    @title = "Add Logic for "+@this_question # FIXME I18n
     if @question.part_of_group?
       @question.question_group.build_dependency(:rule=>'A')
     else
@@ -13,7 +13,7 @@ class SurveyorGui::DependencysController < ApplicationController
 
   def edit
     prep_variables
-    @title = "Edit Logic for Question "+@this_question
+    @title = "Edit Logic for Question "+@this_question # FIXME I18n
   end
 
   def create
@@ -26,7 +26,7 @@ class SurveyorGui::DependencysController < ApplicationController
   end
 
   def update
-    @title = "Update Question"
+    @title = "Update Question" # FIXME I18n
     @question = Question.includes(:answers).find(params[:id])
     if @question.part_of_group?
       update_object = @question.question_group

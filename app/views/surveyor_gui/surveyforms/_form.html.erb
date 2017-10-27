@@ -27,6 +27,7 @@
           <%= f.input :title, :input_html => { :size => '35', :style => 'margin-top: 0.5%; font-size: 110%; float:left;' }, :required => false, :label => false %>
           <%= f.input :template, :disabled => @survey_locked, :label => false, :input_html => { :style => "float:right;" } %>
 
+          <%# -# FIXME I18n  %>
           <span style='position:relative; float: right;'>Template?&nbsp;
 
           </span><br/><br />
@@ -39,6 +40,7 @@
             <%= render "survey_section_fields", :s => builder, :f => f %>
           </div>
 
+          <%# -# FIXME I18n  %>
           <% if @survey_locked%>
             <p><button class="go_back" type="button">Go Back</button></p>
           <% else -%>

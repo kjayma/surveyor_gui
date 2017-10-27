@@ -107,7 +107,7 @@ module SurveyorGui
         end
 
         if self.id && !survey_section.survey.template && survey_section.survey.response_sets.count > 0
-          errors.add(:base, "Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead.")
+          errors.add(:base, I18n.t('surveyor_gui.questions.no_responses.has_responses') )
           false
         end
       end
@@ -375,10 +375,10 @@ module SurveyorGui
 
       def comments_text
         if self.part_of_group?
-          @comments_text = is_comment ? self.answers.first.text : "Comments"
+          @comments_text = is_comment ? self.answers.first.text : I18n.t('surveyor_gui.comments')
         else
           answer = self.answers.where('is_comment=?', true).first
-          @comments_text = (answer ? answer.text : "Comments")
+          @comments_text = ( answer ? answer.text : I18n.t('surveyor_gui.comments') )
         end
       end
 

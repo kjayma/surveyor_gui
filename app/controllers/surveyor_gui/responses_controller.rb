@@ -7,7 +7,7 @@ class SurveyorGui::ResponsesController < ApplicationController
 
 
   def index
-    @title         = "Survey Responses"  # TODO i18n
+    @title         = I18n.t('surveyor_gui.responses.index.title')
     @response_sets = Survey.find_by_id(params[:id]).response_sets
   end
 
@@ -25,11 +25,11 @@ class SurveyorGui::ResponsesController < ApplicationController
     @response_sets = [@response_set]
 
     if (!@survey)
-      flash[:notice] = "Survey/Questionnnaire not found."
+      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
       redirect_to :back
     end
 
-    @title        = "Previewing  #{response_set_title}"
+    @title        = I18n.t('surveyor_gui.responses.preview.title', responses_title: response_set_title)
 
     render :show
   end
@@ -38,17 +38,17 @@ class SurveyorGui::ResponsesController < ApplicationController
   def show
     @response_set  = ResponseSet.find(params[:id])
 
-    @title         = "Showing #{response_set_title}"  # TODO i18n
+    @title         = I18n.t('surveyor_gui.responses.show.title', responses_title: response_set_title)
 
     @survey        = @response_set.survey
     @responses     = @response_set.responses
     @response_sets = [@response_set]
 
     if (!@response_set)
-      flash[:error] = "Response not found"
+      flash[:error] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.response') )
       redirect_to :back
     elsif (!@survey)
-      flash[:error] = "Survey/Questionnnaire not found."
+      flash[:error] =  I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
       redirect_to :back
     end
 
@@ -57,7 +57,7 @@ class SurveyorGui::ResponsesController < ApplicationController
   private
 
   def response_set_title
-    "Responses for response set access_code: #{@response_set.access_code}"  # TODO i18n
+    I18n.t('surveyor_gui.responses.responses_for_access_code', response_set_access_code: @response_set.access_code )
   end
 
 end

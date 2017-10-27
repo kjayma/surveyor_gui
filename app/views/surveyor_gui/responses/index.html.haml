@@ -1,4 +1,3 @@
--# TODO I18n
 .column2
   .shadebox.round
     #survey_response
@@ -7,20 +6,21 @@
         = @title
       %br
 
+
       - if @response_sets.where(test_data: false).empty?
         %br
-        Sorry, no responses available yet. &nbsp;Ask some people to take the survey.
+        = I18n.t('surveyor_gui.responses.index.no_responses_yet')
         %br
 
       - else
         %table
           %tr
-            %th ResponseSet Access Code
-            %th User
-            %th date started
-            %th date completed
-            %th date last changed
-            %th survey responses
+            %th= I18n.t('surveyor_gui.response_sets.name') + ' ' + I18n.t('.response_set_access_code')
+            %th= I18n.t('surveyor_gui.user')
+            %th= I18n.t('surveyor_gui.response_sets.date_started')
+            %th=  I18n.t('surveyor_gui.response_sets.date_completed')
+            %th=  I18n.t('surveyor_gui.response_sets.date_last_changed')
+            %th=  I18n.t('surveyor_gui.response_sets.survey_responses')
           - @response_sets.where(test_data: false).each do |response_set|
             %tr
               %td= response_set.access_code
@@ -29,8 +29,8 @@
               %td= response_set.completed_at
               %td= response_set.updated_at
               %td
-                = link_to "Responses", response_path(response_set)
+                = link_to I18n.t('surveyor_gui.responses'), response_path(response_set)
 
       %br
       %p
-        = link_to "Manage Surveys", surveyforms_path
+        = link_to I18n.t('surveyor_gui.manage_surveys'), surveyforms_path

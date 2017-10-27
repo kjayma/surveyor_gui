@@ -1,4 +1,4 @@
-<strong>Possible Answers:</strong> enter each choice on a separate line.
+<strong>Possible Answers:</strong> enter each choice on a separate line.   <%# FIXME I18n %>
 <%= simple_fields_for 'question', @questions do |f| %>
   <%= f.input :answers_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
   <!--  <%= f.simple_fields_for :answers do |a| %>

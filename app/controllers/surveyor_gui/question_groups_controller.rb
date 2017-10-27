@@ -2,7 +2,7 @@ class SurveyorGui::QuestionGroupsController < ApplicationController
   layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
-    @title = "Add Question"
+    @title = "Add Question" # FIXME I18n
     @survey_section_id = question_params[:survey_section_id]
     @question_group = QuestionGroup.new(
       text: params[:text], 
@@ -23,7 +23,7 @@ class SurveyorGui::QuestionGroupsController < ApplicationController
 
 
   def edit
-    @title = "Edit Question Group"
+    @title = "Edit Question Group" # FIXME I18n
     @question_group = QuestionGroup.includes(:questions).find(params[:id])
     @question_group.question_type_id = params[:question_type_id]
     @survey_section_id = question_params[:survey_section_id]
@@ -38,14 +38,14 @@ class SurveyorGui::QuestionGroupsController < ApplicationController
       original_question.destroy if original_question
       render :inline => '<div id="cboxQuestionId">'+@question_group.questions.first.id.to_s+'</div>', :layout => 'surveyor_gui/surveyor_gui_blank'
     else
-      @title = "Add Question"
+      @title = "Add Question" # FIXME I18n
       survey_section_id = question_group_params[:survey_section_id]
       redirect_to :action => 'new', :controller => 'questions', :layout => 'surveyor_gui/surveyor_gui_blank', :survey_section_id => survey_section_id
     end
   end
 
   def update
-    @title = "Update Question"
+    @title = "Update Question" # FIXME I18n
     @question_group = QuestionGroup.includes(:questions).find(params[:id])
     if @question_group.update_attributes(question_group_params)
       render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'

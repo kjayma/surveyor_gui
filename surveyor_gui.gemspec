@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["kjayma@gmail.com", "ashley@ashleycaroline.com"]
   s.homepage    =  %q{http://github.com/weedySeaDragon/surveyor_gui}
 
-  s.post_install_message = %q{Thanks for installing surveyor_gui! The time has come to run the surveyor_gui generator and migrate your database, even if you are upgrading.}
+  s.post_install_message = %q{Thanks for installing surveyor_gui! This depends on the surveyor gem.  Please be sure you have the correct version of that gem, too.}
   s.summary     = "Ashley Engelund's modifications to surveyor_gui: Rspec 3, jquery-ui (vs. -sass-rails). A Rails gem to supply a front-end and reporting capability to the Surveyor gem."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
@@ -31,12 +31,14 @@ Gem::Specification.new do |s|
     # this version is required for capybara-webkit
 
 
+  s.add_dependency  'surveyor', '~> 1.6',  '>= 1.6'
+
+
   s.add_dependency 'rails', '~> 4.2.8',  '>= 4.2.0'
   s.add_dependency 'dynamic_form', '~> 1.1.4'
 
   s.add_dependency 'jquery-ui-rails'
 
-  s.add_dependency 'surveyor', '~> 1.5.9', '>= 1.5.1'  # ruby 2.4.0
   s.add_dependency 'will_paginate', '~> 3.0.5'
 
   s.add_dependency 'simple_form', '~> 3.3.1'

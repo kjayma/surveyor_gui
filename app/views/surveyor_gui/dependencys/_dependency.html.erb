@@ -3,20 +3,20 @@
   <%= d.hidden_field :question_group_id %>
   <%= d.hidden_field :rule %>
   <div>
-    Show the question, "<%= @this_question %>", when the following conditions are true:<br /><br />
+    Show the question, "<%= @this_question %>", when the following conditions are true:<br /><br /> <%# FIXME I18n %>
     <table>
       <thead>
         <tr>
-          <td>Question</td><td>Condition</td><td>Answer</td>
+          <td>Question</td><td>Condition</td><td>Answer</td>  <%# FIXME I18n %>
         </tr>
       </thead>
       <tbody id="dependency_conditions_partial" data-question_id="<%= @question.id.to_s %>" data-dependency_id="<%= d.object.id.to_s %>"></tbody>
     </table>
     <p class="floatdown2 add_condition">
-      Add a Condition <%= image_tag 'addicon.png', :border => 0 %>
+      Add a Condition <%= image_tag 'addicon.png', :border => 0 %>  <%# FIXME I18n %>
     </p>
   </div>
 <% end -%>
 <br /><br />
-<%= f.button :submit,  'Save Changes',  :id=>'dependency_submit' %>
+<%= f.button :submit,  'Save Changes',  :id=>'dependency_submit' %>  <%# FIXME I18n %>
 

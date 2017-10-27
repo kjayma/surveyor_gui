@@ -4,8 +4,8 @@
   %td
     %table
       %tr{:style => "font-weight:bold;"}
-        %td User Id
-        %td Response
+        %td= I18n.t('surveyor_gui.user') + 'ID'
+        %td= I18n.t('surveyor_gui.response')
       - response_formatter = ReportFormatter.new(q, @responses)
       - @response_sets.each do |response_set| 
         - @responses.where(question_id: q.id, response_set_id: response_set).each do |r|

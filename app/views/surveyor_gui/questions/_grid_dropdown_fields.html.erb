@@ -1,5 +1,5 @@
 <%= simple_fields_for 'question', @questions do |f| %>      
-  Number of columns:     
+  Number of columns:      <%# FIXME I18n %>
   <%= f.input :dropdown_column_count, :collection => 
     10.times.map{|i| [(i+1).to_s + " column".pluralize(i+1), i+1]}, 
     :as => :select, :label => false,
@@ -7,7 +7,7 @@
   %>
   <%= f.simple_fields_for :question_group, @question_group do |qg| %>
     <%= qg.hidden_field :id %>
-    Columns: <span class="grid_textbox_hint">Columns: enter the choices for each column option on a separate line under "Column Options"</span><br/>
+    Columns: <span class="grid_textbox_hint">Columns: enter the choices for each column option on a separate line under "Column Options"</span><br/>  <%# FIXME I18n %>
     <div class="grid_dropdown_columns">
       <span class="spacer">&nbsp;</span>
       <%= qg.simple_fields_for :columns do |c| %>
@@ -16,12 +16,13 @@
     </div>
   <% end -%>
   <div class="rows">
-    Rows: <span class="grid_textbox_hint">add each row as a new line</span><br/>
+    Rows: <span class="grid_textbox_hint">add each row as a new line</span><br/>  <%# FIXME I18n %>
     <%= f.input :grid_rows_textbox, :as => :text, 
                 :wrapper_html => {:class=>'answers_collection'}, :label => false %>  
   </div>
 
   <br/><br/><br/>
+  <%# FIXME I18n %>
   <%= f.input :other_text, 
     label: "add a choice for", 
     hint: "user determines choice", 
@@ -31,6 +32,7 @@
   %>: 
   <%= f.input_field :other, label: false, as: :boolean %>
   <br/><br/><br/>
+  <%# FIXME I18n %>
   <%= f.input :comments_text, 
     label: "at the bottom of questions, add", 
     hint: "box for notes/comments", 

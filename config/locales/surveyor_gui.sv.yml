@@ -1,0 +1,155 @@
+sv:
+  surveyor_gui:
+
+    manage: &manage "Hantera"
+    create_new: &create_new "Skapa ny"
+    edit: &edit "Redigera"
+    show: &show "Visa"
+    show_all: &show_all "Visa alla"
+    update: &update "Uppdatering"
+    preview: &preview "Förhandsgranska"
+
+    not_found: "hittades inte"
+
+    survey: &survey "Undersökning"
+    surveys: &surveys "Undersökningar"
+    template: &template "Mall"
+    templates: &templates "Mallar"
+    section: &section "Sektion"
+    question: &question "Fråga"
+    answer: &answer "Svar"
+    response: &response "Respons"
+    responses: &responses "Responser"
+    comment: &comment "Kommentar"
+    comments: &comments "Kommentarer"
+    user: &user "Användar"
+
+
+    total: &total "Total"
+    minimum: &minimum "Minimum"
+    min: &min "Min"
+    maximum: &maximum "Maximum"
+    max: &max "Max"
+    average: &average "Medeltal"
+    count: &count "Nummer"
+
+
+    already_has_responses: &responses_already "Reponeringar har redan samlats in för denna undersökning, därför är ändringar inte tillåtna."
+    create_a_new_survey: &create_new_survey "Vänligen skapa en ny undersökning istället."
+    already_has_responses_create_new: &has_responses_create_new "Reponeringar har redan samlats in för denna undersökning, därför är ändringar inte tillåtna. Vänligen skapa en ny undersökning istället."
+
+
+    manage_surveys: "Hantera undersökningar"
+
+    item_not_found: "%{item} hittades inte"
+
+
+
+    activerecord:
+      attributes:
+        question:
+          text: "Fråga"
+
+
+
+    survey:
+      did_not_complete_required_title: "Du svarade inte på alla obligatoriska frågor."
+
+
+
+    surveys:
+      show:
+        user_will_see: "Användaren kommer att se denna undersökning"
+
+      no_responses:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new
+
+
+    survey_sections:
+      no_responses:
+        has_responses: *has_responses_create_new
+
+      destroy:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new
+
+
+
+    response_sets:
+      name: &response_set "respons grupp"
+      access_code: &access_code "access code"
+      user: *user
+      date_started: &date_started "datum startat"
+      date_completed: &date_completed "datum slutfört"
+      date_last_changed: &date_last_changed "datum senast ändrat"
+      survey_responses: "respons"
+
+
+    reports:
+      q_used_for_uploads: "Den här frågan användes för filuppladdningar."
+
+      preview:
+        title: "Förhandsgranska rapporten för %{response_qty} randomiserade respons"
+
+      show:
+        title: "Responses i %{survey_title}"
+        no_responses: "Det finns inga response på denna undersökning."
+
+        error: "Inga respons har samlats in för denna undersökning"
+
+
+    responses:
+      responses_for_access_code: "Responses i respons grupp access_code: %{response_set_access_code}"
+
+      index:
+        title: "Undersökningar resultat"
+        responses: "Respons"
+        response_set_access_code: "Response Grupp Access Code"
+        no_responses_yet: "Tyvärr, inga respons ännu tillgängliga. Be några människor att ta undersökningen."
+
+      preview:
+        title: "Förhandsvisning %{responses_title}"
+        error:
+          survey_not_found: &survey_not_found "Undersökningar som inte hittades"
+
+      show:
+        title: "Visande %{responses_title}"
+        error:
+           response_not_found: "Respons inte hittat"
+           survey_not_found: *survey_not_found
+
+
+    surveyforms:
+      clone_survey: "Duplicera undersökningen"
+      clone_success: "Framgångsrikt skapad undersökning, frågeformulär eller formulär."
+      clone_error: "Kunde inte klona undersökningen, frågeformuläret eller formuläret."
+
+      destroy:
+        success: "Framgångsrikt förstörd undersökning."
+        error:
+          has_responses: "Denna undersökning har respons och kan inte raderas."
+          could_not_delete: "Undersökningen kunde inte raderas."
+
+      create:
+        success: "Framgångsrikt skapad undersökning."
+        error: "Kunde inte skapa undersökningen."
+
+      edit:
+        already_has_responses: *responses_already
+
+      update:
+        success: "Uppdaterat undersökningsformuläret."
+        error: "Det gick inte att spara ändringarna"
+
+
+    questions:
+      no_responses:
+        has_responses: *has_responses_create_new
+
+      destroy:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new

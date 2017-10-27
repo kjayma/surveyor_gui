@@ -1,0 +1,147 @@
+en:
+  surveyor_gui:
+
+    manage: &manage "Manage"
+    create_new: &create_new "Create new"
+    edit: &edit "Edit"
+    show: &show "Show"
+    show_all: &show_all "Show all"
+    update: &update "Update"
+    preview: &preview "Preview"
+
+
+    not_found: "not found"
+
+    survey: &survey "Survey"
+    surveys: &surveys "Surveys"
+    template: &template "Template"
+    templates: &templates "Templates"
+    section: &section "Section"
+    question: &question "Question"
+    answer: &answer "Answer"
+    response: &response "Response"
+    responses: &responses "Responses"
+    comment: &comment "Comment"
+    comments: &comments "Comments"
+    user: &user "Användar"
+
+    total: &total "Total"
+    minimum: &minimum "Minimum"
+    min: &min "Min"
+    maximum: &maximum "Maximum"
+    max: &max "Max"
+    average: &average "Medeltal"
+    count: &count "Count"
+
+
+    already_has_responses: &responses_already "Reponses have already been collected for this survey, therefore modifications are not permitted."
+    create_new_response: &create_new_survey "Please create a new survey instead."
+    already_has_responses_create_new: &has_responses_create_new "Reponses have already been collected for this survey, therefore modifications are not permitted. Please create a new survey instead."
+
+    manage_surveys: "Manage Surveys"
+
+    item_not_found: "%{item} hittades inte"
+
+
+
+    activerecord:
+      attributes:
+        question:
+          text: "Question"
+
+
+
+    survey:
+      did_not_complete_required_title: "You did not answer all mandatory questions."
+
+
+    surveys:
+      show:
+        user_will_see: "Användaren kommer att se denna undersökning"
+
+      no_responses:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new
+
+
+
+    survey_sections:
+      destroy:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new
+
+    response_sets:
+      name: &response_set "Response set"
+      access_code: &access_code "access code"
+      user: *user
+      date_started: &date_started "date started"
+      date_completed: &date_completed "date completed"
+      date_last_changed: &date_last_changed "date last changed"
+      survey_responses: "responses"
+
+
+    reports:
+      q_used_for_uploads: "Den här frågan användes för filuppladdningar."
+
+      preview:
+        title: "Preview the report for %{response_qty} randomized responses"
+
+      show:
+        title: "Responses report for %{survey_title}"
+        no_responses: "There are no responses for this survey."
+
+        error: "No responses have been collected for this survey"
+
+
+    responses:
+      responses_for_access_code: "Responses for response set access_code: %{response_set_access_code}"
+
+      index:
+        title: "Survey Results"
+        responses: "Responses"
+        response_set_access_code: "Response Grupp Access Code"
+        no_responses_yet: "Sorry, no responses available yet. Ask some people to take the survey."
+
+      preview:
+        title: "Previewing %{responses_title}"
+        error:
+          survey_not_found: &survey_not_found "Survey not found"
+
+      show:
+        title: "Showing %{responses_title}"
+        error:
+          response_not_found: "Response not found"
+          survey_not_found: *survey_not_found
+
+
+    surveyforms:
+      clone_survey: "Clone survey"
+      success: "Successfully created survey, questionnaire, or form."
+      error: "Could not clone the survey, questionnaire, or form."
+
+      destroy:
+        success: "Successfully destroyed survey"
+        error:
+          has_responses: "This survey has responses and can not be deleted."
+          could_not_delete: "Survey could not be deleted."
+
+      create:
+        success: "Successfully created the survey."
+        error: "Could not create the survey"
+
+      edit:
+        already_has_responses: *responses_already
+
+
+      update:
+        success: "Successfully saved the survey form changes."
+        error: "Could not save the changes."
+
+
+    questions:
+      destroy:
+        already_has_responses: *responses_already
+        create_new_survey_instead: *create_new_survey
+        has_responses: *has_responses_create_new

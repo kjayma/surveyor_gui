@@ -14,7 +14,7 @@ GIT
 PATH
   remote: .
   specs:
-    surveyor_gui (0.2.12)
+    surveyor_gui (0.2.13)
       carrierwave
       chartkick
       colorbox-rails (~> 0.1.1)
@@ -82,7 +82,7 @@ GEM
     capybara-webkit (1.14.0)
       capybara (>= 2.3.0, < 2.14.0)
       json
-    carrierwave (1.1.0)
+    carrierwave (1.2.1)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
@@ -267,4 +267,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.14.6
+   1.15.1

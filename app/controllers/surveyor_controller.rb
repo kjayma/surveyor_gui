@@ -113,8 +113,6 @@ module SurveyorControllerCustomMethods
 
   def enough_qs_complete?(response, question_id)
 
-    # what level do we need to check? (the whole survey, each section, each question?)
-    # TODO we'd call the appropriate method based on some option being set
     section_qs_complete?(response, question_id)
 
   end

@@ -12,7 +12,6 @@ class SurveyorGui::ReportsController < ApplicationController
   around_action :wrap_in_transaction, only: :preview
   layout 'surveyor_gui/surveyor_gui_default'
 
-  # FIXME get colors from config file (.yml)  -- each time this is run?
   #GRAPH_COLORS = ['#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
 
 
@@ -72,7 +71,6 @@ class SurveyorGui::ReportsController < ApplicationController
     #     :group => "answers.question_id, answers.id, answers.text",
     #     :order => "answers.question_id, answers.id")
 
-    # TODO reject all comments (for questions & answers)
 
     multiple_choice_answers = Answer.unscoped.joins("LEFT OUTER JOIN responses ON responses.answer_id = answers.id
             LEFT OUTER JOIN response_sets ON response_sets.id = responses.response_set_id").
@@ -95,8 +93,6 @@ class SurveyorGui::ReportsController < ApplicationController
 
     @chart = {}
 
-
-    # FIXME what about looping through question groups vs. questions? what is the right relationship?
 
     questions.each do |q|
 
@@ -290,13 +286,12 @@ class SurveyorGui::ReportsController < ApplicationController
     q_group = q.question_group
     group_responses = q_group.responses
 
-    # TODO group by column
     q_group.columns.each_with_index do |column, column_index|
 
       q.answers.select { |a| a.column_id == column.id }.each_with_index do |answer, answer_index|
 
         # Response.where(question_id: q.id, answer_id: answer.id, column_id: column.id).count
-        # TODO what is the relationship between the current question and the whole group?
+
         responses_ans_col = group_responses.select { |g_resp| g_resp.question.id == q.id && g_resp.answer.id == answer.id && g_resp.try(:column).try(:id) == column.id }
         response_count = responses_ans_col.count
 
@@ -316,8 +311,7 @@ class SurveyorGui::ReportsController < ApplicationController
       # get all of the possible answers for this column
       q_group.columns.each do |column|
 
-        # TODO why not put this into a loop with the resp_count_series instead of for the names?
-        match_ans_and_col = resp_count_series.select { |s| s[:name] == answer_name && s[:column_id] == column.id }.first # TODO why .first ?
+        match_ans_and_col = resp_count_series.select { |s| s[:name] == answer_name && s[:column_id] == column.id }.first
 
         # select only the responses that are for this particular question
         #  get the array of [name, count for the # of responses for this answer ]
@@ -463,7 +457,6 @@ end
 #
 # Uses ReportFormatter to create a helpful X-axis label based on the upper and lower bounds of the data
 #
-#  TODO needs tests (HistogramArray)
 class HistogramArray
 
   # notes that response must be Response (not some version of Answers or anything else)

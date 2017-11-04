@@ -1,7 +1,20 @@
+GIT
+  remote: https://github.com/weedySeaDragon/ae-surveyor.git
+  revision: c110ca368c28c03a6cf9c4f32a78fd33dea1063e
+  specs:
+    surveyor (1.6.0)
+      formtastic (~> 2.2.1)
+      haml (~> 4.0)
+      mustache (~> 0.99)
+      rabl (~> 0.6)
+      rails (>= 4)
+      sass
+      uuidtools (~> 2.1)
+
 PATH
   remote: .
   specs:
-    surveyor_gui (0.2.13)
+    surveyor_gui (0.2.14)
       carrierwave
       chartkick
       colorbox-rails (~> 0.1.1)
@@ -12,20 +25,8 @@ PATH
       jquery-ui-rails
       rails (~> 4.2.8, >= 4.2.0)
       simple_form (~> 3.3.1)
-      surveyor (>= 1.6)
+      surveyor (~> 1.6, >= 1.6)
       will_paginate (~> 3.0.5)
-
-PATH
-  remote: /Users/ashleyengelund/github/ae/ae-surveyor
-  specs:
-    surveyor (1.6.0)
-      formtastic (~> 2.2.1)
-      haml (~> 4.0)
-      mustache (~> 0.99)
-      rabl (~> 0.6)
-      rails (>= 4)
-      sass
-      uuidtools (~> 2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -85,7 +86,7 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-    chartkick (2.2.4)
+    chartkick (2.2.5)
     cliver (0.3.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -111,7 +112,7 @@ GEM
       activesupport (>= 3.0.0)
     formtastic (2.2.1)
       actionpack (>= 3.0)
-    globalid (0.4.0)
+    globalid (0.4.1)
       activesupport (>= 4.2.0)
     haml (4.0.7)
       tilt
@@ -270,4 +271,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.15.1
+   1.16.0

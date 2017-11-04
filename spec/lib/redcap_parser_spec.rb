@@ -4,7 +4,7 @@ describe Surveyor::RedcapParser do
   let(:parser){ Surveyor::RedcapParser.new }
   it "returns a survey object" do
     x = %("Variable / Field Name","Form Name","Field Units","Section Header","Field Type","Field Label","Choices OR Calculations","Field Note","Text Validation Type","Text Validation Min","Text Validation Max",Identifier?,"Branching Logic (Show field only if...)","Required Field?"\nstudy_id,demographics,,,text,"Study ID",,,,,,,,)
-    parser.parse(x, "redcaptest").is_a?(Survey).should be_true
+    parser.parse(x, "redcaptest").is_a?(Survey).should be_truthy
   end
   context "parses" do
     it "basic questions from REDCap" do

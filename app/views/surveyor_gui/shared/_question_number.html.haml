@@ -1,11 +1,15 @@
 %tr{:class => q.surveyresponse_class(@response_sets)}
-  %td
+
+  %td.spacer
     &nbsp;
+
   - if q.is_numbered? && !q.part_of_group?
     %td{colspan: "2", style: q.question_type_id==:label ? "font-weight: bold;" : "" }
-      = @question_no.to_s + ") #{q.text}"
+
+      .question= @question_no.to_s + ") #{q.text}"
       - @question_no += 1
+
   - else
-    %td
+    %td.spacer
     %td{style: q.question_type_id==:label ? "font-weight: bold;" : "" }
-      = q.text
+      .question= q.text

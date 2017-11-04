@@ -1,22 +1,29 @@
 %tr.question_group
-  %td
-  %td
-  %td
+  %td.spacer
+  %td.spacer
+  %td.spacer
+
     %table
+
       %tr.question_group_header
         - question_group.questions.each do |group_question|
-          %td
+
+          %td.group-question-text
             = group_question.text
      
       - question_ids = question_group.questions.collect(&:id)
+
       - responses = @responses.where('responses.question_id in (?)', question_ids).map{|r| {response_set_id: r.response_set_id, question_id: r.question_id, response: r.response_value}}
+
       - (responses.select{|response| response[:response_set_id]==@response_set.id}.count/question_ids.count).times do |index|
+
         %tr{class: index==0 ? "first_row" : nil}
+
           - question_ids.each do |question_id|
             %td
               - if response = responses.select{|response| response[:response_set_id] == @response_set.id && response[:question_id] == question_id}[index]
-                = response[:response]
+                .response-choice= response[:response]
       %tr
-        %td
+        %td.spacer
           &nbsp;
              

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe SurveyorGui::SurveyformsController do
+describe SurveyorGui::SurveyformsController, :type => :controller do
   include Surveyor::Engine.routes.url_helpers
   include SurveyorGui::Engine.routes.url_helpers
   before do
@@ -240,7 +240,7 @@ describe SurveyorGui::SurveyformsController do
       it "successfully destroys the survey" do
         do_delete
         expect(response).to redirect_to(surveyforms_path)
-        expect(Survey.exists?(survey_with_no_responses.id)).to be_false
+        expect(Survey.exists?(survey_with_no_responses.id)).to be_falsey
       end
     end
 
@@ -252,7 +252,7 @@ describe SurveyorGui::SurveyformsController do
       it "fails to delete the survey" do
         do_delete
         expect(response).to redirect_to(surveyforms_path)
-        expect(Survey.exists?(survey_with_responses.id)).to be_true
+        expect(Survey.exists?(survey_with_responses.id)).to be_truthy
       end
 
       it "displays a flash message warning responses were collected" do

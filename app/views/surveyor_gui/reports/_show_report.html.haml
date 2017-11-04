@@ -6,7 +6,7 @@
     %div{class: q.surveyresponse_class(@response_sets)}
       %div{class: q.repeater? ? "repeater" : "non_repeater"}
         - if q.part_of_group?
-          - @question_group = @question_group || QuestionGroupTracker.new(q.question_group)
+          - @question_group = @question_group || QuestionGroupTracker.new(q.question_group_id)
           - if @question_group.check_for_new_group(q)
             - if ["default", "inline", "repeater", "grid"].include? q.question_group.display_type
               %table

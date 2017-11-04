@@ -4,7 +4,7 @@ body
   :font-size  16px
   :font-family Arial, Helvetica, sans-serif
   :text-align  left
-  :background-color white !important
+  :background-color white
 
 #box
   :margin 1em auto 1em
@@ -396,7 +396,10 @@ body
 
       star label.collection_radio
         :display inline
-        :margin 1 0 0 0em
+        :margin-top 1em
+        :margin-bottom  0
+        :margin-left  0
+        :margin-right  0
         :width auto
 
   .question_logic_notifier
@@ -632,17 +635,65 @@ table#number_hint
   td, tr
     :border 1px solid
 
-.surveyor_gui_report
+
+$grid-table-border: solid 2pt
+$grid-table-border-lt: dotted 1pt
+
+.surveyor_gui_report,
+.survey-responses
+
   .show_data, .hide_data
     :margin-top .25em
     :margin-bottom .5em
+
+  td.spacer
+    :border none !important
+    :border-top none !important
+    :border-bottom none !important
+    :border-right none !important
+    :border-left none !important
+
   tr.question_group_header
     td
       :font-weight bold
+
   span.user_id
     :display none
+
   tr.first_row span.user_id
     :display block
+
+  tr.question-group-text
+    td.question-group-text
+      :font-size larger
+
+
+  tr.grid-response-answers
+    :font-weight bold
+
+    td.grid-answer-label
+      :border-bottom $grid-table-border
+      :border-right $grid-table-border-lt
+
+  tr.grid-question-row
+
+    td.grid-question-text
+      :font-weight bold
+      :border-right $grid-table-border
+      :border-bottom $grid-table-border-lt
+    td.grid-answer
+      :border $grid-table-border-lt
+
+
+
+
+  .report-chart
+    :margin 0
+    :clear both
+    :min-width 400px
+
+
+
 
 span.preview_multiple_choice_answer
   :font-style italic 

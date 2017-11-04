@@ -1,24 +1,35 @@
 .column2
   .shadebox.round
     #survey_response
+
       %h1.round_top
         = @title
       %br
+
+
       - if @response_sets.where(test_data: false).empty?
         %br
-        Sorry, no responses available yet. &nbsp;Ask some people to take the survey.
+        = I18n.t('surveyor_gui.responses.index.no_responses_yet')
         %br
+
       - else
         %table
           %tr
-            %th User
-            %th Action
+            %th= I18n.t('surveyor_gui.response_sets.name' )
+            %th= I18n.t('surveyor_gui.user')
+            %th= I18n.t('surveyor_gui.response_sets.date_started')
+            %th=  I18n.t('surveyor_gui.response_sets.date_completed')
+            %th=  I18n.t('surveyor_gui.response_sets.date_last_changed')
+
           - @response_sets.where(test_data: false).each do |response_set|
             %tr
-              %td
-                = response_set.report_user_name
-              %td
-                = link_to "Response", response_path(response_set)
+              %td= link_to response_set.access_code, response_path(response_set)
+              %td= response_set.report_user_name
+              %td= response_set.created_at
+              %td= response_set.completed_at
+              %td= response_set.updated_at
+
+
       %br
       %p
-        = link_to "Manage Surveys", surveyforms_path
+        = link_to I18n.t('surveyor_gui.manage_surveys'), surveyforms_path

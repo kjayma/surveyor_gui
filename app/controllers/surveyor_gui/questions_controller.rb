@@ -2,7 +2,7 @@ class SurveyorGui::QuestionsController < ApplicationController
   layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
-    @title = "Add Question"
+    @title = "Add Question" # FIXME I18n
     survey_section = SurveySection.find(params[:survey_section_id])
     survey = Survey.find(survey_section.survey_id)
     @question_group = QuestionGroup.new
@@ -23,7 +23,7 @@ class SurveyorGui::QuestionsController < ApplicationController
   end
 
   def edit
-    @title = "Edit Question"
+    @title = "Edit Question" # FIXME I18n
     @question = Question.includes(:answers).find(params[:id])
     @question.question_type_id = params[:question_type_id] if !params[:question_type_id].blank?
   end
@@ -51,13 +51,13 @@ class SurveyorGui::QuestionsController < ApplicationController
       #load any page - if it has no flash errors, the colorbox that contains it will be closed immediately after the page loads
       render :inline => '<div id="cboxQuestionId">'+@question.id.to_s+'</div>', :layout => 'surveyor_gui/surveyor_gui_blank'
     else
-      @title = "Add Question"
+      @title = "Add Question" # FIXME I18n
       render :action => 'new', :layout => 'surveyor_gui/surveyor_gui_blank'
     end
   end
 
   def update
-    @title = "Update Question"
+    @title = "Update Question" # FIXME I18n
     @question = Question.includes(:answers).find(params[:id])
     if @question.update_attributes(question_params)
       @question.answers.each_with_index {|a, index| a.destroy if index > 0} if @question.pick == 'none'
@@ -71,11 +71,11 @@ class SurveyorGui::QuestionsController < ApplicationController
   def destroy
     question = Question.find(params[:id])
     if !question.survey_section.survey.template && question.survey_section.survey.response_sets.count > 0
-      flash[:error]="Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead."
+      flash[:error]= I18n.t('surveyor_gui.questions.destroy.has_responses')
       return false
     end
     if !question.dependency_conditions.blank?
-      render :text=>"The following questions have logic that depend on this question: \n\n"+question.dependency_conditions.map{|d| " - "+d.dependency.question.text}.join('\n')+"\n\nPlease delete logic before deleting this question.".html_safe
+      render :text=>"The following questions have logic that depend on this question: \n\n"+question.dependency_conditions.map{|d| " - "+d.dependency.question.text}.join('\n')+"\n\nPlease delete logic before deleting this question.".html_safe # FIXME I18n
       return
     end
     if question.part_of_group?

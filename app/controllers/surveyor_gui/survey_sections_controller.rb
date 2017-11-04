@@ -2,18 +2,19 @@ class SurveyorGui::SurveySectionsController < ApplicationController
   layout 'surveyor_gui/surveyor_gui_blank'
 
   def new
-    @title = "Add Survey Section"
+    @title = "Add Survey Section" # FIXME I18n
     survey = Survey.find(params[:survey_id])
     prev_section = SurveySection.find(params[:prev_section_id])
     @last_survey_section = survey.survey_sections.last
+    # FIXME I18n
     @survey_section = survey.survey_sections
                             .build(:title => 'New Section',
                                    :display_order => prev_section.display_order + 1,
-                                   :modifiable => true)
+                                   :modifiable => true)  # FIXME I18n
   end
 
   def edit
-    @title = "Edit Survey Section"
+    @title = "Edit Survey Section" # FIXME I18n
     @survey_section = SurveySection.find(params[:id])
   end
 
@@ -33,7 +34,7 @@ class SurveyorGui::SurveySectionsController < ApplicationController
   end
 
   def update
-    @title = "Update Survey Section"
+    @title = "Update Survey Section" # FIXME I18n
     @survey_section = SurveySection.find(params[:id])
     if @survey_section.update_attributes(survey_section_params)
       render :blank, :layout => 'surveyor_gui/surveyor_gui_blank'
@@ -45,15 +46,15 @@ class SurveyorGui::SurveySectionsController < ApplicationController
   def destroy
     @survey_section = SurveySection.find(params[:id])
     if !@survey_section.survey.template && @survey_section.survey.response_sets.count > 0
-      render :text => "Reponses have already been collected for this survey, therefore it cannot be modified. Please create a new survey instead."
+      render :text =>  I18n.t('surveyor_gui.survey_sections.destroy.has_responses')
       return false
     end
     if !@survey_section.modifiable
-      render :text => "This section cannot be removed."
+      render :text => "This section cannot be removed." # FIXME I18n
       return false
     end
     if !@survey_section.questions.map{|q| q.dependency_conditions}.flatten.blank?
-      render :text => "The following questions have logic that depend on questions in this section: \n\n"+@survey_section.questions.map{|q| q.dependency_conditions.map{|d| " - "+d.dependency.question.text}}.flatten.join('\n')+"\n\nPlease delete logic before deleting this section.".html_safe
+      render :text => "The following questions have logic that depend on questions in this section: \n\n"+@survey_section.questions.map{|q| q.dependency_conditions.map{|d| " - "+d.dependency.question.text}}.flatten.join('\n')+"\n\nPlease delete logic before deleting this section.".html_safe # FIXME I18n
       return
     end
     @survey_section.destroy

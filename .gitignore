@@ -8,7 +8,6 @@ capybara-*.html
 /vendor/bundle
 /log/*
 log/*
-/tmp/*
 /public/system/*
 /coverage/
 /spec/tmp/*
@@ -32,7 +31,11 @@ config/initializers/secret_token.rb
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
+
 /tmp
+
+
+
 
 # Ignore testbed
 testbed
@@ -41,4 +44,9 @@ testbed
 .ruby-version
 .ruby-gemset
 
-Gemfile.lock
+
+# ignore IDE and files for development tools
+
+# RubyMine IDE
+.idea/
+

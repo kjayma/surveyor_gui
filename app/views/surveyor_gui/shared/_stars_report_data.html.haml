@@ -4,8 +4,8 @@
   %td
     %table
       %tr{:style => "font-weight:bold;"}
-        %td User Id
-        %td Response
+        %td= I18n.t('surveyor_gui.user') + 'ID'
+        %td= I18n.t('surveyor_gui.response')
       - @responses.where(:question_id => q.id).each do |r|
         %tr
           %td= r.response_set.report_user_name

@@ -6,11 +6,11 @@ require 'rspec/core/rake_task'
 
 ###### RSPEC
 
-RSpec::Core::RakeTask.new(:spec)
+#RSpec::Core::RakeTask.new(:spec)
 
-RSpec::Core::RakeTask.new(:rcov) do |spec|
-  spec.rcov = true
-end
+#RSpec::Core::RakeTask.new(:rcov) do |spec|
+#  spec.rcov = true
+#end
 
 task :default => :spec
 
@@ -51,12 +51,15 @@ namespace :gui_testbed do
   task :migrate do
     chdir('testbed') do
       Bundler.with_clean_env do
-        sh 'bundle exec rails generate simple_form:install'
-        sh 'bundle exec rake highcharts:update'
-        sh 'bundle exec rails generate surveyor:install'
-        sh 'bundle exec rake db:migrate db:test:prepare'
+        # AE: no need to manually install these and surveyor; they are installed when surveyor_gui is installed
+          #sh 'bundle exec rails generate simple_form:install'
+
+          #sh 'bundle exec rails generate surveyor:install'
+          #sh 'bundle exec rake db:migrate db:test:prepare'
+
         sh 'bundle exec rails generate surveyor_gui:install'
         sh 'bundle exec rake db:migrate db:test:prepare'
+
         sh 'bundle exec rake surveyor FILE=surveys/kitchen_sink_survey.rb'
       end
     end

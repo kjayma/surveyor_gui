@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe DependencyCondition do
   it "should have a list of operators" do
     %w(== != < > <= >=).each do |operator|
-      DependencyCondition.operators.include?(operator).should be_true
+      DependencyCondition.operators.include?(operator).should be_truthy
     end
   end
 
@@ -29,14 +29,18 @@ describe DependencyCondition do
 
     it "should be invalid without an operator" do
       @dependency_condition.operator = nil
-      @dependency_condition.should have(2).errors_on(:operator)
+      #@dependency_condition.should have(2).errors_on(:operator)
+      @dependency_condition.valid?
+      expect(@dependency_condition.errors[:operator].size).to eq(2)
     end
 
     it "should be invalid without a rule_key" do
       @dependency_condition.should be_valid
       @dependency_condition.rule_key = nil
       @dependency_condition.should_not be_valid
-      @dependency_condition.should have(1).errors_on(:rule_key)
+      #@dependency_condition.should have(1).errors_on(:rule_key)
+      @dependency_condition.valid?
+      expect(@dependency_condition.errors[:rule_key].size).to eq(1)
     end
 
     it "should have unique rule_key within the context of a dependency" do
@@ -47,33 +51,47 @@ describe DependencyCondition do
       @dependency_condition.rule_key = "B" # rule key uniquness is scoped by dependency_id
       @dependency_condition.dependency_id = 2
       @dependency_condition.should_not be_valid
-      @dependency_condition.should have(1).errors_on(:rule_key)
+      #@dependency_condition.should have(1).errors_on(:rule_key)
+      @dependency_condition.valid?
+      expect(@dependency_condition.errors[:rule_key].size).to eq(1)
     end
 
     it "should have an operator in DependencyCondition.operators" do
       DependencyCondition.operators.each do |o|
         @dependency_condition.operator = o
-        @dependency_condition.should have(0).errors_on(:operator)
+       # @dependency_condition.should have(0).errors_on(:operator)
+        @dependency_condition.valid?
+        expect(@dependency_condition.errors[:operator].size).to eq(0)
       end
       @dependency_condition.operator = "#"
-      @dependency_condition.should have(1).error_on(:operator)
+      #@dependency_condition.should have(1).error_on(:operator)
+      @dependency_condition.valid?
+      expect(@dependency_condition.errors[:operator].size).to eq(1)
     end
     it "should have a properly formed count operator" do
       %w(count>1 count<1 count>=1 count<=1 count==1 count!=1).each do |o|
         @dependency_condition.operator = o
-        @dependency_condition.should have(0).errors_on(:operator)
+        @dependency_condition.valid?
+        #@dependency_condition.should have(0).errors_on(:operator)
+        expect(@dependency_condition.errors[:operator].size).to eq(0)
       end
       %w(count> count< count>= count<= count== count!=).each do |o|
         @dependency_condition.operator = o
-        @dependency_condition.should have(1).errors_on(:operator)
+        @dependency_condition.valid?
+        #@dependency_condition.should have(1).errors_on(:operator)
+        expect(@dependency_condition.errors[:operator].size).to eq(1)
       end
       %w(count=1 count><1 count<>1 count!1 count!!1 count=>1 count=<1).each do |o|
         @dependency_condition.operator = o
-        @dependency_condition.should have(1).errors_on(:operator)
+        #@dependency_condition.should have(1).errors_on(:operator)
+        #@dependecy_condition.valid?
+        expect(@dependency_condition.errors[:operator].size).to eq(1)
       end
       %w(count= count>< count<> count! count!! count=> count=< count> count< count>= count<= count== count!=).each do |o|
         @dependency_condition.operator = o
-        @dependency_condition.should have(1).errors_on(:operator)
+       # @dependency_condition.should have(1).errors_on(:operator)
+        @dependency_condition.valid?
+        expect(@dependency_condition.errors[:operator].size).to eq(1)
       end
     end
   end

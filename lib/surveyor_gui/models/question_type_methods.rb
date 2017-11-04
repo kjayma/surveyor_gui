@@ -289,6 +289,7 @@ module SurveyorGui
 #----------------------------- end instance methods ---------------------------------------------------------------
       module ClassMethods
 
+        # FIXME I18n
       AllTypes = [
           #                                                                                             group       answer
           #                                                                   part_of_         display  display     response

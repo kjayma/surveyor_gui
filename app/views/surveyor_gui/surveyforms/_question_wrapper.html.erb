@@ -27,21 +27,21 @@
               question_id:  f.object.id)%>"
              data-edit_question_url="<%=surveyor_gui.edit_question_url(f.object.id)%>"
              data-question_id="<%= f.object.id.to_s %>"
-          >Edit Question</button>
+          >Edit Question</button> <%# -# FIXME I18n  %>
 
           <button type="button" id="cut_question"
              data-cut_question_surveyform_url="<%=surveyor_gui.cut_question_surveyform_url(
               id:           f.object.survey_section.survey.id, 
               question_id:  f.object.id)%>"
              data-question_already_cut="<%= session[:cut_question] %>"
-          >Cut Question</button>
+          >Cut Question</button> <%# -# FIXME I18n  %>
 
           <button type="button" id="delete_question"
              data-question_url="<%=surveyor_gui.question_url(f.object.id)%>"
              data-replace_form_surveyform_url="<%= surveyor_gui.replace_form_surveyform_url(
               id:                 f.object.survey_section.survey.id, 
               survey_section_id:  f.object.survey_section_id) %>"
-          >Delete Question</button>
+          >Delete Question</button> <%# -# FIXME I18n  %>
 
           <span style="float:right;">
 
@@ -51,14 +51,14 @@
                  data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(:question_id => f.object.id)%>"
                  data-dependency_url="<%= surveyor_gui.dependency_url(f.object.id) %>"
                  data-question_id="<%= f.object.id.to_s %>"
-              >Delete Logic</button>
+              >Delete Logic</button> <%# -# FIXME I18n  %>
 
 
               <button type="button" id="edit_logic"
                 data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(:question_id => f.object.id)%>"
                 data-edit_dependency_url="<%= surveyor_gui.edit_dependency_url(f.object.id) %>"
                 data-question_id="<%= f.object.id.to_s %>"
-              >Edit Logic</button>
+              >Edit Logic</button> <%# -# FIXME I18n  %>
 
             <% else -%>
                 <button type="button" id="add_logic"
@@ -67,7 +67,7 @@
                     question_id:  f.object.id)%>"
                   data-new_dependency_url="<%= surveyor_gui.new_dependency_url(:id=>f.object.id) %>"
                   data-question_id="<%= f.object.id.to_s %>"
-                >Add Logic</button>
+                >Add Logic</button> <%# -# FIXME I18n  %>
             <% end %>
 
           </span>
@@ -90,7 +90,7 @@
         data-insert_new_question_url="<%=surveyor_gui.insert_new_question_surveyform_url(id: f.object.survey_section.survey.id, ) %>"
         data-new_question_url="<%=surveyor_gui.new_question_url%>"
         data-prev_question_id="<%= f.object.id.to_s %>"
-      >Add Question</button>
+      >Add Question</button> <%# -# FIXME I18n  %>
 
       <% if session[:cut_question] -%>
 
@@ -98,7 +98,7 @@
           data-paste_question_surveyform_url="<%= surveyor_gui.paste_question_surveyform_url(
               id:           f.object.survey_section.survey.id,
               question_id:  f.object.id) %>"
-        >Paste Question</button>
+        >Paste Question</button> <%# -# FIXME I18n  %>
 
       <% end %>
 

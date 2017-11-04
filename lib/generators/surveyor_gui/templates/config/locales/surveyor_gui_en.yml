@@ -1,0 +1,25 @@
+en:
+  activerecord:
+    attributes:
+      question:
+        text: "Question"
+
+
+  surveyor_gui:
+    update:
+      complete_required: "You must complete all required fields before submitting the survey.  Please fill in the following:"
+      no_response_set: "No response set"
+
+    reports:
+      show:
+        page_title: "Survey responses with charts"
+        no_responses: "There are no responses for this survey."
+
+        total: Total
+        average: "Avg."
+        minimum: "Min."
+        maximum: "Max."
+        count: Count
+
+        answer: Answer
+

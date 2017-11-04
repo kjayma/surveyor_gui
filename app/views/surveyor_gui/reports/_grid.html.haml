@@ -5,22 +5,22 @@
   %td &nbsp;
   %td
     %table.report_data.report_data_display
-      %tr{:style => "font-weight:bold;"}
-        %td User Id
-        %td 
+      %thead
+        %th.user-id-label User Id
+        %th
         - question_group.questions.is_not_comment.first.answers.each do |answer|
-          %td
+          %th.answer-text
             = answer.text
         - @response_sets.each do |response_set| 
           - question_group.questions.is_not_comment.each_with_index do |question, index|
             %tr{class: index==0 ? "first_row" : nil}
-              %td
+              %td.user-name
                 %span.user_id
                   = response_set.report_user_name
-              %td
+              %td.question-text
                 = question.text
               - question.answers.each do |answer|
-                %td
+                %td.answer
                   - if Response.where(response_set_id: response_set.id, question_id: question.id, answer_id: answer.id).count > 0 
                     .ui-icon.ui-icon-check 
           = render "surveyor_gui/shared/grid_comments", question_group: question_group            
@@ -34,7 +34,7 @@
             = answer.text
       - question_group.questions.each do |q|
         %tr
-          %td
+          %td.question-text
             = q.text        
           - q.answers.each do |answer| 
             %td.table_number

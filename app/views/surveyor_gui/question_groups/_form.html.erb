@@ -12,12 +12,12 @@
       <%= qg.label :Question, :input_html=>{:size=>'15'} %>
       <%= qg.input :text , :input_html=>{:size=>'55'}, :label => false%>
       <span class='fl'>
-        <strong>Mandatory?</strong>
+        <strong>Mandatory?</strong>  <%# FIXME I18n %>
       </span>
       <%= qg.input :is_mandatory, :label => false, :as=>:boolean, :wrapper_html=>{:class=>'fl notfirst'}%>
       <br />
       <br />
-      <strong>Question Type</strong><br/>
+      <strong>Question Type</strong><br/>  <%# FIXME I18n %>
       <div class="question_type">
         <span class="question_type_grid1">
           <%= qg.input :question_type_id,
@@ -51,7 +51,7 @@
         <%= render "group_inline_fields", f: qg %>
       </div>
     </div>
-    <%= qg.button :submit, 'Save Changes', :id=>'question_group_submit' %>
+    <%= qg.button :submit, 'Save Changes', :id=>'question_group_submit' %>  <%# FIXME I18n %>
   <% end -%>
   <% 20.times do -%><br/><% end -%>
 </div>

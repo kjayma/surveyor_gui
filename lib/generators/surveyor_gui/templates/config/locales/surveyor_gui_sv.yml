@@ -1,0 +1,24 @@
+en:
+  activerecord:
+    attributes:
+      question:
+        text: "Fråga"
+
+
+  surveyor_gui:
+    update:
+      complete_required: "Du måste fylla i alla obligatoriska fält innan du skickar undersökningen. Fyll i följande:"
+      no_response_set: "No response set"
+
+   reports:
+      show:
+        page_title: "Enkätundersökningar med diagram"
+        no_responses: "Det finns inga svar på denna undersökning."
+
+        total: "total"
+        average: genomsnitt
+        minimum: minimum
+        maximum: maximal
+        count: "räkna"
+
+        answer: svar

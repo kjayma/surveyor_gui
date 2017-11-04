@@ -11,7 +11,7 @@ module SurveyorGui
       generate "simple_form:install"
       generate "surveyor:install"
       rake "db:migrate db:test:prepare"
-      rake "highcharts:update"
+
       unless options[:skip_migration]
         rake 'railties:install:migrations'
       end
@@ -21,6 +21,7 @@ module SurveyorGui
     def configurations
       replace_simple_forms_configuration_rb
       add_i18n_enforce_locales
+      template 'config/initializers/chartkick.rb'
     end
 
     def routes

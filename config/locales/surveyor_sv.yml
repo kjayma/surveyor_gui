@@ -1,0 +1,73 @@
+# encoding: UTF-8
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+sv:
+  surveyor:
+    take_these_surveys: "Vilken ras är du?"
+    take_it: "Gör provet"
+    your_answer: "Ditt svar"
+    to_question: "på frågan"
+    completed_survey: "Testet avslutat"
+    unable_to_find_your_responses: "Det gick inte att hitta dina svar på undersökningen"
+    unable_to_update_survey: "Det gick inte att uppdatera enkäten"
+    unable_to_find_that_survey: "Det gick inte att hitta den undersökningen"
+    dependents_title: "Uppföljningsfrågor från dina svar på föregående sida"
+    survey_started_success: "Testet startat"
+    click_here_to_finish: "Se ditt resultat"
+    previous_section: "&laquo; Föregående fråga "
+    next_section: "Nästa fråga &raquo;"
+    select_one: "Välj en ..."
+    sections: "Sektioner"
+    language: "Språk"
+
+    survey: "Undersökning"
+
+    results_title: "Undersökning: Resultatuppsättningar"
+
+    copyright: "Allt innehåll upphovsrätt &copy Ashley Engelund, %{startyear} - %{thisyear}."
+
+
+    default_meta_page_title: "Surveyor"
+    meta_description: ""
+    meta_keywords:  ""
+
+
+    nav:
+      home: "Hem"
+
+      auth:
+        edit_your_account: "Edit your account"
+        sign_out: "Sign out"
+        sign_in: "Sign in"
+        sign_up: "Sign up"
+
+
+    errors:
+      not_authorized: "Sorry. You can't view this page."
+
+
+
+    # Views
+    users:
+      welcome:
+        page_title: "Welcome!"
+
+      update:
+        success: 'Information for the user was updated successfully.'
+        error: 'There was a problem: the information was not updated.'
+
+
+    admin:
+      index:
+        page_title: "Greetings, Administrator"
+
+
+
+
+    pages:
+      about_us:
+        meta_page_title: "Om oss"
+        meta_page_description: ""
+        page_title: "Om oss"
+

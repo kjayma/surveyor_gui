@@ -15,21 +15,20 @@
       - else
         %table
           %tr
-            %th= I18n.t('surveyor_gui.response_sets.name') + ' ' + I18n.t('.response_set_access_code')
+            %th= I18n.t('surveyor_gui.response_sets.name' )
             %th= I18n.t('surveyor_gui.user')
             %th= I18n.t('surveyor_gui.response_sets.date_started')
             %th=  I18n.t('surveyor_gui.response_sets.date_completed')
             %th=  I18n.t('surveyor_gui.response_sets.date_last_changed')
-            %th=  I18n.t('surveyor_gui.response_sets.survey_responses')
+
           - @response_sets.where(test_data: false).each do |response_set|
             %tr
-              %td= response_set.access_code
+              %td= link_to response_set.access_code, response_path(response_set)
               %td= response_set.report_user_name
               %td= response_set.created_at
               %td= response_set.completed_at
               %td= response_set.updated_at
-              %td
-                = link_to I18n.t('surveyor_gui.responses'), response_path(response_set)
+
 
       %br
       %p

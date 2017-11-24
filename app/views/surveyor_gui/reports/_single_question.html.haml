@@ -3,12 +3,17 @@
   = render "surveyor_gui/shared/new_line"
 - else
   = render "graphs", q: q
+
+  -#  do NOT render the report data for every answer for every question!
+  -#  Only do it from the Responses controller and reports
+
   - if [:pick_one,:pick_any,:dropdown,:number,:date,:datetime,:time,:stars,:slider, :string, :box].include? q.question_type_id
     = render "surveyor_gui/shared/new_line"
+
     - if q.question_type_id == :stars
       = render "surveyor_gui/shared/stars_report_data", q: q, toggle: true
     - elsif [:number,:date,:datetime,:time].include? q.question_type_id
-      = render "surveyor_gui/shared/report_data", q: q, toggle: true
+      =# render "surveyor_gui/shared/report_data", q: q, toggle: true
       %tr
         %td
         %td
@@ -40,26 +45,27 @@
                 = q.prefix
                 = response_formatter.stats(:average) 
                 \&nbsp;#{q.suffix}
-    - elsif q.pick=='any' || q.pick=='one'            
-      = render "surveyor_gui/shared/report_data", q: q, toggle: true
+    - elsif q.pick=='any' || q.pick=='one'
+      =# render "surveyor_gui/shared/report_data", q: q, toggle: true
       %tr
         %td
         %td
         %td
-          %table.report_data_functions
-            %tr
-              %td{:style => "font-weight:bold;"}
+          %table.answers-count
+            %thead
+              %th{:style => "font-weight:bold;"}
                 =I18n.t('surveyor_gui.answer')
-              %td{:style => "font-weight:bold;"}
+              %th{:style => "font-weight:bold;"}
                 =I18n.t('surveyor_gui.count')
-            - q.answers.is_not_comment.each do |answer| 
-              %tr
-                %td
-                  = answer.text
-                %td.table_number
-                  = @responses.where(question_id: q.id, answer_id: answer.id).count
+            %tbody
+              - q.answers.is_not_comment.each do |answer|
+                %tr{class: "answer-#{answer.id}"}
+                  %td.answer
+                    = answer.text
+                  %td.count
+                    = @responses.where(question_id: q.id, answer_id: answer.id).count
     - elsif !q.repeater?
-      = render "surveyor_gui/shared/report_data", q: q, toggle: false 
+      =# render "surveyor_gui/shared/report_data", q: q, toggle: true
     = render "surveyor_gui/shared/new_line"
   - elsif q.question_type_id == :file
     %tr

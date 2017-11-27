@@ -12,28 +12,30 @@
   <br />
 <table>
   <tr>
-    <th>Title</th>
-    <th>Version</th>
-    <th>Actions</th>
+    <th><%= t('surveyor_gui.surveyforms.index.title')%></th>
+    <th><%= t('surveyor_gui.surveyforms.index.version')%></th>
+    <th><%= t('surveyor_gui.surveyforms.index.actions')%></th>
   </tr>
   <% for survey in @surveyforms %>
     <tr>
       <td><%= survey.title %></td>
       <td><%= survey.survey_version %></td>
-      <td><%= link_to "Show", survey %>&nbsp
-      <%= link_to "Edit", edit_surveyform_path(survey) %>&nbsp
-      <%= link_to "Clone", clone_survey_surveyform_path(survey) %>&nbsp
-      <%= link_to "Destroy", survey, data: { confirm: 'Are you sure?' }, :method => :delete %>&nbsp; 
-      <%= link_to "Run Report", report_path(survey) %> &nbsp;
-      <%= link_to "View Responses" , responses_path(id: survey) %></td>
+      <td><%= link_to t('surveyor_gui.surveyforms.index.show'), survey %>&nbsp
+      <%= link_to t('surveyor_gui.surveyforms.index.edit'), edit_surveyform_path(survey) %>&nbsp
+      <%= link_to t('surveyor_gui.surveyforms.index.clone'), clone_survey_surveyform_path(survey) %>&nbsp
+      <%= link_to t('surveyor_gui.surveyforms.index.destroy'), survey, data: { confirm: 'Are you sure?' }, :method => :delete %>&nbsp;
+      <%= link_to t('surveyor_gui.surveyforms.index.summary_report'), report_path(survey) %> &nbsp;
+      <%= link_to t('surveyor_gui.surveyforms.index.view_response_counts'), all_responses_report_path(survey) %> &nbsp;
+      <%= link_to t('surveyor_gui.surveyforms.index.view_responses') , responses_path(id: survey) %></td>
     </tr>
   <% end %>
 </table>
 <br />
+
+<p.all-responses-warning><%= t('surveyor_gui.surveyforms.index.all_responses_warning')%></p.all-responses-warning>
 <%= will_paginate %>
 <p>
-  <%= link_to "New Survey", new_surveyform_path() %>&nbsp
-  <%= link_to "Take a Survey", surveyor.available_surveys_path %>&nbsp
+  <%= link_to "New Survey", new_surveyform_path(), class: 'button btn' %>&nbsp
 </p>
 </div>
   </div>

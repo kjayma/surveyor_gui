@@ -1,0 +1,29 @@
+<%# display the first comment response for an answer %>
+<%# Assumes the following variables:                 %>
+<%#   question = the question we're conerned with    %>
+<%#   q_answers = the answers for the question       %>
+<%#   q_responses = all responses for the question   %>
+<%#   extra_column = (boolean) whether or not to put an extra column (td) first or not %>
+
+
+<% if [:pick_one, :pick_any, :dropdown, :slider].include? question.question_type_id %>
+  <% commented_ans =  q_answers.select{| ans | ans.is_comment == true } %>
+  <% if commented_ans && commented_ans.first %>
+    <% comment = responses.select{ | resp | resp.answer_id == commented_ans.first.id  }.first %>
+    <% if comment %>
+      <tr>
+        <td> &nbsp;</td>
+        <% if extra_column %>
+          <td>&nbsp;</td>
+        <% end %>
+        <td>
+          <%= commented_ans.first.text %>:
+        </td>
+        <td>
+          <%= comment.string_value if comment %>
+        </td>
+      </tr>
+    <% end %>
+    <%= render "surveyor_gui/shared/new_line" %>
+  <% end %>
+<% end %>

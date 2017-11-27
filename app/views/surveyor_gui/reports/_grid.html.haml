@@ -25,18 +25,19 @@
                     .ui-icon.ui-icon-check 
           = render "surveyor_gui/shared/grid_comments", question_group: question_group            
           = render "surveyor_gui/shared/new_line"
-    %table.report_data_functions
-      %tr
-        %td{:style => "font-weight:bold;"}
+    %table.answers-count
+      %thead
+        %th{:style => "font-weight:bold;"}
           &nbsp;
         - question_group.questions.first.answers.each do |answer|
-          %td{:style => "font-weight:bold;"}
+          %th{:style => "font-weight:bold;"}
             = answer.text
-      - question_group.questions.each do |q|
-        %tr
-          %td.question-text
-            = q.text        
-          - q.answers.each do |answer| 
-            %td.table_number
-              = @responses.where(question_id: q.id, answer_id: answer.id).count
+      %tbody
+        - question_group.questions.each do |q|
+          %tr
+            %td.question-text
+              = q.text
+            - q.answers.each do |answer|
+              %td.count
+                = @responses.where(question_id: q.id, answer_id: answer.id).count
       = render "surveyor_gui/shared/new_line"

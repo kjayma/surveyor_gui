@@ -1,0 +1,66 @@
+<%# Show every response for the question.  Shows the user id  %>
+<%# Assumes that this is a row in a table                     %>
+<%# Assumes access to the following variables:                %>
+<%#   toggle = boolean to set the CSS style with report_data_display CSS class or not %>
+<%#   responses = all responses for the survey                %>
+<%#   response_sets = all response sets for the survey        %>
+<%#   question = the question that is being displayed         %>
+<%#   q_answers = all answers for @question                   %>
+<%#   q_responses = all responses for this question           %>
+<%#                                                           %>
+
+
+<tr class="report_data" id="report_data-every-response">
+
+  <td></td>
+  <td></td>
+  <td>
+
+    <% collapse_id = "#collapse-responses-q#{question.id}" %>
+
+    <%#= link_to t('surveyor_gui.surveyforms.show_hide_responses'), '#', onclick: "showHideId('#{collapse_id}');", class: "show_hide_responses" %>
+
+    <button onclick="showHideId('<%= collapse_id %>');" class="show_hide_responses"><%= t('surveyor_gui.surveyforms.show_hide_responses') %></button>
+
+    <div id="<%= collapse_id %>" class="question-responses" style="display: none">
+      <table class="every-response">
+        <thead>
+        <tr>
+          <th><%= I18n.t('surveyor_gui.user') %> ID</th>
+          <th><%= I18n.t('surveyor_gui.response') %></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% response_formatter = ReportFormatter.new(question, q_responses) %>
+
+        <% q_responses.each do |response| %>
+          <tr>
+            <td><%= response.response_set.report_user_name %></td>
+
+            <td class="table_number">
+
+              <% if [:number, :date, :datetime, :time].include? question.question_type_id %>
+                <%= response_formatter.format_stats(response.response_value.to_f) %>
+              <% else %>
+                <%= response.response_value %> &nbsp;
+              <% end %>
+
+            </td>
+
+            <% if question.answers.is_comment.count > 0 %>
+              <%= render 'surveyor_gui/shared/response_comments_for_ans', question: question, q_answers: q_answers, q_responses: q_responses, extra_column: false %>
+            <% end %>
+
+            <%# = render "surveyor_gui/shared/new_line" if question.question_type_id == :pick_any %>
+
+          </tr>
+        <% end %> <%#  q_responses.each do |response|  %>
+
+        </tbody>
+      </table>
+    </div>
+
+
+  </td>
+</tr>

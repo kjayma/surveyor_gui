@@ -11,9 +11,10 @@ module SurveyorGui
               (r.response_group.blank? ? true : r.response_group.to_i == response_group.to_i) &&
               (r.column_id.blank? ? true : r.column_id == column_id.to_i)}
         result.blank? ? response_set.responses.build(
-            question_id: question.id,
-            response_group: response_group,
-            column_id: column_id) : result
+                  survey_section_id: question.survey_section.id,
+                  question_id: question.id,
+                  response_group: response_group,
+                  column_id: column_id) : result
       end
 
 

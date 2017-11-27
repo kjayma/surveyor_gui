@@ -640,10 +640,15 @@ $grid-table-border: solid 2pt
 $grid-table-border-lt: dotted 1pt
 
 .surveyor_gui_report,
-.survey-responses
+.survey-responses,
+.survey-results
 
   .show_data, .hide_data
     :margin-top .25em
+    :margin-bottom .5em
+
+  #report_data-every-response button.show_hide_responses
+    :margin-top 1em
     :margin-bottom .5em
 
   td.spacer
@@ -695,7 +700,7 @@ $grid-table-border-lt: dotted 1pt
 
 
 
-span.preview_multiple_choice_answer
+.preview_multiple_choice_answer
   :font-style italic 
   :font-weight bold
     

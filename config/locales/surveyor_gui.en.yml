@@ -13,14 +13,14 @@ en:
     not_found: "not found"
 
     survey: &survey "Survey"
-    surveys: &surveys "Surveys"
+    survey_many: &surveys "Surveys"
     template: &template "Template"
     templates: &templates "Templates"
     section: &section "Section"
     question: &question "Question"
     answer: &answer "Answer"
     response: &response "Response"
-    responses: &responses "Responses"
+    response_many: &responses "Responses"
     comment: &comment "Comment"
     comments: &comments "Comments"
     user: &user "Användar"
@@ -111,31 +111,60 @@ en:
 
       show:
         title: "Showing %{responses_title}"
+        no_response_for_q: &no_response_for_q "No response / not applicable"
         error:
           response_not_found: "Response not found"
           survey_not_found: *survey_not_found
 
+      all_responses_report:
+        title: 'All responses for all questions and all their answers'
+
 
     surveyforms:
-      clone_survey: "Clone survey"
-      success: "Successfully created survey, questionnaire, or form."
-      error: "Could not clone the survey, questionnaire, or form."
+
+      clone:
+        title: "Clone survey"
+        success: "Successfully created survey, questionnaire, or form."
+        error: "Could not clone the survey, questionnaire, or form."
+
+      show_hide_responses: "show / hide responses"
+
+      index:
+        title: Title
+        version: Version
+        actions: Actions
+
+        show: *show
+        edit: *edit
+        clone: Duplicate
+        destroy: Delete
+        summary_report: Responses Summary
+        view_response_counts: "View all responses for all questions and all answers*"
+        view_responses: "View Each Visitor's Responses  Visa varje besökares reaktioner"
+        all_responses_warning: "Viewing all responses may take a few minutes to generate because it must collect each individual piece of data."
+
+      show:
+        title: "Show survey"
 
       destroy:
-        success: "Successfully destroyed survey"
+        success: "Successfully deleted the survey"
+        error:
         error:
           has_responses: "This survey has responses and can not be deleted."
           could_not_delete: "Survey could not be deleted."
 
       create:
+        title: "Create Survey"
         success: "Successfully created the survey."
         error: "Could not create the survey"
 
       edit:
+        title: "Edit Survey"
         already_has_responses: *responses_already
 
 
       update:
+        title: "Update Survey"
         success: "Successfully saved the survey form changes."
         error: "Could not save the changes."
 

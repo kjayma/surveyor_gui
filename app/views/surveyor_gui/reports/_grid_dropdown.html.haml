@@ -26,31 +26,32 @@
                 = response.answer.text
       = render "surveyor_gui/shared/grid_comments", question_group: question_group            
       = render "surveyor_gui/shared/new_line"
-%table.report_data_functions
-  %tr
-    %td &nbsp;
-    %td &nbsp;
-    %td{:style => "font-weight:bold;"}
+%table.answers-count
+  %thead
+    %th &nbsp;
+    %th &nbsp;
+    %th{:style => "font-weight:bold;"}
       &nbsp;
     - question_group.columns.each do |column|
-      %td{style: "font-weight:bold; text-align: center;", colspan: "#{column.answers.count/question_group.questions.count}"}
+      %th{style: "font-weight:bold; text-align: center;", colspan: "#{column.answers.count/question_group.questions.count}"}
         = column.text
-  %tr
-    %td &nbsp;
-    %td &nbsp;
-    %td
-    - question_group.columns.each do |column|
-      - column.answers.map{|a| a.text}.uniq.each do |answer|
-        %td
-          = answer
-  - question_group.questions.is_not_comment.each do |q|
+  %tbody
     %tr
       %td &nbsp;
       %td &nbsp;
       %td
-        = q.text
-      - question_group.columns.each do |column| 
-        - Answer.where(question_id: q.id, column_id: column.id).each do |a|
-          %td.table_number
-            = @responses.where(question_id: q.id, column_id: column.id, answer_id: a.id).count
+      - question_group.columns.each do |column|
+        - column.answers.map{|a| a.text}.uniq.each do |answer|
+          %td.answer
+            = answer
+    - question_group.questions.is_not_comment.each do |q|
+      %tr
+        %td &nbsp;
+        %td &nbsp;
+        %td.question-text
+          = q.text
+        - question_group.columns.each do |column|
+          - Answer.where(question_id: q.id, column_id: column.id).each do |a|
+            %td.count
+              = @responses.where(question_id: q.id, column_id: column.id, answer_id: a.id).count
 = render "surveyor_gui/shared/new_line"

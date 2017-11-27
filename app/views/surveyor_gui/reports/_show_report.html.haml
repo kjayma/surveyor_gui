@@ -1,8 +1,9 @@
 - @question_no = 1
-- @survey.survey_sections.each do |ss|
-  %h3= ss.title
+- @survey.survey_sections.each do |survey_section|
+  %h3= survey_section.title if @show_section_titles
   %br
-  - ss.questions.each do |q|
+
+  - survey_section.questions.each do |q|
     %div{class: q.surveyresponse_class(@response_sets)}
       %div{class: q.repeater? ? "repeater" : "non_repeater"}
         - if q.part_of_group?
@@ -30,4 +31,4 @@
                   = render "grid_dropdown", question_group: q.question_group
         - else
           %table
-            = render "single_question", q: q 
+            = render "single_question", q: q

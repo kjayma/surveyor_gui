@@ -9,7 +9,10 @@ class SurveyorGui::ReportsController < ApplicationController
 
   # ReportPreviewWrapper wraps preview in a database transaction so test data is not permanently saved.
 
+  before_action :set_survey, only: [:show, :all_responses]
+
   around_action :wrap_in_transaction, only: :preview
+
   layout 'surveyor_gui/surveyor_gui_default'
 
 
@@ -29,7 +32,7 @@ class SurveyorGui::ReportsController < ApplicationController
     @responses = Response.joins(:response_set, :answer).where('user_id in (?) and survey_id = ? and test_data = ? and answers.is_comment = ?', user_ids, params[:survey_id], true, false)
 
     if (!@survey)
-      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
+      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey'))
       redirect_to :back
     end
 
@@ -40,7 +43,6 @@ class SurveyorGui::ReportsController < ApplicationController
 
 
   def show
-    @survey = Survey.find(params[:id])
     @response_sets = ResponseSet.where(survey_id: @survey.id, test_data: false)
     @responses = Response.joins(:response_set, :answer).where('survey_id = ? and test_data = ? and answers.is_comment=?', @survey.id, false, false)
     @title = I18n.t('surveyor_gui.reports.show.title', survey_title: @survey.title)
@@ -53,11 +55,103 @@ class SurveyorGui::ReportsController < ApplicationController
   end
 
 
+  # the count for all responses, for all questions and answers
+  def all_responses
+
+    @chart = {}
+    @show_section_titles = false # FIXME - need to config this for the survey
+
+    @sections = @survey.survey_sections
+    @questions = Question.includes(:answers).where(survey_section_id: @sections.map(&:id), is_comment: false)
+    @answers = Answer.where(question_id: @questions.map(&:id), is_comment: false)
+
+    @response_sets = ResponseSet.where(survey: @survey)
+
+    @responses = Response.where(answer_id: @answers.map(&:id)).order(:answer_id)
+
+    response_counts = Response.where(response_set_id: @response_sets.map(&:id)).group(:question_id).order(:question_id).group(:answer_id).count(:id)
+
+    @response_counts_by_q = response_counts.group_by { |k, _v| k[0] }
+
+    # this creates a nested Hash like this:
+    #   [question_id, answer_id] => count
+    # {
+    #   [305, 1097]=>435,
+    #   [305, 1098]=>109,
+    #   [305, 1099]=>56,
+    #   [306, 1104]=>35,
+    #   [306, 1102]=>188,
+    #   [306, 1100]=>53,
+    #   [306, 1103]=>154,  ...
+
+    # And we can access them in that form like this:
+    #
+    # response_counts_by_q.each do | k_question, v_answers |
+    #  "QUESTION ID (key[0]): #{k_question[0]}  answer ID (key[1]) = #{k_question[1]}, count = #{v_answers}"
+    # end
+
+    # but we can re-organize them so they are easier to work with:
+    @question_answers_counts = {}
+    @response_counts_by_q.each do | k_qid, v_ka_count |
+      v_ka_count.each do | each_v |
+        a_id = each_v.first[1]
+        count = each_v.last
+        puts "  @question_answers_counts[k_qid =  #{@question_answers_counts[k_qid]}"
+        @question_answers_counts.fetch(k_qid){ |ques_id| @question_answers_counts[ques_id] = {}}
+        @question_answers_counts[k_qid].fetch(a_id){ |ans_id| @question_answers_counts[k_qid][ans_id] = count  }
+      end
+
+    end
+
+    # Now they are in this handy form:
+    #  question_id => { answer_id => count}
+    #
+    # [ {305=>{1097=>435, 1098=>109, 1099=>56}},
+    #   {306=>{1104=>35, 1102=>188, 1100=>53, 1103=>154, 1101=>166}},
+    #   {307=>{1108=>55, 1106=>78, 1107=>95, 1105=>368}},
+    #    {308=>{1110=>57, 1109=>371, 1111=>165}},
+    #    {309=>{1125=>65, 1124=>130, 1123=>397}},
+    #    {310=>{1128=>366, 1130=>75, 1127=>170, 1129=>236, 1126=>51}},
+    #    {311=>{1133=>146, 1132=>246, 1131=>199}},
+    #    {312=>
+    #         {1121=>7,
+    #          1113=>3,
+    #          1116=>4,
+    #          1120=>7,
+    #          1117=>2,
+    #          1122=>11,
+    #          1119=>9,
+    #          1114=>2,
+    #          1115=>1,
+    #          1112=>7,
+    #          1118=>4}
+    #     }
+    # ]
+
+    @title = t('surveyor_gui.responses.all_responses_report.title')
+
+
+    # The following is just an ActiveRecord_Relation. it doesn't hit the db for data
+    # It will hit the db once to get the response count for ALL of the answers for ALL of these questions.
+    #  (Then the info will be cached)
+
+    all_answers = Answer.unscoped
+                   .joins("LEFT OUTER JOIN responses ON responses.answer_id = answers.id")
+                   .where(question_id: @questions.map(&:id))
+                   .select("answers.question_id, answers.id, answers.text as text, answers.is_comment, count(responses.id) as answer_count")
+                   .group("answers.question_id, answers.id, answers.text, answers.is_comment")
+                   .order("answers.question_id, answers.id")
+
+    set_chart_info(@questions, all_answers)
+
+  end
+
+
   def generate_report(survey_id, test)
 
-    # FIXME - this gets the data by looping through each response set. SLOW! Instead, just get all of the responses at once.
 
-    questions = Question.joins(:survey_section).where('survey_sections.survey_id = ? and is_comment = ?', survey_id, false)
+    # the following is just an ActiveRecord_Relation - it doesn't hit the db
+    questions = Question.includes(:answers).joins(:survey_section).where('survey_sections.survey_id = ? and is_comment = ?', survey_id, false)
 
     # multiple_choice_responses = Response.joins(:response_set, :answer).where('survey_id = ? and test_data = ?',survey_id,test).group('responses.question_id','answers.id','answers.text').select('responses.question_id, answers.id, answers.text as text, count(*) as answer_count').order('responses.question_id','answers.id')
 
@@ -69,7 +163,11 @@ class SurveyorGui::ReportsController < ApplicationController
     #     :group => "answers.question_id, answers.id, answers.text",
     #     :order => "answers.question_id, answers.id")
 
+    # all_answers = Answer.where(question: questions.map(&:id))
 
+    # The following is just an ActiveRecord_Relation. it doesn't hit the db for data
+    # It will hit the db once to get the response count for ALL of the answers for ALL of these questions.
+    #  (Then the info will be cached)
     multiple_choice_answers = Answer.unscoped.joins("LEFT OUTER JOIN responses ON responses.answer_id = answers.id
             LEFT OUTER JOIN response_sets ON response_sets.id = responses.response_set_id").
         joins(:question => :survey_section).
@@ -79,42 +177,74 @@ class SurveyorGui::ReportsController < ApplicationController
         order("answers.question_id, answers.id")
 
 
-    # all answers for a survey_id, eager loads responses
-    # ans = Answer.unscoped.joins( question: :survey_section ).includes(:responses).where('survey_sections.survey_id = ?', 7).is_not_comment.all
-
+=begin
+   # not currently being used!
     single_choice_answers = Response.joins(:response_set).where('survey_id = ? and test_data = ?', survey_id, test).select('responses.question_id, responses.answer_id,
             responses.float_value,
             responses.integer_value,
             responses.datetime_value,
             responses.string_value')
-
-
+=end
     @chart = {}
 
+    @show_section_titles = false # FIXME - need to config this for the survey
+
+    # single_choice_qs = questions.select{ | q | [:number, :date, :datetime, :time].include? q.question_type_id }
+    # single_choice_as = Answer.joins(:question).where(question: single_choice_qs.map(&:id))
+
+    # mult_choice_qs   = questions.reject{ | q | [:number, :date, :datetime, :time].include? q.question_type_id }
+    # mult_choice_as = Answer.joins(:question).where(question: mult_choice_qs.map(&:id))
+
+
+    set_chart_info(questions, multiple_choice_answers)
+
+
+  end
+
+
+  private
+
+  def set_survey
+    @survey = Survey.find(params[:id]) if params.has_key? :id
+  end
+
+
+  def set_chart_info(questions, all_answers)
 
     questions.each do |q|
+      # will hit the db even if we do this in memory with a .group_by, so might as well us the db version to accomplish it:  Is this only used in 1 case below?
+      #answers = Answer.unscoped.joins(:question).where(question: q).group(:question_id, :id, :text, :is_comment).order(:question_id, :id)
 
+      #answers.each{|a| puts "response count: #{a.responses.count}"}
+
+      # this should be a case statement!
       if [:grid_one, :grid_any].include? q.question_type_id
+        # questions might be comments, and answers might be comments
         # question_group_stacked_bar_chart( q.question_group, multiple_choice_responses )
-        generate_stacked_bar_chart(q, multiple_choice_answers)
+        generate_stacked_bar_chart(q, all_answers)
 
       elsif q.question_type_id == :grid_dropdown
+        # questions cannot be comments, but answers might be
         q.question_group.questions.where(is_comment: false).each do |question|
-          generate_grid_dropdown_bar_chart(question, multiple_choice_answers)
+          generate_grid_dropdown_bar_chart(question, all_answers)
         end
 
       elsif q.pick == 'one'
-        generate_pie_chart(q, multiple_choice_answers)
+        # only work with answers where is_comment: false
+        generate_pie_chart(q, all_answers)
 
       elsif q.pick == 'any'
-        generate_bar_chart(q, multiple_choice_answers)
+        # only work with answers where is_comment: false
+        generate_bar_chart(q, all_answers)
 
       elsif [:number, :date, :datetime, :time].include? q.question_type_id
+        # only work with answers where is_comment: false
+
         # generate_histogram_chart(q, single_choice_responses)
         #  generate_bar_chart(q, single_choice_answers)
         # generate_bar_chart( q, multiple_choice_answers )
 
-        answers = Answer.unscoped.includes(:responses).joins( question: :survey_section ).where('questions.id = ?', q.id ).is_not_comment.all
+        answers = Answer.unscoped.includes(:responses).joins(question: :survey_section).where('questions.id = ?', q.id).is_not_comment.all
 
         simple_histogram q, answers
 
@@ -122,10 +252,8 @@ class SurveyorGui::ReportsController < ApplicationController
 
     end
 
+
   end
-
-
-  private
 
 
   def generate_chart(q, answer_info, chart_method)
@@ -145,6 +273,9 @@ class SurveyorGui::ReportsController < ApplicationController
 
     # select only the responses that are for this particular question
     #  get the count for the # of responses for this answer
+
+    # ans.answer_count == Response.where(answer: ans).count
+
     answer_info.select { |a| a.question_id == q.id }.each_with_index do |ans, index|
       data_array[index]= [ans.text.to_s, ans.answer_count.to_i] unless ans.is_comment?
     end
@@ -194,7 +325,7 @@ class SurveyorGui::ReportsController < ApplicationController
 
     #  get the count for the # of responses for this answer
 
-    data_array = answers.includes(:responses).map{|a| [a.text, a.responses.count]}
+    data_array = answers.includes(:responses).map { |a| [a.text, a.responses.count] }
 
     @chart[q.id.to_s] = chart_info :column_chart, data_array, { label: q.text }
 
@@ -423,7 +554,6 @@ class SurveyorGui::ReportsController < ApplicationController
 =end
 
   end
-
 
 
   # return the info in the form needed so we can pass it to chartkick charts in the view

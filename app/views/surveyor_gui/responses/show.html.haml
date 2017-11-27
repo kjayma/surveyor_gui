@@ -12,8 +12,9 @@
         - @question_no = 1
 
         - @survey.survey_sections.each do |survey_sect|
-          %h3= survey_sect.title
-          %br
+          - if @show_section_titles
+            %h3= survey_sect.title
+            %br
 
           - survey_sect.questions.each do |q|
             %div{class: q.surveyresponse_class(@response_sets)}
@@ -24,7 +25,7 @@
                   - @question_group = @question_group || QuestionGroupTracker.new(q.question_group_id)
 
                   - if @question_group.check_for_new_group(q)
-
+                    -# table start for a question group
                     - if ["default", "inline", "repeater", "grid"].include? q.question_group.display_type
                       %table.question-group
                         %tr.question-group-text
@@ -53,8 +54,8 @@
                           = render "grid_dropdown", question_group: q.question_group
 
                 - else
-                  %table.survey-results
+                  %table.question-results
                     = render "surveyor_gui/shared/question_number", q: q
-                    = render "survey_results", q: q
+                    = render "question_results", q: q
 
         = link_to "back", :back

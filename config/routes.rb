@@ -54,15 +54,19 @@ SurveyorGui::Engine.routes.draw do
     :only=>[
             'show',
             'preview',
-            'show_pdf'] do
+            'show_pdf',
+            'all_responses'] do
       member do
         get 'show'
         get 'preview'
         get 'show_pdf'
+        get 'all_responses'
       end
-    end
+  end
+
   resources :survey, only: ['show'] do
   end
+
   resources :responses, only: ['show', 'index', 'preview'] do
     member do
       get 'preview'

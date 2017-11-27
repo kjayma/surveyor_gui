@@ -12,14 +12,14 @@ sv:
     not_found: "hittades inte"
 
     survey: &survey "Undersökning"
-    surveys: &surveys "Undersökningar"
+    survey_many: &surveys "Undersökningar"
     template: &template "Mall"
     templates: &templates "Mallar"
     section: &section "Sektion"
     question: &question "Fråga"
     answer: &answer "Svar"
     response: &response "Respons"
-    responses: &responses "Responser"
+    response_many: &responses "Responser"
     comment: &comment "Kommentar"
     comments: &comments "Kommentarer"
     user: &user "Användar"
@@ -117,15 +117,41 @@ sv:
 
       show:
         title: "Visande %{responses_title}"
+        no_response_for_q: &no_response_for_q "Inget respons / gäller inte"
         error:
            response_not_found: "Respons inte hittat"
            survey_not_found: *survey_not_found
 
+      all_responses_report:
+        title: 'Alla respons på alla frågor och alla deras svar'
+
 
     surveyforms:
-      clone_survey: "Duplicera undersökningen"
-      clone_success: "Framgångsrikt skapad undersökning, frågeformulär eller formulär."
-      clone_error: "Kunde inte klona undersökningen, frågeformuläret eller formuläret."
+
+      show_hide_responses: "visa / dölja respons"
+
+      clone:
+        title: "Duplicera undersökningen"
+        success: "Framgångsrikt skapad undersökning, frågeformulär eller formulär."
+        error: "Kunde inte klona undersökningen, frågeformuläret eller formuläret."
+
+      index:
+        title: titel
+        version: version
+        actions: handlingar
+
+        show: *show
+        edit: *edit
+        clone: Duplicera
+        destroy: Radera
+        summary_report: Respons Sammanfattning
+        view_response_counts: "View alla reaktion (respons) på alla frågor och alla svar*"
+        view_responses: "Visa varje besökares reaktioner"
+
+        all_responses_warning: "* Visa alla reaktion kan ta några minuter att generera eftersom det måste samla varje enskild data."
+
+      show:
+        title: "Visa undersökning"
 
       destroy:
         success: "Framgångsrikt förstörd undersökning."
@@ -134,13 +160,16 @@ sv:
           could_not_delete: "Undersökningen kunde inte raderas."
 
       create:
+        title: "Skapa undersökning"
         success: "Framgångsrikt skapad undersökning."
         error: "Kunde inte skapa undersökningen."
 
       edit:
+        title: "Redigera enkäten"
         already_has_responses: *responses_already
 
       update:
+        title: "Uppdatera undersökning"
         success: "Uppdaterat undersökningsformuläret."
         error: "Det gick inte att spara ändringarna"
 

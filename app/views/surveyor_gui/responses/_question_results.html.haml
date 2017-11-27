@@ -1,16 +1,8 @@
-- if !(q.part_of_group? and ["default","inline"].include? q.question_group.display_type)
-  %tr
-    %td.spacer &nbsp;
-
-%tr.question
+%tr.answers
   %td.spacer
-  %td
-  - if q.part_of_group? and ["default","inline"].include? q.question_group.display_type
-    %td.question-group-text
-      .question= q.text
+  %td.spacer
 
   %td.answer
-
     - if [:slider, :pick_any].include? q.question_type_id  
       %table.slider-or-pick-any
         %tr
@@ -36,16 +28,19 @@
 
     - elsif q.question_type_id != :label
 
-      - r = @response_set.responses.where(:question_id => q.id).first
-
       .question-prefix= q.prefix
 
-      - if [:number, :date, :datetime, :time].include? q.question_type_id
-        = ReportFormatter.new(q,r).format_stats(r.response_value.to_f) if r
+      - r = @response_set.responses.where(:question_id => q.id).first
+      - if r.nil?
+        %p.no-response= t('surveyor_gui.responses.show.no_response_for_q')
+      -else
+        - if [:number, :date, :datetime, :time].include? q.question_type_id
+          = ReportFormatter.new(q,r).format_stats(r.response_value.to_f) if r
+        - else
+          .answer= r.response_value if r
+          \&nbsp;
 
-      - else
-        .answer= r.response_value if r
-        \&nbsp;
+
 
       .question-suffix= q.suffix
 

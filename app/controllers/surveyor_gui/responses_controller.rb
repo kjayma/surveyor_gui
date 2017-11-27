@@ -24,8 +24,8 @@ class SurveyorGui::ResponsesController < ApplicationController
     @responses     = @response_set.responses
     @response_sets = [@response_set]
 
-    if (!@survey)
-      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
+    unless @survey
+      flash[:notice] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey'))
       redirect_to :back
     end
 
@@ -44,10 +44,12 @@ class SurveyorGui::ResponsesController < ApplicationController
     @responses     = @response_set.responses
     @response_sets = [@response_set]
 
-    if (!@response_set)
+    @show_section_titles = false # FIXME - need to config this for the survey
+
+    if !@response_set
       flash[:error] = I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.response') )
       redirect_to :back
-    elsif (!@survey)
+    elsif !@survey
       flash[:error] =  I18n.t('surveyor_gui.not_found', item: I18n.t('surveyor_gui.survey') )
       redirect_to :back
     end

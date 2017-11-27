@@ -1,0 +1,15 @@
+<%# This partial assumes that there are these variables:               %>
+<%#   question - the Question that this is generating info for         %>
+<%#   @question_no - an integer that represents the                    %>
+<%#       question number to show for this Question (if it is numbered %>
+
+<% if question.is_numbered? && !question.part_of_group? %>
+  <td class="question-text question-nr-text <%=question.question_type_id%>" colspan="2" >
+    <%= @question_no.to_s + ") #{question.text}" %>
+  </td>
+
+<% else %>
+  <td class="spacer">&nbsp;</td>
+  <td class="question-text  #{question.question_type_id}"><%= question.text %> </td>
+
+<% end %>

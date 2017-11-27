@@ -1,3 +1,6 @@
+-# Show every response for the question
+-# This is really EXPENSIVE and inefficient as originally written!
+  (Does a single fetch for every response for every response set for every answer for every question!!!)
 %tr{class: toggle ? "report_data report_data_display" : "report_data"}
   %td
   %td
@@ -6,8 +9,8 @@
       %tr{:style => "font-weight:bold;"}
         %td= I18n.t('surveyor_gui.user') + 'ID'
         %td= I18n.t('surveyor_gui.response')
-      - response_formatter = ReportFormatter.new(q, @responses)
-      - @response_sets.each do |response_set| 
+      -# response_formatter = ReportFormatter.new(q, @responses)
+      -# @response_sets.each do |response_set|
         - @responses.where(question_id: q.id, response_set_id: response_set).each do |r|
           %tr
             %td= r.response_set.report_user_name

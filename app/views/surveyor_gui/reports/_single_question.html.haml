@@ -1,3 +1,6 @@
+-# Assumes the following variables:
+  q = the question being displayed
+-#
 = render "surveyor_gui/shared/question_number", q: q
 - if q.display_type == 'label'
   = render "surveyor_gui/shared/new_line"

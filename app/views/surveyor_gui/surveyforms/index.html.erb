@@ -25,6 +25,7 @@
       <%= link_to t('surveyor_gui.surveyforms.index.clone'), clone_survey_surveyform_path(survey) %>&nbsp
       <%= link_to t('surveyor_gui.surveyforms.index.destroy'), survey, data: { confirm: 'Are you sure?' }, :method => :delete %>&nbsp;
       <%= link_to t('surveyor_gui.surveyforms.index.summary_report'), report_path(survey) %> &nbsp;
+      <%= link_to t('surveyor_gui.surveyforms.index.view_response_counts'), all_responses_report_path(survey) %> &nbsp;
       <%= link_to t('surveyor_gui.surveyforms.index.view_responses') , responses_path(id: survey) %></td>
     </tr>
   <% end %>

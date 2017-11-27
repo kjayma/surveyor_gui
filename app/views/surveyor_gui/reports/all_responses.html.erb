@@ -1,0 +1,221 @@
+<% content_for :javascript_for_view do %>
+  <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<% end %>
+
+<div class="<%= controller_name %>-<%= action_name %>" %>
+  <br/>
+  <div class="column3">
+    <div class="shadebox round surveyor_gui_report">
+      <div id="Survey">
+        <a id="survey-top" href=""></a>
+
+        <h1 class="round-top"><%= @title %></h1>
+
+        <h2><%= @survey.title %></h2>
+
+        <table class='survey-data'>
+
+          <% @question_no = 1 %>
+
+          <% @sections.each do |survey_section| %>
+
+            <tr <%= record_id_class(survey_section) %> >
+
+              <% if @show_section_titles %>
+                <td><h3><%= survey_section.title %></h3>
+                </td>
+              <% end %>
+
+              <td>
+                <table class="questions">
+
+                  <% survey_section.questions.each do |question| %>
+
+                    <% rpt_class = question.repeater? ? "repeater" : "non_repeater" %>
+
+                    <tr>
+                      <td>
+
+                        <% if question.part_of_group? %>
+                          <%= render 'question_in_group', question: question %>
+                        <% else %>
+
+                          <table class="single-question">   <%# this = single_question.html.haml : %>
+
+                            <tr <%= record_id_class(question, classes: [rpt_class]) %> >
+                              <td class="spacer">&nbsp;</td>
+
+                              <%= render 'simple_q_name_number', question: question %>
+                            </tr>
+
+                            <%# if the question is really just a label just put a blank line, else display it all: %>
+                            <% if question.display_type == 'label' %>
+                              <%= render "surveyor_gui/shared/new_line" %>
+                            <% else %>
+                              <%= render "graphs", q: question %>
+
+                              <%# display the info based on the question_type_id %>
+                              <% if [:pick_one, :pick_any, :dropdown, :number, :date, :datetime, :time, :stars, :slider, :string, :box].include? question.question_type_id %>
+                                <%= render "surveyor_gui/shared/new_line" %>
+
+
+                                <% @question_no += 1 if question.is_numbered? && !question.part_of_group? %>
+
+
+                                <% if question.question_type_id == :stars %>
+                                  <%= render "surveyor_gui/shared/stars_report_data", q: question, toggle: true %>
+
+                                <% elsif [:number, :date, :datetime, :time].include? question.question_type_id %>
+                                  <%# render "surveyor_gui/shared/report_data", q: q, toggle: true %>
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                      <table class="report_data_function">
+                                        <% response_formatter = ReportFormatter.new(question, @responses) %>
+                                        <% if question.question_type_id == :numbers %>
+                                          <tr>
+                                            <td style="font-weight:bold"><%= I18n.t('surveyor_gui.total') %></td>
+                                            <td class="table_number">
+                                              <%= question.prefix %>
+                                              <br>
+                                              <%= response_formatter.stats(:sum) %>
+                                              <br>
+                                              <%= question.suffix %>
+                                            </td>
+                                          </tr>
+                                        <% end %>
+                                        <tr>
+                                          <td style="font-weight:bold"><%= I18n.t('surveyor_gui.min') %></td>
+                                          <td class="table_number">
+                                            <%= question.prefix %>
+                                            <br>
+                                            <%= response_formatter.stats(:min) %>
+                                            <br>
+                                            <%= question.suffix %>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style="font-weight:bold"><%= I18n.t('surveyor_gui.max') %></td>
+                                          <td class="table_number">
+                                            <%= question.prefix %>
+                                            <br>
+                                            <%= response_formatter.stats(:max) %>
+                                            <br>
+                                            <%= question.suffix %>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td style="font-weight:bold"><%= I18n.t('surveyor_gui.average') %></td>
+                                          <td class="table_number">
+                                            <%= question.prefix %>
+                                            <br>
+                                            <%= response_formatter.stats(:average) %>
+                                            <br>
+                                            <%= question.suffix %>
+                                          </td>
+                                        </tr>
+
+                                      </table>
+                                      <p>all responses would be here.</p>
+                                    </td>
+                                  </tr>
+
+                                <% elsif question.pick=='any' || question.pick=='one' %>
+                                  <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                      <table class="answers-count">
+                                        <thead>
+                                        <tr>
+                                          <th style="font-weight:bold;"><%= I18n.t('surveyor_gui.answer') %></th>
+                                          <th style="font-weight:bold;"><%= I18n.t('surveyor_gui.count') %></th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <% question.answers.select(&:not_comment?).each do |answer| %>
+                                          <tr class="answer-<%= answer.id %>">
+                                            <td class="answer"><%= answer.text %></td>
+                                            <td class="count"><%= @question_answers_counts[question.id][answer.id] %></td>
+                                          </tr>
+                                        <% end %>
+                                        </tbody>
+
+                                      </table>
+
+                                      <%= render 'surveyor_gui/shared/every_response_for_q',
+                                                 responses: @responses,
+                                                 response_sets: @response_sets,
+                                                 question: question,
+                                                 q_answers: question.answers,
+                                                 q_responses: @responses.select { |r| r.question_id == question.id },
+                                                 toggle: true
+
+                                      %>
+                                    </td>
+                                  </tr>
+
+
+                                <% elsif !question.repeater? %>
+                                  <%# render "surveyor_gui/shared/report_data", q: q, toggle: true %>
+                                  <p>all responses would be here.</p>
+                                <% end %>  <%# if question.question_type_id == :stars ....%>
+
+
+
+
+                                <%= render "surveyor_gui/shared/new_line" %>
+
+                              <% elsif question.question_type_id == :file %>
+                                <tr>
+                                  <td>&nbsp;</td>
+                                  <td>&nbsp;</td>
+                                  <td><%= I18n.t('surveyor_gui.reports.q_used_for_uploads') %> </td>
+                                </tr>
+                                <%= render "surveyor_gui/shared/new_line" %>
+                              <% end %>
+
+                            <% end %> <%# end if .. else for question.display_type == 'lable' %>
+                          </table>  <%# end table class="single-question"  %>
+
+
+                        <% end %>
+                      </td>
+                    </tr>
+
+
+                  <% end %> <%# survey_section.questions) do |question|  %>
+                </table>
+
+              </td>
+            </tr>
+          <% end %>  <%# end  content_for(:tr, @survey.survey_sections) do %>
+
+        </table>  <%#  end table survey-data %>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<script language="javascript" type="text/javascript">
+  function showHideId(elementId) {
+
+      if (document.getElementById) {
+          var element = document.getElementById(elementId);
+          elem_display = element.style.display;
+          if (elem_display === undefined ||  elem_display === '' ||  elem_display === 'none' ) {
+             element.style.display = 'inherit';
+          } else  {
+              element.style.display = 'none';
+          }
+      }
+      return false;
+  }
+</script>

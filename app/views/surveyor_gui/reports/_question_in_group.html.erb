@@ -1,0 +1,49 @@
+<%# outer table CSS so that a question can be displayed as part of a group                     %>
+<%# Assumes the following variables:                                                           %>
+<%#  question = the current question                                                          %>
+<%#  @question_no = the current question number                                                %>
+<%#  @question_group = nil | the question group being worked with (will fetch it if it's nil)  %>
+
+
+<% @question_group = @question_group || QuestionGroupTracker.new(question.question_group_id) %>
+
+<% if @question_group.check_for_new_group(question) %>
+  <% if ["default", "inline", "repeater", "grid"].include? question.question_group.display_type %>
+    <table class="question-group">
+      <tr>
+        <td>&nbsp;</td>
+        <td colspan="3">
+          <%= @question_no.to_s + ") " + question.question_group.text %>
+          <% @question_no += 1 %>
+        </td>
+      </tr>
+
+
+      <% if ["default", "inline", "repeater"].include? question.question_group.display_type %>
+        <tr>
+          <td> &nbsp;</td>
+          <td>
+            <% if question.question_group.display_type == "repeater" %>
+              <%= render "repeater", question_group: question.question_group %> <%# renders a table %>
+            <% end %>
+
+            <% question.question_group.questions.each do |group_question| %>
+              <table class="single-question">
+                <%= render "single_question", q: group_question %> <%# renders a <tr> %>
+              </table>
+            <% end %>
+
+          </td>
+        </tr>
+
+      <% elsif [:grid_one, :grid_any].include? question.question_type_id %>
+        <%= render "grid", question_group: question.question_group, question_type: question.question_type_id %>  <%# renders a <tr> %>
+      <% elsif question.question_type_id == :grid_dropdown %>
+        <%= render "grid_dropdown", question_group: question.question_group %>  <%# renders a <tr> %>
+      <% end %>
+
+    </table>
+
+
+  <% end %>
+<% end %>

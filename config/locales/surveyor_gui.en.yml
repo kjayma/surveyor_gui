@@ -111,16 +111,21 @@ en:
 
       show:
         title: "Showing %{responses_title}"
-        no_response_for_q: "No response / not applicable"
+        no_response_for_q: &no_response_for_q "No response / not applicable"
         error:
           response_not_found: "Response not found"
           survey_not_found: *survey_not_found
+
+      all_responses_report:
+        title: 'All responses for all questions and all their answers'
 
 
     surveyforms:
       clone_survey: "Clone survey"
       success: "Successfully created survey, questionnaire, or form."
       error: "Could not clone the survey, questionnaire, or form."
+
+      show_hide_responses: "show / hide responses"
 
       index:
         title: Title
@@ -132,8 +137,10 @@ en:
         clone: Duplicate
         destroy: Delete
         summary_report: Responses Summary
-        view_responses: "View All Responses*"
-        all_responses_warning: "* Viewing all responses can take a few minutes to generate because it must gather every single piece of data."
+        view_response_counts: "View all responses for all questions and all answers*"
+        view_responses: "View Each Visitor's Responses  Visa varje besökares reaktioner"
+        all_responses_warning: "Viewing all responses may take a few minutes to generate because it must collect each individual piece of data."
+
 
       destroy:
         success: "Successfully destroyed survey"

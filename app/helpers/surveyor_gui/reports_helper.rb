@@ -16,4 +16,12 @@ module SurveyorGui::ReportsHelper
     (responses.where(:question_id => q.id).where('integer_value > ?',0).collect(&:integer_value).average * 2).round
   end
 
+
+
+  def record_id_class(record, classes: [])
+
+    "id=#{dom_id(record)} class=#{dom_class(record)} #{classes.join(' ')}"
+  end
+
+
 end

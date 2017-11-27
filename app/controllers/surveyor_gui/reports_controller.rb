@@ -96,7 +96,7 @@ class SurveyorGui::ReportsController < ApplicationController
       v_ka_count.each do | each_v |
         a_id = each_v.first[1]
         count = each_v.last
-        puts "  @question_answers_counts[k_qid =  #{@question_answers_counts[k_qid]}"
+
         @question_answers_counts.fetch(k_qid){ |ques_id| @question_answers_counts[ques_id] = {}}
         @question_answers_counts[k_qid].fetch(a_id){ |ans_id| @question_answers_counts[k_qid][ans_id] = count  }
       end

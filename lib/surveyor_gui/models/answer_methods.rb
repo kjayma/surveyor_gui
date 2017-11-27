@@ -19,6 +19,10 @@ module SurveyorGui
         part == :pre ? text.split("|",2)[0] : (part == :post ? text.split("|",2)[1] : text)
       end
 
+      def not_comment?
+        is_comment.nil? || is_comment == false
+      end
+
     end
   end
 end

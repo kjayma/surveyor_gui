@@ -127,11 +127,13 @@ sv:
 
 
     surveyforms:
-      clone_survey: "Duplicera undersökningen"
-      clone_success: "Framgångsrikt skapad undersökning, frågeformulär eller formulär."
-      clone_error: "Kunde inte klona undersökningen, frågeformuläret eller formuläret."
 
       show_hide_responses: "visa / dölja respons"
+
+      clone:
+        title: "Duplicera undersökningen"
+        success: "Framgångsrikt skapad undersökning, frågeformulär eller formulär."
+        error: "Kunde inte klona undersökningen, frågeformuläret eller formuläret."
 
       index:
         title: titel
@@ -148,6 +150,8 @@ sv:
 
         all_responses_warning: "* Visa alla reaktion kan ta några minuter att generera eftersom det måste samla varje enskild data."
 
+      show:
+        title: "Visa undersökning"
 
       destroy:
         success: "Framgångsrikt förstörd undersökning."
@@ -156,13 +160,16 @@ sv:
           could_not_delete: "Undersökningen kunde inte raderas."
 
       create:
+        title: "Skapa undersökning"
         success: "Framgångsrikt skapad undersökning."
         error: "Kunde inte skapa undersökningen."
 
       edit:
+        title: "Redigera enkäten"
         already_has_responses: *responses_already
 
       update:
+        title: "Uppdatera undersökning"
         success: "Uppdaterat undersökningsformuläret."
         error: "Det gick inte att spara ändringarna"
 

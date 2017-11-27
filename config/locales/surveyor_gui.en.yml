@@ -121,9 +121,11 @@ en:
 
 
     surveyforms:
-      clone_survey: "Clone survey"
-      success: "Successfully created survey, questionnaire, or form."
-      error: "Could not clone the survey, questionnaire, or form."
+
+      clone:
+        title: "Clone survey"
+        success: "Successfully created survey, questionnaire, or form."
+        error: "Could not clone the survey, questionnaire, or form."
 
       show_hide_responses: "show / hide responses"
 
@@ -141,22 +143,28 @@ en:
         view_responses: "View Each Visitor's Responses  Visa varje besökares reaktioner"
         all_responses_warning: "Viewing all responses may take a few minutes to generate because it must collect each individual piece of data."
 
+      show:
+        title: "Show survey"
 
       destroy:
-        success: "Successfully destroyed survey"
+        success: "Successfully deleted the survey"
+        error:
         error:
           has_responses: "This survey has responses and can not be deleted."
           could_not_delete: "Survey could not be deleted."
 
       create:
+        title: "Create Survey"
         success: "Successfully created the survey."
         error: "Could not create the survey"
 
       edit:
+        title: "Edit Survey"
         already_has_responses: *responses_already
 
 
       update:
+        title: "Update Survey"
         success: "Successfully saved the survey form changes."
         error: "Could not save the changes."
 

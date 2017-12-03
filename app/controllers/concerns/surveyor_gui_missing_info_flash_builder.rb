@@ -10,7 +10,7 @@ module SurveyorGui
 
     # html for each part of the flash message that is needed when questions
     # are not answered.
-    # This will return a string that have been put together using .join and the
+    # This will return a string that has been put together using .join and the
     # separator passed in.
     #  This method is here so that it can be easily overridden by the main app,
     #  and it is broken down into discrete pieces so that you can easily

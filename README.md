@@ -1,7 +1,7 @@
 surveyor_gui 
 ============
 
-current version =  0.2.3
+current version =  0.2.6
 
 Some differences with the surveyor_gui fork:
 

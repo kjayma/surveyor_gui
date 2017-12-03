@@ -101,7 +101,7 @@ en:
       index:
         title: "Survey Results"
         responses: "Responses"
-        response_set_access_code: "Response Grupp Access Code"
+        response_set_access_code: "Response Set Access Code"
         no_responses_yet: "Sorry, no responses available yet. Ask some people to take the survey."
 
       preview:
@@ -148,7 +148,6 @@ en:
 
       destroy:
         success: "Successfully deleted the survey"
-        error:
         error:
           has_responses: "This survey has responses and can not be deleted."
           could_not_delete: "Survey could not be deleted."

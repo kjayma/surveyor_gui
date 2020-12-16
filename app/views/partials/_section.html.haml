@@ -1,4 +1,4 @@
-= div_for @section, :class => @section.custom_class do
+%div{class: "@section.custom_class", id: "section_#{@section.id}" }
   %span.title=  #@section.translation(I18n.locale)[:title]
   - qs ||= []
   - (questions = @section.questions).each_with_index do |q, i|

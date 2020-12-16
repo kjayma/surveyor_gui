@@ -1,5 +1,5 @@
 <% @question_no = @question_no + 1 if f.object.id && f.object.question_type_id != :label -%>
-<%= div_for(f.object) do %>
+<div id='<%="#{f.object.id}"%>'>
   <fieldset class="
     fields
     questions
@@ -23,7 +23,7 @@
         <span class="question_button_bar">
 
           <button type="button" id="edit_question"
-             data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(id: f.object.survey_section.survey.id, 
+             data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(id: f.object.survey_section.survey.id,
               question_id:  f.object.id)%>"
              data-edit_question_url="<%=surveyor_gui.edit_question_url(f.object.id)%>"
              data-question_id="<%= f.object.id.to_s %>"
@@ -31,7 +31,7 @@
 
           <button type="button" id="cut_question"
              data-cut_question_surveyform_url="<%=surveyor_gui.cut_question_surveyform_url(
-              id:           f.object.survey_section.survey.id, 
+              id:           f.object.survey_section.survey.id,
               question_id:  f.object.id)%>"
              data-question_already_cut="<%= session[:cut_question] %>"
           >Cut Question</button> <%# -# FIXME I18n  %>
@@ -39,7 +39,7 @@
           <button type="button" id="delete_question"
              data-question_url="<%=surveyor_gui.question_url(f.object.id)%>"
              data-replace_form_surveyform_url="<%= surveyor_gui.replace_form_surveyform_url(
-              id:                 f.object.survey_section.survey.id, 
+              id:                 f.object.survey_section.survey.id,
               survey_section_id:  f.object.survey_section_id) %>"
           >Delete Question</button> <%# -# FIXME I18n  %>
 
@@ -63,7 +63,7 @@
             <% else -%>
                 <button type="button" id="add_logic"
                   data-replace_question_url="<%=surveyor_gui.replace_question_surveyform_path(
-                    id:           f.object.survey_section.survey.id, 
+                    id:           f.object.survey_section.survey.id,
                     question_id:  f.object.id)%>"
                   data-new_dependency_url="<%= surveyor_gui.new_dependency_url(:id=>f.object.id) %>"
                   data-question_id="<%= f.object.id.to_s %>"
@@ -105,4 +105,4 @@
     </div>
 
   <% end %>
-<% end %>
+</div>>

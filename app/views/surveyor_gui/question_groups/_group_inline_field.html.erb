@@ -1,21 +1,21 @@
 <%= simple_fields_for :question_group, @question_group do |qg| %>
   <div class="sortable_group_questions" id="sortable_question<%= @survey_section_id.to_s %>">
       <%= qg.simple_fields_for :questions do |q| %>
-        <%= div_for(q.object, class: "group_inline_question") do %>
+        <div class="group_inline_question" id='<%="question_object_#{q.object.id}"%>'>
           <div class="handle"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></div>
           <%= q.hidden_field :survey_section_id, value: @survey_section_id %>
           <%= q.hidden_field :id %>
           <%= q.input :text, label: false, as: :string, wrapper_html:{class: "question"} %>
           <%= q.input :question_type_id, label: false, collection: QuestionType.all.map{|t|[t.text, t.id]}[0..13].uniq.select{|c| [:box,:number,:date,:string,:dropdown,:pick_one,:pick_any, :slider, :stars, :file].include? c[1]}, wrapper_html:{class: "question"}   %>
           <%= q.input :answers_textbox, label: false, as: :text, wrapper_html:{class: "question group_answers_textbox"} %>
-          
+
           <%= q.hidden_field :display_order %>
           <%= q.hidden_field :display_type %>
           <%= q.hidden_field :pick %>
           <span class="delete_group_inline_question">
             <%= link_to_remove_fields "remove", q, ".group_inline_question" %>
           </span>
-        <% end -%>
-      <% end -%>
+        </div>>
+      <% end %>
   </div>
-<% end -%>
+<% end %>

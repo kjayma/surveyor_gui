@@ -2,7 +2,7 @@
 <%= simple_fields_for 'question', @questions do |f| %>
   <%= f.input :answers_textbox, :as => :text, :wrapper_html => {:class=>'answers_collection'}, :label => false %>
   <!--  <%= f.simple_fields_for :answers do |a| %>
-    <%= div_for(a.object) do %>
+    <div class="answer", id='<%="answer_#{a.id}"%>'>
       <div id='original_choice', data-original_choice="<%= a.object.original_choice %>"></div>
       <div class="fields vertical_collection" style='display: table;'>
         <span class='fl ui-icon ui-icon-arrowthick-2-n-s answer_handle'>
@@ -15,9 +15,9 @@
           <%= link_to_remove_fields "remove", a %>
         </span>
       </div>
-    <% end %>
-  <% end -%>
+    </div>
+  <% end %>
   -->
-  
+
   <%= render "answer_options", f: f %>
 <% end -%>

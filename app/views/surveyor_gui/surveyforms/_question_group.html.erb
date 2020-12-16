@@ -1,5 +1,5 @@
 <% @question_no = @question_no + 1 if f.object.id && f.object.question_type != 'Label'-%>
-<%= div_for(f.object) do %>
+<div id='<%="#{f.object.id}" %>'>
   <fieldset class="
     fields
     questions
@@ -113,4 +113,4 @@
     </div>
 
   <% end %>
-<% end %>
+</div>

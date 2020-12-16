@@ -25,9 +25,11 @@ namespace :gui_testbed do
   task :generate do
     sh "bundle exec rails new testbed --skip-bundle" # don't run bundle install until the Gemfile modifications
 
+
     chdir('testbed') do
       gem_file_contents = File.read('Gemfile')
-      gem_file_contents.sub!(/^(gem 'rails'.*)$/, %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'surveyor', github: 'NUBIC/surveyor'})
+      gem_file_contents.sub!(/^(gem 'rails'.*)$/,
+                             %Q{ \\1\nplugin_root = File.expand_path('../..', __FILE__)\ngem 'surveyor_gui', :path => plugin_root\ngem 'therubyracer'\ngem 'surveyor', '>= 1.6.0', git: 'https://github.com/weedySeaDragon/ae-surveyor.git'})
 
       File.open('Gemfile', 'w'){|f| f.write(gem_file_contents) }
 

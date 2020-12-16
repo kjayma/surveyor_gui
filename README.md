@@ -1,16 +1,16 @@
-surveyor_gui 
+surveyor_gui
 ============
 
-current version =  0.2.3
+current version =  0.3.0
 
 Some differences with the surveyor_gui fork:
 
 * surveyor:  uses the [weedySeaDragon/ae-surveyor](https://github.com/weedySeaDragon/ae-surveyor) fork of the [NUBIC **surveyor** gem](https://nubic.github.io/surveyor/)
   - is recently updated
 
- 
-* uses jquery-ui-rails instead of jquery-ui-sass-rails 
- 
+
+* uses jquery-ui-rails instead of jquery-ui-sass-rails
+
 * fixes some RSpec testing issues:
   - doesn't install this _and_ surveyor (which causes Surveyor to show up twice in the routes.rb file)
   - updates to RSpec 3+  (including code changes under `/spec/`). Note that `/spec/features` still fail
@@ -20,16 +20,17 @@ Some differences with the surveyor_gui fork:
 
 
 ## Requirements
-- ruby 2.4.0
+- ruby 2.5.8
+- rails >= 5.0
 
 
 ### Issues and Notes
 
-- surveryor_gui adds some answer formats, notably  _grids_ 
-  
+- surveryor_gui adds some answer formats, notably  _grids_
+
   ```
   Question #q: Mark your first, second, and third choice for your favorite ice cream flavors
-  
+
   | 1st Choice                    | 2nd Choice                    | 3rd choice  |
   | ◻︎ vanilla                     | ◻︎ vanilla                     | ◻︎ vanilla                     |
   | ◻︎ chocolate                   | ◻︎ chocolate                   | ◻︎ chocolate                   |
@@ -37,15 +38,15 @@ Some differences with the surveyor_gui fork:
   | ◻︎ chocolate-chip cookie dough | ◻︎ chocolate-chip cookie dough | ◻︎ chocolate-chip cookie dough |
   | ◻︎ mint chocolate chip         | ◻︎ mint chocolate chip         | ◻︎ mint chocolate chip         |
   | ◻︎ kale                        | ◻︎ kale                        | ◻︎ kale                        |
-  
+
   ```
-  
-  
+
+
    - Grids are accomplished by creating a _question group_:  each **row** is made into a separate _question_ and all of the questions for all of the rows belong to that _question group._
      It looks like this is just 1 question with a grid (rows and columns) of different possible answers,
      but it's really 1 _question group_ that has 3 questions.
-     
-    
+
+
    - Grid questions do not create "well formed" parameters when a user selects (and their browser sends) a response. I had to modify the `surveyor` gem (my version of it) to handle this.
 
 
@@ -71,7 +72,7 @@ Builds on the popular Surveyor gem
 
 Surveyor_gui is built over Surveyor gem.
 
-Surveyor does some things really well.  Surveyor can be used to build rich surveys with a wide variety of questions types, and it provides a web page for users to take those surveys.  However, it lacks two key abilities - the ability to build and edit surveys using a browser and to report on survey results without additional coding.  In order to build a survey using Surveyor, you need to create a text file using Surveyor's DSL, and then call a Rake task to parse it.  
+Surveyor does some things really well.  Surveyor can be used to build rich surveys with a wide variety of questions types, and it provides a web page for users to take those surveys.  However, it lacks two key abilities - the ability to build and edit surveys using a browser and to report on survey results without additional coding.  In order to build a survey using Surveyor, you need to create a text file using Surveyor's DSL, and then call a Rake task to parse it.
 
 The lack of a gui front-end and reports limits the utility of surveyor for certain applications.
 
@@ -174,7 +175,7 @@ Survey.find(1).response_set.all.each{|r| r.destroy} ). Use appropriate caution!
 
 Surveys may be saved as templates.  This allows them to be cloned when creating a new survey (cloning is a pending feature).  It is
 possible to mark certain parts of a survey as unmodifiable so that they will always be present when a survey is cloned.
-  
+
 A template library feature is pending.
 
 ## Test environment
@@ -196,7 +197,7 @@ Before contributing, please run the tests:
 
 ## Reports
 
-Surveyor_gui now provides reports!  
+Surveyor_gui now provides reports!
 
 You can see a report of all survey responses, or view an individual response.
 
@@ -204,7 +205,7 @@ Highcharts.js is used for graphics, and must be licensed for commercial use.  Fu
 
 To see reports, try using the "Preview Reports" button on the survey editor, or take the survey and try
 "localhost:3000/surveyor_gui/reports/:id/show" where :id is the survey id.  Preview reports will create some dummy
-responses using randomized answers.  
+responses using randomized answers.
 
 You can also view an individual response at "localhost:3000/surveyor_gui/results/:id/show".
 
@@ -224,7 +225,7 @@ Surveyor_gui reports assume there will be a unique user for eash Survey response
 If the response set has a user id, (which will be the case if you've setup Devise in the typical way) it will identify the response by user_id.  If no user_id is available, it will
 default to the response_set.id.
 
-You may want to identify users by something other than id on reports.  This can be done easily.  
+You may want to identify users by something other than id on reports.  This can be done easily.
 
 Surveyor_gui creates a response_set_user.rb file in your app/models directory.  Edit it to define the identifier you would like to use for users in reports.  For instance, if your user model is User, and you would like to see the user's email address on reports, edit the file as follows...
 
@@ -263,7 +264,7 @@ If you wish to customize the SurveyorController, add the following snippet to th
 
      include Surveyor::SurveyorControllerMethods
      include SurveyorControllerCustomMethods
- 
+
 These statements are necessary if calling super from within your customized methods.  Be sure to insert the statements in the order shown above.
 
 If customizing models, you'll need to include both the Surveyor and Surveyor_gui libraries.  For instance, to customize question.rb, start with the following shell:
@@ -273,7 +274,7 @@ If customizing models, you'll need to include both the Surveyor and Surveyor_gui
       include SurveyorGui::Models::QuestionMethods
     end
 
-Take a look at the surveyor_gui/app/models directory for examples.    
+Take a look at the surveyor_gui/app/models directory for examples.
 
 ## Surveyor
 

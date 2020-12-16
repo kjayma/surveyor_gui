@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    surveyor_gui (0.2.17)
+    surveyor_gui (0.2.18)
       carrierwave
       chartkick
       colorbox-rails (~> 0.1)

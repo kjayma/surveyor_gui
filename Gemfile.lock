@@ -1,7 +1,20 @@
+GIT
+  remote: https://github.com/weedySeaDragon/ae-surveyor.git
+  revision: de6984db8b9a6a92141392b60cc6f6a811266dcc
+  specs:
+    surveyor (1.6.6)
+      formtastic (>= 2.2.1)
+      haml (>= 4.0)
+      mustache (~> 0.99)
+      rabl (~> 0.6)
+      rails (~> 5)
+      sass
+      uuidtools (~> 2.1)
+
 PATH
   remote: .
   specs:
-    surveyor_gui (0.2.18)
+    surveyor_gui (0.3.0)
       carrierwave
       chartkick
       colorbox-rails (~> 0.1)
@@ -14,18 +27,6 @@ PATH
       simple_form (~> 3.3)
       surveyor (>= 1.6)
       will_paginate (~> 3.0)
-
-PATH
-  remote: /Users/ashleyengelund/github/ae/ae-surveyor
-  specs:
-    surveyor (1.6.4)
-      formtastic (>= 2.2.1)
-      haml (>= 4.0)
-      mustache (~> 0.99)
-      rabl (~> 0.6)
-      rails (~> 5)
-      sass
-      uuidtools (~> 2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -116,7 +117,7 @@ GEM
       actionpack (>= 3.2.13)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    haml (5.2.0)
+    haml (5.2.1)
       temple (>= 0.8.0)
       tilt
     i18n (1.8.5)
@@ -282,7 +283,7 @@ DEPENDENCIES
   rspec-retry
   sass-rails
   sqlite3
-  surveyor!
+  surveyor (>= 1.6.6)!
   surveyor_gui!
   uglifier (>= 1.0.3)
   web-console (>= 2.0)

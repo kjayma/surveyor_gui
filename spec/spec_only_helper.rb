@@ -10,7 +10,7 @@ require 'json_spec'
 require 'database_cleaner'
 require 'rspec/retry'
 
-require 'factory_girl'
+require 'factory_bot'
 
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -50,7 +50,7 @@ RSpec.configure do |config|
   config.order = "random"
 
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
 
 

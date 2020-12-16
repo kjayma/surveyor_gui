@@ -12,49 +12,49 @@ RSpec.configure do |config|
 end
 describe "surveyor_gui/surveyforms/edit.html.erb" do
   include CapybaraHelper
-  let(:surveyform){ FactoryGirl.create(:surveyform) }
-  let(:ss){ FactoryGirl.create(:survey_section, :surveyform => surveyform, :title => "Rooms", :display_order => 0)}
-  let(:question){ FactoryGirl.create(:question, :survey_section => ss, display_order: 0 )}  
-  let(:answer){ FactoryGirl.create(:answer, :question => question)}
-  let(:question1){ FactoryGirl.create(
-    :question, 
-    survey_section: ss, 
+  let(:surveyform){ FactoryBot.create(:surveyform) }
+  let(:ss){ FactoryBot.create(:survey_section, :surveyform => surveyform, :title => "Rooms", :display_order => 0)}
+  let(:question){ FactoryBot.create(:question, :survey_section => ss, display_order: 0 )}
+  let(:answer){ FactoryBot.create(:answer, :question => question)}
+  let(:question1){ FactoryBot.create(
+    :question,
+    survey_section: ss,
     text: 'What rooms do you prefer?',
     question_type_id: "pick_one",
     answers_textbox: "Standard\nDouble\nDeluxe",
     display_order: 1
-   ) }  
-   
-  let(:qg) {FactoryGirl.create(:question_group, display_type: 'grid', text: 'Rate the meals.') }
-  let(:qg2){FactoryGirl.create(:question_group, display_type: 'grid', text: 'Pick your favorite sport') }
-  let(:c1) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Spring", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
-  let(:c2) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Summer", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
-  let(:c3) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Fall", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
-  let(:c4) {FactoryGirl.create(:column, question_group_id: qg2.id, text: "Winter", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
-  let(:question2){ FactoryGirl.create(
-    :question, 
+   ) }
+
+  let(:qg) {FactoryBot.create(:question_group, display_type: 'grid', text: 'Rate the meals.') }
+  let(:qg2){FactoryBot.create(:question_group, display_type: 'grid', text: 'Pick your favorite sport') }
+  let(:c1) {FactoryBot.create(:column, question_group_id: qg2.id, text: "Spring", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
+  let(:c2) {FactoryBot.create(:column, question_group_id: qg2.id, text: "Summer", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball" )}
+  let(:c3) {FactoryBot.create(:column, question_group_id: qg2.id, text: "Fall", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
+  let(:c4) {FactoryBot.create(:column, question_group_id: qg2.id, text: "Winter", answers_textbox: "Football\nBaseball\nHockey\nSoccer\nBasketball")}
+  let(:question2){ FactoryBot.create(
+    :question,
     text: 'Rate the meals.',
-    survey_section: ss, 
+    survey_section: ss,
     question_group: nil,
     question_type_id: "grid_one",
     grid_columns_textbox: "Good\nBad\nUgly",
     grid_rows_textbox: "Breakfast\nLunch\nDinner",
     display_order: 4
-   ) }    
+   ) }
 
-  let(:question5){ FactoryGirl.create(:question, :survey_section => ss, text: "What brand of ketchup do they use?", display_order: 7 )}    
-  let(:answer1){FactoryGirl.create(:answer, :question => question5)}
-  let(:question6) { FactoryGirl.create(
-    :question, 
-    survey_section: ss, 
+  let(:question5){ FactoryBot.create(:question, :survey_section => ss, text: "What brand of ketchup do they use?", display_order: 7 )}
+  let(:answer1){FactoryBot.create(:answer, :question => question5)}
+  let(:question6) { FactoryBot.create(
+    :question,
+    survey_section: ss,
     question_group: qg2,
     question_type_id: "grid_dropdown",
     grid_rows_textbox: "TV\nArena",
     text: "Pick your favorite sport:",
     display_order: 8
-  ) }    
-  let(:number_question) {FactoryGirl.create(
-    :question, 
+  ) }
+  let(:number_question) {FactoryBot.create(
+    :question,
     survey_section: ss,
     text: "How much do you spend on Cheese Doodles?",
     question_type_id: "number",
@@ -62,7 +62,7 @@ describe "surveyor_gui/surveyforms/edit.html.erb" do
     prefix: "USD",
     display_order: 10
   ) }
-  
+
   before do
     surveyform.save
     surveyform.reload
@@ -83,8 +83,8 @@ describe "surveyor_gui/surveyforms/edit.html.erb" do
     number_question.reload
     assign(:surveyform, surveyform)
     assign(:question_no, 0)
-  end    
-  
+  end
+
   it "renders a form" do
     render
     expect(response).to have_selector("form")
@@ -94,14 +94,14 @@ describe "surveyor_gui/surveyforms/edit.html.erb" do
     render
     expect(response).to match(/1\) What is your favorite color?/)
   end
-  
+
   it "shows multiple choice questions" do
     render
     expect(response).to have_selector("input[type='radio'][value='Standard']")
     expect(response).to have_selector("input[type='radio'][value='Double']")
     expect(response).to have_selector("input[type='radio'][value='Deluxe']")
   end
-  
+
   it "shows grid questions" do
     render
     expect(response).to match (/Rate the meals/)
@@ -109,18 +109,18 @@ describe "surveyor_gui/surveyforms/edit.html.erb" do
   end
 
   it "shows grid dropdowns" do
-    render    
+    render
     expect(response).to match(/5\) Pick your favorite sport.*Spring.*Summer.*Fall.*Winter.*(?<!\d\)\s)TV.*(?<!\d\)\s)Arena/m)
   end
-  
+
   it "maintains correct question numbering after grid questions" do
     render
     expect(response).to match(/4\) What brand of ketchup do they use?/)
   end
-  
+
   it "shows a prefix and suffix for number questions" do
     render
     expect(response).to match(/How much do you spend on Cheese Doodles?/)
   end
-  
+
 end

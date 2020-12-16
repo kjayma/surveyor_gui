@@ -2,173 +2,173 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe QuestionType do
-  let(:grid)    { FactoryGirl.create(:question_group, display_type: "grid") }
-  let(:inline)  { FactoryGirl.create(:question_group, display_type: "inline") }
-  let(:repeater){ FactoryGirl.create(:question_group, display_type: "inline") }
+  let(:grid)    { FactoryBot.create(:question_group, display_type: "grid") }
+  let(:inline)  { FactoryBot.create(:question_group, display_type: "inline") }
+  let(:repeater){ FactoryBot.create(:question_group, display_type: "inline") }
 
-  let(:textbox)         { FactoryGirl.create(
+  let(:textbox)         { FactoryBot.create(
                             :question,
                             pick:             "none",
                             display_type:     "default",
                             question_group_id: nil
                           )
                         }
-  let(:textbox_a)       { FactoryGirl.create(
+  let(:textbox_a)       { FactoryBot.create(
                             :answer,
                             question_id:    textbox.id,
                             response_class: :text
                           )
                         }
-  let(:text)            { FactoryGirl.create(
+  let(:text)            { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "default",
                            question_group_id: nil
                           )
                         }
-  let(:text_a)          { FactoryGirl.create(
+  let(:text_a)          { FactoryBot.create(
                             :answer,
                             question_id:    text.id,
                             response_class: :string
                           )
                         }
-  let(:float)           { FactoryGirl.create(
+  let(:float)           { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "default",
                            question_group_id: nil
                          )
                         }
-  let(:float_a)         { FactoryGirl.create(
+  let(:float_a)         { FactoryBot.create(
                             :answer,
                             question_id:    float.id,
                             response_class: :float
                           )
                         }
-  let(:integer)         { FactoryGirl.create(
+  let(:integer)         { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "default",
                            question_group_id: nil
                          )
                         }
-  let(:integer_a)       { FactoryGirl.create(
+  let(:integer_a)       { FactoryBot.create(
                             :answer,
                             question_id:    integer.id,
                             response_class: :integer
                           )
                         }
-  let(:date)            { FactoryGirl.create(
+  let(:date)            { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "default",
                            question_group_id: nil
                          )
                         }
-  let(:date_a)          { FactoryGirl.create(
+  let(:date_a)          { FactoryBot.create(
                             :answer,
                             question_id:    date.id,
                             response_class: :date
                           )
                         }
-  let(:file)            { FactoryGirl.create(
+  let(:file)            { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "default",
                            question_group_id: nil
                          )
                         }
-  let(:file_a)          { FactoryGirl.create(
+  let(:file_a)          { FactoryBot.create(
                             :answer,
                             question_id:    file.id,
                             response_class: :blob
                           )
                         }
-  let(:label)           { FactoryGirl.create(
+  let(:label)           { FactoryBot.create(
                            :question,
                            pick:             "none",
                            display_type:     "label",
                            question_group_id: nil
                          )
                         }
-  let(:pick_one)        { FactoryGirl.create(
+  let(:pick_one)        { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "default",
                            question_group_id: nil
                          )
                         }
-  let(:pick_any)        { FactoryGirl.create(
+  let(:pick_any)        { FactoryBot.create(
                            :question,
                            pick:             "any",
                            display_type:      "default",
                            question_group_id: nil
                          )
                         }
-  let(:pick_one_inline) { FactoryGirl.create(
+  let(:pick_one_inline) { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "default",
                            question_group_id: inline.id
                          )
                         }
-  let(:pick_any_inline) { FactoryGirl.create(
+  let(:pick_any_inline) { FactoryBot.create(
                            :question,
                            pick:             "any",
                            display_type:      "default",
                            question_group_id: inline.id
                          )
                         }
-  let(:dropdown)        { FactoryGirl.create(
+  let(:dropdown)        { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "dropdown",
                            question_group_id: nil
                          )
                         }
-  let(:slider)          { FactoryGirl.create(
+  let(:slider)          { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "slider",
                            question_group_id: nil
                          )
                         }
-  let(:stars)           { FactoryGirl.create(
+  let(:stars)           { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "stars",
                            question_group_id: nil
                          )
                         }
-  let(:grid_one)        { FactoryGirl.create(
+  let(:grid_one)        { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "default",
                            question_group_id: grid.id
                          )
                         }
-  let(:grid_any)        { FactoryGirl.create(
+  let(:grid_any)        { FactoryBot.create(
                            :question,
                            pick:             "any",
                            display_type:      "default",
                            question_group_id: grid.id
                          )
                         }
-  let(:grid_dropdown)   { FactoryGirl.create(
+  let(:grid_dropdown)   { FactoryBot.create(
                            :question,
                            pick:             "one",
                            display_type:      "dropdown",
                            question_group_id: grid.id
                          )
                         }
-  let(:group_inline)   { FactoryGirl.create(
+  let(:group_inline)   { FactoryBot.create(
                            :question,
                            pick:             "",
                            display_type:      "",
                            question_group_id: inline.id
                          )
                         }
-  let(:repeater)   { FactoryGirl.create(
+  let(:repeater)   { FactoryBot.create(
                            :question,
                            pick:             "",
                            display_type:      "",

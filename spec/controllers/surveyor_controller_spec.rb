@@ -6,9 +6,9 @@ describe SurveyorController, :type => :controller do
     @routes = Surveyor::Engine.routes
   end
 
-  let!(:survey)           { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
-  let!(:survey_beta)      { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
-  let!(:response_set)      { FactoryGirl.create(:response_set, :survey => survey, :access_code => "pdq")}
+  let!(:survey)           { FactoryBot.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
+  let!(:survey_beta)      { FactoryBot.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
+  let!(:response_set)      { FactoryBot.create(:response_set, :survey => survey, :access_code => "pdq")}
 
   before { ResponseSet.stub(:create).and_return(response_set) }
 
@@ -101,7 +101,7 @@ describe SurveyorController, :type => :controller do
       assigns[:survey].should == survey
     end
     it "assigns later survey_version" do
-      response_set_beta = FactoryGirl.create(:response_set, :survey => survey_beta, :access_code => "rst")
+      response_set_beta = FactoryBot.create(:response_set, :survey => survey_beta, :access_code => "rst")
       do_get :response_set_code => "rst"
       assigns[:response_set].should == response_set_beta
       assigns[:survey].should == survey_beta
@@ -111,9 +111,9 @@ describe SurveyorController, :type => :controller do
   context "#edit" do
     context "responses have been collected" do
       def do_get(params = {})
-        @survey = FactoryGirl.create(:survey, :title => "Alphabet Soup", :access_code => "alphasoup", :survey_version => 0)
-        @survey.sections = [FactoryGirl.create(:survey_section, :survey => @survey)]
-        @response_set = FactoryGirl.create(:response_set, :survey => @survey, :access_code => "foo")
+        @survey = FactoryBot.create(:survey, :title => "Alphabet Soup", :access_code => "alphasoup", :survey_version => 0)
+        @survey.sections = [FactoryBot.create(:survey_section, :survey => @survey)]
+        @response_set = FactoryBot.create(:response_set, :survey => @survey, :access_code => "foo")
         get :edit, {:survey_code => "alphasoup", :response_set_code => "foo"}.merge(params)
       end
       it "renders edit" do
@@ -131,13 +131,13 @@ describe SurveyorController, :type => :controller do
         response.should redirect_to(available_surveys_path)
       end
       it "assigns dependents if javascript not enabled" do
-        controller.stub(:get_unanswered_dependencies_minus_section_questions).and_return([FactoryGirl.create(:question)])
+        controller.stub(:get_unanswered_dependencies_minus_section_questions).and_return([FactoryBot.create(:question)])
         session[:surveyor_javascript].should be_nil
         do_get
         assigns[:dependents].should_not be_empty
       end
       it "does not assign dependents if javascript is enabled" do
-        controller.stub(:get_unanswered_dependencies_minus_section_questions).and_return([FactoryGirl.create(:question)])
+        controller.stub(:get_unanswered_dependencies_minus_section_questions).and_return([FactoryBot.create(:question)])
         session[:surveyor_javascript] = "enabled"
         do_get
         assigns[:dependents].should be_empty
@@ -148,8 +148,8 @@ describe SurveyorController, :type => :controller do
         assigns[:survey].should == @survey
       end
       it "assigns later survey_version" do
-        survey_beta.sections = [FactoryGirl.create(:survey_section, :survey => survey_beta)]
-        response_set_beta = FactoryGirl.create(:response_set, :survey => survey_beta, :access_code => "rst")
+        survey_beta.sections = [FactoryBot.create(:survey_section, :survey => survey_beta)]
+        response_set_beta = FactoryBot.create(:response_set, :survey => survey_beta, :access_code => "rst")
         do_get :response_set_code => "rst"
         assigns[:survey].should == survey_beta
         assigns[:response_set].should == response_set_beta

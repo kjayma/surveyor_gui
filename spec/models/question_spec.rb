@@ -2,7 +2,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Question do
-  let(:question){ FactoryGirl.create(:question) }
+  let(:question){ FactoryBot.create(:question) }
 
   context "when creating" do
     it "validation: is invalid without #text" do
@@ -30,7 +30,7 @@ describe Question do
       question.api_id.length.should == 36
     end
     it "#part_of_group? and #solo? are aware of question groups" do
-      question.question_group = FactoryGirl.create(:question_group)
+      question.question_group = FactoryBot.create(:question_group)
       question.solo?.should be_falsey
       question.part_of_group?.should be_truthy
 
@@ -41,9 +41,9 @@ describe Question do
   end
 
   context "with answers" do
-    let(:answer_1){ FactoryGirl.create(:answer, :question => question, :display_order => 3, :text => "blue")}
-    let(:answer_2){ FactoryGirl.create(:answer, :question => question, :display_order => 1, :text => "red")}
-    let(:answer_3){ FactoryGirl.create(:answer, :question => question, :display_order => 2, :text => "green")}
+    let(:answer_1){ FactoryBot.create(:answer, :question => question, :display_order => 3, :text => "blue")}
+    let(:answer_2){ FactoryBot.create(:answer, :question => question, :display_order => 1, :text => "red")}
+    let(:answer_3){ FactoryBot.create(:answer, :question => question, :display_order => 2, :text => "green")}
     before do
       [answer_1, answer_2, answer_3].each{|a| question.answers << a }
     end
@@ -63,8 +63,8 @@ describe Question do
   end
 
   context "with dependencies" do
-    let(:response_set){ FactoryGirl.create(:response_set) }
-    let(:dependency){ FactoryGirl.create(:dependency) }
+    let(:response_set){ FactoryBot.create(:response_set) }
+    let(:dependency){ FactoryBot.create(:dependency) }
     before do
       question.dependency = dependency
       dependency.stub(:is_met?).with(response_set).and_return true
@@ -94,10 +94,10 @@ describe Question do
 
   context "with translations" do
     require 'yaml'
-    let(:survey){ FactoryGirl.create(:survey) }
-    let(:survey_section){ FactoryGirl.create(:survey_section) }
+    let(:survey){ FactoryBot.create(:survey) }
+    let(:survey_section){ FactoryBot.create(:survey_section) }
     let(:survey_translation){
-      FactoryGirl.create(:survey_translation, :locale => :es, :translation => {
+      FactoryBot.create(:survey_translation, :locale => :es, :translation => {
         :questions => {
           :hello => {
             :text => "¡Hola!"

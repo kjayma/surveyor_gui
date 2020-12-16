@@ -9,7 +9,7 @@ require 'spec_only_helper'
 
 ENV["RAILS_ENV"] ||= 'test'
 begin
-  require File.expand_path("../../testbed/config/environment", __FILE__)
+  require File.expand_path("../../test/dummy/config/environment", __FILE__)
 rescue LoadError => e
   fail "Could not load the testbed app. Have you generated it?\n#{e.class}: #{e}"
 end
@@ -21,12 +21,12 @@ require 'rspec/rails/matchers'
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
-require 'capybara/webkit'
+# require 'capybara/webkit'
 
 require 'rack/utils'
 
 
-Capybara.app = Rack::ShowExceptions.new(Testbed::Application)
+Capybara.app = Rack::ShowExceptions.new(Dummy::Application)
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 #ActiveRecord::Migration.maintain_test_schema! if ::Rails.version >= "4.0" && defined?(ActiveRecord::Migration)

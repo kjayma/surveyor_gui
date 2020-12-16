@@ -7,14 +7,14 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
     self.routes = SurveyorGui::Engine.routes
   end
 
-  let!(:survey) { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
-  let!(:survey_beta) { FactoryGirl.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
-  let!(:survey_with_no_responses) {FactoryGirl.create(:survey)}
-  let!(:survey_with_responses) {FactoryGirl.create(:survey)}
-  let!(:template) {FactoryGirl.create(:template)}
-  let!(:surveyform) {FactoryGirl.create(:surveyform)}
-  let!(:response_set) { FactoryGirl.create(:survey_sections, :survey => survey_with_responses)}
-  let!(:response_set) { FactoryGirl.create(:response_set, :survey => survey_with_responses, :access_code => "pdq")}
+  let!(:survey) { FactoryBot.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 0)}
+  let!(:survey_beta) { FactoryBot.create(:survey, :title => "Alphabet", :access_code => "alpha", :survey_version => 1)}
+  let!(:survey_with_no_responses) {FactoryBot.create(:survey)}
+  let!(:survey_with_responses) {FactoryBot.create(:survey)}
+  let!(:template) {FactoryBot.create(:template)}
+  let!(:surveyform) {FactoryBot.create(:surveyform)}
+  let!(:response_set) { FactoryBot.create(:survey_sections, :survey => survey_with_responses)}
+  let!(:response_set) { FactoryBot.create(:response_set, :survey => survey_with_responses, :access_code => "pdq")}
 
   def survey_with_sections
     {
@@ -265,7 +265,7 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
   context "#replace form" do
 
     def do_get(params = {})
-      FactoryGirl.create(:survey_section, :survey => survey)
+      FactoryBot.create(:survey_section, :survey => survey)
       get :replace_form, {:id=>survey.id,:survey_section_id=>survey.sections.first.id}.merge(params)
     end
 
@@ -284,7 +284,7 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
 
   context "#insert_survey_section" do
     def do_get(params = {})
-      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
+      survey.sections = [FactoryBot.create(:survey_section, :survey => survey)]
       get :insert_survey_section,{id: survey.id}.merge(params)
     end
     it "inserts a survey section" do
@@ -297,7 +297,7 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
   context "#replace_survey_section" do
 
     def do_get(params = {})
-      FactoryGirl.create(:survey_section, :survey => survey)
+      FactoryBot.create(:survey_section, :survey => survey)
       get :replace_survey_section, {:id=>survey.id,:survey_section_id=>survey.sections.first.id}.merge(params)
     end
 
@@ -315,8 +315,8 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
   end
   context "#insert_new_question" do
     def do_get(params = {})
-      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
-      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first)]
+      survey.sections = [FactoryBot.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryBot.create(:question, :survey_section => survey.sections.first)]
       get :insert_new_question,{:id => survey.id, :question_id => survey.sections.first.questions.first.id}.merge(params)
     end
     it "inserts a question" do
@@ -328,8 +328,8 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
 
   context "#cut_question" do
     def do_get(params = {})
-      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
-      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first)]
+      survey.sections = [FactoryBot.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryBot.create(:question, :survey_section => survey.sections.first)]
       get :cut_question,{:id => survey.id, :question_id => survey.sections.first.questions.first.id}.merge(params)
     end
     it "cuts a question" do
@@ -340,8 +340,8 @@ describe SurveyorGui::SurveyformsController, :type => :controller do
 
   context "#clone_survey" do
     def do_put(params={})
-      survey.sections = [FactoryGirl.create(:survey_section, :survey => survey)]
-      survey.sections.first.questions = [FactoryGirl.create(:question, :survey_section => survey.sections.first, text: 'my cloned question')]
+      survey.sections = [FactoryBot.create(:survey_section, :survey => survey)]
+      survey.sections.first.questions = [FactoryBot.create(:question, :survey_section => survey.sections.first, text: 'my cloned question')]
       put :clone_survey,{id: survey.id}
     end
 
